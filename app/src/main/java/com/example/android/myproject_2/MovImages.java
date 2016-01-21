@@ -1,4 +1,4 @@
-package com.example.android.myproject_1;
+package com.example.android.myproject_2;
 
 /**
  * Created by kkyin on 29/9/2015.

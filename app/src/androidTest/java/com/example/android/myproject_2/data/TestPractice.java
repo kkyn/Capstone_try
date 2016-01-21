@@ -1,4 +1,4 @@
-package com.example.android.myproject_1.data;
+package com.example.android.myproject_2.data;
 
 import android.test.AndroidTestCase;
 

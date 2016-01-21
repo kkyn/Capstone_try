@@ -1,4 +1,4 @@
-package com.example.android.myproject_1;
+package com.example.android.myproject_2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -54,7 +54,7 @@ public class MoviesFragment extends Fragment {
 
         // Retrieve a String value from the preferences.
         // getString(String key, String defValue)
-        String sortMoviesBy = prefs.getString(getString(R.string.pref_sortmovies_by_key), getString(R.string.pref_sortmovies_by_popularity));
+        String sortMoviesBy = prefs.getString(getString(com.example.android.myproject_2.R.string.pref_sortmovies_by_key), getString(com.example.android.myproject_2.R.string.pref_sortmovies_by_popularity));
 
         //    Toast.makeText(getActivity(),sortMoviesBy, Toast.LENGTH_LONG).show();
 
@@ -75,7 +75,7 @@ public class MoviesFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_moviefragment, menu);
+        inflater.inflate(com.example.android.myproject_2.R.menu.menu_moviefragment, menu);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class MoviesFragment extends Fragment {
             return true;
         } else
         */
-        if (id == R.id.most_popular) {
+        if (id == com.example.android.myproject_2.R.id.most_popular) {
 
             FetchMoviesDbAsyncTask task = new FetchMoviesDbAsyncTask(getActivity(), new FetchComplete());
             task.execute(POPULARITY_DESC);
@@ -115,12 +115,12 @@ public class MoviesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
+        View rootView = inflater.inflate(com.example.android.myproject_2.R.layout.fragment_movie, container, false);
 
         arrayListOfMovieInfo = new ArrayList<MoviesSelectedInfo>();
         moviesArrayAdapter = new MoviesArrayAdapter(getActivity(), arrayListOfMovieInfo);
 
-        mGridView = (GridView) rootView.findViewById(R.id.grid_view);
+        mGridView = (GridView) rootView.findViewById(com.example.android.myproject_2.R.id.grid_view);
         mGridView.setAdapter(moviesArrayAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.android.myproject_1"
+        applicationId "com.example.android.myproject_2"
         minSdkVersion 11
         targetSdkVersion 23
         versionCode 1

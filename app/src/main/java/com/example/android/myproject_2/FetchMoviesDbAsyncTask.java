@@ -1,4 +1,4 @@
-package com.example.android.myproject_1;
+package com.example.android.myproject_2;
 
 import android.content.Context;
 import android.net.Uri;
@@ -37,7 +37,7 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, MoviesSelect
 
     public interface OnAsyncTaskCompletedListener {
 
-        void onAsyncTaskCompleted(com.example.android.myproject_1.MoviesSelectedInfo[] result);
+        void onAsyncTaskCompleted(com.example.android.myproject_2.MoviesSelectedInfo[] result);
     }
 
     ///////////////////////////////////////////

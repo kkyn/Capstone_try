@@ -1,4 +1,4 @@
-package com.example.android.myproject_1;
+package com.example.android.myproject_2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,14 +11,14 @@ public class DetailMovieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detailmovie);
+        setContentView(com.example.android.myproject_2.R.layout.activity_detailmovie);
 
         if (savedInstanceState == null) {
 
             DetailMovieFragment mDetailMovieFragment = new DetailMovieFragment();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.container, mDetailMovieFragment);
+            fragmentTransaction.add(com.example.android.myproject_2.R.id.container, mDetailMovieFragment);
             fragmentTransaction.commit();
             // --or--
 //             getSupportFragmentManager().beginTransaction()
@@ -31,7 +31,7 @@ public class DetailMovieActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_detailmovie, menu);
+        getMenuInflater().inflate(com.example.android.myproject_2.R.menu.menu_detailmovie, menu);
         return true;
     }
 
@@ -43,7 +43,7 @@ public class DetailMovieActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == com.example.android.myproject_2.R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         } else if (id == android.R.id.home) {

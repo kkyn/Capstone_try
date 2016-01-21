@@ -1,4 +1,4 @@
-package com.example.android.myproject_1.data;
+package com.example.android.myproject_2.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,12 +10,12 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.test.AndroidTestCase;
 
-import com.example.android.myproject_1.utils.PollingCheck;
+import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
+import com.example.android.myproject_2.data.MovieContract.MovieSelectEntry;
+import com.example.android.myproject_2.utils.PollingCheck;
 
 import java.util.Map;
 import java.util.Set;
-
-//import com.example.android.sunshine.app.utils.PollingCheck;
 
 /*
     Students: These are functions and some test data to make it easier to test your database and
@@ -46,103 +46,56 @@ public class TestUtilities extends AndroidTestCase {
     }
 
     /*
-        Students: Use this to create some default weather values for your database tests.
+        Students: Use this to create some default MovieSelect values for your database tests.
      */
-    static ContentValues createDynamicPInfoValues(long movieRowId) {
-        ContentValues DynamicPInfoValues = new ContentValues();
+    static ContentValues createMovieSelectValues(long movieRowId) {
 
-        DynamicPInfoValues.put(MovieContract.DynamicPInfo.COL_MV_KEY, movieRowId);
+        ContentValues MovieSelectValues = new ContentValues();
 
-        return DynamicPInfoValues;
+        MovieSelectValues.put(MovieSelectEntry.COL_MV_ID, movieRowId);
+
+        return MovieSelectValues;
     }
-//    static ContentValues createDynamicPInfoValues() {
-//        ContentValues DynamicPInfoValues = new ContentValues();
-//
-//        DynamicPInfoValues.put(MovieContract.DynamicPInfo.COL_MV_KEY, "xxx");
-//
-//        return DynamicPInfoValues;
-//    }
 
-//    static ContentValues createWeatherValues(long locationRowId) {
-//        ContentValues weatherValues = new ContentValues();
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_LOC_KEY, locationRowId);
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_DATE, TEST_DATE);
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_DEGREES, 1.1);
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_HUMIDITY, 1.2);
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_PRESSURE, 1.3);
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_MAX_TEMP, 75);
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_MIN_TEMP, 65);
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_SHORT_DESC, "Asteroids");
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_WIND_SPEED, 5.5);
-//        weatherValues.put(weatherValues.WeatherEntry.COLUMN_WEATHER_ID, 321);
-//
-//        return weatherValues;
-//    }
 
     /*
         Students: You can uncomment this helper function once you have finished creating the
-        LocationEntry part of the WeatherContract.
-     */
-    static ContentValues createMovieStaticValues() {
+        SortBy part of the MovieContract.
+    */
+    static ContentValues createMovieInfoValues() {
 
-        ContentValues movieStaticValues = new ContentValues();
+        ContentValues movieInfoValues = new ContentValues();
 
-        movieStaticValues.put(MovieContract.StaticInfo.COL_MV_ID, TEST_MOVIE_ID);
+        movieInfoValues.put(MovieInfoEntry.COL_MV_KEY, TEST_MOVIE_ID);
 
-        movieStaticValues.put(MovieContract.StaticInfo.COL_MV_LINK, "movie_http");
-        movieStaticValues.put(MovieContract.StaticInfo.COL_MV_NAME, "MyMovie");
-        movieStaticValues.put(MovieContract.StaticInfo.COL_MV_POSTER_LINK, "MyMovie_PosterLink");
-        movieStaticValues.put(MovieContract.StaticInfo.COL_MV_VIDEO_LINK, "MyMovie_VideoLink");
-        movieStaticValues.put(MovieContract.StaticInfo.COL_MV_RELEASEDATE, "ReleaseDate_Today");
-        movieStaticValues.put(MovieContract.StaticInfo.COL_MV_SYNOPSIS, "MyMovie_Synopsis");
+        movieInfoValues.put(MovieInfoEntry.COL_MV_LINK, "movie_http");
+        movieInfoValues.put(MovieInfoEntry.COL_MV_POSTER_LINK, "MyMovie_PosterLink");
+        movieInfoValues.put(MovieInfoEntry.COL_MV_VIDEO_LINK, "MyMovie_VideoLink");
+        movieInfoValues.put(MovieInfoEntry.COL_MV_RELEASE_DATE, "ReleaseDate_Today");
+        movieInfoValues.put(MovieInfoEntry.COL_MV_SYNOPSIS, "MyMovie_Synopsis");
 
-        return movieStaticValues;
+        return movieInfoValues;
     }
-//    static ContentValues createNorthPoleLocationValues() {
-//        // Create a new map of values, where column names are the keys
-//        ContentValues testValues = new ContentValues();
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_MOVIE_ID);
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
-//        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
-//
-//        return testValues;
-//    }
 
     /*
         Students: You can uncomment this function once you have finished creating the
-        LocationEntry part of the WeatherContract as well as the WeatherDbHelper.
+        MovieSelectEntry part of the MovieContract as well as the MovieDbHelperr.
      */
-    static long insertStaticValues (Context context) {
+    static long insertMovieInfoValues (Context context) {
         // insert our test records into the database
         MovieDbHelper dbHelper = new MovieDbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        ContentValues dryTestValues = TestUtilities.createMovieStaticValues();
+        ContentValues dryTestValues = TestUtilities.createMovieInfoValues();
 
         long StaticInfoRowId;
-        StaticInfoRowId = db.insert(MovieContract.StaticInfo.TABLE_NAME, null, dryTestValues);
+        StaticInfoRowId = db.insert(MovieContract.MovieInfoEntry.TABLE_NAME, null, dryTestValues);
                 // Verify we got a row back.
         assertTrue("Error: Failure to insert North Pole Location Values", StaticInfoRowId != -1);
 
         return StaticInfoRowId;
     }
 
-
-//    static long insertNorthPoleLocationValues(Context context) {
-//        // insert our test records into the database
-//        WeatherDbHelper dbHelper = new WeatherDbHelper(context);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
-//
-//        long locationRowId;
-//        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
-//
-//        // Verify we got a row back.
-//        assertTrue("Error: Failure to insert North Pole Location Values", locationRowId != -1);
-//
-//        return locationRowId;
-//    }
 
     /*
         Students: The functions we provide inside of TestProvider use this utility class to test

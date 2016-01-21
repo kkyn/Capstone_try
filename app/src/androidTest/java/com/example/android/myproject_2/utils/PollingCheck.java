@@ -15,7 +15,7 @@
  *
  * Note: This file copied from the Android CTS Tests
  */
-package com.example.android.myproject_1.utils;
+package com.example.android.myproject_2.utils;
 
 import junit.framework.Assert;
 

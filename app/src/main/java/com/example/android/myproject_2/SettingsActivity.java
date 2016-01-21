@@ -1,4 +1,4 @@
-package com.example.android.myproject_1;
+package com.example.android.myproject_2;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -22,12 +22,12 @@ public class SettingsActivity extends PreferenceActivity
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
         // TODO: Add preferences from XML
-        addPreferencesFromResource(R.xml.pref_general);
+        addPreferencesFromResource(com.example.android.myproject_2.R.xml.pref_general);
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         // TODO: Add preferences
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sortmovies_by_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(com.example.android.myproject_2.R.string.pref_sortmovies_by_key)));
     }
 
     /**

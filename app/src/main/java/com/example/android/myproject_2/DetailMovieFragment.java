@@ -1,4 +1,4 @@
-package com.example.android.myproject_1;
+package com.example.android.myproject_2;
 
 
 import android.content.Intent;
@@ -27,19 +27,19 @@ public class DetailMovieFragment extends Fragment {
     }
 
     ///////////////////////////////////////////////
-    @Bind(R.id.movie_title_textView)
+    @Bind(com.example.android.myproject_2.R.id.movie_title_textView)
     TextView movie_title_textView;
 
-    @Bind(R.id.thumbnail_imageView)
+    @Bind(com.example.android.myproject_2.R.id.thumbnail_imageView)
     ImageView thumbnail_imageView;
 
-    @Bind(R.id.movie_release_date_textView)
+    @Bind(com.example.android.myproject_2.R.id.movie_release_date_textView)
     TextView movie_release_date_textView;
 
-    @Bind(R.id.movie_ratings)
+    @Bind(com.example.android.myproject_2.R.id.movie_ratings)
     TextView movie_ratings;
 
-    @Bind(R.id.movie_synopsis)
+    @Bind(com.example.android.myproject_2.R.id.movie_synopsis)
     TextView movie_synopsis;
 
     @Override
@@ -65,7 +65,7 @@ public class DetailMovieFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         aMovieInfo = intent.getParcelableExtra("aMovieKey");
 
-        View rootView = inflater.inflate(R.layout.fragment_detailmovie, container, false);
+        View rootView = inflater.inflate(com.example.android.myproject_2.R.layout.fragment_detailmovie, container, false);
 
         ButterKnife.bind(this, rootView);
 

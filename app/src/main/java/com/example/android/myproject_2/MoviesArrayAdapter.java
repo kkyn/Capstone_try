@@ -1,4 +1,4 @@
-package com.example.android.myproject_1;
+package com.example.android.myproject_2;
 
 import android.app.Activity;
 import android.view.View;
@@ -47,8 +47,8 @@ public class MoviesArrayAdapter extends ArrayAdapter<MoviesSelectedInfo> {
         Picasso.with(getContext())
                 .load(mMovImages.mPoster)
                         //                .centerCrop()
-                .placeholder(R.drawable.sample_1)
-                .error(R.drawable.sample_0)
+                .placeholder(com.example.android.myproject_2.R.drawable.sample_1)
+                .error(com.example.android.myproject_2.R.drawable.sample_0)
                 .into(view);
         //  .into(mImageView);
 
