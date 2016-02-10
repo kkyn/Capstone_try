@@ -18,7 +18,8 @@ package com.example.android.myproject_2.data;
 import android.net.Uri;
 import android.test.AndroidTestCase;
 
-import com.example.android.myproject_2.data.MovieContract.MovieSelectEntry;
+import com.example.android.myproject_2.data.MovieContract.SortByEntry;
+import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
 
 /*
     Students: This is NOT a complete test for the WeatherContract --- just for the functions
@@ -27,24 +28,65 @@ import com.example.android.myproject_2.data.MovieContract.MovieSelectEntry;
 public class TestMovieContract extends AndroidTestCase {
 
     // intentionally includes a slash to make sure Uri is getting quoted correctly
-    private static final String TEST_MOVIE_NAME = "/North Pole";
-    private static final long TEST_WEATHER_DATE = 1419033600L;  // December 20th, 2014
+    // e.g. /North Pole ==> %2FNorth%20Pole
+    //      /popularity ==> %2Fpopularity
+    private static final String TEST_MOVIE_SORTED_BY = "/popularity"; //
 
-    /*
-        Students: Uncomment this out to test your weather location function.
-     */
-    public void testBuildMovieSelect() {
-        Uri locationUri = MovieSelectEntry.buildMovieSelect(TEST_MOVIE_NAME);
+    //private static final String TEST_MOVIE_INFO = "/movieInfo";
 
-        assertNotNull("Error: Null Uri returned.  You must fill-in buildMovieSelect in " +
-                        "MovieContract.",
-                locationUri);
+    private static final long TEST_MOVIE_ID = 14L;
 
-        assertEquals("Error: Weather location not properly appended to the end of the Uri",
-                TEST_MOVIE_NAME, locationUri.getLastPathSegment());
 
-        assertEquals("Error: Weather location Uri doesn't match our expected result",
-                locationUri.toString(),
-                "content://com.example.android.myproject_2/movieSelect/%2FNorth%20Pole");
+    ///////////////////////////////////////////
+    // Test methods for Uri,
+    // "content://com.example.android.myproject_2/movieSortBy"
+    ///////////////////////////////////////////
+    public void testBuildUriMovieSortByWithId() {
+        Uri sortByUri = SortByEntry.buildUriMovieSortByWithId(TEST_MOVIE_ID);
+
+        assertNotNull("Error: Null Uri returned. "
+                        + "You must fill in movie ID in MovieContract."
+                        , sortByUri);
+
+        assertEquals("Error: Long expected",
+                        TEST_MOVIE_ID,
+                        Long.parseLong(sortByUri.getLastPathSegment(),10));
+    }
+    /*     */
+    public void testBuildUriMovieSortBy() {
+        Uri sortByUri = SortByEntry.buildUriMovieSortBy(TEST_MOVIE_SORTED_BY);
+
+        assertNotNull("Error: Null Uri returned. "
+                        + "You must fill-in buildUriMovieSortBy in "
+                        + "MovieContract."
+                        , sortByUri);
+
+        assertEquals("Error: 'Sort by' not properly appended to the end of the Uri"
+                        , TEST_MOVIE_SORTED_BY
+                        , sortByUri.getLastPathSegment());
+
+        //
+        // " content://com.example.android.myproject_2/movieSortBy//popularity "
+        //
+        assertEquals("Error: 'Sort by' Uri doesn't match our expected result",
+                    sortByUri.toString(),
+                    "content://com.example.android.myproject_2/movieSortBy/%2Fpopularity");
+    }
+
+    ///////////////////////////////////////////
+    // Test methods for Uri,
+    // "content://com.example.android.myproject_2/movieInfo"
+    ////////////////////////////////////////////
+    public void testBuildUriMovieInfoWithId() {
+        Uri movieInfoUri = MovieInfoEntry.buildUriMovieInfoWithId(TEST_MOVIE_ID);
+
+        assertNotNull("Error: Null Uri returned. "
+                + "you must fill in buildUriMovieInfoWithId "
+                + "MovieContract."
+                , movieInfoUri);
+
+        assertEquals("Error: Long expected"
+                , TEST_MOVIE_ID
+                , Long.parseLong(movieInfoUri.getLastPathSegment(), 10));
     }
 }

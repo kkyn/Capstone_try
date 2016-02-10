@@ -1,5 +1,6 @@
 package com.example.android.myproject_2.data;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -10,59 +11,86 @@ import android.provider.BaseColumns;
 public class MovieContract {
 
     public static final String CONTENT_AUTHORITY = "com.example.android.myproject_2";
-    public static final Uri BASE_CONTENT_TYPE_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final Uri BASE_CONTENT_TYPE = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    public static final String SELECT_DIR = "movieSelect";
-    public static final String INFO_DIR = "movieInfo";
+    public static final String SORTBY = "movieSortBy";
+    public static final String INFO = "movieInfo";
 
     //---------------------------------------------//
-    public static final class MovieSelectEntry implements BaseColumns {
+    // TABLE 1, DEFINITIONS
+    //--------------------------------------------//
+    public static final class SortByEntry implements BaseColumns {
 
-        public static final Uri MOVIE_SELECT_CONTENT_TYPE_URI =
-                BASE_CONTENT_TYPE_URI.buildUpon().appendPath(SELECT_DIR).build();
+        // "content://com.example.android.myproject_2/movieSortBy"
+        public static final Uri URI_4_SORTBY = BASE_CONTENT_TYPE.buildUpon().appendPath(SORTBY).build();
 
         //--------------------------------------------------------//
-        public static final String TABLE_NAME = "movieSelect_Table";
+        // Dir_Cursor return >1 items, from the content provider
+        // Item_Cursor return 1 item, from the content provider
+        //--------------------------------------------------------//
+        public static final String DIR_CURSOR = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                                                            "/" + CONTENT_AUTHORITY +
+                                                            "/" + SORTBY;
+        public static  final String ITEM_CURSOR = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                                                            "/" + CONTENT_AUTHORITY +
+                                                            "/" + SORTBY;
 
-        public static final String COL_MV_NAME = "movie_name";
-        public static final String COL_MV_ID = "movie_id";
+        //--------------------------------------------------------//
+        public static final String TABLE_NAME = "Table_SortBy";
 
-        //-----------------------------------------------------//
-        // Supporting methods to build Uris
+        public static final String COL_SETTING_SORTBY = "sortBySetting";
+        public static final String COL_MOVIE_ID = "MovieId";
+
+        //-------------------------------------------------------//
+        // Supporting methods to build Uri(s)
         //
-        public static Uri buildMovieSelectUri(long id) {
-            return ContentUris.withAppendedId(MOVIE_SELECT_CONTENT_TYPE_URI, id);
+        public static Uri buildUriMovieSortByWithId(long id) {
+            return ContentUris.withAppendedId(URI_4_SORTBY, id);
         }
 
-        public static Uri buildMovieSelect (String movieSelectSetting) {
-            return MOVIE_SELECT_CONTENT_TYPE_URI.buildUpon()
-                    .appendPath(movieSelectSetting).build();
+        public static Uri buildUriMovieSortBy(String SortedBy) {
+            return URI_4_SORTBY.buildUpon().appendPath(SortedBy).build();
         }
     }
 
     //--------------------------------------------//
+    // TABLE 2, DEFINITIONS
+    //--------------------------------------------//
     public static final class MovieInfoEntry implements BaseColumns {
 
-        public static final Uri MOVIE_INFO_CONTENT_TYPE_URI =
-                BASE_CONTENT_TYPE_URI.buildUpon().appendPath(INFO_DIR).build();
+        // "content://com.example.android.myproject_2/movieInfo"
+        //
+        public static final Uri URI_4_MOVIEINFO = BASE_CONTENT_TYPE.buildUpon()
+                                                                    .appendPath(INFO).build();
+
+        //--------------------------------------------------------//
+        // Dir_Cursor return >1 item, from the content provider
+        // Item_Cursor return 1 item, from the content provider
+        public static final String DIR_CURSOR = ContentResolver.CURSOR_DIR_BASE_TYPE +
+                                                            "/" + CONTENT_AUTHORITY +
+                                                            "/" + INFO;
+        public static  final String ITEM_CURSOR = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+                                                            "/" + CONTENT_AUTHORITY +
+                                                            "/" + INFO;
 
         //-------------------------------------------------------//
-        public static final String TABLE_NAME = "movieInfo_Table";
+        public static final String TABLE_NAME = "Table_MovieInfo";
 
-        public static final String COL_MV_KEY = "movie_key";
+        // Column contains foreign-key used in the SortByTable
+        public static final String COL_ID = "id";
+        public static final String COL_TITLE = "title";
 
-        public static final String COL_MV_LINK = "movie_link";
+        public static final String COL_RELEASE_DATE = "release_date";
+        public static final String COL_OVERVIEW = "overview";
 
-        public static final String COL_MV_RELEASE_DATE = "release_date";
-        public static final String COL_MV_VIDEO_LINK = "video_link";
-        public static final String COL_MV_POSTER_LINK = "poster_link";
-        public static final String COL_MV_SYNOPSIS = "synopsis";
+        public static final String COL_VIDEO_LINK = "video_link";
+        public static final String COL_POSTER_LINK = "poster_link";
 
         //---------------------------------------------------//
         // Supporting methods to build Uris
         //
-        public static Uri buildMovieInfoUri(long id) {
-            return ContentUris.withAppendedId(MOVIE_INFO_CONTENT_TYPE_URI, id);
+        public static Uri buildUriMovieInfoWithId(long id) {
+            return ContentUris.withAppendedId(URI_4_MOVIEINFO, id);
         }
 
     }

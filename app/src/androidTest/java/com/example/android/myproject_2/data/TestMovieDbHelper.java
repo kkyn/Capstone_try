@@ -43,13 +43,9 @@ public class TestMovieDbHelper extends AndroidTestCase {
     }
 
     /*
-        Students: Uncomment this test once you've written the code to create the MovieInfo table.
-        Note that you will have to have chosen the same column names that I did in
-        my solution for this test to compile, so if you haven't yet done that, this is
-        a good time to change your column names to match mine.
-
-        Note that this only tests that the MovieInfo table has the correct columns,
-        since we give you the code for the MovieInfo table.  This test does not look at the
+        Create this test method once you've written the code to create the MovieInfo table.
+        Note that this only tests that the MovieInfo table has the correct columns.
+        This test does not look at the
      */
     public void testCreateDb() throws Throwable {
         // build a HashSet of all of the table names we wish to look for
@@ -82,8 +78,8 @@ public class TestMovieDbHelper extends AndroidTestCase {
             tableNameHashSet.remove(mCursor.getString(0));
         } while( mCursor.moveToNext() );
 
-        // if this fails, it means that your database doesn't contain both the location entry
-        // and weather entry tables
+        // if this fails, it means that your database doesn't contain both the SortBy entry
+        // and MovieInfo entry tables
         assertTrue("Error: Your database was created without both the location entry and weather entry tables",
                 tableNameHashSet.isEmpty());
 
@@ -108,7 +104,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
             locationColumnHashSet.remove(columnName);
         } while(mCursor.moveToNext());
 
-        // if this fails, it means that your database doesn't contain all of the required location
+        // if this fails, it means that your database doesn't contain all of the required SortBy
         // entry columns
         assertTrue("Error: The database doesn't contain all of the required location entry columns",
                 locationColumnHashSet.isEmpty());
@@ -116,10 +112,9 @@ public class TestMovieDbHelper extends AndroidTestCase {
     }
 
     /*
-        Students:  Here is where you will build code to test that we can insert and query the
-        location database.  We've done a lot of work for you.  You'll want to look in TestUtilities
-        where you can uncomment out the "createNorthPoleLocationValues" function.  You can
-        also make use of the ValidateCurrentRecord function from within TestUtilities.
+        Build code to test that we can insert and query the SortBy database.
+        You'll want to look in TestUtilities, the "createSortByValues" function.
+        You can also make use of the ValidateCurrentRecord function from within TestUtilities.
     */
     public void testSortByTable() {
         insertSortBy();
@@ -128,14 +123,13 @@ public class TestMovieDbHelper extends AndroidTestCase {
 
 
     /*
-        Students:  Here is where you will build code to test that we can insert and query the
-        database.  We've done a lot of work for you.  You'll want to look in TestUtilities
-        where you can use the "createMovieDynamicValues" function.  You can
-        also make use of the validateCurrentRecord function from within TestUtilities.
+        Build code to test that we can insert and query the database.
+        You'll want to look in TestUtilities where you can use the "createSortByValues" function.
+        You can also make use of the validateCurrentRecord function from within TestUtilities.
      */
     public void testMovieInfoTable() {
-        // First insert the location, and then use the locationRowId to insert
-        // the weather. Make sure to cover as many failure cases as you can.
+        // First insert the sortby value, and then use the sortByRowId to insert
+        // the movieInfo. Make sure to cover as many failure cases as you can.
 
         // Instead of rewriting all of the code we've already written in testSortByTable
         // we can move this code to insertSortBy and then call insertSortBy from both
@@ -153,7 +147,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         MovieDbHelper dbHelper = new MovieDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Second Step (MovieInfo): Create weather values
+        // Second Step (MovieInfo): Create MovieInfo values
         ContentValues movieInfoValues = TestUtilities.createMovieInfoValues(sortByRowId);
 
         // Third Step (MovieInfo): Insert ContentValues into database and get a row ID back
@@ -175,7 +169,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // Move the cursor to a valid database row and check to see if we have any rows
         assertTrue("Error: No Records returned from location query", movieInfoCursor.moveToFirst());
 
-        // Fifth Step: Validate the location Query
+        // Fifth Step: Validate the movieInfo Query
         TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
                 movieInfoCursor, movieInfoValues);
 
@@ -189,9 +183,9 @@ public class TestMovieDbHelper extends AndroidTestCase {
     }
 
     /*
-        Students: This is a helper method for the testMovieInfoTable quiz. You can move your
+        This is a helper method for the testMovieInfoTable. You can move your
         code from testSortByTable to here so that you can call this code from both
-        testMovieInfoTable and testSortByTable.
+        testMovieInfoTable and testSortByTable. ??
      */
     public long insertSortBy() {
         // First step: Get reference to writable database
@@ -201,7 +195,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         // Second Step: Create ContentValues of what you want to insert
-        // (you can use the createNorthPoleLocationValues if you wish)
+        // (you can use the createSortByValues if you wish)
         ContentValues testValues = TestUtilities.createSortByValues();
 
         // Third Step: Insert ContentValues into database and get a row ID back
@@ -249,7 +243,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
     }
 
     /*
-        Students: This is a helper method for the testMovieInfoTable quiz. You can move your
+        This is a helper method for the testMovieInfoTable. You can move your
         code from testSortByTable to here so that you can call this code from both
         testMovieInfoTable and testSortByTable.
      */

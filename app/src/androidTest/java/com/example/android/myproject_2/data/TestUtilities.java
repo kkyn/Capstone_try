@@ -11,7 +11,7 @@ import android.os.HandlerThread;
 import android.test.AndroidTestCase;
 
 import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
-import com.example.android.myproject_2.data.MovieContract.MovieSelectEntry;
+import com.example.android.myproject_2.data.MovieContract.SortByEntry;
 import com.example.android.myproject_2.utils.PollingCheck;
 
 import java.util.Map;
@@ -23,8 +23,8 @@ import java.util.Set;
     in our solution to use these as-given.
  */
 public class TestUtilities extends AndroidTestCase {
-    static final String TEST_MOVIE_ID = "99705";
-    static final long TEST_DATE = 1419033600L;  // December 20th, 2014
+
+    static final String TEST_SORTBY_VALUE = "popularity";
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
@@ -45,55 +45,60 @@ public class TestUtilities extends AndroidTestCase {
         }
     }
 
-    /*
-        Students: Use this to create some default MovieSelect values for your database tests.
-     */
-    static ContentValues createMovieSelectValues(long movieRowId) {
-
-        ContentValues MovieSelectValues = new ContentValues();
-
-        MovieSelectValues.put(MovieSelectEntry.COL_MV_ID, movieRowId);
-
-        return MovieSelectValues;
-    }
 
 
     /*
         Students: You can uncomment this helper function once you have finished creating the
         SortBy part of the MovieContract.
     */
-    static ContentValues createMovieInfoValues() {
+    static ContentValues createMovieInfoValues(long sortByRowId) {
 
         ContentValues movieInfoValues = new ContentValues();
 
-        movieInfoValues.put(MovieInfoEntry.COL_MV_KEY, TEST_MOVIE_ID);
+        movieInfoValues.put(MovieInfoEntry.COL_ID, sortByRowId);
 
-        movieInfoValues.put(MovieInfoEntry.COL_MV_LINK, "movie_http");
-        movieInfoValues.put(MovieInfoEntry.COL_MV_POSTER_LINK, "MyMovie_PosterLink");
-        movieInfoValues.put(MovieInfoEntry.COL_MV_VIDEO_LINK, "MyMovie_VideoLink");
-        movieInfoValues.put(MovieInfoEntry.COL_MV_RELEASE_DATE, "ReleaseDate_Today");
-        movieInfoValues.put(MovieInfoEntry.COL_MV_SYNOPSIS, "MyMovie_Synopsis");
+        movieInfoValues.put(MovieInfoEntry.COL_TITLE, "MyMovie");
+        movieInfoValues.put(MovieInfoEntry.COL_RELEASE_DATE, "ReleaseDate_Today");
+        movieInfoValues.put(MovieInfoEntry.COL_OVERVIEW, "MyMovie_Synopsis");
+
+        movieInfoValues.put(MovieInfoEntry.COL_POSTER_LINK, "MyMovie_PosterLink");
+        movieInfoValues.put(MovieInfoEntry.COL_VIDEO_LINK, "MyMovie_VideoLink");
 
         return movieInfoValues;
+    }
+    /*
+        Students: Use this to create some default MovieSelect values for your database tests.
+     */
+    static ContentValues createSortByValues() {
+
+        // Create a new map of values, where column names are the keys
+        ContentValues MovieSelectValues = new ContentValues();
+
+        MovieSelectValues.put(SortByEntry.COL_SETTING_SORTBY, TEST_SORTBY_VALUE);
+        MovieSelectValues.put(SortByEntry.COL_MOVIE_ID, 1L);
+
+        return MovieSelectValues;
     }
 
     /*
         Students: You can uncomment this function once you have finished creating the
-        MovieSelectEntry part of the MovieContract as well as the MovieDbHelperr.
+        SortByEntry part of the MovieContract as well as the MovieDbHelperr.
      */
     static long insertMovieInfoValues (Context context) {
         // insert our test records into the database
         MovieDbHelper dbHelper = new MovieDbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        ContentValues dryTestValues = TestUtilities.createMovieInfoValues();
+        ContentValues dryTestValues = TestUtilities.createSortByValues();
+        /// ContentValues dryTestValues = TestUtilities.createMovieInfoValues();
 
-        long StaticInfoRowId;
-        StaticInfoRowId = db.insert(MovieContract.MovieInfoEntry.TABLE_NAME, null, dryTestValues);
-                // Verify we got a row back.
-        assertTrue("Error: Failure to insert North Pole Location Values", StaticInfoRowId != -1);
+        long sortByRowId;
+        sortByRowId = db.insert(SortByEntry.TABLE_NAME, null, dryTestValues);
 
-        return StaticInfoRowId;
+        // Verify we got a row back.
+        assertTrue("Error: Failure to insert North Pole Location Values", sortByRowId != -1);
+
+        return sortByRowId;
     }
 
 
