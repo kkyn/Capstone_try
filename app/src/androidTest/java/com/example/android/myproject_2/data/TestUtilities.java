@@ -24,6 +24,8 @@ import java.util.Set;
  */
 public class TestUtilities extends AndroidTestCase {
 
+
+
     static final String TEST_SORTBY_VALUE = "popularity";
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
@@ -58,11 +60,11 @@ public class TestUtilities extends AndroidTestCase {
         movieInfoValues.put(MovieInfoEntry.COL_ID, sortByRowId);
 
         movieInfoValues.put(MovieInfoEntry.COL_TITLE, "MyMovie");
-        movieInfoValues.put(MovieInfoEntry.COL_RELEASE_DATE, "ReleaseDate_Today");
+        movieInfoValues.put(MovieInfoEntry.COL_RELEASEDATE, "ReleaseDate_Today");
         movieInfoValues.put(MovieInfoEntry.COL_OVERVIEW, "MyMovie_Synopsis");
 
-        movieInfoValues.put(MovieInfoEntry.COL_POSTER_LINK, "MyMovie_PosterLink");
-        movieInfoValues.put(MovieInfoEntry.COL_VIDEO_LINK, "MyMovie_VideoLink");
+        movieInfoValues.put(MovieInfoEntry.COL_POSTERLINK, "MyMovie_PosterLink");
+        movieInfoValues.put(MovieInfoEntry.COL_VIDEOLINK, "MyMovie_VideoLink");
 
         return movieInfoValues;
     }
@@ -74,8 +76,8 @@ public class TestUtilities extends AndroidTestCase {
         // Create a new map of values, where column names are the keys
         ContentValues MovieSelectValues = new ContentValues();
 
-        MovieSelectValues.put(SortByEntry.COL_SETTING_SORTBY, TEST_SORTBY_VALUE);
-        MovieSelectValues.put(SortByEntry.COL_MOVIE_ID, 1L);
+        MovieSelectValues.put(SortByEntry.COL_SORTBYSETTING, TEST_SORTBY_VALUE);
+        MovieSelectValues.put(SortByEntry.COL_MOVIEID, 1L);
 
         return MovieSelectValues;
     }

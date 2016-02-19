@@ -30,11 +30,12 @@ public class TestMovieContract extends AndroidTestCase {
     // intentionally includes a slash to make sure Uri is getting quoted correctly
     // e.g. /North Pole ==> %2FNorth%20Pole
     //      /popularity ==> %2Fpopularity
-    private static final String TEST_MOVIE_SORTED_BY = "/popularity"; //
+    private static final String TEST_SORTEDBY = "/popularity"; //
+
 
     //private static final String TEST_MOVIE_INFO = "/movieInfo";
 
-    private static final long TEST_MOVIE_ID = 14L;
+    private static final long TEST_MOVIEID = 14L;
 
 
     ///////////////////////////////////////////
@@ -42,19 +43,19 @@ public class TestMovieContract extends AndroidTestCase {
     // "content://com.example.android.myproject_2/movieSortBy"
     ///////////////////////////////////////////
     public void testBuildUriMovieSortByWithId() {
-        Uri sortByUri = SortByEntry.buildUriMovieSortByWithId(TEST_MOVIE_ID);
+        Uri sortByUri = SortByEntry.buildUriMovieSortByWithId(TEST_MOVIEID);
 
         assertNotNull("Error: Null Uri returned. "
                         + "You must fill in movie ID in MovieContract."
                         , sortByUri);
 
         assertEquals("Error: Long expected",
-                        TEST_MOVIE_ID,
+                TEST_MOVIEID,
                         Long.parseLong(sortByUri.getLastPathSegment(),10));
     }
     /*     */
     public void testBuildUriMovieSortBy() {
-        Uri sortByUri = SortByEntry.buildUriMovieSortBy(TEST_MOVIE_SORTED_BY);
+        Uri sortByUri = SortByEntry.buildUriMovieSortBy(TEST_SORTEDBY);
 
         assertNotNull("Error: Null Uri returned. "
                         + "You must fill-in buildUriMovieSortBy in "
@@ -62,7 +63,7 @@ public class TestMovieContract extends AndroidTestCase {
                         , sortByUri);
 
         assertEquals("Error: 'Sort by' not properly appended to the end of the Uri"
-                        , TEST_MOVIE_SORTED_BY
+                        , TEST_SORTEDBY
                         , sortByUri.getLastPathSegment());
 
         //
@@ -78,7 +79,7 @@ public class TestMovieContract extends AndroidTestCase {
     // "content://com.example.android.myproject_2/movieInfo"
     ////////////////////////////////////////////
     public void testBuildUriMovieInfoWithId() {
-        Uri movieInfoUri = MovieInfoEntry.buildUriMovieInfoWithId(TEST_MOVIE_ID);
+        Uri movieInfoUri = MovieInfoEntry.buildUriMovieInfoWithId(TEST_MOVIEID);
 
         assertNotNull("Error: Null Uri returned. "
                 + "you must fill in buildUriMovieInfoWithId "
@@ -86,7 +87,7 @@ public class TestMovieContract extends AndroidTestCase {
                 , movieInfoUri);
 
         assertEquals("Error: Long expected"
-                , TEST_MOVIE_ID
+                , TEST_MOVIEID
                 , Long.parseLong(movieInfoUri.getLastPathSegment(), 10));
     }
 }

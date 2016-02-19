@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 /**
  * Created by kkyin on 6/1/2016.
  */
-public class MovieContract
+public class MovieContract_0
 {
 
     // "Content authority" --- is the name of the Content Provider

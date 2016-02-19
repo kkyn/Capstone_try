@@ -52,8 +52,8 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // Note that there will be another table in the DB that stores the
         // Android metadata (db version information)
         final HashSet<String> tableNameHashSet = new HashSet<String>();
-        tableNameHashSet.add(MovieInfoEntry.TABLE_NAME);
-        tableNameHashSet.add(SortByEntry.TABLE_NAME);
+        tableNameHashSet.add(MovieInfoEntry.TABLE_MOVIEINFO);
+        tableNameHashSet.add(SortByEntry.TABLE_SORTBY);
 
         // tky:
         // Deletes a database including its journal file and other auxiliary files
@@ -84,7 +84,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
                 tableNameHashSet.isEmpty());
 
         // now, do our tables contain the correct columns?
-        mCursor = db.rawQuery("PRAGMA table_info(" + MovieInfoEntry.TABLE_NAME + ")",
+        mCursor = db.rawQuery("PRAGMA table_info(" + MovieInfoEntry.TABLE_MOVIEINFO + ")",
                 null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
@@ -94,8 +94,8 @@ public class TestMovieDbHelper extends AndroidTestCase {
         final HashSet<String> locationColumnHashSet = new HashSet<String>();
 
         locationColumnHashSet.add(MovieInfoEntry._ID);
-        locationColumnHashSet.add(MovieInfoEntry.COL_POSTER_LINK);
-        locationColumnHashSet.add(MovieInfoEntry.COL_VIDEO_LINK);
+        locationColumnHashSet.add(MovieInfoEntry.COL_POSTERLINK);
+        locationColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);
         locationColumnHashSet.add(MovieInfoEntry.COL_ID);
 
         int columnNameIndex = mCursor.getColumnIndex("name");
@@ -151,13 +151,13 @@ public class TestMovieDbHelper extends AndroidTestCase {
         ContentValues movieInfoValues = TestUtilities.createMovieInfoValues(sortByRowId);
 
         // Third Step (MovieInfo): Insert ContentValues into database and get a row ID back
-        long movieInfoRowId = db.insert(MovieInfoEntry.TABLE_NAME, null, movieInfoValues);
+        long movieInfoRowId = db.insert(MovieInfoEntry.TABLE_MOVIEINFO, null, movieInfoValues);
         assertTrue(movieInfoRowId != -1);
 
         // Fourth Step: Query the database and receive a Cursor back
         // A cursor is your primary interface to the query results.
         Cursor movieInfoCursor = db.query(
-                MovieInfoEntry.TABLE_NAME,  // Table to Query
+                MovieInfoEntry.TABLE_MOVIEINFO,  // Table to Query
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause
@@ -188,19 +188,19 @@ public class TestMovieDbHelper extends AndroidTestCase {
         testMovieInfoTable and testSortByTable. ??
      */
     public long insertSortBy() {
-        // First step: Get reference to writable database
+        // Step 1 : Get reference to writable database
         // If there's an error in those massive SQL table creation Strings,
         // errors will be thrown here when you try to get a writable database.
         MovieDbHelper dbHelper = new MovieDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Second Step: Create ContentValues of what you want to insert
+        // Step 2 : Create ContentValues of what you want to insert
         // (you can use the createSortByValues if you wish)
         ContentValues testValues = TestUtilities.createSortByValues();
 
-        // Third Step: Insert ContentValues into database and get a row ID back
+        // Step 3 : Insert ContentValues into database and get a row ID back
         long movieRowId;
-        movieRowId = db.insert(SortByEntry.TABLE_NAME, null, testValues);
+        movieRowId = db.insert(SortByEntry.TABLE_SORTBY, null, testValues);
 
         // Verify we got a row back.
         assertTrue(movieRowId != -1);
@@ -208,10 +208,10 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // Data's inserted.  IN THEORY.  Now pull some out to stare at it and verify it made
         // the round trip.
 
-        // Fourth Step: Query the database and receive a Cursor back
+        // Step 4 : Query the database and receive a Cursor back
         // A cursor is your primary interface to the query results.
         Cursor cursor = db.query(
-                SortByEntry.TABLE_NAME, // Table to Query
+                SortByEntry.TABLE_SORTBY, // Table to Query
                 null, // all columns
                 null, // Columns for the "where" clause
                 null, // Values for the "where" clause
@@ -225,7 +225,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // from the query
         assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
 
-        // Fifth Step: Validate data in resulting Cursor with the original ContentValues
+        // Step 5 : Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
         TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
@@ -235,7 +235,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         assertFalse( "Error: More than one record returned from location query",
                 cursor.moveToNext() );
 
-        // Sixth Step: Close Cursor and Database
+        // Step 6 : Close Cursor and Database
         cursor.close();
         db.close();
 

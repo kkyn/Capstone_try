@@ -8,8 +8,7 @@ import android.provider.BaseColumns;
 /**
  * Created by kkyin on 6/1/2016.
  */
-public class MovieContract
-{
+public class MovieContract_1 {
 
     // "Content authority" --- is the name of the Content Provider
     public static final String CONTENT_AUTHORITY = "com.example.android.myproject_2";
@@ -22,9 +21,9 @@ public class MovieContract
     // Note the valid paths matches the tables in the database.
     // e.g "content://com.example.android.myproject_2/movieSortBy"
     // e.g "content://com.example.android.myproject_2/movieInfo"
-    public static final String MOVIESORTBY = "movieSortBy";
+    public static final String POPULARITY = "popularity";
     public static final String MOVIEINFO = "movieInfo";
-    public static final String MOVIERATING = "movieRating";
+    public static final String RATING = "Rating";
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++//
@@ -36,8 +35,8 @@ public class MovieContract
         // Uri reference to TABLE 1
         //-------------------------------
         // "content://com.example.android.myproject_2/movieSortBy"
-        public static final Uri URI_BCA_SORTBY =
-                URI_BASE_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIESORTBY).build();
+        public static final Uri URI_BCA_POPULARITY =
+                URI_BASE_CONTENT_AUTHORITY.buildUpon().appendPath(POPULARITY).build();
 
         //-----------------------------------------------------
         // Returned Cursor definitions from Content Provider
@@ -51,14 +50,14 @@ public class MovieContract
         // cursor return >1 item from the URI/Content Provider.)
         // * Android uses a form, mime type, to describe the type returned by the URI.
         public static final String DIR_CURSOR_SORTBY =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIESORTBY;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + POPULARITY;
 
         // * Item_Cursor string set cursor return 1 item, from the content provider.
         // (prefix, ContentResolver.CURSOR_ITEM_BASE_TYPE, implies
         // cursor return 1 item from the URI/Content Provider.)
         // * Android uses a form, mime type, to describe the type returned by the URI.
         public static  final String ITEM_CURSOR_SORTBY =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIESORTBY;
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + POPULARITY;
 
         //----------------------------------------
         // TABLE 1's name and column constants
@@ -73,11 +72,11 @@ public class MovieContract
         //
 
         public static Uri buildUriMovieSortBy(String SortedBy) {
-            return URI_BCA_SORTBY.buildUpon().appendPath(SortedBy).build();
+            return URI_BCA_POPULARITY.buildUpon().appendPath(SortedBy).build();
         }
 
         public static Uri buildUriMovieSortByWithId(long id) {
-            return ContentUris.withAppendedId(URI_BCA_SORTBY, id);
+            return ContentUris.withAppendedId(URI_BCA_POPULARITY, id);
         }
 
     }
@@ -92,15 +91,15 @@ public class MovieContract
         //-------------------------------
         // "content://com.example/android.myproject_2/Rating"
         public static final Uri URI_BCA_RATING =
-                URI_BASE_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIERATING).build();
+                URI_BASE_CONTENT_AUTHORITY.buildUpon().appendPath(RATING).build();
 
         //-----------------------------------------------------
         // Returned Cursor definitions from Content Provider
         //-----------------------------------------------------
         public static final String DIR_CURSOR_RATING =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIERATING;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + RATING;
         public static final String ITEM_CURSOR_RATING =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIERATING;
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + RATING;
 
         public static final String TABLE_RATING = "Table_Rating";
         public static final String COL_ID = "MovieID";
