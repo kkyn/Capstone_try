@@ -34,6 +34,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.myproject_2.MainActivity" />
         </activity>
+
+        <!-- Step-3b -->
+        <provider
+            android:authorities="com.example.android.myproject_2"
+            android:name=".data.MovieProvider"/>
     </application>
 
 </manifest>

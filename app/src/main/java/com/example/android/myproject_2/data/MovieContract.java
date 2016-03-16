@@ -8,41 +8,48 @@ import android.provider.BaseColumns;
 /**
  * Created by kkyin on 6/1/2016.
  */
-public class MovieContract
-{
+public class MovieContract {
 
+    // Step-1
     // "Content authority" --- is the name of the Content Provider
-    public static final String CONTENT_AUTHORITY = "com.example.android.myproject_2";
+    public static final String AUTHORITY = "com.example.android.myproject_2";
 
     // With the "Content authority" --- Create the "base content URI"
     // which apps need have to contact the Content Provider
-    public static final Uri URI_BASE_CONTENT_AUTHORITY = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final Uri URI_CONTENT_AUTHORITY = Uri.parse("content://" + AUTHORITY);
 
     // Possible valid paths (appended to the "base content URI" for possible URIs)
     // Note the valid paths matches the tables in the database.
     // e.g "content://com.example.android.myproject_2/movieSortBy"
     // e.g "content://com.example.android.myproject_2/movieInfo"
-    public static final String MOVIESORTBY = "movieSortBy";
+    public static final String POPULAR = "popularity";
+    public static final String RATING = "rating";
     public static final String MOVIEINFO = "movieInfo";
-    public static final String MOVIERATING = "movieRating";
+    public static final String MOVIE = "movie";
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++//
-    // DEFINITIONS FOR TABLE 1
+    // DEFINITIONS FOR TABLE 1 -- "content://com.example.android.myproject_2/popularity"
     //+++++++++++++++++++++++++++++++++++++++++++++//
-    public static final class SortByEntry implements BaseColumns {
+    public static final class PopularEntry implements BaseColumns {
 
+        // Step-1
         //-------------------------------
-        // Uri reference to TABLE 1
+        // Uri reference to TABLE 1 -- "content://com.example.android.myproject_2/popularity"
         //-------------------------------
-        // "content://com.example.android.myproject_2/movieSortBy"
-        public static final Uri URI_BCA_SORTBY =
-                URI_BASE_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIESORTBY).build();
+        // "content://com.example.android.myproject_2/popularity"
+        public static final Uri URI_CONTENT_AUTHORITY_POPULAR =
+                URI_CONTENT_AUTHORITY.buildUpon().appendPath(POPULAR).build();
 
         //-----------------------------------------------------
-        // Returned Cursor definitions from Content Provider
+        // Definitions of Cursor returned from Content Provider.
+        // Cursors returned have unique types based upon their content and
+        // base path used for the query.
+        // Android uses a form similar to the internet media type or
+        // mime type to describe the type returned by the URI.
+        // Cursors that can return more than 1 item are prefixed by the CURSOR_DIR_BASE_TYPE string.
+        // While cursors that return only 1 single item are prefixed by the CURSOR_ITEM_BASE_TYPE string.
         //-----------------------------------------------------
-        //--------------------------------------------------------//
         // Dir_Cursor return >1 items, from the content provider
         // Item_Cursor return 1 item, from the content provider
         //--------------------------------------------------------//
@@ -50,105 +57,118 @@ public class MovieContract
         // (prefix, ContentResolver.CURSOR_DIR_BASE_TYPE, implies
         // cursor return >1 item from the URI/Content Provider.)
         // * Android uses a form, mime type, to describe the type returned by the URI.
-        public static final String DIR_CURSOR_SORTBY =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIESORTBY;
+        public static final String POPULARITY_MULTI_ITEM_CURSOR =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + POPULAR;
 
         // * Item_Cursor string set cursor return 1 item, from the content provider.
         // (prefix, ContentResolver.CURSOR_ITEM_BASE_TYPE, implies
         // cursor return 1 item from the URI/Content Provider.)
         // * Android uses a form, mime type, to describe the type returned by the URI.
-        public static  final String ITEM_CURSOR_SORTBY =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIESORTBY;
+        public static  final String POPULARITY_SINGLE_ITEM_CURSOR =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + POPULAR;
 
         //----------------------------------------
         // TABLE 1's name and column constants
         //----------------------------------------
-        public static final String TABLE_SORTBY = "Table_SortBy";
+        public static final String TABLE_NAME = "Table_Popularity";
+        public static final String COL_MV_ID = "mvId";
+        public static final String COL_TITLE = "title";
 
-        public static final String COL_SORTBYSETTING = "sortBySetting";
-        public static final String COL_MOVIEID = "movieId";
+       // public static final String COL_KEY = "movieRef";
+        //public static final String COL_SORTBYSETTING = "sortBySetting";
 
+        // Step-2
         //-------------------------------------------------------//
-        // Convenient supporting methods to help build the Content Provider Queries, Uri(s)
+
+        // * http://developer.android.com/reference/android/net/Uri.Builder.html
+        // * Uri.Builder -- Helper class for building or manipulating URI references.
+        // * Convenient supporting methods to help build the Content Provider Queries, Uri(s)
         //
+        // *  e.g. "content://com.example.android.myproject_2/Popularity/movieName"
+        public static Uri buildUriPopularity(String movieName) {
 
-        public static Uri buildUriMovieSortBy(String SortedBy) {
-            return URI_BCA_SORTBY.buildUpon().appendPath(SortedBy).build();
+            return URI_CONTENT_AUTHORITY_POPULAR.buildUpon().appendPath(movieName).build();
+           // return URI_CONTENT_AUTHORITY_POPULAR.buildUpon().appendPath(SortedBy).build();
         }
 
-        public static Uri buildUriMovieSortByWithId(long id) {
-            return ContentUris.withAppendedId(URI_BCA_SORTBY, id);
-        }
 
+
+        // * http://developer.android.com/reference/android/content/ContentUris.html
+        // * ContentUris : Contains Utility methods useful for working with Uri objects
+        //      that use the "content" (content://) scheme.
+        // * content://authority/path/id
+        //      e.g. "content://com.example.android.myproject_2/Popularity/movieId"
+        // * public static Uri withAppendedId (Uri contentUri, long id)
+        public static Uri buildUriPopularityWithId(long movieId) {
+
+            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_POPULAR, movieId);
+        }
+//        public static Uri buildUriPopularityWithId(long id) {
+//            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_POPULAR, id);
+//        }
+
+        public static String getMovieId_fromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+           // return uri.getLastPathSegment();
+        }
     }
+
+//    //+++++++++++++++++++++++++++++++++++++++++++++//
+//    // DEFINITIONS FOR TABLE 2 -- "content://com.example/android.myproject_2/rating"
+//    //+++++++++++++++++++++++++++++++++++++++++++++//
+//    public static final class RatingEntry implements BaseColumns {
+//
+//        //-------------------------------
+//        // Uri reference to TABLE 2 -- "content://com.example/android.myproject_2/rating"
+//        //-------------------------------
+//        // "content://com.example/android.myproject_2/rating"
+//        public static final Uri URI_CONTENT_AUTHORITY_RATING =
+//                URI_CONTENT_AUTHORITY.buildUpon().appendPath(RATING).build();
+//
+//        //--------------------------------------------------------------
+//        public static final String RATING_MULTI_ITEM_CURSOR =
+//                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + RATING;
+//
+//        public static final String RATING_SINGLE_ITEM_CURSOR =
+//                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + RATING;
+//
+//        //--------------------------------------------------------------
+//        public static final String TABLE_NAME = "Table_Rating";
+//
+//        public static final String COL_MV_ID = "movieID";
+//        public static final String COL_TITLE = "movieTitle";
+//      //  public static final String COL_KEY = "movieRef";
+//
+//        // Helper functions to build Uris
+//        public static Uri buildUri_Rating(String MovieName) {
+//
+//            return URI_CONTENT_AUTHORITY_RATING.buildUpon().appendPath(MovieName).build();
+//        }
+//        public static Uri buildUri_Rating_Id(long id) {
+//
+//            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_RATING, id);
+//        }
+//    }
+
 
     //+++++++++++++++++++++++++++++++++++++++++++++//
     // DEFINITIONS FOR TABLE 3
     //+++++++++++++++++++++++++++++++++++++++++++++//
-    public static final class RatingEntry implements BaseColumns {
-
-        //-------------------------------
-        // Uri reference to TABLE 3
-        //-------------------------------
-        // "content://com.example/android.myproject_2/Rating"
-        public static final Uri URI_BCA_RATING =
-                URI_BASE_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIERATING).build();
-
-        //-----------------------------------------------------
-        // Returned Cursor definitions from Content Provider
-        //-----------------------------------------------------
-        public static final String DIR_CURSOR_RATING =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIERATING;
-        public static final String ITEM_CURSOR_RATING =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIERATING;
-
-        public static final String TABLE_RATING = "Table_Rating";
-        public static final String COL_ID = "MovieID";
-        public static final String COL_NAME = "MovieName";
-        public static final String COL_KEY = "MovieRef";
-
-        // Helper functions to build Uris
-        public static Uri buildUri4MovieRating(String Rating) {
-            return URI_BCA_RATING.buildUpon().appendPath(Rating).build();
-        }
-        public static Uri buildUri4MovieRatingAndID(long id) {
-            return ContentUris.withAppendedId(URI_BCA_RATING, id);
-        }
-    }
-
-    //+++++++++++++++++++++++++++++++++++++++++++++//
-    // DEFINITIONS FOR TABLE 2
-    //+++++++++++++++++++++++++++++++++++++++++++++//
     public static final class MovieInfoEntry implements BaseColumns {
 
-        //-------------------------------
-        // Uri reference to TABLE 2
-        //-------------------------------
         // "content://com.example.android.myproject_2/movieInfo"
-        public static final Uri URI_BCA_MOVIEINFO =
-                URI_BASE_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEINFO).build();
+        public static final Uri URI_CONTENT_AUTHORITY_MOVIEINFO =
+                URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEINFO).build();
 
-        //-----------------------------------------------------
-        // Returned Cursor definitions from Content Provider
-        //-----------------------------------------------------
-        // * Dir_Cursor string set cursor return >1 item, from the content provider
-        // (prefix, ContentResolver.CURSOR_DIR_BASE_TYPE, implies
-        // cursor return >1 item from the URI/Content Provider.)
-        // * Android uses a form, mime type, to describe the type returned by the URI.
+        //--------------------------------------------------------------
         public static final String DIR_CURSOR_MOVIEINFO =
-                ContentResolver.CURSOR_DIR_BASE_TYPE +"/"+ CONTENT_AUTHORITY +"/"+ MOVIEINFO;
+            ContentResolver.CURSOR_DIR_BASE_TYPE +"/"+ AUTHORITY +"/"+ MOVIEINFO;
 
-        // * Item_Cursor string set cursor return 1 item, from the content provider.
-        // (prefix, ContentResolver.CURSOR_ITEM_BASE_TYPE, implies
-        // cursor return 1 item from the URI/Content Provider.)
-        // * Android uses a form, mime type, to describe the type returned by the URI.
         public static  final String ITEM_CURSOR_MOVIEINFO =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIEINFO;
+            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEINFO;
 
-        //----------------------------------------
-        // TABLE 2's name and column constants
-        //----------------------------------------
-        public static final String TABLE_MOVIEINFO = "Table_MovieInfo";
+        //--------------------------------------------------------------
+        public static final String TABLE_NAME = "Table_MovieInfo";
 
         // Column contains foreign-key used in the SortByTable
         public static final String COL_ID = "id";
@@ -156,18 +176,62 @@ public class MovieContract
 
         public static final String COL_RELEASEDATE = "release_date";
         public static final String COL_OVERVIEW = "overview";
-
         public static final String COL_VIDEOLINK = "video_link";
         public static final String COL_POSTERLINK = "poster_link";
 
         //---------------------------------------------------//
         // Supporting methods to build Uris
         //
-        public static Uri buildUriMovieInfoWithId(long id) {
-            return ContentUris.withAppendedId(URI_BCA_MOVIEINFO, id);
+        public static Uri buildUri_MovieInfo_Id(long id) {
+            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_MOVIEINFO, id);
         }
-
+        public static String getMovieId_fromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+            // return uri.getLastPathSegment();
+        }
     }
 
+//    public static final class MovieEntry implements BaseColumns {
+//        //-------------------------------
+//        // Uri reference to TABLE 4
+//        //-------------------------------
+//        // "content://com.example.android.myproject_2/movie"
+//        public static final Uri URI_CONTENT_AUTHORITY_MOVIE =
+//            URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIE).build();
+//
+//        public static final String DIR_CURSOR_MOVIE =
+//            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIE;
+//
+//        public static final String ITEM_CURSOR_MOVIE =
+//            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIE;
+//
+//        public static final String TABLE_NAME = "Table_Movie";
+//
+//        public static final String COL_MOVIE_ID = "movieId";
+//        public static final String COL_VOTECOUNT = "votes";
+//        public static final String COL_RATING = "ratings";
+//        public static final String COL_TITLE = "title";
+//        public static final String COL_RELEASEDATE = "release_date";
+//        public static final String COL_OVERVIEW = "overview";
+//     //   public static final String COL_VIDEOLINK = "video_link";
+//     //   public static final String COL_POSTERLINK = "poster_link";
+//
+//        // Helper methods to build Uri(s)
+//        //
+//        public static Uri buildUri_Movie_Id(long movieId) {
+//
+//            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_MOVIE, movieId);
+//        }
+//
+//        public static Uri buildUri_Movie_Name(String movieName) {
+//
+//            return URI_CONTENT_AUTHORITY_MOVIE.buildUpon().appendPath(movieName).build();
+//        }
+//    }
 
+
+//    public static String getMovieId_fromUri(Uri uri) {
+//        return uri.getPathSegments().get(1);
+//       // return uri.getLastPathSegment();
+//    }
 }

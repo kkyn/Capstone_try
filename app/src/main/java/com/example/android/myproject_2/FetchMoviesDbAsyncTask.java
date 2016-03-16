@@ -25,7 +25,6 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, MoviesSelect
     private final String LOG_TAG = FetchMoviesDbAsyncTask.class.getSimpleName();
 
     ///////////////////////////////////////////////////
-
     private Context mContext;
     private OnAsyncTaskCompletedListener mListener;
 
@@ -41,7 +40,6 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, MoviesSelect
     }
 
     ///////////////////////////////////////////
-
     @Override
     protected MoviesSelectedInfo[] doInBackground(String... params) {
         if (params.length == 0) {
@@ -152,9 +150,7 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, MoviesSelect
         super.onPostExecute(returnedResult);
 
         mListener.onAsyncTaskCompleted(returnedResult);
-
     }
-
 
     private MoviesSelectedInfo[] getMovieInfoFromJson(String moviesJsonStr) throws JSONException {
 
@@ -203,7 +199,6 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, MoviesSelect
 
                 /*Log.v(LOG_TAG, "Movie: " + myMovSlctdInfo[i].mOriginalTitle + " " + myMovSlctdInfo[i].mVoteAverage ); //+ " " + myMovSlctdInfo[i].mPoster);*/
         }
-
             /*for (MoviesSelectedInfo s : myMovSlctdInfo) {
                 Log.v(LOG_TAG, "Movie: " + s.mOriginalTitle + " " + s.mVoteAverage + " " + s.mPoster);
             }*/
@@ -211,8 +206,6 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, MoviesSelect
             /*Log.v(LOG_TAG, "Movie: " + urladdress);*/
 
         return myMovSlctdInfo;
-
     }
-
 }
 
