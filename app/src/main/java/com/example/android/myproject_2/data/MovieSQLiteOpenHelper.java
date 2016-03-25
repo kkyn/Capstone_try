@@ -45,57 +45,58 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
         // Define the formats of the Database tables
         //+++++++++++++++++++++++++++++++++++++++++++++
         final String SQL_CREATE_TABLE_POPULARITY =
-                "CREATE TABLE " + PopularEntry.TABLE_NAME +
-                        " ("
-                        + PopularEntry._ID + " INTEGER PRIMARY KEY, "
-                      //  + PopularEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "CREATE TABLE " + PopularEntry.TABLE_NAME
+                + " ("
+                    + PopularEntry._ID + " INTEGER PRIMARY KEY, "
 
-                        + PopularEntry.COL_MV_ID + " INTEGER NOT NULL, " // constraint
-                        + PopularEntry.COL_TITLE + " TEXT NOT NULL, " // constraint
-                        // + PopularEntry.COL_SORTBYSETTING + " TEXT NOT NULL, " // constraint
-                        // + PopularEntry.COL_KEY + " INTEGER NOT NULL, " // constraint
+                    + PopularEntry.COL_KEY_ID + " INTEGER NOT NULL, " // constraint
+                    + PopularEntry.COL_MV_ID + " INTEGER NOT NULL, "
+                    + PopularEntry.COL_TITLE + " TEXT NOT NULL, " // constraint
+                // + PopularEntry.COL_SORTBYSETTING + " TEXT NOT NULL, " // constraint
+                // + PopularEntry.COL_KEY + " INTEGER NOT NULL, " // constraint
 
-                        // * Set the COL_MV_ID-column as containing foreignKey(s)/ID(s)
-                        // to reference movies' ID(s) in MovieInfoEntry.COL_MV_ID
-                        //
-                        // * definition of a FOREIGN KEY constraint...
+                // * Set the COL_KEY_ID-column as containing foreignKey(s)/ID(s)
+                // to reference movies' ID(s) in MovieInfoEntry.COL_KEY_ID
+                //
+                // * definition of a FOREIGN KEY constraint...
+                + " FOREIGN KEY (" + PopularEntry.COL_KEY_ID + ")"
 
-                        + " FOREIGN KEY (" + PopularEntry.COL_MV_ID + ")"
-                  //  + " FOREIGN KEY (" + PopularEntry._ID + ")"
-                            + " REFERENCES " + MovieInfoEntry.TABLE_NAME +
-                                        " (" + MovieInfoEntry.COL_ID + ") "
-                        + ");";
+                + " REFERENCES " + MovieInfoEntry.TABLE_NAME + " (" + MovieInfoEntry._ID + ") "
+                /*
+                    + " FOREIGN KEY (" + PopularEntry.COL_KEY_ID + ")"
 
-//        final String SQL_CREATE_TABLE_RATING =
-//                "CREATE TABLE " + RatingEntry.TABLE_NAME +
-//                        " ("
-//                        + RatingEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-//                        + RatingEntry.COL_MV_ID + " INTEGER NOT NULL, "
-//                        + RatingEntry.COL_TITLE + " TEXT NOT NULL, "
-//
-//                        + " FOREIGN KEY (" + RatingEntry.COL_MV_ID + ")"
-//                            + " REFERENCES " + MovieInfoEntry.TABLE_NAME +
-//                                        " (" + MovieInfoEntry.COL_MV_ID + ") "
-//                        + ");";
+                        + " REFERENCES " + MovieInfoEntry.TABLE_NAME +
+                                " (" + MovieInfoEntry.COL_KEY_ID + ") "
+                */
+                + ");";
 
         final String SQL_CREATE_TABLE_MOVIEINFO =
 
             "CREATE TABLE " + MovieInfoEntry.TABLE_NAME
                 + " ("
-                + MovieInfoEntry._ID
-                //    + " INTEGER PRIMARY KEY, "
-                  + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + MovieInfoEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 
-           //         + MovieInfoEntry._ID + " INTEGER PRIMARY KEY, "
-                    + MovieInfoEntry.COL_ID + " INTEGER NOT NULL, "
-                    + MovieInfoEntry.COL_TITLE + " TEXT NOT NULL, "
+                + MovieInfoEntry.COL_MV_ID          + " INTEGER NOT NULL, "
 
-                    + MovieInfoEntry.COL_RELEASEDATE + " INTEGER NOT NULL, "
-                    + MovieInfoEntry.COL_OVERVIEW  + " TEXT NOT NULL, "
-
-                    + MovieInfoEntry.COL_POSTERLINK + " TEXT NOT NULL, "
-                    + MovieInfoEntry.COL_VIDEOLINK + " TEXT NOT NULL "
+                + MovieInfoEntry.COL_TITLE          + " TEXT NOT NULL, "
+                + MovieInfoEntry.COL_RELEASEDATE    + " INTEGER NOT NULL, "
+                + MovieInfoEntry.COL_OVERVIEW       + " TEXT NOT NULL, "
+                + MovieInfoEntry.COL_POSTERLINK     + " TEXT NOT NULL, "
+                + MovieInfoEntry.COL_VIDEOLINK      + " TEXT NOT NULL "
                 + ");";
+
+//        final String SQL_CREATE_TABLE_RATING =
+//                "CREATE TABLE " + RatingEntry.TABLE_NAME +
+//                        " ("
+//                        + RatingEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+//                        + RatingEntry.COL_KEY_ID + " INTEGER NOT NULL, "
+//                        + RatingEntry.COL_TITLE + " TEXT NOT NULL, "
+//
+//                        + " FOREIGN KEY (" + RatingEntry.COL_KEY_ID + ")"
+//                            + " REFERENCES " + MovieInfoEntry.TABLE_NAME +
+//                                        " (" + MovieInfoEntry.COL_KEY_ID + ") "
+//                        + ");";
+
 
 
         //+++++++++++++++++++++++++++++++++++
@@ -125,8 +126,8 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
 
         // Have the system to execute the "SQL...", to build the database table
         db.execSQL(SQL_CREATE_TABLE_POPULARITY);
-//        db.execSQL(SQL_CREATE_TABLE_RATING);
         db.execSQL(SQL_CREATE_TABLE_MOVIEINFO);
+//        db.execSQL(SQL_CREATE_TABLE_RATING);
      //   db.execSQL(SQL_CREATE_TABLE_MOVIE);
     }
 

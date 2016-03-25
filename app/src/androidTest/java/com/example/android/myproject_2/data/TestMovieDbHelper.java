@@ -103,7 +103,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         locationColumnHashSet.add(MovieInfoEntry._ID);
         locationColumnHashSet.add(MovieInfoEntry.COL_POSTERLINK);
         locationColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);
-        locationColumnHashSet.add(MovieInfoEntry.COL_ID);
+        locationColumnHashSet.add(MovieInfoEntry.COL_MV_ID);
 
         int columnNameIndex = mCursor.getColumnIndex("name");
         do {
@@ -123,8 +123,12 @@ public class TestMovieDbHelper extends AndroidTestCase {
         You'll want to look in TestUtilities, the "createPopularValues" function.
         You can also make use of the ValidateCurrentRecord function from within TestUtilities.
     */
-    public void testSortByTable() {
-        insertSortBy();
+    public void testPopularTable() {
+
+        long rowId;
+        Log.d("-- " + LOG_TAG, " ---testPopularTable()--- "); // tky add
+        rowId = insertPopularTable();
+        Log.d("-- " + LOG_TAG, " rowId : " + rowId); // tky add
     }
 
 
@@ -134,67 +138,76 @@ public class TestMovieDbHelper extends AndroidTestCase {
         You'll want to look in TestUtilities where you can use the "createPopularValues" function.
         You can also make use of the validateCurrentRecord function from within TestUtilities.
      */
-//    public void testMovieInfoTable() {
-//        // First insert the sortby value, and then use the sortByRowId to insert
-//        // the movieInfo. Make sure to cover as many failure cases as you can.
-//
-//        // Instead of rewriting all of the code we've already written in testSortByTable
-//        // we can move this code to insertSortBy and then call insertSortBy from both
-//        // tests. Why move it? We need the code to return the ID of the inserted location
-//        // and our testSortByTable can only return void because it's a test.
-//
-//        long sortByRowId = insertSortBy();
-//
-//        // Make sure we have a valid row ID.
-//        assertFalse("Error: Location Not Inserted Correctly", sortByRowId == -1L);
-//
-//        // First step: Get reference to writable database
-//        // If there's an error in those massive SQL table creation Strings,
-//        // errors will be thrown here when you try to get a writable database.
-//        MovieSQLiteOpenHelper dbHelper = new MovieSQLiteOpenHelper(mContext);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//
-//        // Second Step (MovieInfo): Create MovieInfo values
-//        ContentValues movieInfoValues = TestUtilities.createValues_4MovieInfo(sortByRowId);
-//
-//        // Third Step (MovieInfo): Insert ContentValues into database and get a row ID back
-//        long movieInfoRowId = db.insert(MovieInfoEntry.TABLE_NAME, null, movieInfoValues);
-//        assertTrue(movieInfoRowId != -1);
-//
-//        // Fourth Step: Query the database and receive a Cursor back
-//        // A cursor is your primary interface to the query results.
-//        Cursor movieInfoCursor = db.query(
-//                MovieInfoEntry.TABLE_NAME,  // Table to Query
-//                null, // leaving "columns" null just returns all the columns.
-//                null, // cols for "where" clause
-//                null, // values for "where" clause
-//                null, // columns to group by
-//                null, // columns to filter by row groups
-//                null  // sort order
-//        );
-//
-//        // Move the cursor to a valid database row and check to see if we have any rows
-//        assertTrue("Error: No Records returned from location query", movieInfoCursor.moveToFirst());
-//
-//        // Fifth Step: Validate the movieInfo Query
-//        TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
-//                movieInfoCursor, movieInfoValues);
-//
-//        // Move the cursor to demonstrate that there is only one record in the database
-//        assertFalse("Error: More than one record returned from weather query",
-//                movieInfoCursor.moveToNext());
-//
-//        // Sixth Step: Close cursor and database
-//        movieInfoCursor.close();
-//        dbHelper.close();
-//    }
+    public void testMovieInfoTable() {
+
+        Log.d("-- " + LOG_TAG, " ---testMovieInfoTable()--- "); // tky add
+
+        // First insert the sortby value, and then use the popularRowId to insert
+        // the movieInfo. Make sure to cover as many failure cases as you can.
+
+        // Instead of rewriting all of the code we've already written in testPopularTable
+        // we can move this code to insertPopularTable and then call insertPopularTable from both
+        // tests. Why move it? We need the code to return the ID of the inserted location
+        // and our testPopularTable can only return void because it's a test.
+
+        long popularRowId = insertPopularTable();
+
+        // Make sure we have a valid row ID.
+        assertFalse("Error: Location Not Inserted Correctly", popularRowId == -1L);
+
+        // First step: Get reference to writable database
+        // If there's an error in those massive SQL table creation Strings,
+        // errors will be thrown here when you try to get a writable database.
+        MovieSQLiteOpenHelper dbHelper = new MovieSQLiteOpenHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Second Step (MovieInfo): Create MovieInfo values
+        ContentValues mInfoValues = TestUtilities.createValues4MovieInfo(popularRowId);
+
+        // Third Step (MovieInfo): Insert ContentValues into database and get a row ID back
+        long movieInfoRowId = db.insert(MovieInfoEntry.TABLE_NAME, null, mInfoValues);
+        assertTrue(movieInfoRowId != -1);
+
+        // Fourth Step: Query the database and receive a Cursor back
+        // A cursor is your primary interface to the query results.
+        Cursor mInfoCursor = db.query(
+                MovieInfoEntry.TABLE_NAME,  // Table to Query
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                null, // columns to group by
+                null, // columns to filter by row groups
+                null  // sort order
+        );
+
+
+        // Move the cursor to a valid database row and check to see if we have any rows
+        assertTrue("Error: No Records returned from location query", mInfoCursor.moveToFirst());
+
+        // Fifth Step: Validate the movieInfo Query
+        TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
+                mInfoCursor, mInfoValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse("Error: More than one record returned from weather query",
+            mInfoCursor.moveToNext());
+
+        TestUtilities.validateCursorValue(mInfoCursor); // tky add
+
+        // Sixth Step: Close cursor and database
+        mInfoCursor.close();
+        dbHelper.close();
+    }
 
     /*
         This is a helper method for the testMovieInfoTable. You can move your
-        code from testSortByTable to here so that you can call this code from both
-        testMovieInfoTable and testSortByTable. ??
+        code from testPopularTable to here so that you can call this code from both
+        testMovieInfoTable and testPopularTable. ??
      */
-    public long insertSortBy() {
+    public long insertPopularTable() {
+
+        Log.d("-- " + LOG_TAG, " ---insertPopularTable()--- "); // tky add
+
         // Step 1 : Get reference to writable database
         // If there's an error in those massive SQL table creation Strings,
         // errors will be thrown here when you try to get a writable database.
@@ -203,16 +216,17 @@ public class TestMovieDbHelper extends AndroidTestCase {
 
         // Step 2 : Create ContentValues of what you want to insert
         // (you can use the createPopularValues if you wish)
-        ContentValues testValues = TestUtilities.createPopularValues();
+        ContentValues tValues = TestUtilities.createPopularValues();
 
         // Step 3 : Insert ContentValues into database and get a row ID back
-        long movieRowId;
-        movieRowId = db.insert(PopularEntry.TABLE_NAME, null, testValues);
+        long popularRowId;
+        popularRowId = db.insert(PopularEntry.TABLE_NAME, null, tValues);
 
         // Verify we got a row back.
-        assertTrue(movieRowId != -1);
+        assertTrue(popularRowId != -1);
 
-        Log.d("-- " + LOG_TAG + " after Insert", "movieRowId: " + String.valueOf(movieRowId)); // tky add
+        Log.d("-- " + LOG_TAG, " ---after Insert--- "); // tky add
+        Log.d("-- " + LOG_TAG, " popularRowId: " + String.valueOf(popularRowId)); // tky add
 
         // Data's inserted.  IN THEORY.  Now pull some out to stare at it and verify it made
         // the round trip.
@@ -234,31 +248,33 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // from the query
         assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
 
-        Log.d("-- " + LOG_TAG, "TestUtilities.validateCurrentRecord()");
+        Log.d("-- " + LOG_TAG, " --- Into TestUtilities.validateCurrentRecord() --- "); // tky add
 
             // Step 5 : Validate data in resulting Cursor with the original ContentValues
             // (you can use the validateCurrentRecord function in TestUtilities to validate the
             // query if you like)
             TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
-                cursor, testValues);
+                cursor, tValues);
 
         // Move the cursor to demonstrate that there is only one record in the database
         assertFalse( "Error: More than one record returned from location query",
                 cursor.moveToNext() );
-
+/**/
+TestUtilities.validateCursorValue( cursor );
+/* */
         // Step 6 : Close Cursor and Database
         cursor.close();
         db.close();
 
-        return movieRowId;
+        return popularRowId;
     }
 
     /*
         This is a helper method for the testMovieInfoTable. You can move your
-        code from testSortByTable to here so that you can call this code from both
-        testMovieInfoTable and testSortByTable.
+        code from testPopularTable to here so that you can call this code from both
+        testMovieInfoTable and testPopularTable.
      */
-    //public long insertSortBy() {
+    //public long insertPopularTable() {
     //    return -1L;
     //}
 }

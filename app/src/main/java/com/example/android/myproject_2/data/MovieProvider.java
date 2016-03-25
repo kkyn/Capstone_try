@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /* */
 
@@ -25,6 +26,7 @@ import com.example.android.myproject_2.data.MovieContract.PopularEntry;
 //      execute different types of operations against the underlying SQL database.
 public class MovieProvider extends ContentProvider {
 
+    public static final String LOG_TAG = MovieProvider.class.getSimpleName(); // tky add
     private MovieSQLiteOpenHelper mMovie_SQLiteOpenHelper = null;
 
     // Step-3 ... URIMatcher
@@ -66,7 +68,8 @@ public class MovieProvider extends ContentProvider {
         UriMatcher aUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         aUriMatcher.addURI(authority, MovieContract.POPULAR, POPULAR_);
-        aUriMatcher.addURI(authority, MovieContract.POPULAR + "/*", POPULAR_MOVIEID);
+        aUriMatcher.addURI(authority, MovieContract.POPULAR + "/#", POPULAR_MOVIEID);
+    //    aUriMatcher.addURI(authority, MovieContract.POPULAR + "/*", POPULAR_MOVIEID);
 
         aUriMatcher.addURI(authority, MovieContract.RATING,             RATING_DIR);
         aUriMatcher.addURI(authority, MovieContract.RATING + "/*",      RATING_MOVIEID);
@@ -93,10 +96,26 @@ public class MovieProvider extends ContentProvider {
         // .setTables -- Sets the list of tables to query.
         mPopularMovies_SQLiteQueryBuilder.setTables(
             PopularEntry.TABLE_NAME + " INNER JOIN " + MovieInfoEntry.TABLE_NAME
+            /*
                 + " ON "
                 + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_MV_ID
                 + " = "
-                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_ID
+                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_MV_ID
+            */
+            /*
+                + " ON "
+                + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID
+                + " = "
+                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
+            //    + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_MV_ID
+            */
+            /**/
+                + " ON "
+                + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_TITLE
+                + " = "
+                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_TITLE
+            //    + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_MV_ID
+            /**/
         );
     }
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -108,9 +127,9 @@ public class MovieProvider extends ContentProvider {
 //        mRatedMovies_SQLiteQueryBuilder.setTables(
 //            RatingEntry.TABLE_NAME + " INNER JOIN " + MovieInfoEntry.TABLE_NAME
 //                + " ON "
-//                + RatingEntry.TABLE_NAME + "." + RatingEntry.COL_MV_ID
+//                + RatingEntry.TABLE_NAME + "." + RatingEntry.COL_KEY_ID
 //                + " = "
-//                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_MV_ID
+//                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_KEY_ID
 //        );
 //    }
 
@@ -143,7 +162,8 @@ public class MovieProvider extends ContentProvider {
 
     // Popularity.MovieID = ?
     private static final String sPopular_MovieId_Selection =
-        PopularEntry.TABLE_NAME + "." + PopularEntry.COL_MV_ID + " = ?";
+        PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID + " = ?";
+
 
     // ContentResolver > Content-Provider > "DATABASE"
     // This method is to be used in Content-Provider's query method
@@ -229,7 +249,19 @@ public class MovieProvider extends ContentProvider {
             }
             // Popularity/
              case POPULAR_: {
-                retCursor = getPopularMoviesData(uri, projection, selection, selectionArgs, sortOrder);
+
+                 Log.d(LOG_TAG, "popularUri: " + uri.toString()); // tky add
+                //retCursor = getPopularMoviesData(uri, projection, selection, selectionArgs, sortOrder);
+                 retCursor = mMovie_SQLiteOpenHelper.getReadableDatabase()
+                     .query(
+                         PopularEntry.TABLE_NAME,
+                         projection,
+                         selection,
+                         selectionArgs,
+                         null,
+                         null,
+                         sortOrder
+                     );
                 break;
             }
             case MOVIEINFO_: {
@@ -262,8 +294,15 @@ public class MovieProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
 
         }
+        if (retCursor == null) {
+            Log.d(LOG_TAG, "retCursor is NULL");
+        } else {
+            Log.d(LOG_TAG, "retCursor is not NULL");
+        }
         // to uncomment later -- retCursor cannot be null
-        //retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+
+        //getContext().getContentResolver().notifyChange(uri, null);
         return retCursor;
     }
 
@@ -273,21 +312,32 @@ public class MovieProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         final SQLiteDatabase mSqlDb = mMovie_SQLiteOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
         int rowsUpdated;
 
-        switch (sUriMatcher.match(uri)) {
+        switch (match) {
             case POPULAR_: {
+
                 rowsUpdated = mSqlDb.update(PopularEntry.TABLE_NAME, values, selection, selectionArgs);
+
+                Log.d(LOG_TAG, "update/uri: " + uri.toString() + " ++++ rowsUpdated: " + rowsUpdated); // tky add
+                break;
+            }
+            case MOVIEINFO_: {
+                rowsUpdated = mSqlDb.update(MovieInfoEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
+        //getContext().getContentResolver().notifyChange(uri, null);
         if (rowsUpdated != 0) {
+        //    if (rowsUpdated > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
-        return 0;
+        return rowsUpdated;
+        //return 0;
     }
 
     @Nullable
@@ -340,6 +390,9 @@ public class MovieProvider extends ContentProvider {
         return true;
     }
 
+    // e.g. Uri == "content://authority/table-name/row-ID" , row-Id is needed if a specific row is to be deleted
+    // + selection, (a String) == An optional restriction to apply to rows when deleting.
+    // + return int == the number of rows deleted
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
 
@@ -352,6 +405,10 @@ public class MovieProvider extends ContentProvider {
 
             case POPULAR_: {
                 rowsDeleted = mSqlDb.delete(PopularEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            case MOVIEINFO_: {
+                rowsDeleted = mSqlDb.delete(MovieInfoEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
             default:

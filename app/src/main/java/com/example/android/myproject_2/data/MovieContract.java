@@ -38,7 +38,7 @@ public class MovieContract {
         // Uri reference to TABLE 1 -- "content://com.example.android.myproject_2/popularity"
         //-------------------------------
         // "content://com.example.android.myproject_2/popularity"
-        public static final Uri URI_CONTENT_AUTHORITY_POPULAR =
+        public static final Uri CONTENT_URI =
                 URI_CONTENT_AUTHORITY.buildUpon().appendPath(POPULAR).build();
 
         //-----------------------------------------------------
@@ -71,8 +71,9 @@ public class MovieContract {
         // TABLE 1's name and column constants
         //----------------------------------------
         public static final String TABLE_NAME = "Table_Popularity";
-        public static final String COL_MV_ID = "mvId";
-        public static final String COL_TITLE = "title";
+        public static final String COL_KEY_ID = "KeyId";
+        public static final String COL_MV_ID = "MovieIDs";
+        public static final String COL_TITLE = "Title";
 
        // public static final String COL_KEY = "movieRef";
         //public static final String COL_SORTBYSETTING = "sortBySetting";
@@ -87,8 +88,8 @@ public class MovieContract {
         // *  e.g. "content://com.example.android.myproject_2/Popularity/movieName"
         public static Uri buildUriPopularity(String movieName) {
 
-            return URI_CONTENT_AUTHORITY_POPULAR.buildUpon().appendPath(movieName).build();
-           // return URI_CONTENT_AUTHORITY_POPULAR.buildUpon().appendPath(SortedBy).build();
+            return CONTENT_URI.buildUpon().appendPath(movieName).build();
+           // return CONTENT_URI.buildUpon().appendPath(SortedBy).build();
         }
 
 
@@ -101,15 +102,55 @@ public class MovieContract {
         // * public static Uri withAppendedId (Uri contentUri, long id)
         public static Uri buildUriPopularityWithId(long movieId) {
 
-            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_POPULAR, movieId);
+            return ContentUris.withAppendedId(CONTENT_URI, movieId);
         }
 //        public static Uri buildUriPopularityWithId(long id) {
-//            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_POPULAR, id);
+//            return ContentUris.withAppendedId(CONTENT_URI, id);
 //        }
 
         public static String getMovieId_fromUri(Uri uri) {
             return uri.getPathSegments().get(1);
            // return uri.getLastPathSegment();
+        }
+    }
+
+    //+++++++++++++++++++++++++++++++++++++++++++++//
+    // DEFINITIONS FOR TABLE 3
+    //+++++++++++++++++++++++++++++++++++++++++++++//
+    public static final class MovieInfoEntry implements BaseColumns {
+
+        // "content://com.example.android.myproject_2/movieInfo"
+        public static final Uri CONTENT_URI =
+            URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEINFO).build();
+
+        //--------------------------------------------------------------
+        public static final String DIR_CURSOR_MOVIEINFO =
+            ContentResolver.CURSOR_DIR_BASE_TYPE +"/"+ AUTHORITY +"/"+ MOVIEINFO;
+
+        public static  final String ITEM_CURSOR_MOVIEINFO =
+            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEINFO;
+
+        //--------------------------------------------------------------
+        public static final String TABLE_NAME = "Table_MovieInfo";
+
+        // Column contains foreign-key used in the SortByTable
+        public static final String COL_MV_ID = "movie_id";
+        public static final String COL_TITLE = "title";
+
+        public static final String COL_RELEASEDATE = "release_date";
+        public static final String COL_OVERVIEW = "overview";
+        public static final String COL_VIDEOLINK = "video_link";
+        public static final String COL_POSTERLINK = "poster_link";
+
+        //---------------------------------------------------//
+        // Supporting methods to build Uris
+        //
+        public static Uri buildUri_MovieInfo_Id(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+        public static String getMovieId_fromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+            // return uri.getLastPathSegment();
         }
     }
 
@@ -135,7 +176,7 @@ public class MovieContract {
 //        //--------------------------------------------------------------
 //        public static final String TABLE_NAME = "Table_Rating";
 //
-//        public static final String COL_MV_ID = "movieID";
+//        public static final String COL_KEY_ID = "movieID";
 //        public static final String COL_TITLE = "movieTitle";
 //      //  public static final String COL_KEY = "movieRef";
 //
@@ -151,45 +192,7 @@ public class MovieContract {
 //    }
 
 
-    //+++++++++++++++++++++++++++++++++++++++++++++//
-    // DEFINITIONS FOR TABLE 3
-    //+++++++++++++++++++++++++++++++++++++++++++++//
-    public static final class MovieInfoEntry implements BaseColumns {
 
-        // "content://com.example.android.myproject_2/movieInfo"
-        public static final Uri URI_CONTENT_AUTHORITY_MOVIEINFO =
-                URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEINFO).build();
-
-        //--------------------------------------------------------------
-        public static final String DIR_CURSOR_MOVIEINFO =
-            ContentResolver.CURSOR_DIR_BASE_TYPE +"/"+ AUTHORITY +"/"+ MOVIEINFO;
-
-        public static  final String ITEM_CURSOR_MOVIEINFO =
-            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEINFO;
-
-        //--------------------------------------------------------------
-        public static final String TABLE_NAME = "Table_MovieInfo";
-
-        // Column contains foreign-key used in the SortByTable
-        public static final String COL_ID = "id";
-        public static final String COL_TITLE = "title";
-
-        public static final String COL_RELEASEDATE = "release_date";
-        public static final String COL_OVERVIEW = "overview";
-        public static final String COL_VIDEOLINK = "video_link";
-        public static final String COL_POSTERLINK = "poster_link";
-
-        //---------------------------------------------------//
-        // Supporting methods to build Uris
-        //
-        public static Uri buildUri_MovieInfo_Id(long id) {
-            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_MOVIEINFO, id);
-        }
-        public static String getMovieId_fromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
-            // return uri.getLastPathSegment();
-        }
-    }
 
 //    public static final class MovieEntry implements BaseColumns {
 //        //-------------------------------

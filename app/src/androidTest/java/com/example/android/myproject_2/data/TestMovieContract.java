@@ -151,13 +151,13 @@ public class TestMovieContract extends AndroidTestCase {
 //    }
     public void testGetMovieId_fromUri() {
 
-        Uri mUri =  Uri.parse("content://com.example.android.myproject_2/movie/1234");
+        Uri mUri =  Uri.parse("content://com.example.android.myproject_2/popularity/1234");
         String mMovieId = PopularEntry.getMovieId_fromUri(mUri);
 
         assertEquals("Error: 'extracted Movie_Id from Uri don't match with fixed 1234",
             "1234", mMovieId);
-        Log.d("-- " + LOG_TAG, mUri.toString() );
-        Log.d("-- "+ LOG_TAG, mMovieId);
+        Log.d("-- " + LOG_TAG, "Uri : " + mUri.toString() ); // tky add
+        Log.d("-- "+ LOG_TAG, "movieId : " + mMovieId);     // tky add
 
     }
 }
