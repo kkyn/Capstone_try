@@ -33,7 +33,7 @@ public class TestUtilities extends AndroidTestCase {
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
 
-        Log.d("-- " + LOG_TAG, " ---validateCursor()--- "); // tky add
+        Log.d("-- " + LOG_TAG, "  +++ validateCursor()--- "); // tky add
 
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
         validateCurrentRecord(error, valueCursor, expectedValues);
@@ -42,7 +42,7 @@ public class TestUtilities extends AndroidTestCase {
 
     static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
 
-        Log.d("-- " + LOG_TAG, " ---validateCurrentRecord()--- "); // tky add
+        Log.d("-- " + LOG_TAG, "  +++ validateCurrentRecord()--- "); // tky add
 
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
 
@@ -57,7 +57,7 @@ public class TestUtilities extends AndroidTestCase {
 
             String expectedValue = entry.getValue().toString();
 
-            Log.d("-- " + LOG_TAG,  "ColIndx: " + idx + " -- " + "ColName: " + columnName + " cColName: " + cColName + " --- " + expectedValue ); // tky add
+            Log.d("-- " + LOG_TAG,  "  +++ ColIndx: " + idx + " -- " + "ColName: " + columnName + " cColName: " + cColName + " --- " + expectedValue ); // tky add
 
             assertEquals(
                 "Value '"
@@ -88,7 +88,7 @@ ContentValues expectedValues) {
           //  assertFalse("Column '" + columnName + "' not found. " + error, idx == -1);
 
             String expectedValue = entry.getValue().toString();
-            Log.d("-- " + LOG_TAG,  "key: " + columnName + "  " + "value: " + expectedValue ); // tky add
+            Log.d("-- " + LOG_TAG,  "  +++ key: " + columnName + "  " + "value: " + expectedValue ); // tky add
 
           //  Log.d("-- " + LOG_TAG,  "ColmnIndx: " + idx + "  " + "ColmnName: " + columnName + "  cColName: " + cColName + " value: " + expectedValue ); // tky add
 
@@ -111,22 +111,23 @@ static void validateCursorValue(//String error,
                                  //,ContentValues expectedValues
                                  ) {
 
-    Log.d("-- " + LOG_TAG, " ---validateCursorValue()--- "); // tky add
+    Log.d("-- " + LOG_TAG, "  +++ validateCursorValue() --- "); // tky add
   //  Cursor mCursor = valueCursor;
     int rowCount = valueCursor.getCount();
     int colCount = valueCursor.getColumnCount();
 
-    Log.d(LOG_TAG, "rows:: " + Integer.toString(rowCount) +  " cols:: " + Integer.toString(colCount));
+    Log.d("-- "+LOG_TAG, "  +++ rows:- " + rowCount +  " cols:- " + colCount);
+    //Log.d("-- "+LOG_TAG, "  +++ rows:: " + Integer.toString(rowCount) +  " cols:: " + Integer.toString(colCount));
 
     int count = 0;
     String mValue = "";
-    String nValue = valueCursor.moveToFirst() == true ? "--yes it is first---" : "--no not first--";
-    Log.d(LOG_TAG, "*** :" + nValue);
+    String nValue = valueCursor.moveToFirst() == true ? "yes it is first" : "no -- not first--";
+    Log.d("-- "+LOG_TAG, "  +++ *** :" + nValue);
     do {
         mValue = valueCursor.isFirst() == true ? "YES it is first" : "NO -- not first";
-        Log.d(LOG_TAG, "*** :" + mValue);
+        Log.d("-- "+LOG_TAG, "  +++ *** :" + mValue);
         for (count = 0; count < colCount; count++) {
-            Log.d(LOG_TAG, valueCursor.getColumnName(count)+ " : " + valueCursor.getString(count));
+            Log.d("-- "+LOG_TAG, "  +++ " + valueCursor.getColumnName(count)+ " : " + valueCursor.getString(count));
         }
         valueCursor.moveToNext();
     }
@@ -204,10 +205,8 @@ static void validateCursorValue(//String error,
 
         ContentValues tValues = new ContentValues();
 
-        tValues.put(MovieInfoEntry.COL_MV_ID, rowId);  // rowId
-
-     //   tValues.put(MovieInfoEntry.COL_MV_ID, rowId-1);  // rowId , last used
-     //   tValues.put(MovieInfoEntry.COL_MV_ID, rowId-1);  // rowId
+        //tValues.put(MovieInfoEntry.COL_MV_ID, 8);  // rowId
+         tValues.put(MovieInfoEntry.COL_MV_ID, rowId);  // rowId
 
         tValues.put(MovieInfoEntry.COL_TITLE, "MyMovie");
         tValues.put(MovieInfoEntry.COL_RELEASEDATE, 95); // 55
@@ -218,11 +217,12 @@ static void validateCursorValue(//String error,
 
         return tValues;
     }
-    static ContentValues createValues_4MovieInfo_1() {
+    static ContentValues createMovieInfoValues_1() {
 
+        Log.d(LOG_TAG, "  ++++ Into createMovieInfoValues_1() ---"); // tky add
         ContentValues mContentValues = new ContentValues();
-
-        mContentValues.put(MovieInfoEntry.COL_MV_ID, 8); // tky comment , 1L
+        mContentValues.put(MovieInfoEntry.COL_MV_ID, 99); // tky comment , 1L, 3
+     // mContentValues.put(MovieInfoEntry.COL_MV_ID, 8); // tky comment , 1L
         mContentValues.put(MovieInfoEntry.COL_TITLE, "MyMovie");
         mContentValues.put(MovieInfoEntry.COL_RELEASEDATE, 95);  // 55, 88
         mContentValues.put(MovieInfoEntry.COL_OVERVIEW, "MyMovie_Synopsis");
@@ -376,7 +376,7 @@ static void validateCursorValue(//String error,
         MovieSQLiteOpenHelper mSqlDbOpenHelper = new MovieSQLiteOpenHelper(context);
         SQLiteDatabase mSqlDb = mSqlDbOpenHelper.getWritableDatabase();
 
-        ContentValues mContentValues = TestUtilities.createValues_4MovieInfo_1();
+        ContentValues mContentValues = TestUtilities.createMovieInfoValues_1();
 
         long mRowId;
         mRowId = mSqlDb.insert(MovieInfoEntry.TABLE_NAME, null, mContentValues);

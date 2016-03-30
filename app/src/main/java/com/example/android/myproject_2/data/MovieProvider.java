@@ -69,14 +69,13 @@ public class MovieProvider extends ContentProvider {
 
         aUriMatcher.addURI(authority, MovieContract.POPULAR, POPULAR_);
         aUriMatcher.addURI(authority, MovieContract.POPULAR + "/#", POPULAR_MOVIEID);
-    //    aUriMatcher.addURI(authority, MovieContract.POPULAR + "/*", POPULAR_MOVIEID);
-
-        aUriMatcher.addURI(authority, MovieContract.RATING,             RATING_DIR);
-        aUriMatcher.addURI(authority, MovieContract.RATING + "/*",      RATING_MOVIEID);
+    //  aUriMatcher.addURI(authority, MovieContract.POPULAR + "/*", POPULAR_MOVIEID);
 
         aUriMatcher.addURI(authority, MovieContract.MOVIEINFO, MOVIEINFO_);
 
-        aUriMatcher.addURI(authority, MovieContract.MOVIE,      MOVIE_DIR);
+    //    aUriMatcher.addURI(authority, MovieContract.RATING,             RATING_DIR);
+    //    aUriMatcher.addURI(authority, MovieContract.RATING + "/*",      RATING_MOVIEID);
+    //    aUriMatcher.addURI(authority, MovieContract.MOVIE,      MOVIE_DIR);
 
         return aUriMatcher;
     }
@@ -84,24 +83,49 @@ public class MovieProvider extends ContentProvider {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // The SQLiteQueryBuilder -- a convience class that helps build SQL queries
     //                      to be sent to SQLiteDatabase objects.
-    private static final SQLiteQueryBuilder mPopularMovies_SQLiteQueryBuilder;
+    private static final SQLiteQueryBuilder mPopular_SQLiteQueryBuilder;
     //private static final SQLiteQueryBuilder mRatedMovies_SQLiteQueryBuilder;
     //private static final SQLiteQueryBuilder mMovie_SQLiteQueryBuilder;
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     static {
-        mPopularMovies_SQLiteQueryBuilder = new SQLiteQueryBuilder();
+        mPopular_SQLiteQueryBuilder = new SQLiteQueryBuilder();
 
         // .setTables -- Sets the list of tables to query.
-        mPopularMovies_SQLiteQueryBuilder.setTables(
-            PopularEntry.TABLE_NAME + " INNER JOIN " + MovieInfoEntry.TABLE_NAME
+        mPopular_SQLiteQueryBuilder.setTables(/**/
+
+            /**
+            MovieInfoEntry.TABLE_NAME
+                + " INNER JOIN " + PopularEntry.TABLE_NAME
+                + " ON "
+                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
+                + " = "
+                + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID
+            **/
+            /**/
+            PopularEntry.TABLE_NAME
+            + " INNER JOIN " + MovieInfoEntry.TABLE_NAME
+                + " ON "
+                + "(" + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID
+                + " = "
+                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
+                + ");"
+            /**/
+            /**
+            PopularEntry.TABLE_NAME
+
+            **/
             /*
+            PopularEntry.TABLE_NAME
+
+            + " INNER JOIN " + MovieInfoEntry.TABLE_NAME
+
                 + " ON "
                 + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_MV_ID
                 + " = "
                 + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_MV_ID
-            */
+*/
             /*
                 + " ON "
                 + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID
@@ -109,13 +133,13 @@ public class MovieProvider extends ContentProvider {
                 + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
             //    + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_MV_ID
             */
-            /**/
-                + " ON "
-                + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_TITLE
-                + " = "
-                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_TITLE
-            //    + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_MV_ID
-            /**/
+            /***
+             + " ON "
+             + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_TITLE
+             + " = "
+             + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_TITLE
+             //    + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_MV_ID
+             ***/
         );
     }
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -141,16 +165,17 @@ public class MovieProvider extends ContentProvider {
     private Cursor getPopularMoviesData(
         Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
-        return mPopularMovies_SQLiteQueryBuilder.query
-                (
-                    mMovie_SQLiteOpenHelper.getReadableDatabase()
-                    , projection
-                    , selection
-                    , selectionArgs
-                    , null
-                    , null
-                    , sortOrder
-                );
+        Log.d(LOG_TAG, "---- INTO getPopularMoviesData() ---- call SQLiteQueryBuilder.query()"); // tky add
+
+        return mPopular_SQLiteQueryBuilder.query(
+                                mMovie_SQLiteOpenHelper.getReadableDatabase()
+                                , projection
+                                , selection
+                                , selectionArgs
+                                , null
+                                , null
+                                , sortOrder
+                            );
     }
 
 //    private Cursor getMovieInfoData(
@@ -173,7 +198,7 @@ public class MovieProvider extends ContentProvider {
         String mMovieId = PopularEntry.getMovieId_fromUri(uri);
 
         // call database and query for the row with such mMovieId
-        return mPopularMovies_SQLiteQueryBuilder.query(
+        return mPopular_SQLiteQueryBuilder.query(
             mMovie_SQLiteOpenHelper.getReadableDatabase()
             , projection
             , sPopular_MovieId_Selection
@@ -206,6 +231,16 @@ public class MovieProvider extends ContentProvider {
     }
 */
 
+    // + onCreate runs on the UI thread, so you should avoid executing any long-lasting tasks in this method.
+    // + Your content provider is usually created at the start of your app.
+    @Override
+    public boolean onCreate() {
+
+        // Create/Reference the Database ( movie.db ) associated to this content provider
+        //
+        mMovie_SQLiteOpenHelper = new MovieSQLiteOpenHelper(getContext());
+        return true;
+    }
 
    // @Nullable
     @Override
@@ -223,7 +258,6 @@ public class MovieProvider extends ContentProvider {
 
             //    case RATING_DIR         :   return RatingEntry.RATING_MULTI_ITEM_CURSOR;
             //    case RATING_MOVIEID     :   return RatingEntry.RATING_SINGLE_ITEM_CURSOR;
-
             //    case MOVIE_DIR:         return MovieEntry.DIR_CURSOR_MOVIE;
 
             default:
@@ -248,10 +282,9 @@ public class MovieProvider extends ContentProvider {
                 break;
             }
             // Popularity/
-             case POPULAR_: {
-
-                 Log.d(LOG_TAG, "popularUri: " + uri.toString()); // tky add
-                //retCursor = getPopularMoviesData(uri, projection, selection, selectionArgs, sortOrder);
+            case POPULAR_: {
+                Log.d(LOG_TAG, "---- popularUri: " + uri.toString());  // tky add
+//                retCursor = getPopularMoviesData(uri, projection, selection, selectionArgs, sortOrder);
                  retCursor = mMovie_SQLiteOpenHelper.getReadableDatabase()
                      .query(
                          PopularEntry.TABLE_NAME,
@@ -263,8 +296,25 @@ public class MovieProvider extends ContentProvider {
                          sortOrder
                      );
                 break;
+                /****
+    private Cursor getPopularMoviesData(
+        Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        return mPopular_SQLiteQueryBuilder.query(
+                                mMovie_SQLiteOpenHelper.getReadableDatabase()
+                                , projection
+                                , selection
+                                , selectionArgs
+                                , null
+                                , null
+                                , sortOrder
+                            );
+    }
+                ****/
             }
             case MOVIEINFO_: {
+
+                Log.d(LOG_TAG, "---- popularUri: " + uri.toString());  // tky add
                 // retCursor = null;
                 retCursor = mMovie_SQLiteOpenHelper.getReadableDatabase()
                                 .query(
@@ -295,9 +345,9 @@ public class MovieProvider extends ContentProvider {
 
         }
         if (retCursor == null) {
-            Log.d(LOG_TAG, "retCursor is NULL");
+            Log.d(LOG_TAG, "---- retCursor is NULL");
         } else {
-            Log.d(LOG_TAG, "retCursor is not NULL");
+            Log.d(LOG_TAG, "---- retCursor is not NULL");
         }
         // to uncomment later -- retCursor cannot be null
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -320,7 +370,7 @@ public class MovieProvider extends ContentProvider {
 
                 rowsUpdated = mSqlDb.update(PopularEntry.TABLE_NAME, values, selection, selectionArgs);
 
-                Log.d(LOG_TAG, "update/uri: " + uri.toString() + " ++++ rowsUpdated: " + rowsUpdated); // tky add
+                Log.d(LOG_TAG, "---- update/uri: " + uri.toString() + " ++++ rowsUpdated: " + rowsUpdated); // tky add
                 break;
             }
             case MOVIEINFO_: {
@@ -362,6 +412,7 @@ public class MovieProvider extends ContentProvider {
             //---------------------
             case MOVIEINFO_: {
                 long _id = mSqlDb.insert(MovieInfoEntry.TABLE_NAME, null, values);
+                Log.d(LOG_TAG, "-----inserted into MovieInfoEntry _id = " + _id);
                 if (_id > 0) {
                     retUri = MovieInfoEntry.buildUri_MovieInfo_Id(_id);
                 }
@@ -379,16 +430,7 @@ public class MovieProvider extends ContentProvider {
 
     }
 
-    // + onCreate runs on the UI thread, so you should avoid executing any long-lasting tasks in this method.
-    // + Your content provider is usually created at the start of your app.
-    @Override
-    public boolean onCreate() {
 
-        // Create/Reference the Database ( movie.db ) associated to this content provider
-        //
-        mMovie_SQLiteOpenHelper = new MovieSQLiteOpenHelper(getContext());
-        return true;
-    }
 
     // e.g. Uri == "content://authority/table-name/row-ID" , row-Id is needed if a specific row is to be deleted
     // + selection, (a String) == An optional restriction to apply to rows when deleting.

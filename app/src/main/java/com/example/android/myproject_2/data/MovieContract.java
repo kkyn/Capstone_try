@@ -23,9 +23,9 @@ public class MovieContract {
     // e.g "content://com.example.android.myproject_2/movieSortBy"
     // e.g "content://com.example.android.myproject_2/movieInfo"
     public static final String POPULAR = "popularity";
-    public static final String RATING = "rating";
     public static final String MOVIEINFO = "movieInfo";
-    public static final String MOVIE = "movie";
+   //public static final String RATING = "rating";
+   //public static final String MOVIE = "movie";
 
 
     //+++++++++++++++++++++++++++++++++++++++++++++//
@@ -71,12 +71,10 @@ public class MovieContract {
         // TABLE 1's name and column constants
         //----------------------------------------
         public static final String TABLE_NAME = "Table_Popularity";
-        public static final String COL_KEY_ID = "KeyId";
-        public static final String COL_MV_ID = "MovieIDs";
+        public static final String COL_KEY_ID = "KeyID";
+        public static final String COL_MV_ID = "MovieID";
         public static final String COL_TITLE = "Title";
 
-       // public static final String COL_KEY = "movieRef";
-        //public static final String COL_SORTBYSETTING = "sortBySetting";
 
         // Step-2
         //-------------------------------------------------------//
@@ -91,8 +89,6 @@ public class MovieContract {
             return CONTENT_URI.buildUpon().appendPath(movieName).build();
            // return CONTENT_URI.buildUpon().appendPath(SortedBy).build();
         }
-
-
 
         // * http://developer.android.com/reference/android/content/ContentUris.html
         // * ContentUris : Contains Utility methods useful for working with Uri objects
@@ -154,6 +150,7 @@ public class MovieContract {
         }
     }
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //    //+++++++++++++++++++++++++++++++++++++++++++++//
 //    // DEFINITIONS FOR TABLE 2 -- "content://com.example/android.myproject_2/rating"
 //    //+++++++++++++++++++++++++++++++++++++++++++++//
@@ -176,9 +173,9 @@ public class MovieContract {
 //        //--------------------------------------------------------------
 //        public static final String TABLE_NAME = "Table_Rating";
 //
-//        public static final String COL_KEY_ID = "movieID";
-//        public static final String COL_TITLE = "movieTitle";
-//      //  public static final String COL_KEY = "movieRef";
+//        public static final String COL_KEY_ID = "KeyID";
+//        public static final String COL_TITLE = "Title";
+//      //  public static final String COL_MV_ID = "MovieID";
 //
 //        // Helper functions to build Uris
 //        public static Uri buildUri_Rating(String MovieName) {
@@ -190,10 +187,9 @@ public class MovieContract {
 //            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_RATING, id);
 //        }
 //    }
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //    public static final class MovieEntry implements BaseColumns {
 //        //-------------------------------
 //        // Uri reference to TABLE 4
@@ -210,10 +206,10 @@ public class MovieContract {
 //
 //        public static final String TABLE_NAME = "Table_Movie";
 //
-//        public static final String COL_MOVIE_ID = "movieId";
+//        public static final String COL_MV_ID = "MovieID";
+//        public static final String COL_TITLE = "title";
 //        public static final String COL_VOTECOUNT = "votes";
 //        public static final String COL_RATING = "ratings";
-//        public static final String COL_TITLE = "title";
 //        public static final String COL_RELEASEDATE = "release_date";
 //        public static final String COL_OVERVIEW = "overview";
 //     //   public static final String COL_VIDEOLINK = "video_link";
@@ -231,10 +227,13 @@ public class MovieContract {
 //            return URI_CONTENT_AUTHORITY_MOVIE.buildUpon().appendPath(movieName).build();
 //        }
 //    }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //    public static String getMovieId_fromUri(Uri uri) {
 //        return uri.getPathSegments().get(1);
 //       // return uri.getLastPathSegment();
 //    }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 }

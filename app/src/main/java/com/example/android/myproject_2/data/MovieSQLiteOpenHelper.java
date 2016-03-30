@@ -47,13 +47,13 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_TABLE_POPULARITY =
             "CREATE TABLE " + PopularEntry.TABLE_NAME
                 + " ("
+                //   + PopularEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + PopularEntry._ID + " INTEGER PRIMARY KEY, "
 
                     + PopularEntry.COL_KEY_ID + " INTEGER NOT NULL, " // constraint
                     + PopularEntry.COL_MV_ID + " INTEGER NOT NULL, "
+                // + PopularEntry.COL_MV_ID + " INTEGER UNIQUE NOT NULL, "
                     + PopularEntry.COL_TITLE + " TEXT NOT NULL, " // constraint
-                // + PopularEntry.COL_SORTBYSETTING + " TEXT NOT NULL, " // constraint
-                // + PopularEntry.COL_KEY + " INTEGER NOT NULL, " // constraint
 
                 // * Set the COL_KEY_ID-column as containing foreignKey(s)/ID(s)
                 // to reference movies' ID(s) in MovieInfoEntry.COL_KEY_ID
@@ -77,6 +77,7 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
                 + MovieInfoEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 
                 + MovieInfoEntry.COL_MV_ID          + " INTEGER NOT NULL, "
+            //    + MovieInfoEntry.COL_MV_ID          + " INTEGER UNIQUE NOT NULL, "
 
                 + MovieInfoEntry.COL_TITLE          + " TEXT NOT NULL, "
                 + MovieInfoEntry.COL_RELEASEDATE    + " INTEGER NOT NULL, "

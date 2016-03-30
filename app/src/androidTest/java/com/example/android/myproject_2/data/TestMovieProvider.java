@@ -81,24 +81,24 @@ public class TestMovieProvider extends AndroidTestCase {
     }
 
     //++++++++++++++++++++++++++++++++++++++++++++
-/**/
+  /**/
     public void testBasicQuery_MovieInfo() {
 
-        Log.d(LOG_TAG, "---- testBasicQuery_MovieInfo() ----"); // tky add
+        Log.d(LOG_TAG, "  === testBasicQuery_MovieInfo() ----"); // tky add
 
         // insert our test records into database
         MovieSQLiteOpenHelper mSqlDbOpenHelper = new MovieSQLiteOpenHelper(mContext);
         SQLiteDatabase mSqlDb = mSqlDbOpenHelper.getWritableDatabase();
 
-        ContentValues tValues = TestUtilities.createValues_4MovieInfo_1();
+        ContentValues tValues = TestUtilities.createMovieInfoValues_1();
 
         long mRowId;
         mRowId = mSqlDb.insert(MovieInfoEntry.TABLE_NAME, null, tValues);
 
         mSqlDb.close();
 
-//--        Log.d("-- " + LOG_TAG, "testBasicQuery_MovieInfo()");
-//--        Log.d("-- " + LOG_TAG + " after insert###", "mRowId: " + String.valueOf(mRowId)); // tky add
+  //--        Log.d("-- " + LOG_TAG, "testBasicQuery_MovieInfo()");
+  //--        Log.d("-- " + LOG_TAG + " after insert###", "mRowId: " + String.valueOf(mRowId)); // tky add
         // Verify we got a row back.
         assertTrue("Error: Failure to insert Movie Values", mRowId != -1);
 
@@ -107,13 +107,13 @@ public class TestMovieProvider extends AndroidTestCase {
             null, null, null, null
         );
 
-//--        Log.d("-- " + LOG_TAG, "TestUtilities.validateCursor()---");
+  //--        Log.d("-- " + LOG_TAG, "TestUtilities.validateCursor()---");
         // to uncomment later
         // Make sure we get the correct cursor out of the database
         TestUtilities.validateCursor("testBasicMovieQuery", mCursor, tValues);
         mCursor.close();
     }
-/**/
+  /**/
     //--------------------------------------------------------------
     /*
     public void testBasicMovieQuery() {
@@ -159,7 +159,8 @@ public class TestMovieProvider extends AndroidTestCase {
 //     */
 ///**/
 public void testUpdatePopularProvider() {
-    Log.d(LOG_TAG, "---- testUpdatePopularProvider() ----"); // tky add
+
+    Log.d(LOG_TAG, "  === testUpdatePopularProvider() ----"); // tky add
     //------- tky add
     deleteAllRecordsFromProvider();
    // deleteAllRecordsFromDB();
@@ -171,44 +172,88 @@ public void testUpdatePopularProvider() {
 
     //------------------
 
+    // insert our test records into database
+    MovieSQLiteOpenHelper mSqlDbOpenHelper = new MovieSQLiteOpenHelper(mContext);
+    SQLiteDatabase mSqlDb = mSqlDbOpenHelper.getWritableDatabase();
+
+    ContentValues sValues = TestUtilities.createMovieInfoValues_1();
+
+    Log.d(LOG_TAG, "  === BEFORE INSERT MOVIE-INFO ----"); // tky add
+    long mRowId;
+    mRowId = mSqlDb.insert(MovieInfoEntry.TABLE_NAME, null, sValues);
+
+    mSqlDb.close();
+
+    Log.d(LOG_TAG, "  === AFTER INSERT MOVIE-INFO ----"); // tky add
+
+//--   Log.d("-- " + LOG_TAG, "testBasicQuery_MovieInfo()");
+//--   Log.d("-- " + LOG_TAG + " after insert###", "mRowId: " + String.valueOf(mRowId)); // tky add
+    // Verify we got a row back.
+    assertTrue("Error: Failure to insert Movie Values", mRowId != -1);
+
+    ContentResolver tResolver = mContext.getContentResolver();
+
+    Cursor mCursor = tResolver.query(MovieInfoEntry.CONTENT_URI,
+        null, null, null, null
+    );
+
+    Log.d(LOG_TAG, "  === AFTER QUERY MOVIE-INFO ----"); // tky add
+//--        Log.d("-- " + LOG_TAG, "TestUtilities.validateCursor()---");
+    // to uncomment later
+    // Make sure we get the correct cursor out of the database
+    TestUtilities.validateCursor("testBasicMovieQuery", mCursor, sValues);
+    mCursor.close();
+/*&&&&&&&&&&&&&&&&
+
+        mContentValues.put(MovieInfoEntry.COL_MV_ID, 8); // tky comment , 1L
+        mContentValues.put(MovieInfoEntry.COL_TITLE, "MyMovie");
+        mContentValues.put(MovieInfoEntry.COL_RELEASEDATE, 95);  // 55, 88
+        mContentValues.put(MovieInfoEntry.COL_OVERVIEW, "MyMovie_Synopsis");
+
+        mContentValues.put(MovieInfoEntry.COL_POSTERLINK,"MyMovie_PosterLink");
+        mContentValues.put(MovieInfoEntry.COL_VIDEOLINK,"MyMovie_VideoLink");
+///////////////////
+
+        mContentValues.put(PopularEntry.COL_KEY_ID, 1); // 33, 2
+        mContentValues.put(PopularEntry.COL_MV_ID, 3);
+        mContentValues.put(PopularEntry.COL_TITLE, "MyMovie"); /// tky comment, -- AMovie
+
+&&&&&&&&&&&&&&&&&*/
+
+
     // Create a new map of tValues, where column names are the keys
     ContentValues tValues = TestUtilities.createPopularValues();
 
-    ContentResolver tResolver = mContext.getContentResolver();
-/**/
+   // ContentResolver tResolver = mContext.getContentResolver();
+
     // Register a content observer for our insert.
     // This time, directly with the content resolver
     TestUtilities.TestContentObserver tObserver = TestUtilities.getTestContentObserver();
     tResolver.registerContentObserver(PopularEntry.CONTENT_URI, true, tObserver);
-/**/
+
     Uri popularUri = tResolver.insert(PopularEntry.CONTENT_URI, tValues);
 
     assertTrue(popularUri != null);  // tky add
-/**/
+
     tObserver.waitForNotificationOrFail();
     tResolver.unregisterContentObserver(tObserver);
-/**/
-    long popularRowId = ContentUris.parseId(popularUri);
 
-    Log.d(LOG_TAG, "popularUri: " + popularUri.toString()); // tky add
-    Log.d(LOG_TAG, "popularRowId: " + popularRowId); // tky add
-    Log.d(LOG_TAG, "mpopularUri: " + popularUri.toString()); // tky add
-    Log.d(LOG_TAG, "mpopularID: " + PopularEntry.getMovieId_fromUri(popularUri));// tky add
+    Log.d(LOG_TAG, "  === AFTER INSERT POPULAR ----"); // tky add
+
+     Integer popularRowId = (int) (long) ContentUris.parseId(popularUri);
+    //long popularRowId = ContentUris.parseId(popularUri);
+    //Integer i = (int) (long) theLong;
+
+   /// Log.d(LOG_TAG, "popularUri: " + popularUri.toString()); // tky add
+   /// Log.d(LOG_TAG, "popularRowId: " + popularRowId); // tky add
+    Log.d(LOG_TAG, "  === mpopularUri: " + popularUri.toString()); // tky add
+    Log.d(LOG_TAG, "  === mpopularID: " + PopularEntry.getMovieId_fromUri(popularUri));// tky add
 
     // Verify we got a row back.
     assertTrue(popularRowId != -1);
     //Log.d(LOG_TAG, "New popularRowId: " + popularRowId); // tky add
 
-///*
-//    public static final String TABLE_NAME = "Table_Popularity";
-//    public static final String COL_KEY_ID = "KeyId";
-//    public static final String COL_MV_ID = "MovieIDs";
-//    public static final String COL_TITLE = "Title";
-//    //------------
-//    mContentValues.put(PopularEntry.COL_KEY_ID, 1); // 33, 2
-//    mContentValues.put(PopularEntry.COL_MV_ID, 3);
-//    mContentValues.put(PopularEntry.COL_TITLE, "MyMovie"); /// tky comment, -- AMovie
-// */
+    Log.d(LOG_TAG, "  === BEFORE calling TestUtilities.validateContentValue(tValues);"); // tky add
 
     TestUtilities.validateContentValue(tValues);
 
@@ -218,12 +263,15 @@ public void testUpdatePopularProvider() {
     tUpdtdValues.put(PopularEntry._ID, popularRowId);
     tUpdtdValues.put(PopularEntry.COL_TITLE, "Santa's Village");
 
+    Log.d(LOG_TAG, "  === BEFORE calling TestUtilities.validateContentValue(tUpdtdValues);"); // tky add
+
     TestUtilities.validateContentValue(tUpdtdValues);
 
     // Create a cursor with observer to make sure that the content provider is notifying
     // the observers as expected
     Cursor tCursor = tResolver.query(PopularEntry.CONTENT_URI, null, null, null, null);
 
+    Log.d(LOG_TAG, "  === AFTER QUERY POPULAR ----"); // tky add
 ////??    TestUtilities.validateCursorValue(tCursor);
 
 //------------------------------------------------
@@ -255,23 +303,23 @@ public void testUpdatePopularProvider() {
 
 //
     /**/
+
     int count = tResolver.update(
         PopularEntry.CONTENT_URI,
+
         tUpdtdValues,
 
         //--- selection
-        PopularEntry._ID + "= ?",
-        //PopularEntry.TABLE_NAME + "." + PopularEntry._ID + " = ?",
-        //PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID + " = ?",
+        //PopularEntry._ID + "= ?",
+        PopularEntry.TABLE_NAME + "." + PopularEntry._ID + " = ?",
 
         //--- selectionArg,  Values for the "where" clause //
         new String[]{Long.toString(popularRowId)}
-        //new String[]{Integer.toString(1)}
-        //new String[]{Long.toString(2)}
-        //new String[]{Long.toString(3)}
     );
     /**/
 
+
+    Log.d(LOG_TAG, "  === AFTER UPDATE POPULAR ----"); // tky add
 
 //----    TestUtilities.validateCursorValue(tCursor); ///// ???
 //
@@ -290,6 +338,8 @@ public void testUpdatePopularProvider() {
 
     tCursor.close();
 
+    Log.d(LOG_TAG, "  === BEFORE QUERY POPULAR xxxx"); // tky add
+    Log.d(LOG_TAG, "  === BEFORE QUERY POPULAR xxxx, "+ "popularRowId: " + popularRowId); // tky add
     //---------------------------------
 ////--    tCursor = tResolver.query(PopularEntry.CONTENT_URI, null, null, null, null);
 ///    TestUtilities.validateCursorValue(tCursor);
@@ -299,23 +349,33 @@ public void testUpdatePopularProvider() {
     Cursor cursor = tResolver.query(
         PopularEntry.CONTENT_URI,
         null,   // projection
-        PopularEntry._ID + " = ? ",    // selection
-        //PopularEntry._ID + " = " + popularRowId,    // selection
 
-        //null,   // Values for the "where" clause // selectionArg
-        new String[]{Long.toString(popularRowId)},   // Values for the "where" clause // selectionArg
+     ///   PopularEntry.TABLE_NAME + "." + PopularEntry._ID + " = ? ",    //-- selection
+     ///   new String[]{Long.toString(popularRowId )},   //-- Values for the "where" clause // selectionArg
 
-        null    // sort order
+
+    //    PopularEntry.COL_MV_ID + " = " + 3,    //-- selection  ???? last looked at 29March
+
+    /// PopularEntry.TABLE_NAME + "." +
+    /// MovieContract.PopularEntry._ID + " = " + 1,    //-- selection  ??? last looked at 29March, cannot work
+    //    PopularEntry.TABLE_NAME + "." +
+    //    PopularEntry._ID + " = " + popularRowId,    //-- selection ??? last looked at 29MArch, work
+
+      MovieContract.PopularEntry._ID + " = " + popularRowId,    //-- selection ??? last looked at 29MArch, work
+
+        null,   //-- Values for the "where" clause // selectionArg
+
+        null    //-- sort order
     );
 
-    TestUtilities.validateCursorValue(cursor);
+      TestUtilities.validateCursorValue(cursor);
+
+    Log.d(LOG_TAG, "  === AFTER QUERY POPULAR xxxx"); // tky add
 
     TestUtilities.validateCursor("testUpdatePopularProvider.  Error validating popular entry update.",
         cursor, tUpdtdValues);
 
-
     cursor.close();
-//        tCursor.close();
 }
     //==================================================================
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -328,7 +388,7 @@ public void testInsertReadProvider() {
     Log.d(LOG_TAG, "---- testInsertReadProvider() ----"); // tky add
 
     //   ContentValues tValues = TestUtilities.createValues4MovieInfo(4);
-    ContentValues tValues = TestUtilities.createValues_4MovieInfo_1();
+    ContentValues tValues = TestUtilities.createMovieInfoValues_1();
 
     ContentResolver tResolver = mContext.getContentResolver();
 
@@ -344,14 +404,14 @@ public void testInsertReadProvider() {
     tObserver.waitForNotificationOrFail();
     tResolver.unregisterContentObserver(tObserver);
 
-//--    Log.d("-- " + LOG_TAG, "mMovieInfoUri: " + mMovieInfoUri.toString()); // tky add
-//--    Log.d("-- " + LOG_TAG, "mMovieInfoID: " + MovieInfoEntry.getMovieId_fromUri(mMovieInfoUri));// tky add
+    Log.d("-- " + LOG_TAG, "mMovieInfoUri: " + mMovieInfoUri.toString()); // tky add
+  //--    Log.d("-- " + LOG_TAG, "mMovieInfoID: " + MovieInfoEntry.getMovieId_fromUri(mMovieInfoUri));// tky add
 
     Cursor tCursor = tResolver.query(MovieInfoEntry.CONTENT_URI, null, null, null, null);
-//
+  //
     TestUtilities.validateCursor("testInsertReadProvider, Error validating MovieInfoEntry insert  ",
         tCursor, tValues);
-//
+  //
 
     ContentValues mPopularValues = TestUtilities.createPopularValues();
 
@@ -365,8 +425,8 @@ public void testInsertReadProvider() {
     // Return the uri after the insert operation.
     Uri mPopularUri = tResolver.insert(PopularEntry.CONTENT_URI, mPopularValues);
 
-//--    Log.d("-- " + LOG_TAG , " testInsertReadProvider()");
-//--    Log.d("-- " + LOG_TAG + " after insert-- ", "mPopularUri: " + mPopularUri.toString()); // tky add,String.valueOf(popularRowId)
+  //--    Log.d("-- " + LOG_TAG , " testInsertReadProvider()");
+  //--    Log.d("-- " + LOG_TAG + " after insert-- ", "mPopularUri: " + mPopularUri.toString()); // tky add,String.valueOf(popularRowId)
 
     // Did our content observer get called?
     // If this fails, your insert PopularEntry data
@@ -382,7 +442,7 @@ public void testInsertReadProvider() {
     // Verify we got a row back.
     assertTrue(popularRowId != -1);
 
-//--    Log.d("-- " + LOG_TAG + " after insert++ ", "popularRowID: " + String.valueOf(popularRowId)); // tky add
+  //--    Log.d("-- " + LOG_TAG + " after insert++ ", "popularRowID: " + String.valueOf(popularRowId)); // tky add
 
     // Now pull some out to stare at it and
     // verify it made the round trip.
@@ -500,6 +560,8 @@ public void testInsertReadProvider() {
     // Student: Uncomment this test after you have completed writing the delete functionality
     // in your provider.  It relies on insertions with testInsertReadProvider, so insert and
     // query functionality must also be complete before this test can be used.
+
+//    Good!?
     public void testDeleteRecords() {
 
         Log.d(LOG_TAG, "---- testDeleteRecords() ----"); // tky add
@@ -561,6 +623,9 @@ public void testInsertReadProvider() {
       the delete functionality in the ContentProvider.
     */
     public void deleteAllRecordsFromProvider() {
+
+        Log.d(LOG_TAG, "  === Into deleteAllRecordsFromProvider()");
+
         mContext.getContentResolver().delete(
             MovieInfoEntry.CONTENT_URI,
             null, null
@@ -570,6 +635,7 @@ public void testInsertReadProvider() {
             null, null
         );
 
+        Log.d(LOG_TAG, "  === Before MovieInfoEntry: -->X.query -->" + MovieInfoEntry.CONTENT_URI); // tky add
         Cursor cursor = mContext.getContentResolver().query(
             MovieInfoEntry.CONTENT_URI,
             null, null, null, null
@@ -577,6 +643,7 @@ public void testInsertReadProvider() {
         assertEquals("Error: Records not deleted from Weather table during delete", 0, cursor.getCount());
         cursor.close();
 
+        Log.d(LOG_TAG, "  === Before PopularEntry: -->Y.query -->" + PopularEntry.CONTENT_URI);//     tky add
         cursor = mContext.getContentResolver().query(
             PopularEntry.CONTENT_URI,
             null, null, null, null
