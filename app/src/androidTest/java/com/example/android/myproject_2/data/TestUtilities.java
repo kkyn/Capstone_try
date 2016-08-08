@@ -199,7 +199,7 @@ static void validateCursorValue(//String error,
     /* */
     /*
         Students: You can uncomment this helper function once you have finished creating the
-        PopularEntry part of the MovieContract.
+        PopularEntry part of the MovieContract_x.
     */
     static ContentValues createValues4MovieInfo(long rowId) {
 
@@ -250,7 +250,7 @@ static void validateCursorValue(//String error,
 
     /*
         Students: You can uncomment this function once you have finished creating the
-        PopularEntry part of the MovieContract as well as the MovieDbHelperr.
+        PopularEntry part of the MovieContract_x as well as the MovieDbHelperr.
      */
     static long insertPopularValues(Context context) {
 
@@ -334,7 +334,7 @@ static void validateCursorValue(//String error,
 //        // Create a new map of values, where column names are the keys
 //        ContentValues movieContentValues = new ContentValues();
 //
-//        // movieContentValues.put(MovieContract.PopularEntry.COL_SORTBYSETTING, TEST_SORTBY_VALUE);
+//        // movieContentValues.put(MovieContract_x.PopularEntry.COL_SORTBYSETTING, TEST_SORTBY_VALUE);
 //        movieContentValues.put(MovieEntry.COL_MOVIE_ID, 1L);
 //        movieContentValues.put(MovieEntry.COL_TITLE, "AMovie");
 //        movieContentValues.put(MovieEntry.COL_OVERVIEW,"Bla..Bla");
@@ -348,7 +348,7 @@ static void validateCursorValue(//String error,
     //+++++++++++++++++++++++++++++++++++++++++++
     /*
         You can uncomment this function once you have finished creating the
-        MovieEntry part of the MovieContract as well as the MovieDbHelperr.
+        MovieEntry part of the MovieContract_x as well as the MovieDbHelperr.
     */
 //    static long insertMovieValues(Context context) {
 //

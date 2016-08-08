@@ -23,7 +23,7 @@ import android.util.Log;
 
 import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
 import com.example.android.myproject_2.data.MovieContract.PopularEntry;
-//import com.example.android.myproject_2.data.MovieContract.RatingEntry;
+//import com.example.android.myproject_2.data.MovieContract_x.RatingEntry;
 
 import java.util.HashSet;
 

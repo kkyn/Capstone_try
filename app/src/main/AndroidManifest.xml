@@ -2,7 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.myproject_2">
 
+    <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Permissions required by the sync adapter -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -28,7 +34,7 @@
                 android:value="com.example.android.myproject_2.MainActivity" />
         </activity>
         <activity
-            android:name="com.example.android.myproject_2.SettingsActivity"
+            android:name=".SettingsPreferenceActivity"
             android:label="Settings"
             android:parentActivityName="com.example.android.myproject_2.MainActivity">
             <meta-data
@@ -36,10 +42,33 @@
                 android:value="com.example.android.myproject_2.MainActivity" />
         </activity>
 
+        <!-- The SyncAdapter's dummy authentication service -->
+        <service android:name="com.example.android.myproject_2.sync.MoviesAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator"/>
+
+        </service>
+        <!-- The SyncAdapter service -->
+        <service
+            android:name="com.example.android.myproject_2.sync.MovieSyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.content.SyncAdapter"
+                    android:resource="@xml/syncadapter"/>
+        </service>
+
         <!-- Step-3b -->
         <provider
             android:authorities="com.example.android.myproject_2"
-            android:name=".data.MovieProvider"/>
+            android:name=".data.MovieProvider"
+            android:syncable="true"/>
     </application>
 
 </manifest>

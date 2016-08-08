@@ -6,7 +6,7 @@
     </string-array>
 
     <string-array name="pref_movies_sortby_values">
-        <item>@string/pref_sortmovies_by_popularity</item>
+        <item>"popularity.desc"</item>
         <item>@string/pref_sortmovies_by_ratings</item>
     </string-array>
 

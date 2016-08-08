@@ -24,21 +24,24 @@ public class MoviesSelectedInfo implements Parcelable {
 
     };
     //---------------------------------------
-    long mId;
-    String mOriginalTitle;
-    String mOverview;
-    double mVoteAverage;
-    String mReleaseDate;
-//    long mVoteCount;
-    String mPoster;
-    String mThumbnail;
+    public long mId;
+    public String mOriginalTitle;
+    public String mOverview;
+    public String mVoteAverage;
+    public String mPopularity;
+    public String mReleaseDate;
+    public long mVoteCount;
+    public String mPoster;
+    public String mThumbnail;
 
-    MoviesSelectedInfo(long id,
+    //MoviesSelectedInfo(long id,
+    public MoviesSelectedInfo(long id,
                        String originalTitle,
                        String overview,
-                       double voteAverage,
+                       String voteAverage,
+                       String popularity,
                        String releaseDate,
-                       //    long voteCount,
+                       long voteCount,
                        String poster,
                        String thumbnail
     ) {
@@ -46,20 +49,27 @@ public class MoviesSelectedInfo implements Parcelable {
         mOriginalTitle = originalTitle;
         mOverview = overview;
         mVoteAverage = voteAverage;
+        mPopularity = popularity;
         mReleaseDate = releaseDate;
-    //    mVoteCount = voteCount;
+        mVoteCount = voteCount;
         mPoster = poster;
         mThumbnail = thumbnail;
     }
+    /*
+     + MovieInfoEntry.COL_VOTE_AVERAGE   + " TEXT NOT NULL, " //" REAL NOT NULL, "
+     + MovieInfoEntry.COL_VOTE_COUNT     + " INTEGER NOT NULL, "//" INTEGER NOT NULL, "
+     */
 
     //---------------------------------------------
-    protected MoviesSelectedInfo(Parcel in) {
-        mId = in.readLong();
+    //protected MoviesSelectedInfo(Parcel in) {
+    public MoviesSelectedInfo(Parcel in) {
+        this.mId = in.readLong();
         mOriginalTitle = in.readString();
         mOverview = in.readString();
-        mVoteAverage = in.readDouble();
+        mVoteAverage = in.readString();
+        mPopularity = in.readString();
         mReleaseDate = in.readString();
-    //    mVoteCount = in.readLong();
+        mVoteCount = in.readLong();
         mPoster = in.readString();
         mThumbnail = in.readString();
     }
@@ -74,9 +84,10 @@ public class MoviesSelectedInfo implements Parcelable {
         dest.writeLong(mId);
         dest.writeString(mOriginalTitle);
         dest.writeString(mOverview);
-        dest.writeDouble(mVoteAverage);
+        dest.writeString(mVoteAverage);
+        dest.writeString(mPopularity);
         dest.writeString(mReleaseDate);
-    //    dest.writeLong(mVoteCount);
+        dest.writeLong(mVoteCount);
         dest.writeString(mPoster);
         dest.writeString(mThumbnail);
 

@@ -49,7 +49,7 @@ public class TestMovieContract extends AndroidTestCase {
         Uri mUri = PopularEntry.buildUriPopularity(TEST_MOVIE_NAME);
 
         assertNotNull("Error: Null Uri returned. "
-                + "You must fill-in buildUriPopularity in MovieContract."
+                + "You must fill-in buildUriPopularity in MovieContract_x."
                 , mUri);
 
         assertEquals("Error: 'TEST_MOVIE_NAME' not properly appended to the end of the Uri"
@@ -67,10 +67,10 @@ public class TestMovieContract extends AndroidTestCase {
     // "content://com.example.android.myproject_2/popularity/id"
     ///////////////////////////////////////////
     public void testBuildUriPopularityWithId() {
-        Uri mUri = PopularEntry.buildUriPopularityWithId(TEST_MOVIE_ID);
+        Uri mUri = PopularEntry.buildUri_PopularityWithId(TEST_MOVIE_ID);
 
         assertNotNull("Error: Null Uri returned. "
-                + "You must fill in movie ID in MovieContract."
+                + "You must fill in movie ID in MovieContract_x."
                 , mUri);
 
         assertEquals("Error: Long expected",
@@ -79,10 +79,10 @@ public class TestMovieContract extends AndroidTestCase {
     }
     //============================================================================//
 //    public void testBuildUriRating() {
-//        Uri mUri = MovieContract.RatingEntry.buildUri_Rating(TEST_MOVIE_NAME);
+//        Uri mUri = MovieContract_x.RatingEntry.buildUri_Rating(TEST_MOVIE_NAME);
 //
 //        assertNotNull("Error: Uri for Rating expected"
-//                + "You must fill-in buildUri_Rating in MovieContract."
+//                + "You must fill-in buildUri_Rating in MovieContract_x."
 //                , mUri );
 //
 //        assertEquals("Error: 'TEST_MOVIE_NAME' not properly appended to the end of the Uri."
@@ -94,10 +94,10 @@ public class TestMovieContract extends AndroidTestCase {
 //                , "content://com.example.android.myproject_2/rating/%2FXMovie");
 //    }
 //    public void testBuildUriRatingAndId() {
-//        Uri mUri = MovieContract.RatingEntry.buildUri_Rating_Id(TEST_MOVIE_ID);
+//        Uri mUri = MovieContract_x.RatingEntry.buildUri_RatingWithId(TEST_MOVIE_ID);
 //
 //        assertNotNull("Error: Uri for Rating expected"
-//            + "You must fill-in buildUri_Rating in MovieContract."
+//            + "You must fill-in buildUri_Rating in MovieContract_x."
 //            , mUri);
 //
 //        assertEquals("Error: Long expected"
@@ -112,11 +112,11 @@ public class TestMovieContract extends AndroidTestCase {
     ////////////////////////////////////////////
 //    public void testBuildUri_MovieInfo_Id() {
 //
-//        Uri mUri = MovieContract.MovieInfoEntry.buildUri_MovieInfo_Id(TEST_MOVIE_ID);
+//        Uri mUri = MovieContract_x.MovieInfoEntry.buildUri_MovieInfo_Id(TEST_MOVIE_ID);
 //
 //        assertNotNull("Error: Null Uri returned. "
 //                + "you must fill in buildUri_MovieInfo_Id "
-//                + "MovieContract."
+//                + "MovieContract_x."
 //                , mUri);
 //
 //        assertEquals("Error: Long expected"
@@ -125,7 +125,7 @@ public class TestMovieContract extends AndroidTestCase {
 //    }
 
 //    public void testBuildUri_Movie_Id() {
-//        Uri mUri = MovieContract.MovieEntry.buildUri_Movie_Id(TEST_MOVIE_ID);
+//        Uri mUri = MovieContract_x.MovieEntry.buildUri_Movie_Id(TEST_MOVIE_ID);
 //
 //        assertNotNull("Error:  ", mUri);
 //
@@ -133,10 +133,10 @@ public class TestMovieContract extends AndroidTestCase {
 //    }
 //
 //    public void testBuildUri_Movie_Name() {
-//        Uri mUri = MovieContract.MovieEntry.buildUri_Movie_Name(TEST_MOVIE_NAME);
+//        Uri mUri = MovieContract_x.MovieEntry.buildUri_Movie_Name(TEST_MOVIE_NAME);
 //
 //        assertNotNull("Error:: Null Uri returned. "
-//            + "You must fill-in buildUri_Movie_Name in MovieContract."
+//            + "You must fill-in buildUri_Movie_Name in MovieContract_x."
 //            , mUri);
 //
 //        assertEquals("Error: 'TEST_MOVIE_NAME' not properly appended to the end of the Uri"

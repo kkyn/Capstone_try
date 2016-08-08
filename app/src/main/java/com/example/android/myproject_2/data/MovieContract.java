@@ -24,7 +24,7 @@ public class MovieContract {
     // e.g "content://com.example.android.myproject_2/movieInfo"
     public static final String POPULAR = "popularity";
     public static final String MOVIEINFO = "movieInfo";
-   //public static final String RATING = "rating";
+    public static final String RATING = "rating";
    //public static final String MOVIE = "movie";
 
 
@@ -74,6 +74,7 @@ public class MovieContract {
         public static final String COL_KEY_ID = "KeyID";
         public static final String COL_MV_ID = "MovieID";
         public static final String COL_TITLE = "Title";
+        public static final String COL_POSTER = "Poster";
 
 
         // Step-2
@@ -96,11 +97,11 @@ public class MovieContract {
         // * content://authority/path/id
         //      e.g. "content://com.example.android.myproject_2/Popularity/movieId"
         // * public static Uri withAppendedId (Uri contentUri, long id)
-        public static Uri buildUriPopularityWithId(long movieId) {
+        public static Uri buildUri_PopularityWithId(long movieId) {
 
             return ContentUris.withAppendedId(CONTENT_URI, movieId);
         }
-//        public static Uri buildUriPopularityWithId(long id) {
+//        public static Uri buildUri_PopularityWithId(long id) {
 //            return ContentUris.withAppendedId(CONTENT_URI, id);
 //        }
 
@@ -108,6 +109,26 @@ public class MovieContract {
             return uri.getPathSegments().get(1);
            // return uri.getLastPathSegment();
         }
+        //------------------------------------------------------------
+/*        // Helper functions to build Uris
+        public static Uri buildUri_Rating(String MovieName) { // ?? where is it called ???
+
+            return CONTENT_URI.buildUpon().appendPath(MovieName).build();
+        }
+        public static Uri buildUri_RatingWithId(long id) {// ?? where is it called ???
+
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+//    public static Uri buildUri_PopularityWithId(long movieId) {
+//
+//        return ContentUris.withAppendedId(CONTENT_URI, movieId);
+//    }
+
+        public static String getMovieId_fromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+            // return uri.getLastPathSegment();
+        }*/
+        //------------------------------------------------------------
     }
 
     //+++++++++++++++++++++++++++++++++++++++++++++//
@@ -135,8 +156,12 @@ public class MovieContract {
 
         public static final String COL_RELEASEDATE = "release_date";
         public static final String COL_OVERVIEW = "overview";
-        public static final String COL_VIDEOLINK = "video_link";
         public static final String COL_POSTERLINK = "poster_link";
+        public static final String COL_VIDEOLINK = "video_link";
+
+        public static final String COL_VOTE_AVERAGE = "vote_average";
+        public static final String COL_POPULARITY = "popularity";
+        public static final String COL_VOTE_COUNT = "vote_count";
 
         //---------------------------------------------------//
         // Supporting methods to build Uris
@@ -151,42 +176,51 @@ public class MovieContract {
     }
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//    //+++++++++++++++++++++++++++++++++++++++++++++//
-//    // DEFINITIONS FOR TABLE 2 -- "content://com.example/android.myproject_2/rating"
-//    //+++++++++++++++++++++++++++++++++++++++++++++//
-//    public static final class RatingEntry implements BaseColumns {
+    //+++++++++++++++++++++++++++++++++++++++++++++//
+    // DEFINITIONS FOR TABLE 2 -- "content://com.example/android.myproject_2/rating"
+    //+++++++++++++++++++++++++++++++++++++++++++++//
+    public static final class RatingEntry implements BaseColumns {
+
+        //-------------------------------
+        // Uri reference to TABLE 2 -- "content://com.example/android.myproject_2/rating"
+        //-------------------------------
+        // "content://com.example/android.myproject_2/rating"
+        public static final Uri CONTENT_URI =
+                URI_CONTENT_AUTHORITY.buildUpon().appendPath(RATING).build();
+
+        //--------------------------------------------------------------
+        public static final String RATING_MULTI_ITEM_CURSOR =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + RATING;
+
+        public static final String RATING_SINGLE_ITEM_CURSOR =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + RATING;
+
+        //--------------------------------------------------------------
+        public static final String TABLE_NAME = "Table_Rating";
+        public static final String COL_KEY_ID = "KeyID";
+        public static final String COL_MV_ID = "MovieID";
+        public static final String COL_TITLE = "Title";
+        public static final String COL_POSTER = "Poster";
+
+        // Helper functions to build Uris
+        public static Uri buildUri_Rating(String MovieName) {
+
+            return CONTENT_URI.buildUpon().appendPath(MovieName).build();
+        }
+        public static Uri buildUri_RatingWithId(long id) {
+
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+//    public static Uri buildUri_PopularityWithId(long movieId) {
 //
-//        //-------------------------------
-//        // Uri reference to TABLE 2 -- "content://com.example/android.myproject_2/rating"
-//        //-------------------------------
-//        // "content://com.example/android.myproject_2/rating"
-//        public static final Uri URI_CONTENT_AUTHORITY_RATING =
-//                URI_CONTENT_AUTHORITY.buildUpon().appendPath(RATING).build();
-//
-//        //--------------------------------------------------------------
-//        public static final String RATING_MULTI_ITEM_CURSOR =
-//                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + RATING;
-//
-//        public static final String RATING_SINGLE_ITEM_CURSOR =
-//                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + RATING;
-//
-//        //--------------------------------------------------------------
-//        public static final String TABLE_NAME = "Table_Rating";
-//
-//        public static final String COL_KEY_ID = "KeyID";
-//        public static final String COL_TITLE = "Title";
-//      //  public static final String COL_MV_ID = "MovieID";
-//
-//        // Helper functions to build Uris
-//        public static Uri buildUri_Rating(String MovieName) {
-//
-//            return URI_CONTENT_AUTHORITY_RATING.buildUpon().appendPath(MovieName).build();
-//        }
-//        public static Uri buildUri_Rating_Id(long id) {
-//
-//            return ContentUris.withAppendedId(URI_CONTENT_AUTHORITY_RATING, id);
-//        }
+//        return ContentUris.withAppendedId(CONTENT_URI, movieId);
 //    }
+
+        public static String getMovieId_fromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+            // return uri.getLastPathSegment();
+        }
+    }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
