@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements Movie_Fragment.Ca
 
             Log.d(LOG_TAG, "xxxx onResume() / mMovieFragment != null / mMovieFragment.myRestartLoaderCode()  -----");
          //   Toast.makeText(getApplicationContext(),"-- In MainActivity/onResume() 1 --", Toast.LENGTH_SHORT).show();
+
             mMovieFragment.myRestartLoaderCode();
         }
     }

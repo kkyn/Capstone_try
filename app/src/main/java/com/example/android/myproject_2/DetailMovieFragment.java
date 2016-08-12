@@ -213,9 +213,14 @@ public class DetailMovieFragment extends Fragment
         Loader<Cursor> cursorLoader;
         //---------------
         String sortType = Utility.getPreferredSortSequence(getContext());
-        if (sortType.equals("popularity.desc")) {cursorLoader = new CursorLoader(getContext(), mUri,PROJECTION_POPULAR, null, null, null);}
-        else                                    {cursorLoader = new CursorLoader(getContext(), mUri,PROJECTION_RATING, null, null, null);}
-        return cursorLoader;
+        if (sortType.equals("popularity.desc")) { return new CursorLoader(getContext(), mUri,PROJECTION_POPULAR, null, null, null);}
+        else                                    { return new CursorLoader(getContext(), mUri,PROJECTION_RATING, null, null, null);}
+
+        //---------------
+//        String sortType = Utility.getPreferredSortSequence(getContext());
+//        if (sortType.equals("popularity.desc")) {cursorLoader = new CursorLoader(getContext(), mUri,PROJECTION_POPULAR, null, null, null);}
+//        else                                    {cursorLoader = new CursorLoader(getContext(), mUri,PROJECTION_RATING, null, null, null);}
+//        return cursorLoader;
         //---------------
         //return new CursorLoader(getContext(), mUri,PROJECTION_POPULAR, null, null, null);
 

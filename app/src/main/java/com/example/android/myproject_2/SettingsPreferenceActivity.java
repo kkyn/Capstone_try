@@ -15,7 +15,8 @@ import com.example.android.myproject_2.data.MovieContract;
 import com.example.android.myproject_2.sync.MoviesSyncAdapter;
 import static com.example.android.myproject_2.Movie_Fragment.*;
 //import static com.example.android.myproject_2.Movie_Fragment.*;
-
+//==============================================
+//==============================================
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
  * <p>
@@ -108,35 +109,14 @@ public class SettingsPreferenceActivity extends PreferenceActivity
             if (index >= 0) {
                 CharSequence charSequence[] = listPreference.getEntries();
                 preference.setSummary(charSequence[index]);
+                // -- or --
+                //preference.setSummary(listPreference.getEntries()[index]);
             }
         } else {
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
     }
-    //++++++++++++++++++++++++++++++++++++++++++
-/*
-    private void setPreferenceSummary(Preference preference, Object value) {
-
-        String mKey = preference.getKey();
-        String stringValue = value.toString();
-
-        if (preference instanceof ListPreference) {
-
-            // For list preferences, look up the correct display value in
-            // the preference's 'entries' list (since they have separate labels/values).
-            ListPreference listPreference = (ListPreference) preference;
-
-            int index = listPreference.findIndexOfValue(stringValue);
-            if (index >= 0) {
-                preference.setSummary(listPreference.getEntries()[index]);
-            }
-        } else {
-            // For other preferences, set the summary to the value's simple string representation.
-            preference.setSummary(stringValue);
-        }
-    }*/
-    //++++++++++++++++++++++++++++++++++++++++++
 
     //
     // implementation of interface Preference.OnPreferenceChangeListener
@@ -191,10 +171,12 @@ public class SettingsPreferenceActivity extends PreferenceActivity
             Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... key: " + key + " ..... SortSeq: " + mString);
             Toast.makeText(getApplicationContext(),"++ SettingsPreference Activity / onSharedPreferenceChanged ----", Toast.LENGTH_SHORT).show();
 
+            // THIS 2 LINES WORKS !! NOT SURE ???
 //            getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
 //            getContentResolver().notifyChange(MovieContract.RatingEntry.CONTENT_URI, null);
+        //+++++++++++++++++++++++++++++++++++++++++++
 
-            // tky add, 4th August, 2016, 11.44pm
+            // tky add, 4th August, 2016, 11.44pm --- DON"T SEEM TO WORK !!
 			if (mString.equals(getString(R.string.pref_sortmovies_default_value))){
 			        getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
                 Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... notifyChange: " + mString + " .... " + MovieContract.PopularEntry.CONTENT_URI.toString());
@@ -203,6 +185,7 @@ public class SettingsPreferenceActivity extends PreferenceActivity
 			        getContentResolver().notifyChange(MovieContract.RatingEntry.CONTENT_URI, null);
                 Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... notifyChange: " + mString + " .... " + MovieContract.RatingEntry.CONTENT_URI.toString());
 			}
+        //++++++++++++++++++++++++++++++++++++++++
 
             Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... MoviesSyncAdapter.syncImmediately(this) --");
 
@@ -227,38 +210,5 @@ public class SettingsPreferenceActivity extends PreferenceActivity
         */
 
     }
-
-//    @Override
-//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        /*
-//        if ( key.equals(getString(R.string.pref_location_key)) ) {
-//            // we've changed the location
-//            // first clear locationStatus
-//            Utility.resetLocationStatus(this);
-//            SunshineSyncAdapter.syncImmediately(this);
-//            MoviesSyncAdapter.syncImmediately(this); ????
-//        } else if ( key.equals(getString(R.string.pref_units_key)) ) {
-//            // units have changed. update lists of weather entries accordingly
-//            getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
-//        } else if ( key.equals(getString(R.string.pref_location_status_key)) ) {
-//            // our location status has changed.  Update the summary accordingly
-//            Preference locationPreference = findPreference(getString(R.string.pref_location_key));
-//            bindPreferenceSummaryToValue(locationPreference);
-//        } else if ( key.equals(getString(R.string.pref_art_pack_key)) ) {
-//            // art pack have changed. update lists of weather entries accordingly
-//            getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
-//        }
-//        */
-//    }
-    //------------------------------
 }
-/*
-public class SettingsActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-    }
-}
-*/

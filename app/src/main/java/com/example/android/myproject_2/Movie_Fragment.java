@@ -39,7 +39,8 @@ import com.example.android.myproject_2.sync.MoviesSyncAdapter;
  */
 public class Movie_Fragment extends Fragment
                         implements LoaderManager.LoaderCallbacks<Cursor>
-                                , SharedPreferences.OnSharedPreferenceChangeListener
+                           //     , SharedPreferences.OnSharedPreferenceChangeListener
+        // OnSharedPreferenceChanged
                              //   ,Movie_RecyclerViewAdapter.MvItemOnClickHandler
 {
     // constructor
@@ -48,7 +49,7 @@ public class Movie_Fragment extends Fragment
     }
 
     public static final String LOG_TAG = Movie_Fragment.class.getSimpleName();
-
+    SharedPreferences.OnSharedPreferenceChangeListener listener;
 /**/
 private RecyclerView                mRecyclerView;
 private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
@@ -151,8 +152,8 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
         //+x+x+x+x+x+x+x+x+x+x+
-//        Log.d(LOG_TAG, "-- 2 onActivityCreated() / initLoader --");
-//        getLoaderManager().initLoader(MOVIE_FRAGMENT_ID, null, this);
+        Log.d(LOG_TAG, "-- 2 onActivityCreated() / initLoader --");
+        getLoaderManager().initLoader(MOVIE_FRAGMENT_ID, null, this);
         //+x+x+x+x+x+x+x+x+x+x+
         //++++++++++++++++++++++++++++++ // added, no try yet, 7th August 2016, 1.06 am,
 //        getLoaderManager().initLoader(POPULAR_LOADER_ID, null, this);
@@ -160,6 +161,53 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         //++++++++++++++++++++++++++++++
 
         super.onActivityCreated(savedInstanceState);
+
+        //+++++++++++++++++ tky, try just add 11 August, 11.48 pm begin
+         listener = new SharedPreferences.OnSharedPreferenceChangeListener(){
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+                Log.d(LOG_TAG, "-- onSharedPreferenceChanged --");
+                //  Toast.makeText(getContext(),"-- Movie_Fragment/onActivityCreated/onSharedPreferenceChanged()/key --" + key, Toast.LENGTH_SHORT).show();
+
+                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                if ( key.equals(getString(R.string.pref_sortmovies_key)) ) {
+                    // we've changed the location
+                    // first clear locationStatus
+                    //    Utility.resetLocationStatus(this);
+
+                    String mString = Utility.getPreferredSortSequence(getContext());
+
+                    Log.d(LOG_TAG, "-- onSharedPreferenceChanged ..... key: " + key + " ..... SortSeq: " + mString);
+
+//             getContext().getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
+//
+//             getContext().getContentResolver().notifyChange(MovieContract.RatingEntry.CONTENT_URI, null);
+/*
+
+                    // tky add, 4th August, 2016, 11.44pm
+                    if (mString.equals(getString(R.string.pref_sortmovies_default_value))){
+                        getContext().getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
+                        Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... notifyChange: " + mString + " .... " + MovieContract.PopularEntry.CONTENT_URI.toString());
+                    }
+                    else if (mString.equals(getString(R.string.pref_sortmovies_by_ratings))){
+                        getContext().getContentResolver().notifyChange(MovieContract.RatingEntry.CONTENT_URI, null);
+                        Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... notifyChange: " + mString + " .... " + MovieContract.RatingEntry.CONTENT_URI.toString());
+                    }
+*/
+
+                    Log.d(LOG_TAG, "-- onSharedPreferenceChanged ..... MoviesSyncAdapter.syncImmediately(this) --");
+
+                    // Movie_Fragment.myRestartLoaderCode();
+                    //    MoviesSyncAdapter.syncImmediately(getContext());
+
+                }
+                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            }
+
+        };
+        //+++++++++++++++++ tky, try just add 11 August, 11.48 pm , end
 
     }
 
@@ -194,7 +242,8 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
     public void onResume() {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sp.registerOnSharedPreferenceChangeListener(this);
+        sp.registerOnSharedPreferenceChangeListener(listener);
+     //   sp.registerOnSharedPreferenceChangeListener(this);
         super.onResume();
         Log.d(LOG_TAG, "-- 4 onResume() / registerOnSharedPreferenceChangeListener ----");
     }
@@ -203,7 +252,8 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
     public void onPause() {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sp.unregisterOnSharedPreferenceChangeListener(this);
+        sp.unregisterOnSharedPreferenceChangeListener(listener);
+     //   sp.unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
         Log.d(LOG_TAG, "-- 5 onPause() / unregisterOnSharedPreferenceChangeListener ----");
     }
@@ -221,8 +271,8 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         //+++++++++++++++++++++++++++
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
         //+++++++++++++++++++++++++++
-        /*  // added, no try yet, 7th August 2016, 1.17 am,
-        String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
+          // added, no try yet, 7th August 2016, 1.17 am,
+       /* String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
 
         Log.d(LOG_TAG, "--   myRestartLoaderCode() / restartLoader ... sortMovieBy = " + sortMoviesBy);
 
@@ -245,7 +295,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
     //------ SETTING FOR implementation of SharedPreferences.OnSharedPreferenceChangeListener -----
     //---------------------------------------------------------------------------------------------
     // For SharedPreferences.OnSharedPreferenceChangeListener
-    @Override
+    /*@Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         Log.d(LOG_TAG, "-- onSharedPreferenceChanged --");
@@ -259,7 +309,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
 
             String mString = Utility.getPreferredSortSequence(getContext());
 
-            Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... key: " + key + " ..... SortSeq: " + mString);
+            Log.d(LOG_TAG, "-- onSharedPreferenceChanged ..... key: " + key + " ..... SortSeq: " + mString);
 
 //             getContext().getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
 //
@@ -275,7 +325,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
                 Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... notifyChange: " + mString + " .... " + MovieContract.RatingEntry.CONTENT_URI.toString());
 			}
 
-            Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... MoviesSyncAdapter.syncImmediately(this) --");
+            Log.d(LOG_TAG, "-- onSharedPreferenceChanged ..... MoviesSyncAdapter.syncImmediately(this) --");
 
             // Movie_Fragment.myRestartLoaderCode();
         //    MoviesSyncAdapter.syncImmediately(getContext());
@@ -283,7 +333,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         }
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    }
+    }*/
 
     //--------------------------------------------------------------
     //-- LoaderManager.LoaderCallbacks<Cursor> --

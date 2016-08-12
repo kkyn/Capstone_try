@@ -55,7 +55,8 @@
         <service
             android:name="com.example.android.myproject_2.sync.MovieSyncService"
             android:exported="true"
-            android:process=":sync">
+           >
+            <!--  android:process=":sync" -->
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
