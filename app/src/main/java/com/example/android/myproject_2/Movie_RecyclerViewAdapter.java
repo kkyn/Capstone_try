@@ -186,4 +186,16 @@ public class Movie_RecyclerViewAdapter extends RecyclerView.Adapter<Movie_Recycl
         this.notifyDataSetChanged();
 
     }
+
+    @Override
+    public long getItemId(int position) {
+        int ColIndex=0;
+        if (mCursor != null && mCursor.moveToPosition(position)) {
+            ColIndex = mCursor.getColumnIndex("MovieID");
+          //   ColIndex = mCursor.getColumnIndex("MovieID");
+            return mCursor.getLong(ColIndex);
+        }
+        return ColIndex;
+       // return super.getItemId(position);
+    }
 }

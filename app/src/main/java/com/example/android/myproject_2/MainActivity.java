@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements Movie_Fragment.Ca
 
             mMovieFragment.myRestartLoaderCode();
         }
+        //---------------------------
     }
 
     @Override
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements Movie_Fragment.Ca
 
     @Override
     public void onItemSelectedInRecyclerView(Uri uri) {
-        Toast.makeText(getApplicationContext(),".. MainActivity() / onItemSelectedInRecyclerView() ..", Toast.LENGTH_LONG).show();
+///        Toast.makeText(getApplicationContext(),".. MainActivity() / onItemSelectedInRecyclerView() ..", Toast.LENGTH_LONG).show();
         //Toast.makeText(this,".. MainActivity()/onItemSelectedInRecyclerView() ..", Toast.LENGTH_SHORT).show(); // with 'this' would not work ???
 
         Log.d(LOG_TAG, "xxxx onItemSelectedInRecyclerView -> StartActivity -> DetailMovieActivity --");

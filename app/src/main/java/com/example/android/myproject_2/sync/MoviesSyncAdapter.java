@@ -58,7 +58,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
     //+++++++++++++++++++++++++++++++++
 
     private static Context mContext;
-    //private static String sortBy;
 
     public MoviesSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -69,35 +68,12 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         //-----------------------------------------
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String sortBy = sharedPreferences.getString(mContext.getString(R.string.pref_sortmovies_key), mContext.getString(R.string.pref_sortmovies_default_value));
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+//        String sortBy = sharedPreferences.getString(mContext.getString(R.string.pref_sortmovies_key), mContext.getString(R.string.pref_sortmovies_default_value));
         //-----------------------------------------
-        //String
-       //         sortBy = Utility.getPreferredSortSequence(mContext);
-    //    String sortBy = Utility.getPreferredSortSequence(getContext());
-        //-----------------------------------------
- /*
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        // Retrieve a String value from the preferences.
-        // getString(String key, String defValue)
-
-        //    String mstring = String.valueOf((R.string.pref_sortmovies_key));
-        String key = mContext.getString(R.string.pref_sortmovies_key);
-        String mDefault = mContext.getString(R.string.pref_sortmovies_default_value);
-
-        String string = sharedPreferences.getString(key, mDefault);
-        //String string = sharedPreferences.getString(mstring, "popularity.desc");
-        //String string = sharedPreferences.getString("Movies", "popularity.desc");
-
-        Log.d(LOG_TAG, "1111 key    :" + key + " -- mDefault:" + mDefault);
-        Log.d(LOG_TAG, "1111 sortBy :" + string);
-        String sortBy = string;
-        */
-
+        String sortBy = Utility.getPreferredSortSequence(mContext);
         //-----------------------------------------
 
-
-//        Log.d(LOG_TAG, "aaaa onPerformSync " + " sortBy: " + sortBy);
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection httpUrlConnection = null;
@@ -257,7 +233,9 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             String mvReleaseDate = movieInfoJson.getString(RELEASE_DATE);
 
             String mvPosterPath   = TMDB_BASE_URL + W500 + movieInfoJson.getString(POSTER_PATH);
-            String mvBackDropPath = TMDB_BASE_URL + W500 + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
+            String mvBackDropPath = TMDB_BASE_URL + "w780" +
+                    "/" + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
+       //     String mvBackDropPath = TMDB_BASE_URL + W500 + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
 
             //++++++++++++++++++++++++++++++++++++++++++++++
             ContentValues mCvMvInfo = new ContentValues();
@@ -265,7 +243,8 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_TITLE,         mvOrgTitle);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_RELEASEDATE,   mvReleaseDate);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_OVERVIEW,      mvOverview);
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POSTERLINK,    mvPosterPath);
+            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POSTERLINK,    mvBackDropPath);
+      //      mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POSTERLINK,    mvPosterPath);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE,  mvVoteAverage);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POPULARITY,    mvPopularity);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_VOTE_COUNT,    mvVoteCount);

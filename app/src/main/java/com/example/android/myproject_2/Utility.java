@@ -28,11 +28,16 @@ public class Utility {
 
         //++++++++++++++++++++++++++++++++++++++++
 
+    ///    Log.d(LOG_TAG, "1111 getPreferredSortSequence" );
+
         String string = sharedPreferences.getString(mstring, mstringDefault);
         //String string = sharedPreferences.getString("Movies", "popularity.desc");
 
-        Log.d(LOG_TAG, "1111 mstring: " + mstring + " -- mstringDefault: " + mstringDefault);
-        Log.d(LOG_TAG, "1111 string : " + string);
+        Log.d(LOG_TAG, "1111 getPreferredSortSequence -- actualSortSeq : " + string );
+
+    /// Log.d(LOG_TAG, "1111 mstring: " + mstring + " -- mstringDefault: " + mstringDefault);
+    ///    Log.d(LOG_TAG, "1111 actualSortSeq : " + string);
+
 
         return string;
         //++++++++++++++++++++++++++++++++++++++++

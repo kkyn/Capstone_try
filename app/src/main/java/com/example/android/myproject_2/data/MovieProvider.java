@@ -31,10 +31,12 @@ public class MovieProvider extends ContentProvider {
     // * Can easily use them in switch statements.
     static final int POPULAR_ = 100;
     static final int POPULAR_MOVIEID = 101;
+
     static final int MOVIEINFO_ = 104;
 
     static final int RATING_ = 102;
     static final int RATING_MOVIEID = 103;
+
     static final int MOVIE_DIR = 105;
 
     // * http://developer.android.com/reference/android/content/UriMatcher.html
@@ -65,15 +67,15 @@ public class MovieProvider extends ContentProvider {
 
         aUriMatcher.addURI(authority, MovieContract.POPULAR, POPULAR_);
         //aUriMatcher.addURI(authority, MovieContract.POPULAR + "/#", POPULAR_MOVIEID);
-          aUriMatcher.addURI(authority, MovieContract.POPULAR + "/*", POPULAR_MOVIEID);
-        //  aUriMatcher.addURI(authority, MovieContract_x.POPULAR + "/*", POPULAR_MOVIEID);
+        aUriMatcher.addURI(authority, MovieContract.POPULAR + "/*", POPULAR_MOVIEID);
+        //aUriMatcher.addURI(authority, MovieContract_x.POPULAR + "/*", POPULAR_MOVIEID);
 
         aUriMatcher.addURI(authority, MovieContract.MOVIEINFO, MOVIEINFO_);
 
         aUriMatcher.addURI(authority, MovieContract.RATING, RATING_);
-        aUriMatcher.addURI(authority, MovieContract.RATING + "/#", RATING_MOVIEID);
-        //aUriMatcher.addURI(authority, MovieContract.RATING + "/*", RATING_MOVIEID);
-        //    aUriMatcher.addURI(authority, MovieContract_x.MOVIE,      MOVIE_DIR);
+        //aUriMatcher.addURI(authority, MovieContract.RATING + "/#", RATING_MOVIEID);
+        aUriMatcher.addURI(authority, MovieContract.RATING + "/*", RATING_MOVIEID);
+        //aUriMatcher.addURI(authority, MovieContract_x.MOVIE,      MOVIE_DIR);
 
         return aUriMatcher;
     }
@@ -82,7 +84,7 @@ public class MovieProvider extends ContentProvider {
     // The SQLiteQueryBuilder -- a convience class that helps build SQL queries
     //                      to be sent to SQLiteDatabase objects.
     private static final SQLiteQueryBuilder popularSqLtQryBldr;
-    private static final SQLiteQueryBuilder ratedSQLiteQueryBuilder;
+    private static final SQLiteQueryBuilder ratedSQLtQryBuldr;
     //private static final SQLiteQueryBuilder mMovie_SQLiteQueryBuilder;
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -118,9 +120,10 @@ public class MovieProvider extends ContentProvider {
     }
 
     static {
-        ratedSQLiteQueryBuilder = new SQLiteQueryBuilder();
+        ratedSQLtQryBuldr = new SQLiteQueryBuilder();
 
-        ratedSQLiteQueryBuilder.setTables(
+        ratedSQLtQryBuldr.setTables(
+
             MovieInfoEntry.TABLE_NAME
                 + " INNER JOIN " + RatingEntry.TABLE_NAME
                 + " ON "
@@ -172,7 +175,8 @@ public class MovieProvider extends ContentProvider {
 
     // Popularity.MovieID = ?
     private static final String sPopular_MovieId_Selection =
-        PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID + " = ?";
+        PopularEntry.TABLE_NAME + "." + PopularEntry.COL_MV_ID + " = ?";
+        //PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID + " = ?";
 
     // ContentResolver > Content-Provider > "DATABASE"
     // This method is to be used in Content-Provider's query method
@@ -199,7 +203,8 @@ public class MovieProvider extends ContentProvider {
 
     // Rating.MovieID = ?
     private static final String sRating_MovieId_Selection =
-            RatingEntry.TABLE_NAME + "." + RatingEntry.COL_KEY_ID + " = ?";
+            RatingEntry.TABLE_NAME + "." + RatingEntry.COL_MV_ID + " = ?";
+            //RatingEntry.TABLE_NAME + "." + RatingEntry.COL_KEY_ID + " = ?";
 
     // ContentResolver > Content-Provider > "DATABASE"
     // This method is to be used in Content-Provider's query method
@@ -211,14 +216,14 @@ public class MovieProvider extends ContentProvider {
         SQLiteDatabase readSqLtDB = mvsSqLtOpnHlpr.getReadableDatabase();
 
         // call database and query for the row with such mMovieId
-        return ratedSQLiteQueryBuilder.query(
-                readSqLtDB
-                , projection
-                , sRating_MovieId_Selection
-                , new String[]{mMovieId}
-                , null
-                , null
-                , sortOrder
+        return ratedSQLtQryBuldr.query(
+                                    readSqLtDB
+                                    , projection
+                                    , sRating_MovieId_Selection
+                                    , new String[]{mMovieId}
+                                    , null
+                                    , null
+                                    , sortOrder
         );
     }
 

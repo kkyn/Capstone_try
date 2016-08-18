@@ -39,7 +39,7 @@ public class DetailMovieActivity extends AppCompatActivity {
         //++++++++++++++++++ from sunshine as reference
 
         // ?? bundle from MainActivity is passed on to the DetailMovieFragment ?? how/why ??, see code below !!
-        if (savedInstanceState == null) {
+    //    if (savedInstanceState == null) {
 
             Intent intent = this.getIntent();
             mUri = intent.getData();
@@ -65,14 +65,17 @@ public class DetailMovieActivity extends AppCompatActivity {
 //                                .commit();
 
         //    Log.d(LOG_TAG, "yyyy onCreate / savedInstanceState == null / DetailMoviewFragment --");
-        }
+//        }
         // tky add, 6th August 2.28 am
-        else {
-            Log.d(LOG_TAG, "-------------------------------- ERROR ");
-        }
+//        else {
+//            Log.d(LOG_TAG, "-------------------------------- ERROR ");
+//        }
 
         // tky add 3rd August 2015
        // DetailMovieFragment.myResetLoaderCode_1();
+
+
+      ///   DetailMovieFragment.myRestartLoaderCode();
     }
 
 

@@ -31,7 +31,7 @@
 <!--    <string name="pref_sortmovies_default_value" translatable="false">vote_average.desc</string> -->
     <!-- Value in SharedPreference for sort-movies by ratings option -->
     <string name="pref_sortmovies_by_ratings" translatable="false">vote_average.desc</string>
-    <!--<string name="pref_sortmovies_by_ratings" translatable="false">popularity.desc</string>-->
+<!--    <string name="pref_sortmovies_by_ratings" translatable="false">popularity.desc</string> -->
 
     <string name="empty_movie_list">No Movie Information Available</string>
 

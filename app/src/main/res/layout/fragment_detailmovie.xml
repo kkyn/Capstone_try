@@ -6,6 +6,7 @@
     tools:context="com.example.android.myproject_2.DetailMovieFragment">
 <!--
     tools:context="com.example.android.myproject_2.app.DetailMovieActivity.DetailMovieFragment" -->
+<!--
     <TextView
         android:id="@+id/movie_title_textView"
         android:layout_width="match_parent"
@@ -14,7 +15,8 @@
         android:text="@string/hello_world"
         android:textColor="#000000"
         android:textSize="30sp" />
-<!--    <ScrollView
+        -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -58,5 +60,5 @@
                 android:textColor="#000000"
                 android:textSize="20sp" />
         </LinearLayout>
-    </ScrollView>-->
+    </ScrollView>
 </LinearLayout>

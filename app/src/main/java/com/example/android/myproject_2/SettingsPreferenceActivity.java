@@ -35,7 +35,7 @@ public class SettingsPreferenceActivity extends PreferenceActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toast.makeText(getApplicationContext(),"++ In SettingsPreference Activity ----", Toast.LENGTH_SHORT).show();
+///        Toast.makeText(getApplicationContext(),"++ In SettingsPreference Activity ----", Toast.LENGTH_SHORT).show();
         Log.d(LOG_TAG,"ssss onCreate ----");
 
         // - Add 'general' preferences, defined in the XML file
@@ -169,7 +169,7 @@ public class SettingsPreferenceActivity extends PreferenceActivity
             String mString = Utility.getPreferredSortSequence(this);
 
             Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... key: " + key + " ..... SortSeq: " + mString);
-            Toast.makeText(getApplicationContext(),"++ SettingsPreference Activity / onSharedPreferenceChanged ----", Toast.LENGTH_SHORT).show();
+///            Toast.makeText(getApplicationContext(),"++ SettingsPreference Activity / onSharedPreferenceChanged ----", Toast.LENGTH_SHORT).show();
 
             // THIS 2 LINES WORKS !! NOT SURE ???
 //            getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
