@@ -1,20 +1,16 @@
 package com.example.android.myproject_2;
 
-import android.app.FragmentManager;
 import android.content.SharedPreferences;
-import android.graphics.Movie;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.android.myproject_2.data.MovieContract;
 import com.example.android.myproject_2.sync.MoviesSyncAdapter;
-import static com.example.android.myproject_2.Movie_Fragment.*;
-//import static com.example.android.myproject_2.Movie_Fragment.*;
+//import static com.example.android.myproject_2.Main_Fragment.*;
 //==============================================
 //==============================================
 /**
@@ -84,13 +80,6 @@ public class SettingsPreferenceActivity extends PreferenceActivity
 
         // Set the preference summaries
         setPreferenceSummary (preference, object);
-        //++++++++++++++++++++++
-        /*
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Object object = sharedPreferences.getString(preference.getKey(), "");
-
-        setPreferenceSummary(preference, object);
-        */
         //++++++++++++++++++++++
     }
 
@@ -164,16 +153,13 @@ public class SettingsPreferenceActivity extends PreferenceActivity
         if ( key.equals(getString(R.string.pref_sortmovies_key)) ) {
             // we've changed the location
             // first clear locationStatus
-        //    Utility.resetLocationStatus(this);
+        //    Utility.resetLocationStatus(this); ???
 
             String mString = Utility.getPreferredSortSequence(this);
 
             Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... key: " + key + " ..... SortSeq: " + mString);
 ///            Toast.makeText(getApplicationContext(),"++ SettingsPreference Activity / onSharedPreferenceChanged ----", Toast.LENGTH_SHORT).show();
 
-            // THIS 2 LINES WORKS !! NOT SURE ???
-//            getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
-//            getContentResolver().notifyChange(MovieContract.RatingEntry.CONTENT_URI, null);
         //+++++++++++++++++++++++++++++++++++++++++++
 
             // tky add, 4th August, 2016, 11.44pm --- DON"T SEEM TO WORK !!
@@ -189,7 +175,7 @@ public class SettingsPreferenceActivity extends PreferenceActivity
 
             Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... MoviesSyncAdapter.syncImmediately(this) --");
 
-           // Movie_Fragment.myRestartLoaderCode();
+           // Main_Fragment.myRestartLoaderCode();
             MoviesSyncAdapter.syncImmediately(this);
 
         }

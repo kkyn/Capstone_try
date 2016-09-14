@@ -7,12 +7,15 @@ package com.example.android.myproject_2;
 /**/
 /* */
 
+import android.app.Activity;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -32,19 +35,19 @@ import com.example.android.myproject_2.data.MovieContract.RatingEntry;
 import com.example.android.myproject_2.sync.MoviesSyncAdapter;
 
 /**
- * A placeholder fragment (Movie_Fragment) containing a simple view.
+ * A placeholder fragment (Main_Fragment) containing a simple view.
  */
-public class Movie_Fragment extends Fragment
+public class Main_Fragment extends Fragment
                         implements LoaderManager.LoaderCallbacks<Cursor>
                                 , SharedPreferences.OnSharedPreferenceChangeListener
                              //   ,Movie_RecyclerViewAdapter.MvItemOnClickHandler
 {
     // constructor
-    public Movie_Fragment() {
+    public Main_Fragment() {
 
     }
 
-    public static final String LOG_TAG = Movie_Fragment.class.getSimpleName();
+    public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 /**/
 private RecyclerView                mRecyclerView;
@@ -117,34 +120,79 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         ,RatingEntry.COL_POSTER
     };
 
-    public interface CallBack{
+    private static final String SELECTED_INDEX = "selected_index";
+    //-------------------------
+    //--- Interface stuff -----
+    //-------------------------
+    CallBackListner mCallBackListner;
+
+    // Container Activity must implement this interface
+    public interface CallBackListner {
 
          void onItemSelectedInRecyclerView(Uri myUri);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallBackListner = (CallBackListner) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement CallBackListner");
+        }
+    }
 
     //////////////////////////////////////////////////////////////
     // tky, to stay
     //--- Fragment Lifecycle Stuff ----
     //---------------------------------
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(LOG_TAG, "---- 6 onStop() --");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(LOG_TAG, "---- 7 onDestroyView() --");
+    }
+
+
+    @Override // --- 1a ----
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d(LOG_TAG, "---- 1a onViewCreated(View view, @Nullable Bundle savedInstanceState) --");
+    }
+
     @Override // --- 0 ----
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
 
-        Log.d(LOG_TAG, "-- 0 onCreate() --");
+        Log.d(LOG_TAG, "---- 0 onCreate() --");
     }
     @Override // --- 2 ----
     public void onActivityCreated(Bundle savedInstanceState) {
 
-        Log.d(LOG_TAG, "-- 2 onActivityCreated() --");
+        Log.d(LOG_TAG, "---- 2 onActivityCreated() --");
         // returns a loader-object, there is no need to keep it around.
         // LoaderManager will take of the details.
         // Loaders are uniquely identified, e.g. POPULAR_LOADER_ID
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
-        Log.d(LOG_TAG, "-- 2 onActivityCreated() / initLoader --");
+        Log.d(LOG_TAG, "---- 2 onActivityCreated() / initLoader --");
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().initLoader(MOVIE_FRAGMENT_ID, null, this);
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -157,11 +205,11 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
     public void onStart() {
         super.onStart();
 
-        Log.d(LOG_TAG, "-- 3 onStart() --");
+        Log.d(LOG_TAG, "---- 3 onStart() --");
 
         String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
 
-        Log.d(LOG_TAG, "-- 3 onStart() / restartLoader ... sortMovieBy = " + sortMoviesBy);
+        Log.d(LOG_TAG, "---- 3 onStart() / restartLoader ... sortMovieBy = " + sortMoviesBy);
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
        // getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
@@ -176,7 +224,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
     //    sp.registerOnSharedPreferenceChangeListener(listener);
         sp.registerOnSharedPreferenceChangeListener(this);
         super.onResume();
-        Log.d(LOG_TAG, "-- 4 onResume() / registerOnSharedPreferenceChangeListener ----");
+        Log.d(LOG_TAG, "---- 4 onResume() / registerOnSharedPreferenceChangeListener ----");
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this); // tky, help maintain position ??
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -189,14 +237,14 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
     //    sp.unregisterOnSharedPreferenceChangeListener(listener);
         sp.unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
-        Log.d(LOG_TAG, "-- 5 onPause() / unregisterOnSharedPreferenceChangeListener ----");
+        Log.d(LOG_TAG, "---- 5 onPause() / unregisterOnSharedPreferenceChangeListener ----");
     }
 
     // since we read the location when we create the loader, all we need to do is restart things
 
     void myRestartLoaderCode(){
 
-        Log.d(LOG_TAG, "-- myRestartLoaderCode() / getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this) ----");
+        Log.d(LOG_TAG, "----   myRestartLoaderCode() / getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this) ----");
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
@@ -217,7 +265,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         Log.d(LOG_TAG, "-- onSharedPreferenceChanged --");
-    //  Toast.makeText(getContext(),"-- Movie_Fragment/onActivityCreated/onSharedPreferenceChanged()/key --" + key, Toast.LENGTH_SHORT).show();
+    //  Toast.makeText(getContext(),"-- Main_Fragment/onActivityCreated/onSharedPreferenceChanged()/key --" + key, Toast.LENGTH_SHORT).show();
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         if ( key.equals(getString(R.string.pref_sortmovies_key)) ) {
@@ -262,20 +310,12 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         if (sortMoviesBy.equals(getString(R.string.pref_sortmovies_default_value))){
             mUri = PopularEntry.CONTENT_URI;
             mProjection = POPULAR_PROJECTION;
-            Log.d(LOG_TAG, "-- onCreateLoader()/ popularity.desc/ " + mUri.toString());
-//            Log.d(LOG_TAG, "-- onCreateLoader() / popularity.desc --");
-//            Log.d(LOG_TAG, "-- onCreateLoader() / " + mUri.toString() + " --");
-         ///   Toast.makeText(getContext(),"-- Movie_Fragment/onCreateLoader()/Popular --", Toast.LENGTH_LONG).show();
-         ///   Toast.makeText(getContext(),"-- " + mUri.toString(), Toast.LENGTH_LONG).show();
+            Log.d(LOG_TAG, "----   onCreateLoader()/ popularity.desc/ " + mUri.toString());
         }
         else {
             mUri = RatingEntry.CONTENT_URI;
             mProjection = RATING_PROJECTION;
-            Log.d(LOG_TAG, "-- onCreateLoader()/ rate_average.desc/ " + mUri.toString());
-//            Log.d(LOG_TAG, "-- onCreateLoader() / rate_average.desc --");
-//            Log.d(LOG_TAG, "-- onCreateLoader() / " + mUri.toString() + " --");
-         ///   Toast.makeText(getContext(),"-- Movie_Fragment/onCreateLoader()/Rating --", Toast.LENGTH_LONG).show();
-         ///   Toast.makeText(getContext(),"-- " + mUri.toString(), Toast.LENGTH_LONG).show();
+            Log.d(LOG_TAG, "----   onCreateLoader()/ rate_average.desc/ " + mUri.toString());
         }
 
         return new CursorLoader(
@@ -301,9 +341,9 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         String mStrng;
         //Log.d(LOG_TAG, "--  onLoadFinished() --");
 
-        Log.d(LOG_TAG, "-- onLoadFinished(), loader ID : " + loader.getId() + " --");
-        if (cursor == null) {Log.d(LOG_TAG, "-- onLoadFinished(), cursor,NULL --");}
-        else                {Log.d(LOG_TAG, "-- onLoadFinished(), cursor,NOT NULL -- cursor count : " + cursor.getCount() + " --");
+        Log.d(LOG_TAG, "----   onLoadFinished(), loader ID : " + loader.getId() + " --");
+        if (cursor == null) {Log.d(LOG_TAG, "----   onLoadFinished(), cursor,NULL --");}
+        else                {Log.d(LOG_TAG, "----   onLoadFinished(), cursor,NOT NULL -- cursor count : " + cursor.getCount() + " --");
            // mStrng = cursor.getString(0);
           //  Log.d(LOG_TAG, "-- cursor count : " + cursor.getCount() + " --");
         }
@@ -316,6 +356,12 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
          * RecyclerView fronting this adapter to re-display
         */
         mvRcyclrVwAdapterVwHldr.swapCursor(cursor);
+
+        //xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        if (mPosition != RecyclerView.NO_POSITION) {
+            mRecyclerView.smoothScrollToPosition(mPosition);
+        }
+        //xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         //++++++++++++++++++++++++++++++++++++++
     }
 
@@ -327,7 +373,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-        Log.d(LOG_TAG, "-- onLoadReset() --");
+        Log.d(LOG_TAG, "----   onLoadReset() --");
         /* Clears out the adapter's reference to the Cursor.
         * This prevents memory leaks.
         */
@@ -356,7 +402,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         /*
         // tky, to add, new, begin
         if (id == R.id.most_popular) {
-            FetchMoviesDbAsyncTask mtask = new FetchMoviesDbAsyncTask(getActivity());
+            FetchMoviesDb_AsyncTask mtask = new FetchMoviesDb_AsyncTask(getActivity());
             mtask.execute(POPULARITY_DESC);
             return true;
         }
@@ -376,12 +422,8 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         if (id==R.id.most_popular){
 
             Log.d(LOG_TAG, " ---- Picked most popular in item List");
-    //
-            // .makeText(getContext()," -- Movie_Fragment/onOptionsItemSelected() --", Toast.LENGTH_SHORT).show();
 
-            // commented on 20th July, morning
-//            FetchMoviesDbAsyncTask task = new FetchMoviesDbAsyncTask(getActivity());
-//            task.execute(POPULARITY_DESC);
+            // .makeText(getContext()," -- Main_Fragment/onOptionsItemSelected() --", Toast.LENGTH_SHORT).show();
 
             return true;
         }
@@ -405,6 +447,14 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
         return tryUri;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != RecyclerView.NO_POSITION) {
+            outState.putInt(SELECTED_INDEX, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
     private long getNewPosition(int position) {
         return mvRcyclrVwAdapterVwHldr.getItemId(position);
     }
@@ -416,7 +466,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
 
         RecyclerView.LayoutManager mLayoutManager;
         //return super.onCreateView(inflater, container, savedInstanceState);
-        Log.d(LOG_TAG, "-- 1 onCreateView() --");
+        Log.d(LOG_TAG, "---- 1 onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) --");
 
         //****************
         // tky comment ....
@@ -436,7 +486,9 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
                   ///   Toast.makeText(getContext(),"-- MvItemOnClickHandler() / myOnClick() --: " + mPosition + " -- " + sortType + " -- ", Toast.LENGTH_SHORT).show();
                   //      Log.d(LOG_TAG, "-- MvItemOnClickHandler().myOnClick(),  mPosition:" + mPosition + "  sortType:" + sortType );
                   //      Log.d(LOG_TAG, "-- tryUri : " + tryUri.toString());
-                        ((CallBack) getActivity()).onItemSelectedInRecyclerView(tryUri);
+                        mCallBackListner.onItemSelectedInRecyclerView(tryUri);
+                        //-- or --
+                        // ((CallBackListner) getActivity()).onItemSelectedInRecyclerView(tryUri);
 
 
 
@@ -447,9 +499,9 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
        // mvRcyclrVwAdapterVwHldr = new Movie_RecyclerViewAdapter(getContext());
 
     //  View rootView = inflater.inflate(R.layout.fragment_movie_top, container, false);
-        View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_movie);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_id4_movies);
 
         //mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -459,8 +511,15 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mvRcyclrVwAdapterVwHldr);
+        mRecyclerView.setHasFixedSize(true);
 
-    //    Toast.makeText(getContext()," -- 1 Movie_Fragment/onCreateView() --", Toast.LENGTH_SHORT).show();
+
+        //+++++++++++++++++++++++++++++
+        if ((savedInstanceState != null) && savedInstanceState.containsKey(SELECTED_INDEX)) {
+            mPosition = savedInstanceState.getInt(SELECTED_INDEX);
+        }
+        //+++++++++++++++++++++++++++++
+    //    Toast.makeText(getContext()," -- 1 Main_Fragment/onCreateView() --", Toast.LENGTH_SHORT).show();
         return rootView;
     }
 //    //---Toast.makeText(getContext()," -- 1 onCreateView() --", Toast.LENGTH_SHORT).show();
@@ -470,7 +529,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
 //
 //        Log.d(LOG_TAG, "-- 2 onCreateView() --");
 //
-//        View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
+//        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 //
 //        // arrayListOfMovieInfo = new ArrayList<MoviesSelectedInfo>();
 //        //moviesCursorAdapter = new Movie_CursorAdapter(getActivity(), arrayListOfMovieInfo);
@@ -478,7 +537,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
 //
 //        // tky add, tky try
 //        //View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//        //View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
+//        //View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 //
 //        mGridView = (GridView) rootView.findViewById(R.id.grid_view);
 //
@@ -494,7 +553,7 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
 //                Bundle bundle = new Bundle();
 //                bundle.putParcelable("aMovieKey", arrayListOfMovieInfo.get(position));
 //
-//                Intent intent = new Intent(getActivity(), DetailMovieActivity.class);
+//                Intent intent = new Intent(getActivity(), MovieDetails_Activity.class);
 //                intent.putExtras(bundle);
 //
 //                startActivity(intent);
@@ -506,22 +565,5 @@ private Movie_RecyclerViewAdapter mvRcyclrVwAdapterVwHldr;
 //    }
 }
 //------------------------------------------------------------
- /*
-                Uri tryUri;
-                if (sortType.equals("popularity.desc")){
-                    tryUri =  PopularEntry.CONTENT_URI;
-                }
-               /// else {
-               ///     tryUri =  RatingEntry.CONTENT_URI;
-               /// }
-                *//*else if  (sortType.equals("")){
-                    tryUri =  RatingEntry.CONTENT_URI;
-                }*//*
-            ///    String string = tryUri.toString();
 
-                //Toast.makeText(getContext(),"-- MvItemOnClickHandler() / myOnClick() --: " + mPosition , Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getContext(),"-- MvItemOnClickHandler() / myOnClick() --: " + mPosition + " -- " + sortType + " -- " , Toast.LENGTH_SHORT).show();
-                  Toast.makeText(getContext(),"-- MvItemOnClickHandler() / myOnClick() --: " + mPosition + " -- " + sortType + " -- ", Toast.LENGTH_SHORT).show();
-             ///     Toast.makeText(getContext(), string, Toast.LENGTH_LONG).show();
-*/
 

@@ -62,29 +62,9 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
              // * definition of a FOREIGN KEY constraint...
                 + " FOREIGN KEY (" + PopularEntry.COL_KEY_ID + ")"
                 + " REFERENCES " + MovieInfoEntry.TABLE_NAME + " (" + MovieInfoEntry._ID + ") "
-                /*
-                    + " FOREIGN KEY (" + PopularEntry.COL_KEY_ID + ")"
 
-                        + " REFERENCES " + MovieInfoEntry.TABLE_NAME +
-                                " (" + MovieInfoEntry.COL_KEY_ID + ") "
-                */
                 + ");";
 
-        /*
-
-        final String SQL_CREATE_TABLE_RATING =
-                "CREATE TABLE " + RatingEntry.TABLE_NAME +
-                        " ("
-                        + RatingEntry._ID + " INTEGER PRIMARY KEY, "
-                        + RatingEntry.COL_KEY_ID + " INTEGER NOT NULL, "
-                        + RatingEntry.COL_MV_ID + " INTEGER NOT NULL, "
-                        + RatingEntry.COL_TITLE + " TEXT NOT NULL, "
-
-                        + " FOREIGN KEY (" + RatingEntry.COL_KEY_ID + ")"
-                            + " REFERENCES " + MovieInfoEntry.TABLE_NAME +
-                                        " (" + MovieInfoEntry._ID + ") "
-                        + ");";
-         */
         final String SQL_CREATE_TABLE_MOVIEINFO =
 
             "CREATE TABLE " + MovieInfoEntry.TABLE_NAME
@@ -149,17 +129,6 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
 // */
 
         //+++++++++++++++++++++++++++++++++++
-//        final String SQL_CREATE_TABLE_MOVIE =
-//            "CREATE TABLE " + MovieEntry.TABLE_NAME
-//                + " ("
-//                    + MovieEntry._ID + " INTEGER PRIMARY KEY, "
-//                    + MovieEntry.COL_MOVIE_ID + " INTEGER UNIQUE NOT NULL, "
-//                    + MovieEntry.COL_TITLE + " TEXT NOT NULL, "
-//                    + MovieEntry.COL_VOTECOUNT + " INTEGER NOT NULL, "
-//                    + MovieEntry.COL_RATING + " REAL NOT NULL, "
-//                    + MovieEntry.COL_RELEASEDATE + " TEXT NOT NULL, "
-//                    + MovieEntry.COL_OVERVIEW + " TEXT NOT NULL "
-//                +    ");";
 /*
         public static final String TABLE_NAME = "Table_Movie";
 
@@ -177,7 +146,6 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TABLE_POPULARITY);
         db.execSQL(SQL_CREATE_TABLE_MOVIEINFO);
         db.execSQL(SQL_CREATE_TABLE_RATING);
-     //   db.execSQL(SQL_CREATE_TABLE_MOVIE);
     }
 
     @Override

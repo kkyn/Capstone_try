@@ -233,9 +233,8 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             String mvReleaseDate = movieInfoJson.getString(RELEASE_DATE);
 
             String mvPosterPath   = TMDB_BASE_URL + W500 + movieInfoJson.getString(POSTER_PATH);
-            String mvBackDropPath = TMDB_BASE_URL + "w780" +
-                    "/" + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
-       //     String mvBackDropPath = TMDB_BASE_URL + W500 + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
+            String mvBackDropPath = TMDB_BASE_URL + "w780/" + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
+       //   String mvBackDropPath = TMDB_BASE_URL + W500 + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
 
             //++++++++++++++++++++++++++++++++++++++++++++++
             ContentValues mCvMvInfo = new ContentValues();
@@ -244,7 +243,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_RELEASEDATE,   mvReleaseDate);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_OVERVIEW,      mvOverview);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POSTERLINK,    mvBackDropPath);
-      //      mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POSTERLINK,    mvPosterPath);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE,  mvVoteAverage);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POPULARITY,    mvPopularity);
             mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_VOTE_COUNT,    mvVoteCount);
@@ -278,7 +276,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
         long movieId = contentvalues.getAsLong(MovieContract.PopularEntry.COL_MV_ID);
 
-        //Log.d(LOG_TAG, "  ---> 355 addPopular ---> contentResolver-query" + "----" + String.valueOf(movieInfo.mId));
         //    Cursor mCursor = mContext.getContentResolver()
         Cursor mCursor = getContext().getContentResolver()
                 .query(
@@ -309,8 +306,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 String selection = MovieContract.PopularEntry.TABLE_NAME + "." + MovieContract.PopularEntry._ID + "=?";
 
-                //Log.d(LOG_TAG, "  ---> 387 addPopular ---> contentResolver-update");
-
                 //    int rowsUpdated = mContext.getContentResolver()
                 int rowsUpdated = getContext().getContentResolver()
                         .update(MovieContract.PopularEntry.CONTENT_URI,
@@ -320,13 +315,10 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                                 new String[]{String.valueOf(arrayIndx)}
                         );
 
-                //Log.d(LOG_TAG, "  <--- 395 addPopular <--- contentResolver-update");
             }
         }
         // there is no such movie_Id in table, so we need to insert the info.
         else {
-
-            //Log.d(LOG_TAG, "  ---> 406 addPopular ---> contentResolver-insert");
 
             //Uri rowsUpdated = mContext.getContentResolver()
             Uri rowsUpdated = getContext().getContentResolver()
@@ -334,8 +326,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                             contentvalues
                             //cv
                     );
-
-            //Log.d(LOG_TAG, "  <--- 412 addPopular <--- contentResolver-insert");
         }
 
         mCursor.close();
@@ -346,7 +336,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
         long valueOf_Id;
 
-        //Log.d(LOG_TAG, "  ---> 417 addMovieInfo ---> contentResolver-query");
         //    Cursor mCursor = mContext.getContentResolver()
         Cursor mCursor = getContext().getContentResolver()
                 .query(
@@ -358,7 +347,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                         null                                            // sort order
                 );
 
-        //Log.d(LOG_TAG, "  <--- 427 addMovieInfo <--- contentResolver-query");
 
         // Check presence or row/data
         if (mCursor.moveToFirst()==true) {
@@ -366,17 +354,13 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             // get the '_id' value
             int mColIndx = mCursor.getColumnIndex(MovieContract.MovieInfoEntry._ID);
             valueOf_Id = mCursor.getLong(mColIndx);
-            //Log.d(LOG_TAG, "  <--- 435 addMovieInfo, YES IS A ROW EXIST.... ");
 
         } else {
             /*
                 + MovieInfoEntry.COL_VOTE_AVERAGE   + " REAL NOT NULL, " //" REAL NOT NULL, "
                 + MovieInfoEntry.COL_VOTE_COUNT     + " INTEGER NOT NULL, "//" INTEGER NOT NULL, "
              */
-            //Log.d(LOG_TAG, "  ---> 461 addMovieInfo ---> contentResolver-insert");
-            //  Uri insertUri = mContext.getContentResolver().insert(MovieContract.MovieInfoEntry.CONTENT_URI, cv);
             Uri insertUri = getContext().getContentResolver().insert(MovieContract.MovieInfoEntry.CONTENT_URI, contentValues);
-            //Log.d(LOG_TAG, "  <--- 463 addMovieInfo <--- contentResolver-insert");
 
             // The resulting URI contains the ID for the row.  Extract the locationId from the Uri.
             valueOf_Id = ContentUris.parseId(insertUri);

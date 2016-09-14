@@ -17,7 +17,7 @@
         android:name=".MyApplication"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.android.myproject_2.MainActivity"
+            android:name=".Main_Activity"
             android:label="MyProject_2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,20 +26,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.android.myproject_2.DetailMovieActivity"
+            android:name=".MovieDetails_Activity"
             android:label="@string/title_activity_detailmovie"
-            android:parentActivityName="com.example.android.myproject_2.MainActivity">
+            android:parentActivityName=".Main_Activity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.myproject_2.MainActivity" />
+                android:value=".Main_Activity" />
         </activity>
         <activity
             android:name=".SettingsPreferenceActivity"
             android:label="Settings"
-            android:parentActivityName="com.example.android.myproject_2.MainActivity">
+            android:parentActivityName=".Main_Activity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.myproject_2.MainActivity" />
+                android:value=".Main_Activity" />
         </activity>
 
         <!-- The SyncAdapter's dummy authentication service -->

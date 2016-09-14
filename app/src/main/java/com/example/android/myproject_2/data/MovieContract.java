@@ -216,7 +216,9 @@ public class MovieContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
         public static String getMovieId_fromUri(Uri uri) {
+
             return uri.getPathSegments().get(1);
+            //-- or --
             // return uri.getLastPathSegment();
         }
     }
