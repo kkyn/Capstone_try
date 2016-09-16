@@ -109,7 +109,7 @@ public class MovieDetails_Fragment extends Fragment
     @Bind(com.example.android.myproject_2.R.id.movie_title_textView)
     TextView movie_title_textView;
     @Bind(com.example.android.myproject_2.R.id.thumbnail_imageView)
-    ImageView thumbnail_imageView;
+    ImageView movie_thumbnail_imageview;
     @Bind(com.example.android.myproject_2.R.id.movie_release_date_textView)
     TextView movie_release_date_textView;
     @Bind(com.example.android.myproject_2.R.id.movie_ratings)
@@ -118,6 +118,8 @@ public class MovieDetails_Fragment extends Fragment
     TextView movie_synopsis;
     @Bind(com.example.android.myproject_2.R.id.video_button)
     Button movie_video_button;
+    @Bind(com.example.android.myproject_2.R.id.review_button)
+    Button movie_review_button;
 
     private TextView mTextView;
 
@@ -161,10 +163,20 @@ public class MovieDetails_Fragment extends Fragment
         //movie_video_button.setText("Just Clicked");
         //Log.d(LOG_TAG, "++ OnClicked, VideoID = " + videoId );
         //Toast.makeText(getContext(),"VideoID : " + videoId, Toast.LENGTH_LONG).show();
-
-        String mVideoPath = "vnd.youtube:" + videoId;
+        /*int viewId;*/
+        switch (view.getId()) {
+            case R.id.video_button :
+            case R.id.thumbnail_imageView :
+                String mVideoPath = "vnd.youtube:" + videoId;
+                Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoPath));
+                startActivity(mIntent);
+                break;
+            default:
+                break;
+        }
+        /*String mVideoPath = "vnd.youtube:" + videoId;
         Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoPath));
-        startActivity(mIntent);
+        startActivity(mIntent);*/
     }
     //-------------------------------------------
 
@@ -192,6 +204,8 @@ public class MovieDetails_Fragment extends Fragment
         //+++++++++++++++
 
         movie_video_button.setOnClickListener(this);
+        movie_thumbnail_imageview.setOnClickListener(this);
+        movie_review_button.setOnClickListener(this);
 
         //++++++++++++++++++++++++++++++++++++++
         getLoaderManager().initLoader(DETAIL_MOVIE_LOADER, null, this);
@@ -223,7 +237,7 @@ public class MovieDetails_Fragment extends Fragment
 //
 //        movie_title_textView.setText(aMovieInfo.mOriginalTitle);
 //
-//        Picasso.with(getActivity()).load(aMovieInfo.mThumbnail).into(thumbnail_imageView);
+//        Picasso.with(getActivity()).load(aMovieInfo.mThumbnail).into(movie_thumbnail_imageview);
 //
 //        movie_release_date_textView.setText("Release Date: " + aMovieInfo.mReleaseDate);
 //        movie_ratings.setText("Ratings : " + aMovieInfo.mVoteAverage);
@@ -388,7 +402,7 @@ public class MovieDetails_Fragment extends Fragment
             Picasso.with(getContext()).load(cursor.getString(INDX_POSTERLINK))
                     .placeholder(R.drawable.sample_1)
                     .error(R.drawable.sample_0)
-                    .into(thumbnail_imageView);
+                    .into(movie_thumbnail_imageview);
 
             //...................
             // TODO: call DBAsyncTAsk , call method FetchComplete()
@@ -413,7 +427,7 @@ public class MovieDetails_Fragment extends Fragment
                 Picasso.with(getContext()).load(cursor.getString(INDX_POSTERLINK))
                         .placeholder(R.drawable.sample_1)
                         .error(R.drawable.sample_0)
-                        .into(thumbnail_imageView);
+                        .into(movie_thumbnail_imageview);
 
 
 //                Picasso.with(mContext)
@@ -435,7 +449,7 @@ public class MovieDetails_Fragment extends Fragment
                         .load(cursor.getString(INDX_POSTERLINK))
                         .placeholder(R.drawable.sample_1)
                         .error(R.drawable.sample_0)
-                        .into(thumbnail_imageView);
+                        .into(movie_thumbnail_imageview);
 
             }*/
             //++++++++
@@ -449,8 +463,6 @@ public class MovieDetails_Fragment extends Fragment
     public void onLoaderReset(Loader loader) {
         Log.d(LOG_TAG, "++ onLoaderReset() --");
     }
-
-
 
   /*  @Override
     public void onClick(View view) {

@@ -1,13 +1,16 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lnrlyt_id_4_moviedetails"
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/container_id4_moviedetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <!--
-        android:id="@+id/linear_layout_detail_movie"
+    android:id="@+id/linear_layout_detail_movie"
         xmlns:tools="http://schemas.android.com/tools" // not necessary ??
         tools:context="com.example.android.myproject_2.MovieDetails_Fragmentnt" // not necessary ??
-        tools:context="com.example.android.myproject_2.app.MovieDetails_Activity.MovieDetails_Fragment" -->
+        tools:context="com.example.android.myproject_2.app.MovieDetails_Activity.MovieDetails_Fragment"
+    -->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,20 +22,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/mvdtls_textviewid_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top|right"
-                android:text="layout/fragment_moviedetails.xml " />
-
-            <TextView
                 android:id="@+id/movie_title_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="@string/hello_world"
                 android:textColor="#000000"
-                android:textSize="30sp" />
+                android:textSize="20dp" />
+
+            <!--android:textSize="30sp" android:text="@string/hello_world"-->
 
             <ImageView
                 android:id="@+id/thumbnail_imageView"
@@ -69,4 +66,4 @@
                 android:text="Video Clip" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</FrameLayout>
