@@ -14,24 +14,34 @@
     <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
 
     <!-- Label for the sort movies preference -->
-    <string name="pref_sortmovies_by_label">Sort Movies by :</string>
+
+    <string name="pref_movies_sort_title">Sort Movies by :</string>
 
     <!-- Label for popularity option -->
-    <string name="pref_sortmovies_by_popularity_label">Popularity</string>
+
+    <string name="pref_movies_sortby_popularity_label">Popularity</string>
+
     <!-- Label for ratings option -->
-    <string name="pref_sortmovies_by_ratings_label">Ratings</string>
+
+    <string name="pref_movies_sortby_ratings_label">Ratings</string>
+
+    <string name="pref_movies_sortby_ownfavourites_label">Favourites</string>
 
     <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
 
     <!-- Key name in SharedPreferences for sort-movies preference  -->
-    <string name="pref_sortmovies_key" translatable="false">Movies</string>
+    <string name="pref_movies_sort_key" translatable="false">Movies</string>
 
     <!-- Value in SharedPreferences for sort-movies by popularity option -->
-    <string name="pref_sortmovies_default_value" translatable="false">popularity.desc</string>
-<!--    <string name="pref_sortmovies_default_value" translatable="false">vote_average.desc</string> -->
+    <string name="pref_movies_sortby_default_value" translatable="false">popularity.desc</string>
+
+    <!-- <string name="pref_sortmovies_default_value" translatable="false">vote_average.desc</string> -->
+
     <!-- Value in SharedPreference for sort-movies by ratings option -->
-    <string name="pref_sortmovies_by_ratings" translatable="false">vote_average.desc</string>
-<!--    <string name="pref_sortmovies_by_ratings" translatable="false">popularity.desc</string> -->
+    <string name="pref_movies_sortby_ratings" translatable="false">vote_average.desc</string>
+    <!-- <string name="pref_sortmovies_by_ratings" translatable="false">popularity.desc</string> -->
+
+    <string name="pref_movies_sortby_favourites" translatable="false">favourites.desc</string>
 
     <string name="empty_movie_list">No Movie Information Available</string>
 

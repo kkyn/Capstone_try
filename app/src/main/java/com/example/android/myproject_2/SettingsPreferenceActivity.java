@@ -8,8 +8,9 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.example.android.myproject_2.data.MovieContract;
+import com.example.android.myproject_2.data.MovieContract.X_MovieInfoEntry;
 import com.example.android.myproject_2.sync.MoviesSyncAdapter;
+
 //import static com.example.android.myproject_2.Main_Fragment.*;
 //==============================================
 //==============================================
@@ -31,9 +32,6 @@ public class SettingsPreferenceActivity extends PreferenceActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-///        Toast.makeText(getApplicationContext(),"++ In SettingsPreference Activity ----", Toast.LENGTH_SHORT).show();
-        Log.d(LOG_TAG,"ssss onCreate ----");
-
         // - Add 'general' preferences, defined in the XML file
         // - Load the preferences from an XML resource
         // TODO: Add preferences from XML
@@ -46,12 +44,15 @@ public class SettingsPreferenceActivity extends PreferenceActivity
 
         // Finds a Preference based on its key.
         // Preference mPreference = this.findPreference("Movies"); // -- or --
-        Preference mPreference = this.findPreference(getString(R.string.pref_sortmovies_key));
+        Preference mPreference = this.findPreference(getString(R.string.pref_movies_sort_key));
+
         bindPreferenceSummaryToValue(mPreference);
     }
 
     //----------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------
     //---------++ SETTING FOR implementation of Preference.OnPreferenceChangeListener --------
+    //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
     /**
      * Attaches a listener so the summary is always updated with the preference value.
@@ -66,8 +67,20 @@ public class SettingsPreferenceActivity extends PreferenceActivity
         // 'this' refers to 'Preference.OnPreferenceChangeListener'
         preference.setOnPreferenceChangeListener(this);
 
-        //++++++++++++++++++++++
-        Object object = PreferenceManager
+        //++++++++++++++++++++++++++++++
+        PreferenceManager preferenceManager = getPreferenceManager();
+
+        // Gets a SharedPreferences instance that points to the default file
+        // that is used by the preference framework in the given context.
+        // 'preference.getContext()' ++ get the context of this preference
+        SharedPreferences sharedPreferences = preferenceManager.getDefaultSharedPreferences(preference.getContext());
+
+        // Retrieve a String value from the preferences.
+        Object object = sharedPreferences.getString(preference.getKey(), "");
+
+        setPreferenceSummary(preference, object);
+        //++++++++++++++++++++++++++++++
+        /*Object object = PreferenceManager
                 // Gets a SharedPreferences instance that points to the default file
                 // that is used by the preference framework in the given context.
                 // 'preference.getContext()' ++ get the context of this preference
@@ -76,11 +89,9 @@ public class SettingsPreferenceActivity extends PreferenceActivity
                 // Retrieve a String value from the preferences.
                 .getString(preference.getKey(), "");
 
-        Log.d(LOG_TAG, "ssss ---- object : " + object);
-
         // Set the preference summaries
-        setPreferenceSummary (preference, object);
-        //++++++++++++++++++++++
+        setPreferenceSummary (preference, object);*/
+        //++++++++++++++++++++++++++++++
     }
 
     private void setPreferenceSummary(Preference preference, Object value) {
@@ -141,59 +152,32 @@ public class SettingsPreferenceActivity extends PreferenceActivity
     }
 
     //---------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
     //----++ SETTING FOR implementation of SharedPreferences.OnSharedPreferenceChangeListener -----
     //---------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
     // Implementation of interface SharedPreferences.OnSharedPreferenceChangeListener.
-    // This gets called after the preference is changed, which is important because we
+    // This gets called AFTER the preference is changed, which is important because we
     // start our synchronization here
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        if ( key.equals(getString(R.string.pref_sortmovies_key)) ) {
-            // we've changed the location
-            // first clear locationStatus
-        //    Utility.resetLocationStatus(this); ???
 
-            String mString = Utility.getPreferredSortSequence(this);
+        if (key.equals(getString(R.string.pref_movies_sort_key))) {
 
-            Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... key: " + key + " ..... SortSeq: " + mString);
-///            Toast.makeText(getApplicationContext(),"++ SettingsPreference Activity / onSharedPreferenceChanged ----", Toast.LENGTH_SHORT).show();
+            String string = Utility.getPreferredSortSequence(this);
 
-        //+++++++++++++++++++++++++++++++++++++++++++
-
-            // tky add, 4th August, 2016, 11.44pm --- DON"T SEEM TO WORK !!
-			if (mString.equals(getString(R.string.pref_sortmovies_default_value))){
-			        getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
-                Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... notifyChange: " + mString + " .... " + MovieContract.PopularEntry.CONTENT_URI.toString());
+            if (string.equals(getString(R.string.pref_movies_sortby_default_value)) ||
+                string.equals(getString(R.string.pref_movies_sortby_ratings)) ||
+                string.equals(getString(R.string.pref_movies_sortby_favourites))
+               )
+            {
+                getContentResolver().notifyChange(X_MovieInfoEntry.CONTENT_URI, null);
             }
-			else if (mString.equals(getString(R.string.pref_sortmovies_by_ratings))){
-			        getContentResolver().notifyChange(MovieContract.RatingEntry.CONTENT_URI, null);
-                Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... notifyChange: " + mString + " .... " + MovieContract.RatingEntry.CONTENT_URI.toString());
-			}
-        //++++++++++++++++++++++++++++++++++++++++
 
-            Log.d(LOG_TAG, "ssss onSharedPreferenceChanged ..... MoviesSyncAdapter.syncImmediately(this) --");
-
-           // Main_Fragment.myRestartLoaderCode();
             MoviesSyncAdapter.syncImmediately(this);
-
         }
-        /*
-        else if ( key.equals(getString(R.string.pref_units_key)) ) {
-            // units have changed. update lists of weather entries accordingly
-            getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
-
-        } else if ( key.equals(getString(R.string.pref_location_status_key)) ) {
-            // our location status has changed.  Update the summary accordingly
-            Preference locationPreference = findPreference(getString(R.string.pref_location_key));
-
-            bindPreferenceSummaryToValue(locationPreference);
-
-        } else if ( key.equals(getString(R.string.pref_art_pack_key)) ) {
-            // art pack have changed. update lists of weather entries accordingly
-            getContentResolver().notifyChange(MovieContract.PopularEntry.CONTENT_URI, null);
-        */
 
     }
 }

@@ -1,28 +1,3 @@
-<!-- <fragment
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
-    android:name="com.example.android.myproject_2.Main_Fragment
-    android:layout_width="match_parent"
-    tools:layout="@layout/fragment_main"
-    android:layout_height="match_parent" />
--->
-<!-- tools:layout="@layout/fragment_main" -->
-
-<!-- ////////////////////////////// -->
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/container_in_actvty_mn"
-        android:name="com.example.android.myproject_2.Main_Fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>-->
-
-<!-- ////////////////////////////// -->
 <!-- ???????????????????
 Here we use <fragment .. /> element,
 (DYNAMIC) ???
@@ -37,33 +12,3 @@ the UI layout fragment referenced in android:name="com....Main_Fragment".
     android:name="com.example.android.myproject_2.Main_Fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
-
-<!--
- xmlns:tools="http://schemas.android.com/tools"
-    tools:layout="@layout/fragment_main"-->
-
-<!-- ++++++++++++++++++++++++++++++++++++++ -->
-<!-- ???????????????
-Here we use <FrameLayout .. /> element,
-(STATIC) ???
-we use fragmenttransaction in xx.java file to ==>
-associate a fragment with ==>
-the id/container_in_actvty_mn
--->
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container_in_actvty_mn"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Main_Activity"
-    tools:ignore="MergeRootFrame" />-->
-
-    <!-- ////////////////////////////// -->
-
-<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/fragment"
-android:name="com.example.android.myproject_1.MainActivityFragment"
-tools:layout="@layout/fragment_main"
-android:layout_width="match_parent"
-android:layout_height="match_parent" />-->

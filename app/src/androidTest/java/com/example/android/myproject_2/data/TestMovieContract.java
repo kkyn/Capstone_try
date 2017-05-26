@@ -19,7 +19,8 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.example.android.myproject_2.data.MovieContract.PopularEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieInfoEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieReviewEntry;
 
 /*
     Students: This is NOT a complete test for the WeatherContract --- just for the functions
@@ -34,76 +35,132 @@ public class TestMovieContract extends AndroidTestCase {
    // private static final String TEST_MOVIE_NAME = "/popularity"; //
     //private static final String TEST_MOVIE_INFO = "/movieInfo";
 
+    //private static final long TEST_MOVIE_ID = 14;
     private static final long TEST_MOVIE_ID = 14L;
 
     public static final String LOG_TAG = TestMovieContract.class.getSimpleName();
 
 
     //============================================================================//
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+
+    ///////////////////////////////////////////////////////
+    ////////////// X_MovieInfoEntry /////////////////////
+    ///////////////////////////////////////////////////////
+    // Test methods for Uri,
+    // "content://com.example.android.myproject_2/movieinfo/movieName"
+    ///////////////////////////////////////////
+    public void test_buildUri_X_MovieInfo() {
+
+        Uri mUri = MovieContract.X_MovieInfoEntry.buildUri_X_MovieInfo(TEST_MOVIE_NAME);
+
+        assertNotNull(
+                "Error: Null Uri returned. "
+                        + "You must fill-in buildUriPopularity in MovieContract_x."
+                , mUri);
+
+        assertEquals(
+                "Error: 'TEST_MOVIE_NAME' not properly appended to the end of the Uri",
+                TEST_MOVIE_NAME,
+                mUri.getLastPathSegment());
+
+        // " content://com.example.android.myproject_2/movieSortBy//popularity "
+        // " content://com.example.android.myproject_2/SortByPopularity//XMovie "
+        // " content://com.example.android.myproject_2/movieinfo/%2FXMovie "
+        assertEquals(
+                "Error: 'X_MovieInfo' Uri doesn't match our expected result",
+                mUri.toString(),
+                "content://com.example.android.myproject_2/movieinfo/%2FXMovie" );
+    }
+    public void test_buildUri_X_MovieInfoWithId() {
+
+        Uri mUri = X_MovieInfoEntry.buildUri_X_MovieInfoWithId(TEST_MOVIE_ID);
+
+        assertNotNull(
+                "Error: Null Uri returned. " +
+                "You must fill-in buildUri_X_MovieInfoWithId() in MovieContract.",
+                mUri);
+
+        assertEquals(
+                "Error:  Long expected",
+                TEST_MOVIE_ID,
+                Long.parseLong(mUri.getLastPathSegment(), 10));
+    }
+
+    public void test_getMovieId_FromMovieInfoUri() {
+
+        Uri mUri =  Uri.parse("content://com.example.android.myproject_2/movieinfo/1234");
+
+        String mMovieId = X_MovieInfoEntry.getMovieId_FromMovieInfoUri(mUri);
+
+        assertEquals(
+                "Error: 'extracted Movie_Id from Uri don't match with fixed 1234",
+                "1234",
+                mMovieId);
+
+        //Log.d("-- " + LOG_TAG, "Uri : " + mUri.toString() ); // tky add
+        //Log.d("-- "+ LOG_TAG, "movieId : " + mMovieId);     // tky add
+
+    }
+
+    ///////////////////////////////////////////////////////
+    ////////////// X_MovieReviewEntry /////////////////////
+    ///////////////////////////////////////////////////////
+    public void test_buildUri_X_MovieReviewWithName() {
+
+        Uri mUri = X_MovieReviewEntry.buildUri_4MovieReviewWithName(TEST_MOVIE_NAME);
+
+        assertNotNull("Error:  Null Uri returned."
+                + "You must fill-in buildUri_X_MovieReviewWithName() in MovieContract.\"",
+                mUri);
+
+        assertEquals("Error: 'TEST_MOVIE_NAME' not properly appended to the end of the Uri",
+                TEST_MOVIE_NAME,
+                mUri.getLastPathSegment());
+
+        assertEquals("Error: 'X_MovieReview' Uri doesn't match our expected result",
+                mUri.toString(),
+                "content://com.example.android.myproject_2/moviereview/%2FXMovie");
+    }
+    public void test_buildUri_X_MovieReviewWithId() {
+
+        Uri mUri = X_MovieReviewEntry.buildUri_X_MovieReviewWithId(TEST_MOVIE_ID);
+
+        assertNotNull(
+                "Error: Null Uri returned. " +
+                        "You must fill-in buildUri_X_MovieReviewWithId() in MovieContract.",
+                mUri);
+
+        assertEquals(
+                "Error:  Long expected",
+                TEST_MOVIE_ID,
+                Long.parseLong(mUri.getLastPathSegment(), 10));
+    }
+
+    public void test_getMovieId_FromMovieReviewUri() {
+
+        Uri mUri =  Uri.parse("content://com.example.android.myproject_2/moviereview/1234");
+
+        String mMovieId = X_MovieReviewEntry.getMovieId_FromMovieReviewUri(mUri);
+
+        assertEquals(
+                "Error: 'extracted Movie_Id from Uri don't match with fixed 1234",
+                "1234",
+                mMovieId);
+    }
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+
     ///////////////////////////////////////////
     // Test methods for Uri,
     // "content://com.example.android.myproject_2/popularity/movieName"
     ///////////////////////////////////////////
-    public void testBuildUriPopularity() {
 
-        Uri mUri = PopularEntry.buildUriPopularity(TEST_MOVIE_NAME);
-
-        assertNotNull("Error: Null Uri returned. "
-                + "You must fill-in buildUriPopularity in MovieContract_x."
-                , mUri);
-
-        assertEquals("Error: 'TEST_MOVIE_NAME' not properly appended to the end of the Uri"
-                , TEST_MOVIE_NAME
-                , mUri.getLastPathSegment());
-
-        // " content://com.example.android.myproject_2/movieSortBy//popularity "
-        // " content://com.example.android.myproject_2/SortByPopularity//XMovie "
-        assertEquals("Error: 'Popularity' Uri doesn't match our expected result"
-                , mUri.toString()
-                , "content://com.example.android.myproject_2/popularity/%2FXMovie" );
-    }
     ///////////////////////////////////////////
     // Test methods for Uri,
     // "content://com.example.android.myproject_2/popularity/id"
     ///////////////////////////////////////////
-    public void testBuildUriPopularityWithId() {
-        Uri mUri = PopularEntry.buildUri_PopularityWithId(TEST_MOVIE_ID);
 
-        assertNotNull("Error: Null Uri returned. "
-                + "You must fill in movie ID in MovieContract_x."
-                , mUri);
-
-        assertEquals("Error: Long expected",
-                TEST_MOVIE_ID,
-                Long.parseLong(mUri.getLastPathSegment(), 10));
-    }
     //============================================================================//
-//    public void testBuildUriRating() {
-//        Uri mUri = MovieContract_x.RatingEntry.buildUri_Rating(TEST_MOVIE_NAME);
-//
-//        assertNotNull("Error: Uri for Rating expected"
-//                + "You must fill-in buildUri_Rating in MovieContract_x."
-//                , mUri );
-//
-//        assertEquals("Error: 'TEST_MOVIE_NAME' not properly appended to the end of the Uri."
-//            , TEST_MOVIE_NAME
-//            , mUri.getLastPathSegment());
-//
-//        assertEquals("Error: 'Rating' Uri doesn't match our expected result"
-//                , mUri.toString()
-//                , "content://com.example.android.myproject_2/rating/%2FXMovie");
-//    }
-//    public void testBuildUriRatingAndId() {
-//        Uri mUri = MovieContract_x.RatingEntry.buildUri_RatingWithId(TEST_MOVIE_ID);
-//
-//        assertNotNull("Error: Uri for Rating expected"
-//            + "You must fill-in buildUri_Rating in MovieContract_x."
-//            , mUri);
-//
-//        assertEquals("Error: Long expected"
-//                , TEST_MOVIE_ID
-//                , Long.parseLong(mUri.getLastPathSegment(), 10));
-//    }
 
     //============================================================================//
     // /////////////////////////////////////////
@@ -111,53 +168,5 @@ public class TestMovieContract extends AndroidTestCase {
     // "content://com.example.android.myproject_2/movieInfo"
     ////////////////////////////////////////////
 //    public void testBuildUri_MovieInfo_Id() {
-//
-//        Uri mUri = MovieContract_x.MovieInfoEntry.buildUri_MovieInfo_Id(TEST_MOVIE_ID);
-//
-//        assertNotNull("Error: Null Uri returned. "
-//                + "you must fill in buildUri_MovieInfo_Id "
-//                + "MovieContract_x."
-//                , mUri);
-//
-//        assertEquals("Error: Long expected"
-//                , TEST_MOVIE_ID
-//                , Long.parseLong(mUri.getLastPathSegment(), 10));
-//    }
 
-//    public void testBuildUri_Movie_Id() {
-//        Uri mUri = MovieContract_x.MovieEntry.buildUri_Movie_Id(TEST_MOVIE_ID);
-//
-//        assertNotNull("Error:  ", mUri);
-//
-//        assertEquals("Error:...", TEST_MOVIE_ID, Long.parseLong(mUri.getLastPathSegment(), 10));
-//    }
-//
-//    public void testBuildUri_Movie_Name() {
-//        Uri mUri = MovieContract_x.MovieEntry.buildUri_Movie_Name(TEST_MOVIE_NAME);
-//
-//        assertNotNull("Error:: Null Uri returned. "
-//            + "You must fill-in buildUri_Movie_Name in MovieContract_x."
-//            , mUri);
-//
-//        assertEquals("Error: 'TEST_MOVIE_NAME' not properly appended to the end of the Uri"
-//            , TEST_MOVIE_NAME
-//            , mUri.getLastPathSegment());
-//
-//        // " content://com.example.android.myproject_2/movieSortBy//popularity "
-//        // " content://com.example.android.myproject_2/SortByPopularity//XMovie "
-//        assertEquals("Error: 'Popularity' Uri doesn't match our expected result"
-//            , mUri.toString()
-//            , "content://com.example.android.myproject_2/movie/%2FXMovie");
-//    }
-    public void testGetMovieId_fromUri() {
-
-        Uri mUri =  Uri.parse("content://com.example.android.myproject_2/popularity/1234");
-        String mMovieId = PopularEntry.getMovieId_fromUri(mUri);
-
-        assertEquals("Error: 'extracted Movie_Id from Uri don't match with fixed 1234",
-            "1234", mMovieId);
-        Log.d("-- " + LOG_TAG, "Uri : " + mUri.toString() ); // tky add
-        Log.d("-- "+ LOG_TAG, "movieId : " + mMovieId);     // tky add
-
-    }
 }

@@ -1,27 +1,37 @@
 package com.example.android.myproject_2;
 
+import android.content.ComponentName;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-//import android.app.Fragment;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.android.myproject_2.data.MovieContract;
+import com.example.android.myproject_2.data.MovieContract.X_MovieInfoEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieReviewEntry;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,10 +41,9 @@ import butterknife.ButterKnife;
  */
 public class MovieDetails_Fragment extends Fragment
                              implements
-                              LoaderManager.LoaderCallbacks<Cursor>
-                            , SharedPreferences.OnSharedPreferenceChangeListener
+                             // LoaderManager.LoaderCallbacks<Cursor>,
+                              SharedPreferences.OnSharedPreferenceChangeListener
                             , View.OnClickListener
-
 {
 
     public MovieDetails_Fragment() {
@@ -45,67 +54,55 @@ public class MovieDetails_Fragment extends Fragment
     private static final String LOG_TAG = MovieDetails_Fragment.class.getSimpleName();
 
     private static final int DETAIL_MOVIE_LOADER = 3;
-    private String mUriString;
+    private static final int MOVIE_REVIEW_LOADER = 4;
+
     private Uri mUri;
-    private String[] mProjection;
+
     static final String DETAIL_URI = "URI";
+    static final String MOVIE_ID = "MovieID";
     private String videoId;
 
+    private Details_Adapter details_adapter;
 
+    public boolean isFavouriteEnabled = false;
 
-    private static final String[] PROJECTION_RATING = //new String[]
-            {
-            MovieContract.RatingEntry.TABLE_NAME + "." + MovieContract.RatingEntry._ID,
-            MovieContract.RatingEntry.COL_MV_ID,
-            MovieContract.MovieInfoEntry.COL_POSTERLINK,
-            MovieContract.MovieInfoEntry.COL_OVERVIEW,
-            MovieContract.MovieInfoEntry.COL_RELEASEDATE,
-            MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry.COL_TITLE,
-            MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE
-    };
-    private static final String[] PROJECTION_POPULAR = //new String[]
-            {
-            MovieContract.PopularEntry.TABLE_NAME + "." + MovieContract.PopularEntry._ID,
-            MovieContract.PopularEntry.COL_MV_ID,
-            MovieContract.MovieInfoEntry.COL_POSTERLINK,
-            MovieContract.MovieInfoEntry.COL_OVERVIEW,
-            MovieContract.MovieInfoEntry.COL_RELEASEDATE,
-            MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry.COL_TITLE,
-            MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE
+    ///////////////////////////////////////////////
+    private static final String[] PROJECTION_X_MOVIEINFO = new String[]{
+            X_MovieInfoEntry.TABLE_NAME + "." + X_MovieInfoEntry._ID,
+            X_MovieInfoEntry.COL_MV_ID,
+            X_MovieInfoEntry.COL_FAVOURITES,
+            X_MovieInfoEntry.COL_BACKDROP_PATH,
+            X_MovieInfoEntry.COL_OVERVIEW,
+            X_MovieInfoEntry.COL_RELEASEDATE,
+            X_MovieInfoEntry.COL_TITLE,
+            X_MovieInfoEntry.COL_VOTE_AVERAGE
     };
 
     // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
     // must change.
-    public static final int PROJECTION_RATING_ID = 0;
+    //public static final int PROJECTION_RATING_ID = 0;
     public static final int INDX_MOVIE_ID = 1;
-//    public static final int PROJECTION_RATING_POSTER = 2;
-    public static final int INDX_POSTERLINK = 2;
-    public static final int INDX_OVERVIEW = 3;
-    public static final int INDX_RELEASEDATE = 4;
-    public static final int INDX_MOVIE_TITLE = 5;
-    public static final int INDX_MOVIE_RATING = 6;
+    public static final int INDX_FAVOURITES = 2;
+    public static final int INDX_BACKDROP_PATH = 3;
+    public static final int INDX_OVERVIEW = 4;
+    public static final int INDX_RELEASEDATE = 5;
+    public static final int INDX_MOVIE_TITLE = 6;
+    public static final int INDX_MOVIE_RATING = 7;
 
-    /*
-    public static final int PROJECTION_POPULAR_ID = 0;
-    public static final int PROJECTION_POPULAR_MOVIE_ID = 1;
-//    public static final int PROJECTION_POPULAR_POSTER = 2;
-    public static final int PROJECTION_POPULAR_POSTERLINK = 2;
-    public static final int PROJECTION_POPULAR_OVERVIEW = 3;
-    public static final int PROJECTION_POPULAR_RELEASEDATE = 4;
-    public static final int PROJECTION_POPULAR_MOVIE_TITLE = 5;
-    public static final int PROJECTION_POPULAR_MOVIE_RATING = 6;*/
-    /*
-    public static final int PROJECTION_RATING_ID = 0;
-    public static final int PROJECTION_RATING_MOVIE_ID = 1;
-    //    public static final int PROJECTION_RATING_POSTER = 2;
-    public static final int PROJECTION_RATING_POSTERLINK = 2;
-    public static final int PROJECTION_RATING_OVERVIEW = 3;
-    public static final int PROJECTION_RATING_RELEASEDATE = 4;
-    public static final int PROJECTION_RATING_MOVIE_TITLE = 5;
-    public static final int PROJECTION_RATING_MOVIE_RATING = 6;
-*/
     ///////////////////////////////////////////////
+    private static final String[] PROJECTION_X_MOVIEREVIEW = new String[]{
+            X_MovieReviewEntry.TABLE_NAME + "." + X_MovieReviewEntry._ID,
+            X_MovieReviewEntry.TABLE_NAME + "." + X_MovieReviewEntry.COL_MV_ID,
+            X_MovieReviewEntry.COL_REVIEWER,
+            X_MovieReviewEntry.COL_REVIEWCONTENT
+    };
+    //public static final int PROJECTION_RATING_ID = 0;
+    //public static final int INDX_1_MOVIE_ID = 1;
+    public static final int INDX_1_REVIEWER = 2;
+    public static final int INDX_1_REVIEWCONTENT = 3;
+
     ///////////////////////////////////////////////
+
     @Bind(com.example.android.myproject_2.R.id.movie_title_textView)
     TextView movie_title_textView;
     @Bind(com.example.android.myproject_2.R.id.thumbnail_imageView)
@@ -118,8 +115,8 @@ public class MovieDetails_Fragment extends Fragment
     TextView movie_synopsis;
     @Bind(com.example.android.myproject_2.R.id.video_button)
     Button movie_video_button;
-    @Bind(com.example.android.myproject_2.R.id.review_button)
-    Button movie_review_button;
+    @Bind(R.id.favourite_button)
+    ImageButton movie_favourite_button;
 
     private TextView mTextView;
 
@@ -127,32 +124,99 @@ public class MovieDetails_Fragment extends Fragment
     //-- for FetchMoviesDbAsyncTask_1 ... AsyncTask<...> Stuff ----
     //-----------------------------------------------------------
 
-    public class FetchComplete implements FetchMoviesDbAsyncTask_2.OnAsyncTaskCompletedListener {
+    public class FetchComplete implements FetchMoviesDbAsyncTask.OnAsyncTaskCompletedListener {
+
         @Override
         public void onAsyncTaskCompleted(String[] result) {
+
             if (result != null) {
-                //TODO; update VideoId for youtube
-                //Toast.makeText(getContext(),"Great out of AsynTask :- " + result[0],Toast.LENGTH_LONG).show();
-                videoId = result[0];
-            }
-            else {
-                //
-                //
-                // Toast.makeText(getContext(),"Shit out of AsynTask :- ",Toast.LENGTH_LONG).show();
+                if (result.length == 0){
+                    Toast.makeText(getContext(),"Error -- No Videos Trailer for YouTube" , Toast.LENGTH_LONG).show();
+                }
+                else {
+                    //TODO; update VideoId for youtube
+                    videoId = result[0];
+
+                    String mVideoPath = "vnd.youtube:" + videoId;
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoPath));
+
+                    PackageManager manager = getContext().getPackageManager();
+
+                    // Check for youtube app in device. ??
+                    List<ResolveInfo> infos = manager.queryIntentActivities(mIntent, PackageManager.MATCH_DEFAULT_ONLY);
+
+                    // There is no youtube app in device
+                     if (infos.size() == 0) {
+                         mIntent = new Intent(Intent.ACTION_VIEW,
+                                 Uri.parse("http://www.youtube.com/watch?v=" + videoId));
+                    }
+                    startActivity(mIntent);
+                }
             }
         }
     }
 
-    /*public class FetchComplete implements FetchMoviesDbAsyncTask_1.OnAsyncTaskCompletedListener {
-        @Override
-        public void onAsyncTaskCompleted(MoviesSelectedInfo[] result) {
-            if (result != null) {
-                //TODO; update VideoId for youtube
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    private void removeFromFavourites(String movieID) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(X_MovieInfoEntry.COL_FAVOURITES, 0);
+
+        String select = X_MovieInfoEntry.COL_MV_ID + "=?";
+        String[] selectArg = new String[]{movieID};
+
+        int rowId = getActivity().getContentResolver().update(
+                    X_MovieInfoEntry.CONTENT_URI,
+                    contentValues,
+                    select,
+                    selectArg
+            );
+        getContext().getContentResolver().notifyChange(X_MovieReviewEntry.CONTENT_URI, null);
+    }
+
+    private void saveToFavourites(String movieID) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(X_MovieInfoEntry.COL_FAVOURITES, 1);
+
+        String select = X_MovieInfoEntry.COL_MV_ID + "=?";
+        String[] selectArg = new String[]{movieID};
+
+        int rowId = getActivity().getContentResolver().update(
+                X_MovieInfoEntry.CONTENT_URI,
+                contentValues,
+                select,
+                selectArg
+        );
+        getContext().getContentResolver().notifyChange(X_MovieReviewEntry.CONTENT_URI, null);
+
+    }
+
+    private boolean checkFavourites(String movieID) {
+
+        String selection = X_MovieInfoEntry.COL_MV_ID + "=?" + " AND " + X_MovieInfoEntry.COL_FAVOURITES + "=?";
+        String[] selectionArg = new String[]{movieID, "1"};
+
+        Boolean favouritesBoolean = false;
+
+        Cursor cursor = getActivity().getContentResolver().query(
+                X_MovieInfoEntry.CONTENT_URI,   // uri
+                null,                           // projection  ( get the specified Column(s) )
+                selection,                      // selection   ( satisfying the  conditions )
+                selectionArg,                   // selectionArg ( conditions of specific values )
+                null                            // sort order
+        );
+
+        if (cursor != null) {
+            if (cursor.moveToFirst() && cursor.getCount() > 0) {
+                favouritesBoolean = true;
             }
         }
-    }*/
-    //-----------------------------------------------------------
-    //-----------------------------------------------------------
+
+        cursor.close();
+
+        return favouritesBoolean;
+    }
 
     //-------------------------------------------
     //-- for View.onClickListener, movie_video_button.setOnClickListener(this);
@@ -160,174 +224,120 @@ public class MovieDetails_Fragment extends Fragment
     @Override
     public void onClick(View view) {
 
-        //movie_video_button.setText("Just Clicked");
-        //Log.d(LOG_TAG, "++ OnClicked, VideoID = " + videoId );
-        //Toast.makeText(getContext(),"VideoID : " + videoId, Toast.LENGTH_LONG).show();
-        /*int viewId;*/
+        String movieID = mUri.getPathSegments().get(1);
+
         switch (view.getId()) {
+
             case R.id.video_button :
+
             case R.id.thumbnail_imageView :
-                String mVideoPath = "vnd.youtube:" + videoId;
+
+                //...................
+                // TODO: call DBAsyncTAsk , call method FetchComplete()
+                //
+                FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
+                mTask.execute(movieID);
+
+                /*String mVideoPath = "vnd.youtube:" + videoId;
                 Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoPath));
-                startActivity(mIntent);
+                startActivity(mIntent);*/
+
                 break;
+
+            case R.id.favourite_button :
+
+                //movieID = mUri.getPathSegments().get(1);
+
+                isFavouriteEnabled = checkFavourites(movieID);
+
+                if (!isFavouriteEnabled) {
+                    movie_favourite_button.setImageResource(android.R.drawable.btn_star_big_on);
+                    saveToFavourites(movieID);
+                }
+                else {
+                    movie_favourite_button.setImageResource(android.R.drawable.btn_star_big_off);
+                    removeFromFavourites(movieID);
+                }
+
+                break;
+
             default:
                 break;
         }
-        /*String mVideoPath = "vnd.youtube:" + videoId;
-        Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoPath));
-        startActivity(mIntent);*/
     }
     //-------------------------------------------
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-       // return inflater.inflate(R.layout.fragment_blank, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-       // Log.d(LOG_TAG, "++++ 1 onCreateView() --");
-/*
-        Intent intent = getActivity().getIntent();
+        /*Intent intent = getActivity().getIntent();
         mUriString = intent.getDataString();
-        mUri = intent.getData();
-*/
+        mUri = intent.getData();*/
+
         Bundle mBundle = this.getArguments();
         if (mBundle != null) {
             mUri = mBundle.getParcelable(MovieDetails_Fragment.DETAIL_URI);
         }
 
-        View view = inflater.inflate(R.layout.fragment_moviedetails, container, false);
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_moviedetails, container, false);
 
-        //+++++++++++++++
-        ButterKnife.bind(this, view);
-        //+++++++++++++++
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
+
+        ButterKnife.bind(this, rootView);
 
         movie_video_button.setOnClickListener(this);
         movie_thumbnail_imageview.setOnClickListener(this);
-        movie_review_button.setOnClickListener(this);
+        movie_favourite_button.setOnClickListener(this);
 
         //++++++++++++++++++++++++++++++++++++++
-        getLoaderManager().initLoader(DETAIL_MOVIE_LOADER, null, this);
+        getLoaderManager().initLoader(DETAIL_MOVIE_LOADER, null, myTry_0);
+        getLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null, myTry_1);
         //++++++++++++++++++++++++++++++++++++++
 
-        Log.d(LOG_TAG, "++++ 1 onCreateView() ---- after initLoader call");
+        details_adapter = new Details_Adapter(getContext());
 
-        return view;
-//++++++++++++++++++++++++++++++++++
-//
-//        MoviesSelectedInfo aMovieInfo = null;
-//
-//        /*****
-//         Intent intent = getActivity().getIntent();
-//         Bundle bundle = intent.getExtras();
-//         // -- or --
-//         // Bundle bundle = getActivity().getIntent().getExtras();
-//
-//         if (bundle != null) {
-//         aMovieInfo = bundle.getParcelable("try");
-//         }*****/
-//        // -- or --
-//        Intent intent = getActivity().getIntent();
-//        aMovieInfo = intent.getParcelableExtra("aMovieKey");
-//
-//        View rootView = inflater.inflate(com.example.android.myproject_2.R.layout.fragment_moviedetails, container, false);
-//
-//        ButterKnife.bind(this, rootView);
-//
-//        movie_title_textView.setText(aMovieInfo.mOriginalTitle);
-//
-//        Picasso.with(getActivity()).load(aMovieInfo.mThumbnail).into(movie_thumbnail_imageview);
-//
-//        movie_release_date_textView.setText("Release Date: " + aMovieInfo.mReleaseDate);
-//        movie_ratings.setText("Ratings : " + aMovieInfo.mVoteAverage);
-//        movie_synopsis.setText("SYNOPSIS : " + aMovieInfo.mOverview);
-//
-//        return rootView;
-// ++++++++++++++++++++++++++++++++++++++++
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(details_adapter);
+
+        return rootView;
     }
 
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
-        Log.d(LOG_TAG, "++++ 2 onActivityCreated() --");
-//        //++++++++++++++++++++++++++++++++++++++
-//        getLoaderManager().initLoader(DETAIL_MOVIE_LOADER, null, this);
-//        //++++++++++++++++++++++++++++++++++++++
-
-//      getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, this);
+    public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
     }
 
-    /// ??? mMovieFragment.myRestartLoaderCode();
-    // tky add, 3rd Aug, 2016 //MovieDetails_Fragment.myResetLoaderCode_1();
-    /**
-    void myResetLoaderCode_1(){
-
-        Log.d(LOG_TAG, "++ myResetLoaderCode_1() ----");
-        getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, this);
-
-    }
-    * */
-    //------------------------
-    void myRestartLoaderCode(){
-
-        Log.d(LOG_TAG, "-- myRestartLoaderCode() / getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, this) ----");
-
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, this);
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    }
-    //-----------------------
     @Override
     public void onStart() {
-        super.onStart();
-        Log.d(LOG_TAG, "++++ 3 onStart() --");
-    /// ???    getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, this);
+        super.onStart();    //Log.d(LOG_TAG, "++++ 3 onStart() --");
     }
 
     @Override
     public void onPause() {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //    sp.unregisterOnSharedPreferenceChangeListener(listener);
-        sp.unregisterOnSharedPreferenceChangeListener(this);
 
-        super.onPause();
-        Log.d(LOG_TAG, "++++ 5 onPause() --");
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        //sp.unregisterOnSharedPreferenceChangeListener(listener);
+
+        super.onPause();    //Log.d(LOG_TAG, "++++ 5 onPause() --");
     }
 
     @Override
     public void onResume() {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //    sp.registerOnSharedPreferenceChangeListener(listener);
+
         sp.registerOnSharedPreferenceChangeListener(this);
+        //sp.registerOnSharedPreferenceChangeListener(listener);
 
         super.onResume();
 
-        //&&&&&&&&&&&&&&&&&&&&&&&&&
-
-        int displayMode = getResources().getConfiguration().orientation;
-
-        String mMode;
-        // displayMode -> 1 ==> portrait, 2 ==> landscape
-        if (displayMode == 1) {
-            mMode = "portrait";
-        } else mMode = "landscape";
-        Log.d(LOG_TAG, "++++ 4 onResume() ----- orientation = " + mMode  );
-        //&&&&&&&&&&&&&&&&&&&&&&&&&
-
-    //    Log.d(LOG_TAG, "++ 4 onResume() -- restartLoader(DETAIL_MOVIE_LOADER, ...)");
-    //    getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, this);  // tky add, 14 August 1.44 am ??
-
-        // TODO: call DBAsyncTAsk , call method FetchComplete()
-        //
-//        FetchMoviesDbAsyncTask_2 mTask = new FetchMoviesDbAsyncTask_2(getContext(), new FetchComplete());
-//        mTask.execute();
     }
 
     //-----------------------------------------------------------
@@ -335,138 +345,92 @@ public class MovieDetails_Fragment extends Fragment
     //-----------------------------------------------------------
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d(LOG_TAG, "-- onSharedPreferenceChanged --");
-        //  Toast.makeText(getContext(),"-- Main_Fragment/onActivityCreated/onSharedPreferenceChanged()/key --" + key, Toast.LENGTH_SHORT).show();
 
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        if ( key.equals(getString(R.string.pref_sortmovies_key)) ) {
+    }
 
-            String mString = Utility.getPreferredSortSequence(getContext());
+    //-----------------------------------------------------------
+    //-- LoaderManager.LoaderCallbacks<Cursor> ------------------
+    //----------- LOADER Stuff ----------------------------------
+    //-----------------------------------------------------------
+    //    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new MyTryLoader(context, mUri);
+    //    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new MyTryLoader(this.getActivity(), mUri);
+    //    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new MyTryLoader(getActivity(), mUri);
+    //    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new MyTryLoader(getContext(), mUri);
+    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new LoaderManager.LoaderCallbacks<Cursor>()
+    {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-            Log.d(LOG_TAG, "-- onSharedPreferenceChanged ..... key: " + key + " ..... SortSeq: " + mString);
+            String[] mProjection = PROJECTION_X_MOVIEINFO;
 
-            getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, this);
-
-        //    Log.d(LOG_TAG, "-- onSharedPreferenceChanged ..... MoviesSyncAdapter.syncImmediately(this) --");
-
-           // MoviesSyncAdapter.syncImmediately(getContext());
-
+            return new CursorLoader(getActivity(), mUri, mProjection, null, null, null);
         }
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    }
 
-    //-------------------------------------------
-    //-- LoaderManager.LoaderCallbacks<Cursor> --
-    //----------- LOADER Stuff ------------------
-    //-------------------------------------------
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
-        Loader<Cursor> cursorLoader;
+            if (cursor != null && cursor.moveToFirst()) {
 
-        //Uri mUri;
-        //String[] mProjection;
-        //---------------
-    //    Log.d(LOG_TAG, "++++ A onCreateLoader() -- before call 'getPreferredSortSequence'");
-        String sortType = Utility.getPreferredSortSequence(getContext());
-
-        if (sortType.equals("popularity.desc")) { mProjection = PROJECTION_POPULAR; }
-        else                                    { mProjection = PROJECTION_RATING; }
-
-    //    Log.d(LOG_TAG, "++++ A onCreateLoader() -- before call 'return'");
-
-        //return new CursorLoader(getActivity(), mUri, mProjection, null, null, null);
-        cursorLoader = new CursorLoader(getActivity(), mUri, mProjection, null, null, null);
-
-        Log.d(LOG_TAG, "++++ A onCreateLoader() -- before call 'return'");
-        return cursorLoader;
-
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
-        Log.d(LOG_TAG, "++++ B onLoadFinished(), loader ID : " + loader.getId() + " ---------");
-
-        if (cursor != null && cursor.moveToFirst()) {
-
-            Log.d(LOG_TAG, "++++ B onLoadFinished()/ Not NULL -- " + "cursor.getString(1):" + cursor.getString(1) + " --");
-        //    Log.d(LOG_TAG, "++ B onLoadFinished() -- loader ID : " + loader.getId() + " --");
-        //    Log.d(LOG_TAG, "++ " + cursor.getString(1) + " --");
-
-            movie_title_textView.setText(cursor.getString(INDX_MOVIE_TITLE));
-            movie_release_date_textView.setText(cursor.getString(INDX_RELEASEDATE));
-            movie_ratings.setText(cursor.getString(INDX_MOVIE_RATING));
-            movie_synopsis.setText(cursor.getString(INDX_OVERVIEW));
-
-            Picasso.with(getContext()).load(cursor.getString(INDX_POSTERLINK))
-                    .placeholder(R.drawable.sample_1)
-                    .error(R.drawable.sample_0)
-                    .into(movie_thumbnail_imageview);
-
-            //...................
-            // TODO: call DBAsyncTAsk , call method FetchComplete()
-            //
-            FetchMoviesDbAsyncTask_2 mTask = new FetchMoviesDbAsyncTask_2(getContext(), new FetchComplete());
-            mTask.execute(cursor.getString(INDX_MOVIE_ID));
-            //...................
-
-            //++++++++
-            /*
-            String sortType = Utility.getPreferredSortSequence(getContext());
-
-            String title ;
-            if (sortType.equals("popularity.desc")) {
-                title = cursor.getString(INDX_MOVIE_TITLE);
-                movie_title_textView.setText(title);
-
+                movie_title_textView.setText(cursor.getString(INDX_MOVIE_TITLE));
                 movie_release_date_textView.setText(cursor.getString(INDX_RELEASEDATE));
                 movie_ratings.setText(cursor.getString(INDX_MOVIE_RATING));
                 movie_synopsis.setText(cursor.getString(INDX_OVERVIEW));
 
-                Picasso.with(getContext()).load(cursor.getString(INDX_POSTERLINK))
+                Picasso.with(getContext()).load(cursor.getString(INDX_BACKDROP_PATH))
                         .placeholder(R.drawable.sample_1)
                         .error(R.drawable.sample_0)
                         .into(movie_thumbnail_imageview);
 
+                int favouriteValue = cursor.getInt(INDX_FAVOURITES);
+                if (favouriteValue == 1) {
+                    isFavouriteEnabled = true;
+                    movie_favourite_button.setImageResource(android.R.drawable.btn_star_big_on);
+                } else {
+                    isFavouriteEnabled = false;
+                    movie_favourite_button.setImageResource(android.R.drawable.btn_star_big_off);
+                }
+                //...................
+                // TODO: call DBAsyncTAsk , call method FetchComplete()
+                //
+                /*FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
+                mTask.execute(cursor.getString(INDX_MOVIE_ID));*/
+                //...................
 
-//                Picasso.with(mContext)
-//                    .load(mCursor.getString(Main_Fragment.COLUMN_POSTERLINK))
-//                    //                .centerCrop()
-//                    .placeholder(com.example.android.myproject_2.R.drawable.sample_1)
-//                    .error(com.example.android.myproject_2.R.drawable.sample_0)
-//                    .into(holder.imageView);
-
-            } else {
-                title = cursor.getString(INDX_MOVIE_TITLE);
-                movie_title_textView.setText(title);
-
-                movie_release_date_textView.setText(cursor.getString(INDX_RELEASEDATE));
-                movie_ratings.setText(cursor.getString(INDX_MOVIE_RATING));
-                movie_synopsis.setText(cursor.getString(INDX_OVERVIEW));
-
-                Picasso.with(getContext())
-                        .load(cursor.getString(INDX_POSTERLINK))
-                        .placeholder(R.drawable.sample_1)
-                        .error(R.drawable.sample_0)
-                        .into(movie_thumbnail_imageview);
-
-            }*/
-            //++++++++
-        } else {
-
-            Log.d(LOG_TAG, "++++ onLoadFinished() / NULL --");
+            }
         }
-    }
 
-    @Override
-    public void onLoaderReset(Loader loader) {
-        Log.d(LOG_TAG, "++ onLoaderReset() --");
-    }
+        @Override
+        public void onLoaderReset(Loader loader) {
+            Log.d(LOG_TAG, "++ onLoaderReset() --");
+        }
 
-  /*  @Override
-    public void onClick(View view) {
-        movie_video_button.setText("Just Clicked");
-        Log.d(LOG_TAG, "++ OnClicked");
-    }*/
+    };
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    private LoaderManager.LoaderCallbacks<Cursor> myTry_1 = new LoaderManager.LoaderCallbacks<Cursor>()
+    {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+            String[] mProjection = PROJECTION_X_MOVIEREVIEW;
+            String mvID = mUri.getPathSegments().get(1);
+            Uri xUri = ContentUris.withAppendedId(X_MovieReviewEntry.CONTENT_URI, Long.valueOf(mvID));
+
+            return new CursorLoader(getActivity(), xUri, mProjection, null, null, null);
+
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+            details_adapter.swapCursor(data);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+            details_adapter.swapCursor(null);
+        }
+    };
 }

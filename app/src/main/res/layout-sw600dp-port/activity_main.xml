@@ -5,21 +5,7 @@
     android:layout_height="match_parent"
     android:layout_centerInParent="true">
 
-    <!-- //////////////////////////////// -->
-    <!--<LinearLayout
-        android:id="@+id/linear_layout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="...layout-land/fragment_main.xml" />
-
-    </LinearLayout>-->
-    <!-- //////////////////////////////// -->
-    <TextView
+    <!--<TextView
         android:id="@+id/textviewid_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,16 +16,15 @@
         android:name="com.example.android.myproject_2.Main_Fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/textviewid_1"/>
+        android:layout_below="@id/textviewid_1"/>-->
 
     <!-- //////////////////////////////// -->
-    <!--<android.support.v7.widget.CardView
-        android:id="@+id/container_id4_moviedetails"
+
+    <fragment
+        android:id="@+id/container_id4_fragment_main"
+        android:name="com.example.android.myproject_2.Main_Fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/container_id4_fragment_main"/>-->
-    <!-- //////////////////////////////// -->
-
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>
 

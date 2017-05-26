@@ -42,6 +42,7 @@
                 android:value=".Main_Activity" />
         </activity>
 
+
         <!-- The SyncAdapter's dummy authentication service -->
         <service android:name="com.example.android.myproject_2.sync.MoviesAuthenticatorService">
             <intent-filter>
@@ -70,6 +71,7 @@
             android:authorities="com.example.android.myproject_2"
             android:name=".data.MovieProvider"
             android:syncable="true"/>
+
     </application>
 
 </manifest>

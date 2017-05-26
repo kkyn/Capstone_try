@@ -5,28 +5,25 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
+//import android.content.ContentUris;
+//import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.database.Cursor;
+//import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.example.android.myproject_2.BuildConfig;
-import com.example.android.myproject_2.MoviesSelectedInfo;
+//import com.example.android.myproject_2.BuildConfig;
 import com.example.android.myproject_2.R;
 import com.example.android.myproject_2.Utility;
-import com.example.android.myproject_2.data.MovieContract;
+//import com.example.android.myproject_2.data.MovieContract;
 
-import org.json.JSONArray;
+//import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,9 +31,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Vector;
 
-/**
+//import com.example.android.myproject_2.data.MovieContract.X_MovieReviewEntry;
+//import com.example.android.myproject_2.data.MovieContract.X_MovieVideosEntry;
+
+/*
  * Created by kkyin on 2/7/2016.
  */
 public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -45,8 +44,14 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     // Interval at which to sync with the weather, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
-    public static final int SYNC_INTERVAL = 60 * 180;
-    public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+    private static final int SYNC_INTERVAL = 60 * 180;
+    private static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+
+//    public static final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
+//    public static final String MOVIE_ = "movie";
+//    public static final String VIDEOS_ = "videos";
+//    public static final String REVIEWS_ = "reviews";
+//    public static final String PARAM_API_KEY = "api_key";
 
     //+++++++++++++++++++++++++++++++++
     //+++ Add 'ACCOUNT' required by the 'Framework'
@@ -57,7 +62,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
     // 4) Instance name
     //+++++++++++++++++++++++++++++++++
 
-    private static Context mContext;
+    private Context mContext;
 
     public MoviesSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -74,14 +79,21 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
         String sortBy = Utility.getPreferredSortSequence(mContext);
         //-----------------------------------------
 
+        //+++++++++++++++++
+
+        Uri uri; //formUri_MovieInfo
+
+        URL url;
+        //+++++++++++++++++
+
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection httpUrlConnection = null;
-        BufferedReader bufferedRdr = null;
+        BufferedReader bufferedReader = null;
 
         // Will contain the raw JSON response as a string.
         String movieInfoInJsonStr;// = null;
-        Uri buildUri; // = null;
+//        Uri buildUri; // = null;
 
         // (1) build the url,
         // (2) create request and open connection with the url
@@ -96,71 +108,143 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
         // get the api result from moviedb.org
 
         try {
-
             //----------------------------------------- added 8th August 2 am
-//            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-//            String sortBy = sharedPreferences.getString(mContext.getString(R.string.pref_sortmovies_key), mContext.getString(R.string.pref_sortmovies_default_value));
-            //-----------------------------------------
+            //            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            //            String sortBy = sharedPreferences.getString(mContext.getString(R.string.pref_sortmovies_key), mContext.getString(R.string.pref_sortmovies_default_value));
+            //-----------------------------------------//
 
-            final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
-            final String DISCOVER_MODE = "discover/movie";
-            final String SORT_PARAM = "sort_by";
-            final String KEY_PARAM = "api_key";
+            //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+            //zzzzzzzzzzzzzzzzzzz BEGIN zzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+            //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
-            // (1) build the Url
-            buildUri = Uri.parse(MOVIE_DB_BASE_URL) // creates a Uri which parses the given encoded URI string
-                    .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
-                    .appendEncodedPath(DISCOVER_MODE)
-                    .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DB_API_KEY)
-                    .appendQueryParameter(SORT_PARAM, sortBy)
-                    //.appendQueryParameter(SORT_PARAM, params[0]) //.appendQueryParameter(SORT_PARAM, DESC)
+            /********************************************************/
+            /******************* Movie Info ***********************/
+            /********************************************************/
+            // (1)
+            uri = Utility.formUri_X_MovieInfo(mContext);
+         // uri = formUri_X_MovieInfo();
+            url = new URL(uri.toString());
 
-                    //          .appendQueryParameter("with_genres", "18")
-                    .appendQueryParameter("certification_country", "US")
-                    .appendQueryParameter("primary_release_year", "2015")
-                    .appendQueryParameter("vote_count.gte", "50")
-                    .build();
-
-            URL url = new URL(buildUri.toString());
-
-            // (2) create request and open connection with the url
+            // (2)
             httpUrlConnection = (HttpURLConnection) url.openConnection();
             httpUrlConnection.setRequestMethod("GET");
             httpUrlConnection.connect();
 
-            // (3) read the input-stream and convert the stream to string
-            InputStream inputStream = httpUrlConnection.getInputStream();
+            // (3)
+            InputStream
+                    inputStream = httpUrlConnection.getInputStream();
             //StringBuffer stringBuffer = new StringBuffer();
 
-//            if (inputStream == null) { // commented 12July
-//                return null;
-//            }
+            // (4). (4a), (4b)
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-            // (4) create an input-stream-reader
-            // (4a) create a buffered-reader
-            // (4b) create a string-buffer
-            bufferedRdr = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder
+            stringBuffer = new StringBuilder();
 
             String line;
-            //   StringBuffer stringBuffer = new StringBuffer();
-            StringBuilder stringBuffer = new StringBuilder();
-
-            while ((line = bufferedRdr.readLine()) != null) {
-                String st = line + "\n";
-                stringBuffer.append(st);
-                //   stringBuffer.append(line + "\n");
+            while ((line = bufferedReader.readLine()) != null) {
+                line = line + "/n";
+                stringBuffer.append(line);
+                //stringBuffer.append(line + "\n");
             }
-//            if (stringBuffer.length() == 0) { // commented 12July
-//                return null;
-//            }
 
-            // (5) convert string-buffer to string
+            // (5)
             movieInfoInJsonStr = stringBuffer.toString();
 
-            Log.d(LOG_TAG, "--------" + "sortBy ::: " + sortBy + "-----------");
-            // tky, to add and replace code below
-            getMovieInfoFromJson(movieInfoInJsonStr, sortBy);
+//xxyy            Log.d(LOG_TAG, "--------" + "sortBy ::: " + sortBy + "-----------");
+
+            long[] mMovieIDs  = Utility.get_X_MovieInfoFromJson(movieInfoInJsonStr,  sortBy, mContext); // ????
+
             Log.d(LOG_TAG, "  <--- OUTSIDE getMovieInfoFromJson(); ---");
+
+
+            /********************************************************/
+            /******************* Movie Review ***********************/
+            /********************************************************/
+
+            Utility.get_MovieReviews(mContext, mMovieIDs);
+
+            /*for (long movieId : mMovieIDs) {
+
+                Log.d(LOG_TAG, "  <--- IN-SIDE getMovieInfoFromJson(); ---");
+
+                // (1) build the Url
+                buildUri = formUri_X_MovieReview(movieId);
+
+                url = new URL(buildUri.toString());
+
+                // (2) create request and open connection with the url
+                httpUrlConnection = (HttpURLConnection) url.openConnection();
+                httpUrlConnection.setRequestMethod("GET");
+                httpUrlConnection.connect();
+
+                // (3) read the input-stream and convert the stream to string
+                inputStream = httpUrlConnection.getInputStream();
+                //StringBuffer stringBuffer = new StringBuffer();
+
+                // (4) create an input-stream-reader
+                // (4a) create a buffered-reader
+                // (4b) create a string-buffer
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                stringBuffer = new StringBuilder();
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuffer.append(line + "\n");
+                }
+
+                // (5) convert string-buffer to string
+                String movieReviewsInJsonStr = stringBuffer.toString();
+
+                getMovieReviews_FromJSON(movieReviewsInJsonStr, movieId);
+
+            }*/
+            /*****************************************************/
+            /******************* Movie Video ***********************/
+            /*****************************************************/
+            Utility.get_MovieVideos(mContext, mMovieIDs);
+
+            /*for (long movieId : mMovieIDs) {
+
+                Log.d(LOG_TAG, "  <--- IN-SIDE getMovieInfoFromJson(); ---");
+
+                // (1) build the Url
+                buildUri = formUri_X_MovieVideo(movieId);
+
+                url = new URL(buildUri.toString());
+
+                // (2) create request and open connection with the url
+                httpUrlConnection = (HttpURLConnection) url.openConnection();
+                httpUrlConnection.setRequestMethod("GET");
+                httpUrlConnection.connect();
+
+                // (3) read the input-stream and convert the stream to string
+                inputStream = httpUrlConnection.getInputStream();
+                //StringBuffer stringBuffer = new StringBuffer();
+
+                // (4) create an input-stream-reader
+                // (4a) create a buffered-reader
+                // (4b) create a string-buffer
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                //String line;
+                //   StringBuffer stringBuffer = new StringBuffer();
+                //StringBuilder
+                stringBuffer = new StringBuilder();
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuffer.append(line + "\n");
+                }
+
+                // (5) convert string-buffer to string
+                String mMovieVideoDataInJsonStr = stringBuffer.toString();
+
+                getMovieVideoKeys_FromJSON(mMovieVideoDataInJsonStr, movieId);
+
+            }*/
+            //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+            //zzzzzzzzzzzzzzzzzzz  END  zzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+            //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error", e);
@@ -173,259 +257,289 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             if (httpUrlConnection != null) {
                 httpUrlConnection.disconnect();
             }
-            if (bufferedRdr != null) {
+            if (bufferedReader != null) {
                 try {
-                    bufferedRdr.close();
+                    bufferedReader.close();
                 } catch (final IOException e) {
                     Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
         }
-
-        //Toast.makeText(mContext, "--- getMovieInfoFromJson(movieInfoInJsonStr, sortBy); ---", Toast.LENGTH_SHORT).show();
-//        return null; // commented 12July
     }
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++
-    private void getMovieInfoFromJson(String moviesJsonStr, String sortBy) throws JSONException {
 
-        long rowId; // = 0L;
-        //long rowId = 0L;
-        //String rowId = "";
-        final String RESULTS = "results";
-        final String ID = "id";
-        final String ORIGINAL_TITLE = "original_title";
-        final String POSTER_PATH = "poster_path";
-        final String BACKDROP_PATH = "backdrop_path"; // movie poster image thumbnail
-        final String OVERVIEW = "overview";     // plot synopsis
-        final String RELEASE_DATE = "release_date";
-        final String VOTE_AVERAGE = "vote_average"; // user rating
-        final String VOTE_COUNT = "vote_count";
-        final String POPULARITY = "popularity";
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    //zzzzzzzzzzzzzzzz Begin zzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+//    //private String[] getMovieVideoKeys_FromJSON(String movieVideoDataInJsonStr, long movieId) throws JSONException {
+//    private void getMovieVideoKeys_FromJSON(String movieVideoDataInJsonStr, long movieId) throws JSONException {
+//
+//        final String RESULTS = "results";
+//        final String KEY = "key";
+//        String aMovieKey;
+//
+//        JSONObject movieVideoDataJsonObject = new JSONObject(movieVideoDataInJsonStr);
+//        JSONArray resultJSONArray = movieVideoDataJsonObject.getJSONArray(RESULTS);
+//        //==================
+//        //String[] moviesVideoKey = new String[resultJSONArray.length()];
+//        for (int i = 0; i < resultJSONArray.length(); i++) {
+//
+//            if (i == 0) {
+//                JSONObject aMovieJSONObject = resultJSONArray.getJSONObject(i);
+//
+//                aMovieKey = aMovieJSONObject.getString(KEY);
+//
+//                ContentValues contentValues = new ContentValues();
+//
+//                contentValues.put(X_MovieVideosEntry.COL_VIDEO_KEY, aMovieKey);
+//                contentValues.put(X_MovieVideosEntry.COL_MV_ID, movieId);
+//
+//                getContext().getContentResolver()
+//                    .insert(X_MovieVideosEntry.CONTENT_URI, contentValues);
+//            }
+//        }
+//
+//    }
 
-        final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
-        // W92 = "w92/"; W154 = "w154/";
-        // W185 = "w185/"; W342 = "w342/";
-        // W342 = "w342/"; W500 = "w500/";
-        // W780 = "w780/"; ORIGINAL = "original/";
-        //    final String W780 = "w780/";
-        final String W500 = "w500/";
+//    private void X_Add_AMovieVideo(ContentValues contentValues) {
+//
+//        //Uri rowsUpdated =
+//                getContext().getContentResolver()
+//                .insert(X_MovieVideosEntry.CONTENT_URI, contentValues);
+//    }
 
-        Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
+//    private void getMovieReviews_FromJSON(String movieReviewsInJsonStr, long movieId) throws JSONException {
+//
+//        final String RESULTS = "results";
+//        final String AUTHOR = "author";
+//        final String CONTENT = "content";
+//
+//        JSONObject movieReviews_JSONObject = new JSONObject(movieReviewsInJsonStr);
+//        JSONArray movieReviewsResults_JSONArray = movieReviews_JSONObject.getJSONArray(RESULTS);
+//
+//        for (int index = 0; index < movieReviewsResults_JSONArray.length(); index++) {
+//
+//            JSONObject aReview_JSONObject = movieReviewsResults_JSONArray.getJSONObject(index);
+//
+//            String movieReviewer = aReview_JSONObject.getString(AUTHOR);
+//            String movieReviewContent = aReview_JSONObject.getString(CONTENT);
+//
+//            ContentValues contentValues = new ContentValues();
+//            contentValues.put(X_MovieReviewEntry.COL_MV_ID, movieId);
+//        //    contentValues.put(X_MovieReviewEntry.COL_KEY_ID, movieId);
+//            contentValues.put(X_MovieReviewEntry.COL_REVIEWER, movieReviewer);
+//            contentValues.put(X_MovieReviewEntry.COL_REVIEWCONTENT, movieReviewContent);
+//
+//            //+++++++++++++++++++----------------
+//
+//            //+++++++++++++++++++----------------
+//            X_Add_AMovieReview( contentValues );
+//        }
+//    }
+//    private void X_Add_AMovieReview(ContentValues contentValues) {
+//
+//        //Uri rowsUpdated = mContext.getContentResolver()
+//        Uri rowsUpdated = getContext().getContentResolver()
+//                .insert(X_MovieReviewEntry.CONTENT_URI,
+//                        contentValues
+//                        //cv
+//                );
+//    }
 
-        JSONObject moviesJson = new JSONObject(moviesJsonStr);
-        JSONArray resultArray = moviesJson.getJSONArray(RESULTS);
 
-        //++++++++++++++++++
-        Vector<ContentValues> mVofCV = new Vector<ContentValues>(resultArray.length());
-        //++++++++++++++++++
-        for (int i = 0; i < resultArray.length(); i++) {
-
-            JSONObject movieInfoJson = resultArray.getJSONObject(i);
-
-            /// tky, ? where to add method: addMovieInfo(movieInfoJson, params[0]);
-            ///
-            long   mvId          = movieInfoJson.getLong(ID);
-            String mvOrgTitle    = movieInfoJson.getString(ORIGINAL_TITLE);
-            String mvOverview    = movieInfoJson.getString(OVERVIEW); // plot synopsis
-            String mvVoteAverage = movieInfoJson.getString(VOTE_AVERAGE);  // user rating
-            long   mvVoteCount   = movieInfoJson.getLong(VOTE_COUNT);  // user, sum number of votes
-            String mvPopularity  = movieInfoJson.getString(POPULARITY);
-            String mvReleaseDate = movieInfoJson.getString(RELEASE_DATE);
-
-            String mvPosterPath   = TMDB_BASE_URL + W500 + movieInfoJson.getString(POSTER_PATH);
-            String mvBackDropPath = TMDB_BASE_URL + "w780/" + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
-       //   String mvBackDropPath = TMDB_BASE_URL + W500 + movieInfoJson.getString(BACKDROP_PATH); // movie poster image thumbnail
-
-            //++++++++++++++++++++++++++++++++++++++++++++++
-            ContentValues mCvMvInfo = new ContentValues();
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_MV_ID,         mvId);
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_TITLE,         mvOrgTitle);
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_RELEASEDATE,   mvReleaseDate);
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_OVERVIEW,      mvOverview);
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POSTERLINK,    mvBackDropPath);
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE,  mvVoteAverage);
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_POPULARITY,    mvPopularity);
-            mCvMvInfo.put(MovieContract.MovieInfoEntry.COL_VOTE_COUNT,    mvVoteCount);
-
-            rowId = addMovieInfo(mCvMvInfo,  sortBy);
-
-            ContentValues mCv = new ContentValues();
-            if(sortBy.equals("popularity.desc")) {
-                mCv.put(MovieContract.PopularEntry.COL_MV_ID, mvId);
-                mCv.put(MovieContract.PopularEntry.COL_TITLE, mvOrgTitle);
-                mCv.put(MovieContract.PopularEntry.COL_POSTER, mvPosterPath);
-                mCv.put(MovieContract.PopularEntry.COL_KEY_ID, rowId); // ??
-
-                addPopularTable(mCv, i + 1, rowId);
-            }
-            if(sortBy.equals("vote_average.desc")){
-                mCv.put(MovieContract.RatingEntry.COL_MV_ID, mvId);
-                mCv.put(MovieContract.RatingEntry.COL_TITLE, mvOrgTitle);
-                mCv.put(MovieContract.RatingEntry.COL_POSTER, mvPosterPath);
-                mCv.put(MovieContract.RatingEntry.COL_KEY_ID, rowId); // ??
-
-                addRatingTable(mCv, i + 1, rowId);
-            }
-            //++++++++++++++++++++++++++++++++++++++++++++++
-        }
-
-    }
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private void addPopularTable(ContentValues contentvalues, int arrayIndx, long rowId) {
-        long popularTableRow_Id;
-
-        long movieId = contentvalues.getAsLong(MovieContract.PopularEntry.COL_MV_ID);
-
-        //    Cursor mCursor = mContext.getContentResolver()
-        Cursor mCursor = getContext().getContentResolver()
-                .query(
-                        MovieContract.PopularEntry.CONTENT_URI,         // uri
-                        new String[]{MovieContract.PopularEntry._ID}, //, PopularEntry.COL_KEY_ID},
-                                                                        // projection
-                        MovieContract.PopularEntry.COL_MV_ID + "=?",    // selection
-                        new String[]{String.valueOf(movieId)},          // selectionArg
-                        null                                            // sort-order
-                );
-
-        //Log.d(LOG_TAG, "  <--- 365 addPopular <--- contentResolver-query");
-
-        // there is such a movie_Id in table
-        if (mCursor.moveToFirst()==true) {
-            //---- get the '_id' value
-            // from the cursor, get the column index scalar value with the associated column name
-            int mColIndx = mCursor.getColumnIndex(MovieContract.MovieInfoEntry._ID);
-            // with the column index value, get the value residing in it.
-
-            popularTableRow_Id = mCursor.getLong(mColIndx);
-
-            // the movie_Id is in the correct table location/sequence
-            if (arrayIndx == (int)popularTableRow_Id) {
-                // do nothing
-            }
-            else {
-
-                String selection = MovieContract.PopularEntry.TABLE_NAME + "." + MovieContract.PopularEntry._ID + "=?";
-
-                //    int rowsUpdated = mContext.getContentResolver()
-                int rowsUpdated = getContext().getContentResolver()
-                        .update(MovieContract.PopularEntry.CONTENT_URI,
-                                contentvalues,
-                                //cv,
-                                selection,
-                                new String[]{String.valueOf(arrayIndx)}
-                        );
-
-            }
-        }
-        // there is no such movie_Id in table, so we need to insert the info.
-        else {
-
-            //Uri rowsUpdated = mContext.getContentResolver()
-            Uri rowsUpdated = getContext().getContentResolver()
-                    .insert(MovieContract.PopularEntry.CONTENT_URI,
-                            contentvalues
-                            //cv
-                    );
-        }
-
-        mCursor.close();
-    }
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    //zzzzzzzzzzzzzzzz  End  zzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private long addMovieInfo(ContentValues contentValues, String sortBy) {
-
-        long valueOf_Id;
-
-        //    Cursor mCursor = mContext.getContentResolver()
-        Cursor mCursor = getContext().getContentResolver()
-                .query(
-                        MovieContract.MovieInfoEntry.CONTENT_URI,         // uri
-                        new String[]{MovieContract.MovieInfoEntry._ID},   // projection
-                        MovieContract.MovieInfoEntry.COL_MV_ID + "=?",    // selection
-                        new String[]{String.valueOf(contentValues.getAsLong(MovieContract.MovieInfoEntry.COL_MV_ID))},  // selectionArg
-                   //     new String[]{String.valueOf(movieInfo.mId)},  // selectionArg
-                        null                                            // sort order
-                );
-
-
-        // Check presence or row/data
-        if (mCursor.moveToFirst()==true) {
-
-            // get the '_id' value
-            int mColIndx = mCursor.getColumnIndex(MovieContract.MovieInfoEntry._ID);
-            valueOf_Id = mCursor.getLong(mColIndx);
-
-        } else {
-            /*
-                + MovieInfoEntry.COL_VOTE_AVERAGE   + " REAL NOT NULL, " //" REAL NOT NULL, "
-                + MovieInfoEntry.COL_VOTE_COUNT     + " INTEGER NOT NULL, "//" INTEGER NOT NULL, "
-             */
-            Uri insertUri = getContext().getContentResolver().insert(MovieContract.MovieInfoEntry.CONTENT_URI, contentValues);
-
-            // The resulting URI contains the ID for the row.  Extract the locationId from the Uri.
-            valueOf_Id = ContentUris.parseId(insertUri);
-            //valueOf_Id = insertUri.getLastPathSegment();
-        }
-
-        mCursor.close();
-
-        return valueOf_Id;
-    }
+//    private void addPopularTable(ContentValues contentvalues, int arrayIndx, long rowId) {
+//        long popularTableRow_Id;
+//
+//        long movieId = contentvalues.getAsLong(MovieContract.PopularEntry.COL_MV_ID);
+//
+//        //    Cursor mCursor = mContext.getContentResolver()
+//        Cursor mCursor = getContext().getContentResolver()
+//                .query(
+//                        MovieContract.PopularEntry.CONTENT_URI,         // uri
+//                        new String[]{MovieContract.PopularEntry._ID}, //, PopularEntry.COL_KEY_ID},
+//                                                                        // projection
+//                        MovieContract.PopularEntry.COL_MV_ID + "=?",    // selection
+//                        new String[]{String.valueOf(movieId)},          // selectionArg
+//                        null                                            // sort-order
+//                );
+//
+//        // there is such a movie_Id in table
+//        if (mCursor.moveToFirst()==true) {
+//            //---- get the '_id' value
+//            // from the cursor, get the column index scalar value with the associated column name
+//            int mColIndx = mCursor.getColumnIndex(MovieContract.MovieInfoEntry._ID);
+//            // with the column index value, get the value residing in it.
+//
+//            popularTableRow_Id = mCursor.getLong(mColIndx);
+//
+//            // the movie_Id is in the correct table location/sequence
+//            if (arrayIndx == (int)popularTableRow_Id) {
+//                // do nothing
+//            }
+//            else {
+//
+//                String selection = MovieContract.PopularEntry.TABLE_NAME + "." + MovieContract.PopularEntry._ID + "=?";
+//
+//                //    int rowsUpdated = mContext.getContentResolver()
+//                int rowsUpdated = getContext().getContentResolver()
+//                        .update(MovieContract.PopularEntry.CONTENT_URI,
+//                                contentvalues,
+//                                //cv,
+//                                selection,
+//                                new String[]{String.valueOf(arrayIndx)}
+//                        );
+//
+//            }
+//        }
+//        // there is no such movie_Id in table, so we need to insert the info.
+//        else {
+//
+//            //Uri rowsUpdated = mContext.getContentResolver()
+//            Uri rowsUpdated = getContext().getContentResolver()
+//                    .insert(MovieContract.PopularEntry.CONTENT_URI,
+//                            contentvalues
+//                            //cv
+//                    );
+//        }
+//
+//        mCursor.close();
+//    }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private void addRatingTable(ContentValues contentValues, int arrayIndx, long rowId) {
-        long ratingTableRow_Id;
+//    private long addMovieInfo(ContentValues contentValues, String sortBy) {
+//
+//        long valueOf_Id;
+//
+//        //    Cursor mCursor = mContext.getContentResolver()
+//        Cursor mCursor = getContext().getContentResolver()
+//                .query(
+//                        MovieContract.MovieInfoEntry.CONTENT_URI,         // uri
+//                        new String[]{MovieContract.MovieInfoEntry._ID},   // projection
+//                        MovieContract.MovieInfoEntry.COL_MV_ID + "=?",    // selection
+//                        new String[]{String.valueOf(contentValues.getAsLong(MovieContract.MovieInfoEntry.COL_MV_ID))},  // selectionArg
+//                   //     new String[]{String.valueOf(movieInfo.mId)},  // selectionArg
+//                        null                                            // sort order
+//                );
+//
+//
+//        // Check presence or row/data
+//        if (mCursor.moveToFirst()==true) {
+//
+//            // get the '_id' value
+//            int mColIndx = mCursor.getColumnIndex(MovieContract.MovieInfoEntry._ID);
+//            valueOf_Id = mCursor.getLong(mColIndx);
+//
+//        } else {
+//            /*
+//                + MovieInfoEntry.COL_VOTE_AVERAGE   + " REAL NOT NULL, " //" REAL NOT NULL, "
+//                + MovieInfoEntry.COL_VOTE_COUNT     + " INTEGER NOT NULL, "//" INTEGER NOT NULL, "
+//             */
+//            Uri insertUri = getContext().getContentResolver().insert(MovieContract.MovieInfoEntry.CONTENT_URI, contentValues);
+//
+//            // The resulting URI contains the ID for the row.  Extract the locationId from the Uri.
+//            valueOf_Id = ContentUris.parseId(insertUri);
+//            //valueOf_Id = insertUri.getLastPathSegment();
+//        }
+//
+//        mCursor.close();
+//
+//        return valueOf_Id;
+//    }
 
-        long movieId = contentValues.getAsLong(MovieContract.RatingEntry.COL_MV_ID);
-        Cursor mCursor = getContext().getContentResolver().query(
-                MovieContract.RatingEntry.CONTENT_URI,              // uri
-                new String[]{MovieContract.RatingEntry._ID
-                            //,MovieContract.RatingEntry.COL_KEY_ID
-                            },                                      // projection
-                MovieContract.RatingEntry.COL_MV_ID + "=?",         // selection
-                new String[]{String.valueOf(movieId)},              // selectionArg
-                null                                                // sort-order
-        );
-        ////*
-        // there is such a movie_Id in table
-        if (mCursor.moveToFirst()) {
-            // get the '_id' value
-            int mColIndx = mCursor.getColumnIndex(MovieContract.MovieInfoEntry._ID);
-            ratingTableRow_Id = mCursor.getLong(mColIndx);
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//    private void addRatingTable(ContentValues contentValues, int arrayIndx, long rowId) {
+//        long ratingTableRow_Id;
+//
+//        long movieId = contentValues.getAsLong(MovieContract.RatingEntry.COL_MV_ID);
+//        Cursor mCursor = getContext().getContentResolver().query(
+//                MovieContract.RatingEntry.CONTENT_URI,              // uri
+//                new String[]{MovieContract.RatingEntry._ID
+//                            //,MovieContract.RatingEntry.COL_KEY_ID
+//                            },                                      // projection
+//                MovieContract.RatingEntry.COL_MV_ID + "=?",         // selection
+//                new String[]{String.valueOf(movieId)},              // selectionArg
+//                null                                                // sort-order
+//        );
+//        ////*
+//        // there is such a movie_Id in table
+//        if (mCursor.moveToFirst()) {
+//            // get the '_id' value
+//            int mColIndx = mCursor.getColumnIndex(MovieContract.MovieInfoEntry._ID);
+//            ratingTableRow_Id = mCursor.getLong(mColIndx);
+//
+//            // the movie_Id is in the correct table location/sequence
+//            if (arrayIndx == (int )ratingTableRow_Id) {
+//                // do nothing
+//            }
+//            else {
+//                Log.d(LOG_TAG, "aaaa addRatingTable  add Content Values");
+//
+//                String selection = MovieContract.RatingEntry.TABLE_NAME + "." + MovieContract.RatingEntry._ID + "=?";
+//
+//                int rowsUpdated = getContext().getContentResolver()
+//                        .update(MovieContract.RatingEntry.CONTENT_URI,
+//                                contentValues,
+//                                //cv,
+//                                selection,
+//                                new String[]{String.valueOf(arrayIndx)}
+//                        );
+//            }
+//        }
+//        // there is no such movie_Id in table, so we need to insert the info.
+//        else {
+//            Log.d(LOG_TAG, "aaaa addRatingTable ---  add Content Values");
+//
+//            Uri rowsUpdated = getContext().getContentResolver()
+//                    .insert(MovieContract.RatingEntry.CONTENT_URI,
+//                            contentValues
+//                            //cv
+//                    );
+//        }
+//
+//        mCursor.close();
+//        /// */
+//    }
+    ////////////////////////////////////////////////////////////
+    /////////////////////// BEGIN //////////////////////////////
+    ////////////////////////////////////////////////////////////
 
-            // the movie_Id is in the correct table location/sequence
-            if (arrayIndx == (int )ratingTableRow_Id) {
-                // do nothing
-            }
-            else {
-                Log.d(LOG_TAG, "aaaa addRatingTable  add Content Values");
-
-                String selection = MovieContract.RatingEntry.TABLE_NAME + "." + MovieContract.RatingEntry._ID + "=?";
-
-                int rowsUpdated = getContext().getContentResolver()
-                        .update(MovieContract.RatingEntry.CONTENT_URI,
-                                contentValues,
-                                //cv,
-                                selection,
-                                new String[]{String.valueOf(arrayIndx)}
-                        );
-            }
-        }
-        // there is no such movie_Id in table, so we need to insert the info.
-        else {
-            Log.d(LOG_TAG, "aaaa addRatingTable ---  add Content Values");
-
-            Uri rowsUpdated = getContext().getContentResolver()
-                    .insert(MovieContract.RatingEntry.CONTENT_URI,
-                            contentValues
-                            //cv
-                    );
-        }
-
-        mCursor.close();
-        /// */
-    }
-
+//
+//    private Uri formUri_X_MovieVideo(long movieId) {
+//
+//        // (1) build the Url
+//        Uri  buildUri = Uri.parse(MOVIE_DB_BASE_URL) // creates a Uri which parses the given encoded URI string
+//                .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
+//
+//                .appendPath(MOVIE_  /* movie/ */ )
+//                .appendPath(Long.toString(movieId)  /* ID/ */ )
+//                .appendEncodedPath(VIDEOS_  /* videos? */ )
+//                .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
+//                .build();
+//
+//        return buildUri;
+//    }
+//
+//    private Uri  formUri_X_MovieReview(long movieId) {
+//
+//        // (1) build the Url
+//        Uri buildUri = Uri.parse(MOVIE_DB_BASE_URL) // creates a Uri which parses the given encoded URI string
+//                .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
+//
+//                .appendPath(MOVIE_ /* movie/ */)
+//                .appendPath(Long.toString(movieId) /* ID/ */)
+//                .appendEncodedPath(REVIEWS_ /* reviews? */)
+//                .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
+//                .build();
+//
+//        return buildUri;
+//    }
+    ////////////////////////////////////////////////////////////
+    ///////////////////////  END  //////////////////////////////
+    ////////////////////////////////////////////////////////////
 
     //+++++++++++++++++++++++++++++++++
     //+++ Add 'ACCOUNT' required by the 'Framework'
@@ -441,7 +555,8 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param context The context used to access the account service
      * @return a fake account.
      */
-    public static Account getSyncAccount(Context context) {
+//    public static Account getSyncAccount(Context context) {
+        private static Account getSyncAccount(Context context) {
 
         // Get an instance of the Android account manager
         AccountManager
@@ -505,7 +620,8 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
     /**
      * Helper method to schedule the sync adapter periodic execution
      */
-    public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
+    //public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
+    private static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
 

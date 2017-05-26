@@ -11,8 +11,8 @@ import android.os.HandlerThread;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
-import com.example.android.myproject_2.data.MovieContract.PopularEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieInfoEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieReviewEntry;
 import com.example.android.myproject_2.utils.PollingCheck;
 
 import java.util.Map;
@@ -44,30 +44,36 @@ public class TestUtilities extends AndroidTestCase {
 
         Log.d("-- " + LOG_TAG, "  +++ validateCurrentRecord()--- "); // tky add
 
+        // Returns a set of all of the keys and values in 'expectedValues'
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
 
         for (Map.Entry<String, Object> entry : valueSet) {
 
-            String columnName = entry.getKey();
-            int idx = valueCursor.getColumnIndex(columnName);
+            // Returns the key corresponding to this entry.
+            String columnNameFromEntry = entry.getKey();
 
-            String cColName = valueCursor.getColumnName(idx);
+            // Returns the zero-based index for the given column name, or -1 if the column doesn't exist
+            int index = valueCursor.getColumnIndex(columnNameFromEntry);
 
-            assertFalse("Column '" + columnName + "' not found. " + error, idx == -1);
+            String colNameFromCursor = valueCursor.getColumnName(index);
 
-            String expectedValue = entry.getValue().toString();
+            assertFalse("Column '" + columnNameFromEntry + "' not found. " + error, index == -1);
 
-            Log.d("-- " + LOG_TAG,  "  +++ ColIndx: " + idx + " -- " + "ColName: " + columnName + " cColName: " + cColName + " --- " + expectedValue ); // tky add
+            // Returns the value corresponding to this entry.
+            String expctdValue = entry.getValue().toString();
+
+            Log.d("-- " + LOG_TAG,  "  +++ ColIndx: " + index + " -- " + "ColName: " + columnNameFromEntry + " colNameFromCursor: " + colNameFromCursor + " --- " + expctdValue ); // tky add
 
             assertEquals(
                 "Value '"
                     + entry.getValue().toString() // org.
-                    //  + String.valueOf(idx)
-                    //  + columnName
-                    //    + valueCursor.getString(idx)
+                    //  + String.valueOf(index)
+                    //  + columnNameFromEntry
+                    //    + valueCursor.getString(index)
                     + "' did not match the expected value '" +
-                    expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
-                //    expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
+                    expctdValue + "'. " + error,
+                    expctdValue, valueCursor.getString(index));
+                //    expctdValue + "'. " + error, expctdValue, valueCursor.getString(index));
 
         }
     }
@@ -113,7 +119,10 @@ static void validateCursorValue(//String error,
 
     Log.d("-- " + LOG_TAG, "  +++ validateCursorValue() --- "); // tky add
   //  Cursor mCursor = valueCursor;
+
+    //Returns the numbers of rows in the cursor.
     int rowCount = valueCursor.getCount();
+    //Return total number of columns.
     int colCount = valueCursor.getColumnCount();
 
     Log.d("-- "+LOG_TAG, "  +++ rows:- " + rowCount +  " cols:- " + colCount);
@@ -123,6 +132,7 @@ static void validateCursorValue(//String error,
     String mValue = "";
     String nValue = valueCursor.moveToFirst() == true ? "yes it is first" : "no -- not first--";
     Log.d("-- "+LOG_TAG, "  +++ *** :" + nValue);
+
     do {
         mValue = valueCursor.isFirst() == true ? "YES it is first" : "NO -- not first";
         Log.d("-- "+LOG_TAG, "  +++ *** :" + mValue);
@@ -134,142 +144,96 @@ static void validateCursorValue(//String error,
     while (!valueCursor.isAfterLast());
     //+++++++++++++++++++++++++++++++++++++
 /*
-    Cursor mCursor = valueCursor;
-    int rowCount = mCursor.getCount();
-    int colCount = mCursor.getColumnCount();
-
-    Log.d(LOG_TAG, "rows:: " + Integer.toString(rowCount) +  " cols:: " + Integer.toString(colCount));
-
-    int count = 0;
-    String mValue = "";
-    mCursor.moveToFirst();
-    do {
-        mValue = mCursor.isFirst() == true ? "YES it is first" : "NO -- not first";
-        Log.d(LOG_TAG, "*** :" + mValue);
-        for (count = 0; count < colCount; count++) {
-            Log.d(LOG_TAG, mCursor.getColumnName(count)+ " : " + mCursor.getString(count));
-        }
-        mCursor.moveToNext();
-    }
-    while (!mCursor.isAfterLast());
     */
     //----------------------------------------
-//    mValue = mCursor.isFirst()==true ? "YES" : "NO";
-//    Log.d(LOG_TAG, "*** :" + mValue);
-//    for (count = 0; count < colCount; count++) {
-//        Log.d(LOG_TAG, "=== : " + mCursor.getString(count));
-//    }
-//
-//    mCursor.moveToNext();
-//    mValue = mCursor.isFirst()==true ? "YES" : "NO";
-//    Log.d(LOG_TAG, "*** :" + mValue);
-//    for (count = 0; count < colCount; count++) {
-//        Log.d(LOG_TAG, "+++ : " + mCursor.getString(count));
-//    }
+
 }
-/*
-    Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
 
-    for (Map.Entry<String, Object> entry : valueSet) {
+    /**/
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //+++++++++++++++++++  BEGIN  ++++++++++++++++++++++++++
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    static ContentValues create_ContentValues4_X_MovieReview(long rowId) {
 
-        String columnName = entry.getKey();
-          int idx = valueCursor.getColumnIndex(columnName);
+        ContentValues cntValues = new ContentValues();
 
-          String cColName = valueCursor.getColumnName(idx);
+        // Here I use the input rowId of cursor as the 'COL_KEY_ID', for testing only.
+//xxx        cntValues.put(X_MovieReviewEntry.COL_KEY_ID, rowId);
+        cntValues.put(X_MovieReviewEntry.COL_MV_ID, 12);
+        cntValues.put(X_MovieReviewEntry.COL_REVIEWER, "XMovie_Reviewer");
+        cntValues.put(X_MovieReviewEntry.COL_REVIEWCONTENT, "XMovie_ReviewContent");
 
-          assertFalse("Column '" + columnName + "' not found. " + error, idx == -1);
-
-        String expectedValue = entry.getValue().toString();
-        Log.d("-- " + LOG_TAG,  "key: " + columnName + "  " + "value: " + expectedValue ); // tky add
-
-        //  Log.d("-- " + LOG_TAG,  "ColmnIndx: " + idx + "  " + "ColmnName: " + columnName + "  cColName: " + cColName + " value: " + expectedValue ); // tky add
-
-        //  assertEquals(
-        //      "Value '"
-        //          + entry.getValue().toString() // org.
-        //          //  + String.valueOf(idx)
-        //          //  + columnName
-        //          //    + valueCursor.getString(idx)
-        //          + "' did not match the expected value '" +
-        //          expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
-        //      //    expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
-
+        return cntValues;
     }
-}
-    /* */
+    /*
+     */
+    static ContentValues create_ContentValues4_X_MovieInfo() {
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(X_MovieInfoEntry.COL_MV_ID,         12);  // y
+        contentValues.put(X_MovieInfoEntry.COL_TITLE,         "XMovie_Title"); // y
+        contentValues.put(X_MovieInfoEntry.COL_RELEASEDATE,   "XMovie_ReleaseDate"); // y
+        contentValues.put(X_MovieInfoEntry.COL_OVERVIEW,      "XMovie_Overview"); // y
+
+        contentValues.put(X_MovieInfoEntry.COL_VOTE_COUNT,    123); // y
+        contentValues.put(X_MovieInfoEntry.COL_VOTE_AVERAGE,  "XMovie_Vote_Average"); // y
+        contentValues.put(X_MovieInfoEntry.COL_POPULARITY,    "XMovie_Popularity"); // y
+
+        contentValues.put(X_MovieInfoEntry.COL_FAVOURITES,    0);
+
+        contentValues.put(X_MovieInfoEntry.COL_POSTERLINK,    "XMovie_PosterLink"); // y
+        contentValues.put(X_MovieInfoEntry.COL_BACKDROP_PATH, "XMovie_BackDrop_Path");
+
+        return contentValues;
+    }
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //++++++++++++++++++++++  END  +++++++++++++++++++++++
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++
     /*
         Students: You can uncomment this helper function once you have finished creating the
         PopularEntry part of the MovieContract_x.
     */
-    static ContentValues createValues4MovieInfo(long rowId) {
-
-        ContentValues tValues = new ContentValues();
-
-        //tValues.put(MovieInfoEntry.COL_MV_ID, 8);  // rowId
-         tValues.put(MovieInfoEntry.COL_MV_ID, rowId);  // rowId
-
-        tValues.put(MovieInfoEntry.COL_TITLE, "MyMovie");
-        tValues.put(MovieInfoEntry.COL_RELEASEDATE, 95); // 55
-        tValues.put(MovieInfoEntry.COL_OVERVIEW, "MyMovie_Synopsis");
-
-        tValues.put(MovieInfoEntry.COL_POSTERLINK, "MyMovie_PosterLink");
-        tValues.put(MovieInfoEntry.COL_VIDEOLINK, "MyMovie_VideoLink");
-
-        return tValues;
-    }
-    static ContentValues createMovieInfoValues_1() {
-
-        Log.d(LOG_TAG, "  ++++ Into createMovieInfoValues_1() ---"); // tky add
-        ContentValues mContentValues = new ContentValues();
-        mContentValues.put(MovieInfoEntry.COL_MV_ID, 99); // tky comment , 1L, 3
-     // mContentValues.put(MovieInfoEntry.COL_MV_ID, 8); // tky comment , 1L
-        mContentValues.put(MovieInfoEntry.COL_TITLE, "MyMovie");
-        mContentValues.put(MovieInfoEntry.COL_RELEASEDATE, 95);  // 55, 88
-        mContentValues.put(MovieInfoEntry.COL_OVERVIEW, "MyMovie_Synopsis");
-
-        mContentValues.put(MovieInfoEntry.COL_POSTERLINK,"MyMovie_PosterLink");
-        mContentValues.put(MovieInfoEntry.COL_VIDEOLINK,"MyMovie_VideoLink");
-
-        return mContentValues;
-    }
+//    static ContentValues createValues4MovieInfo(long rowId) {
+//
+//        return tValues;
+//    }
+//    static ContentValues createMovieInfoValues_1() {
+//
+//        return mContentValues;
+//    }
 
     /*
         Students: Use this to create some default MovieSelect values for your database tests.
      */
-    static ContentValues createPopularValues() {
-
-        // Create a new map of values, where column names are the keys
-        ContentValues mContentValues = new ContentValues();
-
-        mContentValues.put(PopularEntry.COL_KEY_ID, 1); // 33, 2
-        mContentValues.put(PopularEntry.COL_MV_ID, 3);
-        mContentValues.put(PopularEntry.COL_TITLE, "MyMovie"); /// tky comment, -- AMovie
-
-        return mContentValues;
-    }
+//    static ContentValues createPopularValues() {
+//
+//        // Create a new map of values, where column names are the keys
+//        ContentValues mContentValues = new ContentValues();
+//
+//        return mContentValues;
+//    }
 
     /*
-        Students: You can uncomment this function once you have finished creating the
+        Students: You can uncomment this functReturn total number of columnsion once you have finished creating the
         PopularEntry part of the MovieContract_x as well as the MovieDbHelperr.
      */
-    static long insertPopularValues(Context context) {
-
-        // insert our test records into the database
-        MovieSQLiteOpenHelper dbHelper = new MovieSQLiteOpenHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues testContentValues = TestUtilities.createPopularValues();
-        /// ContentValues dryTestValues = TestUtilities.createValues4MovieInfo();
-
-        long popularRowId;
-        popularRowId = db.insert(PopularEntry.TABLE_NAME, null, testContentValues);
-    //    popularRowId = db.insert(PopularEntry.TABLE_NAME, null, dryTestValues);
-
-        // Verify we got a row back.
-        assertTrue("Error: Failure to insert North Pole Location Values", popularRowId != -1);
-
-        return popularRowId;
-    }
+//    static long insertPopularValues(Context context) {
+//
+//        // insert our test records into the database
+//
+//        ContentValues testContentValues = TestUtilities.createPopularValues();
+//
+//        long popularRowId;
+//        popularRowId = db.insert(PopularEntry.TABLE_NAME, null, testContentValues);
+//
+//        // Verify we got a row back.
+//
+//        return popularRowId;
+//    }
 
 
     /*
@@ -326,21 +290,12 @@ static void validateCursorValue(//String error,
     }
 
     //++++++++++++++++++++++++++===========
-        /*
+    /*
         Students: Use this to create some default Movie values for your database tests.
      */
 //    static ContentValues createMovieValues() {
 //
 //        // Create a new map of values, where column names are the keys
-//        ContentValues movieContentValues = new ContentValues();
-//
-//        // movieContentValues.put(MovieContract_x.PopularEntry.COL_SORTBYSETTING, TEST_SORTBY_VALUE);
-//        movieContentValues.put(MovieEntry.COL_MOVIE_ID, 1L);
-//        movieContentValues.put(MovieEntry.COL_TITLE, "AMovie");
-//        movieContentValues.put(MovieEntry.COL_OVERVIEW,"Bla..Bla");
-//        movieContentValues.put(MovieEntry.COL_VOTECOUNT, 240);
-//        movieContentValues.put(MovieEntry.COL_RATING, 8.8);
-//        movieContentValues.put(MovieEntry.COL_RELEASEDATE, "4March");
 //
 //        return movieContentValues;
 //    }
@@ -353,39 +308,10 @@ static void validateCursorValue(//String error,
 //    static long insertMovieValues(Context context) {
 //
 //        // insert our test records into the database
-//        MovieSQLiteOpenHelper dbHelper = new MovieSQLiteOpenHelper(context);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//
-//        ContentValues testContentValues = TestUtilities.createMovieValues();
-//        //ContentValues testContentValues = TestUtilities.createPopularValues();
-//        /// ContentValues dryTestValues = TestUtilities.createValues4MovieInfo();
-//
-//        long movieRowId;
-//        movieRowId = db.insert(MovieEntry.TABLE_NAME, null, testContentValues);
-//        //    popularRowId = db.insert(PopularEntry.TABLE_NAME, null, dryTestValues);
 //
 //        // Verify we got a row back.
-//        assertTrue("Error: Failure to insert Movie Values", movieRowId != -1);
 //
 //        return movieRowId;
 //    }
 
-    static long insertContentValues_MovieInfo(Context context) {
-
-        // insert our test records into database
-        MovieSQLiteOpenHelper mSqlDbOpenHelper = new MovieSQLiteOpenHelper(context);
-        SQLiteDatabase mSqlDb = mSqlDbOpenHelper.getWritableDatabase();
-
-        ContentValues mContentValues = TestUtilities.createMovieInfoValues_1();
-
-        long mRowId;
-        mRowId = mSqlDb.insert(MovieInfoEntry.TABLE_NAME, null, mContentValues);
-
-        mSqlDb.close();
-
-        // Verify we got a row back.
-        assertTrue("Error: Failure to insert Movie Info Values", mRowId != -1);
-
-        return mRowId;
-    }
 }

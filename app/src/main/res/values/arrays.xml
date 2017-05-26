@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string-array name="pref_movies_sortby_options">
-        <item>@string/pref_sortmovies_by_popularity_label</item>
-        <item>@string/pref_sortmovies_by_ratings_label</item>
+        <item>@string/pref_movies_sortby_popularity_label</item>
+        <item>@string/pref_movies_sortby_ratings_label</item>
+        <item>@string/pref_movies_sortby_ownfavourites_label</item>
     </string-array>
 
     <string-array name="pref_movies_sortby_values">
-        <item>"popularity.desc"</item>
-        <item>@string/pref_sortmovies_by_ratings</item>
+        <item>@string/pref_movies_sortby_default_value</item>
+        <item>@string/pref_movies_sortby_ratings</item>
+        <item>@string/pref_movies_sortby_favourites</item>
     </string-array>
 
 </resources>

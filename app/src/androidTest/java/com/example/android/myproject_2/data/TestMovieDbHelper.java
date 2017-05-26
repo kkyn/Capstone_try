@@ -21,9 +21,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
-import com.example.android.myproject_2.data.MovieContract.PopularEntry;
+//import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
+//import com.example.android.myproject_2.data.MovieContract.PopularEntry;
 //import com.example.android.myproject_2.data.MovieContract_x.RatingEntry;
+
+import com.example.android.myproject_2.data.MovieContract.X_MovieInfoEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieReviewEntry;
 
 import java.util.HashSet;
 
@@ -51,13 +54,17 @@ public class TestMovieDbHelper extends AndroidTestCase {
         Note that this only tests that the MovieInfo table has the correct columns.
         This test does not look at the
      */
-    public void testCreateDb() throws Throwable {
+    public void test_CreateDb() throws Throwable {
         // build a HashSet of all of the table names we wish to look for
         // Note that there will be another table in the DB that stores the
         // Android metadata (db version information)
         final HashSet<String> tableNameHashSet = new HashSet<String>();
-        tableNameHashSet.add(MovieInfoEntry.TABLE_NAME);
-        tableNameHashSet.add(PopularEntry.TABLE_NAME);
+
+        tableNameHashSet.add(X_MovieInfoEntry.TABLE_NAME);      // new
+        tableNameHashSet.add(X_MovieReviewEntry.TABLE_NAME);    // new
+
+ /*       tableNameHashSet.add(MovieInfoEntry.TABLE_NAME);
+        tableNameHashSet.add(PopularEntry.TABLE_NAME);*/
 //        tableNameHashSet.add(RatingEntry.TABLE_NAME);
 
         // tky:
@@ -83,6 +90,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
 
         // verify that the tables have been created
         do {
+            Log.d("-- " + LOG_TAG, "TABLE NAME :---- " + mCursor.getString(0));
             tableNameHashSet.remove(mCursor.getString(0));
         } while( mCursor.moveToNext() );
 
@@ -91,30 +99,106 @@ public class TestMovieDbHelper extends AndroidTestCase {
         assertTrue("Error: Your database was created without both the location entry and weather entry tables",
                 tableNameHashSet.isEmpty());
 
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        // Build a HashSet of all of the column names we want to look for
+        final HashSet<String> X_MovieInfoColumnHashSet = new HashSet<String>();
+
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry._ID);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_MV_ID);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_TITLE);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_RELEASEDATE);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_VOTE_AVERAGE);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_POPULARITY);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_VOTE_COUNT);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_OVERVIEW);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_POSTERLINK);
+        X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_BACKDROP_PATH); // new
+     // X_MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_VIDEOLINK);     // new
+
         // now, do our tables contain the correct columns?
-        mCursor = db.rawQuery("PRAGMA table_info(" + MovieInfoEntry.TABLE_NAME + ")", null);
+        mCursor = db.rawQuery("PRAGMA table_info(" + X_MovieInfoEntry.TABLE_NAME + ")", null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
                 mCursor.moveToFirst());
 
-        // Build a HashSet of all of the column names we want to look for
-        final HashSet<String> locationColumnHashSet = new HashSet<String>();
-
-        locationColumnHashSet.add(MovieInfoEntry._ID);
-        locationColumnHashSet.add(MovieInfoEntry.COL_POSTERLINK);
-        locationColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);
-        locationColumnHashSet.add(MovieInfoEntry.COL_MV_ID);
-
-        int columnNameIndex = mCursor.getColumnIndex("name");
+        int X_columnNameIndex = mCursor.getColumnIndex("name");
         do {
-            String columnName = mCursor.getString(columnNameIndex);
-            locationColumnHashSet.remove(columnName);
+            String X_columnName = mCursor.getString(X_columnNameIndex);
+            X_MovieInfoColumnHashSet.remove(X_columnName);
         } while(mCursor.moveToNext());
 
         // if this fails, it means that your database doesn't contain all of the required SortBy
         // entry columns
         assertTrue("Error: The database doesn't contain all of the required location entry columns",
-                locationColumnHashSet.isEmpty());
+                X_MovieInfoColumnHashSet.isEmpty());
+        //db.close();
+
+        //-------------------------------------------------------//
+
+        // Build a HashSet of all of the column names we want to look for
+        final HashSet<String> X_MovieReviewColumnHashSet = new HashSet<String>();
+
+        X_MovieReviewColumnHashSet.add(X_MovieReviewEntry._ID);
+        X_MovieReviewColumnHashSet.add(X_MovieReviewEntry.COL_MV_ID);
+        X_MovieReviewColumnHashSet.add(X_MovieReviewEntry.COL_REVIEWER);
+        X_MovieReviewColumnHashSet.add(X_MovieReviewEntry.COL_REVIEWCONTENT);
+
+        // now, do our tables contain the correct columns?
+        mCursor = db.rawQuery("PRAGMA table_info(" + X_MovieReviewEntry.TABLE_NAME + ")", null);
+
+        assertTrue("Error: This means that we were unable to query the database for table information.",
+                mCursor.moveToFirst());
+
+        int X1_columnNameIndex = mCursor.getColumnIndex("name");
+        do {
+            String X1_columnName = mCursor.getString(X1_columnNameIndex);
+            X_MovieReviewColumnHashSet.remove(X1_columnName);
+        } while(mCursor.moveToNext());
+
+        // if this fails, it means that your database doesn't contain all of the required SortBy
+        // entry columns
+        assertTrue("Error: The database doesn't contain all of the required location entry columns",
+                X_MovieReviewColumnHashSet.isEmpty());
+
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // now, do our tables contain the correct columns?
+        mCursor = db.rawQuery("PRAGMA table_info(" + X_MovieInfoEntry.TABLE_NAME + ")", null);
+
+        assertTrue("Error: This means that we were unable to query the database for table information.",
+                mCursor.moveToFirst());
+
+
+        // Build a HashSet of all of the column names we want to look for
+        final HashSet<String> MovieInfoColumnHashSet = new HashSet<String>();
+
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry._ID);
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_POSTERLINK);  // y
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_MV_ID);   // y
+        
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_TITLE);   // y
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_RELEASEDATE); // y
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_OVERVIEW);    // y
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_VOTE_AVERAGE);    // y
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_POPULARITY);  // y
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_VOTE_COUNT);  // y
+
+        MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_BACKDROP_PATH); // new
+    //    MovieInfoColumnHashSet.add(X_MovieInfoEntry.COL_VIDEOLINK);     // new
+        //--------------------------------------------------------------
+
+        //---------------------------------------------------//
+        int columnNameIndex = mCursor.getColumnIndex("name");
+        do {
+            String columnName = mCursor.getString(columnNameIndex);
+            MovieInfoColumnHashSet.remove(columnName);
+        } while(mCursor.moveToNext());
+
+        // if this fails, it means that your database doesn't contain all of the required SortBy
+        // entry columns
+        assertTrue("Error: The database doesn't contain all of the required location entry columns",
+                MovieInfoColumnHashSet.isEmpty());
+
         db.close();
     }
 
@@ -123,13 +207,13 @@ public class TestMovieDbHelper extends AndroidTestCase {
         You'll want to look in TestUtilities, the "createPopularValues" function.
         You can also make use of the ValidateCurrentRecord function from within TestUtilities.
     */
-    public void testPopularTable() {
+    /*public void testPopularTable() {
 
         long rowId;
         Log.d("-- " + LOG_TAG, " ---testPopularTable()--- "); // tky add
         rowId = insertPopularTable();
         Log.d("-- " + LOG_TAG, " rowId : " + rowId); // tky add
-    }
+    }*/
 
 
 
@@ -138,7 +222,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         You'll want to look in TestUtilities where you can use the "createPopularValues" function.
         You can also make use of the validateCurrentRecord function from within TestUtilities.
      */
-    public void testMovieInfoTable() {
+    /*public void testMovieInfoTable() {
 
         Log.d("-- " + LOG_TAG, " ---testMovieInfoTable()--- "); // tky add
 
@@ -197,13 +281,14 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // Sixth Step: Close cursor and database
         mInfoCursor.close();
         dbHelper.close();
-    }
+    }*/
 
     /*
-        This is a helper method for the testMovieInfoTable. You can move your
-        code from testPopularTable to here so that you can call this code from both
-        testMovieInfoTable and testPopularTable. ??
-     */
+            This is a helper method for the testMovieInfoTable. You can move your
+            code from testPopularTable to here so that you can call this code from both
+            testMovieInfoTable and testPopularTable. ??
+         */
+    /*
     public long insertPopularTable() {
 
         Log.d("-- " + LOG_TAG, " ---insertPopularTable()--- "); // tky add
@@ -250,24 +335,24 @@ public class TestMovieDbHelper extends AndroidTestCase {
 
         Log.d("-- " + LOG_TAG, " --- Into TestUtilities.validateCurrentRecord() --- "); // tky add
 
-            // Step 5 : Validate data in resulting Cursor with the original ContentValues
-            // (you can use the validateCurrentRecord function in TestUtilities to validate the
-            // query if you like)
-            TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
+        // Step 5 : Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
                 cursor, tValues);
 
         // Move the cursor to demonstrate that there is only one record in the database
         assertFalse( "Error: More than one record returned from location query",
                 cursor.moveToNext() );
-/**/
-TestUtilities.validateCursorValue( cursor );
-/* */
+
+        TestUtilities.validateCursorValue( cursor );
+
         // Step 6 : Close Cursor and Database
         cursor.close();
         db.close();
 
         return popularRowId;
-    }
+    }*/
 
     /*
         This is a helper method for the testMovieInfoTable. You can move your
@@ -277,4 +362,146 @@ TestUtilities.validateCursorValue( cursor );
     //public long insertPopularTable() {
     //    return -1L;
     //}
+
+    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    //xxxxxxxxxxxxxxxxxxxxx BEGIN xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    /*
+        Build code to test that we can insert and query the SortBy database.
+        You'll want to look in TestUtilities, the "createPopularValues" function.
+        You can also make use of the ValidateCurrentRecord function from within TestUtilities.
+    */
+    public void test_X_MovieInfo_Table() {
+
+        Log.d("-- " + LOG_TAG, " ---testPopularTable()--- "); // tky add
+
+        long rowId;
+        rowId = insert_X_MovieInfo_Table();
+
+        Log.d("-- " + LOG_TAG, " rowId : " + rowId); // tky add
+    }
+
+
+    public long insert_X_MovieInfo_Table() {
+
+        SQLiteDatabase db = new MovieSQLiteOpenHelper(this.mContext).getWritableDatabase();
+
+        ContentValues contentValues = TestUtilities.create_ContentValues4_X_MovieInfo();
+
+        long x_MovieInfo_RowId = db.insert(X_MovieInfoEntry.TABLE_NAME, null, contentValues);
+
+        // Verify we got a row back.
+        assertTrue(x_MovieInfo_RowId != -1);
+
+        // Step 4 : Query the database and receive a Cursor back
+        // A cursor is your primary interface to the query results.
+        Cursor cursor = db.query(
+                            X_MovieInfoEntry.TABLE_NAME, // Table to Query
+                            null, // all columns
+                            null, // Columns for the "where" clause
+                            null, // Values for the "where" clause
+                            null, // columns to group by
+                            null, // columns to filter by row groups
+                            null // sort order
+                    );
+
+        // Move the cursor to a valid database row and check to see if we got any records back
+        // from the query
+        assertTrue( "Error: No Records returned from X_MovieInfo query", cursor.moveToFirst() );
+
+        // Step 5 : Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: X_MovieInfo Query Validation Failed",
+                                                cursor, contentValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse( "Error: More than one record returned from location query",
+                cursor.moveToNext() );
+
+        TestUtilities.validateCursorValue( cursor );
+
+        // Step 6 : Close Cursor and Database
+        cursor.close();
+        db.close();
+
+        return x_MovieInfo_RowId;
+    }
+
+    //
+    //    Build code to test that we can insert and query the database.
+    //    You'll want to look in TestUtilities where you can use the "createPopularValues" function.
+    //    You can also make use of the validateCurrentRecord function from within TestUtilities.
+    //
+    public void test_X_MovieReview_Table() {
+
+        Log.d("-- " + LOG_TAG, " ---testMovieInfoTable()--- "); // tky add
+
+        // First insert the sortby value, and then use the X_MovieInfo_RowId to insert
+        // the movieInfo. Make sure to cover as many failure cases as you can.
+
+        // Instead of rewriting all of the code we've already written in testPopularTable
+        // we can move this code to insertPopularTable and then call insertPopularTable from both
+        // tests. Why move it? We need the code to return the ID of the inserted location
+        // and our testPopularTable can only return void because it's a test.
+
+        // Instead of rewriting all of the code we've already written in testPopularTable
+        // we can move this code to insertPopularTable and then call insertPopularTable from both
+        // tests. Why move it? We need the code to return the ID of the inserted location
+        // and our testPopularTable can only return void because it's a test.
+
+        long X_MovieInfo_RowId = insert_X_MovieInfo_Table();
+
+        // Make sure we have a valid row ID.
+        assertFalse("Error: Location Not Inserted Correctly", X_MovieInfo_RowId == -1L);
+
+        // First step: Get reference to writable database
+        // If there's an error in those massive SQL table creation Strings,
+        // errors will be thrown here when you try to get a writable database.
+        MovieSQLiteOpenHelper dbHelper = new MovieSQLiteOpenHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Second Step (MovieInfo): Create MovieInfo values
+        ContentValues contentValues = TestUtilities.create_ContentValues4_X_MovieReview(X_MovieInfo_RowId);
+
+        // Third Step (MovieInfo): Insert ContentValues into database and get a row ID back
+        long movieReview_RowId = db.insert(X_MovieReviewEntry.TABLE_NAME, null, contentValues);
+
+        assertTrue(movieReview_RowId != -1);
+
+        // Fourth Step: Query the database and receive a Cursor back
+        // A cursor is your primary interface to the query results.
+        Cursor cursor = db.query(
+                            X_MovieReviewEntry.TABLE_NAME,  // Table to Query
+                            null, // leaving "columns" null just returns all the columns.
+                            null, // cols for "where" clause
+                            null, // values for "where" clause
+                            null, // columns to group by
+                            null, // columns to filter by row groups
+                            null  // sort order
+                    );
+
+
+        // Move the cursor to a valid database row and check to see if we have any rows
+        assertTrue("Error: No Records returned from location query", cursor.moveToFirst());
+
+        // Fifth Step: Validate the movieInfo Query
+        TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
+                cursor, contentValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse("Error: More than one record returned from weather query",
+                cursor.moveToNext());
+
+        TestUtilities.validateCursorValue(cursor); // tky add
+
+        // Sixth Step: Close cursor and database
+        cursor.close();
+        dbHelper.close();
+    }
+
+    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    //xxxxxxxxxxxxxxxxxxxxxx  END  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 }

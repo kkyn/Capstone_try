@@ -2,10 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
-        android:title="@string/pref_sortmovies_by_label"
-        android:key="Movies"
-        android:defaultValue="popularity.desc"
+        android:title="@string/pref_movies_sort_title"
+        android:key="@string/pref_movies_sort_key"
+        android:defaultValue="@string/pref_movies_sortby_default_value"
         android:entries="@array/pref_movies_sortby_options"
         android:entryValues="@array/pref_movies_sortby_values"
         />
+
+    <!--
+        android:key="Movies"
+        android:defaultValue="popularity.desc"-->
 </PreferenceScreen>

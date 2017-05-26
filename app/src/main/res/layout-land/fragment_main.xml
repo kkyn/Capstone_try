@@ -4,71 +4,22 @@
     android:elevation="4dp">
 
     <!--android:orientation="vertical"-->
-    <!--
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context="com.example.android.myproject_2.Main_Fragment
-    -->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|top"
-            android:id="@+id/linear_layout1"
-            android:text="...layout-land/fragment_main.xml" />
-    <!--
-            android:id="@+id/linear_layout1"
-            android:gravity="right"-->
+    <!--<TextView
+        android:id="@+id/linear_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|top"
+        android:text="...layout-land/fragment_main.xml" />-->
 
+    <!-- ///////////////////////////////// -->
 
     <include
         layout="@layout/fragment_main_base"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/linear_layout1" />
-    <!--
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_movie"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/layout1"
-        android:divider="@null" />
-    -->
 
-</RelativeLayout><!-- zzzzzzzzzzzzzzzzzzzzzz --><!-- 11
-    <GridView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+</RelativeLayout>
 
-        android:id="@+id/grid_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:numColumns="auto_fit"
-
-        tools:context=".Main_Fragment">
-        11 --><!--
-            android:columnWidth="150dp"
-            android:horizontalSpacing="0dp"
-            android:numColumns="auto_fit"
-            android:verticalSpacing="0dp"
-            android:stretchMode="columnWidth"
-
-            android:verticalSpacing="0dp" --><!-- 11
-    </GridView>
-    11 --><!-- zzzzzzzzzzzzzzzzzzzzzz --><!--  inside above definition 'android.support.v7.widget.RecyclerView',
-                style="@style/ForecastListStyle" --><!-- empty list --><!--
-    <TextView
-        android:id="@+id/recyclerview_forecast_empty"
-        android:text="@string/empty_forecast_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        />
-        --><!-- </RelativeLayout> --><!-- </FrameLayout> --><!-- xxxxxxxxxxxxxxxxxxxxxxxxxx -->
 

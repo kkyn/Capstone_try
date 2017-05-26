@@ -20,17 +20,17 @@ import java.net.URL;
  * Created by kkyin on 3/11/2015.
  */
 
-public class FetchMoviesDbAsyncTask_2 extends AsyncTask<String, Void, String[]> {
+public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
 
 
-    private final String LOG_TAG = FetchMoviesDb_AsyncTask.class.getSimpleName();
+    private final String LOG_TAG = FetchMoviesDbAsyncTask.class.getSimpleName();
 
     ///////////////////////////////////////////////////
 
     private Context mContext;
     private OnAsyncTaskCompletedListener mListener;
 
-    public FetchMoviesDbAsyncTask_2(Context context, OnAsyncTaskCompletedListener listener) {
+    public FetchMoviesDbAsyncTask(Context context, OnAsyncTaskCompletedListener listener) {
 
         this.mContext = context;
         this.mListener = listener;
@@ -74,16 +74,21 @@ public class FetchMoviesDbAsyncTask_2 extends AsyncTask<String, Void, String[]> 
         // get the api result from moviedb.org
 
         try {
-            final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/movie/";
+            final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/";
+            final String MOVIE_ = "movie";
             final String VIDEO_MODE = "videos";
             final String KEY_PARAM = "api_key";
 
             // (1) build the Url
             buildUri = Uri.parse(MOVIE_DB_BASE_URL) // creates a Uri which parses the given encoded URI string
                     .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
-                    .appendPath(params[0])
-                    .appendEncodedPath(VIDEO_MODE)
-                    .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DB_API_KEY)
+
+                    .appendPath(MOVIE_    /*  movie/  */)
+                    .appendPath(params[0] /*  ###/    */)
+
+                    .appendEncodedPath(VIDEO_MODE /*  videos?  */)
+
+                    .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DB_API_KEY /*  &api_key=####  */)
                     .build();
 
             Log.d(LOG_TAG, "----xxxxxxx" + buildUri.toString());
@@ -139,6 +144,7 @@ public class FetchMoviesDbAsyncTask_2 extends AsyncTask<String, Void, String[]> 
                 }
             }
         }
+
         try {
             return getMovieInfoFromJson(movieInfoInJsonStr);
 
@@ -163,7 +169,7 @@ public class FetchMoviesDbAsyncTask_2 extends AsyncTask<String, Void, String[]> 
 
         final String RESULTS = "results";
         final String KEY = "key";
-     //   final String SITE = "site";
+     // final String SITE = "site";
 
         String movieKey;
         String movieSite;

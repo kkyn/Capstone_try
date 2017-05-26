@@ -11,19 +11,20 @@ import android.support.annotation.Nullable;
 public class MoviesAuthenticatorService extends Service {
 
     // Instance field that stores the authenticator object
-    private MoviesAuthenticator moviesAuthenticator;
+    private MoviesAccountAuthenticator moviesAccountAuthenticator;
 
     @Override
     public void onCreate() {
         //super.onCreate();
         //Create a new authenticator object
-        moviesAuthenticator = new MoviesAuthenticator(this);
+        moviesAccountAuthenticator = new MoviesAccountAuthenticator(this);
     }
 
+    // 'Service' returns a subclass of 'AbstractAccountAuthenticator'
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         //return null;
-        return moviesAuthenticator.getIBinder();
+        return moviesAccountAuthenticator.getIBinder();
     }
 }

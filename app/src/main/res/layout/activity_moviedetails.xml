@@ -1,9 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container_id4_moviedetails"
+    android:id="@+id/moviedetails_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MovieDetails_Activity"
     tools:ignore="MergeRooFrame" />
-<!--
-    tools:context=".MovieDetails_Activity" -->

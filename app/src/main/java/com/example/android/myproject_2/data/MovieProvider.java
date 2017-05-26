@@ -10,11 +10,12 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
-import com.example.android.myproject_2.data.MovieContract.PopularEntry;
-import com.example.android.myproject_2.data.MovieContract.RatingEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieInfoEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieReviewEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieVideosEntry;
+import com.example.android.myproject_2.data.MovieContract.X_MovieFavouritesEntry;
 
-/**
+/*
  * Created by kkyin on 22/1/2016.
  */
 // * Content providers implement functionality based upon URIs passed to them.
@@ -23,21 +24,26 @@ import com.example.android.myproject_2.data.MovieContract.RatingEntry;
 public class MovieProvider extends ContentProvider {
 
     public static final String LOG_TAG = MovieProvider.class.getSimpleName(); // tky add
+
     private MovieSQLiteOpenHelper mvsSqLtOpnHlpr = null;
 
+    static final String CURSOR_LIMIT = "20";
+
     // Step-3 ... URIMatcher
-    // * Constants used by the URImatcher.
-    // * Constants used to tie each URI type internally.
+    // * Constant Ids used by the URImatcher.
+    // * Constant Ids used to tie each URI type internally.
     // * Can easily use them in switch statements.
-    static final int POPULAR_ = 100;
-    static final int POPULAR_MOVIEID = 101;
+    static final int CNST_MOVIE_INFO_ = 100;
+    static final int CNST_MOVIE_INFO_ID_ = 101;
 
-    static final int MOVIEINFO_ = 104;
+    static final int CNST_MOVIE_REVIEW_ = 102;
+    static final int CNST_MOVIE_REVIEW_ID_ = 103;
 
-    static final int RATING_ = 102;
-    static final int RATING_MOVIEID = 103;
+    static final int CNST_MOVIE_VIDEO_ = 104;
+    static final int CNST_MOVIE_VIDEO_ID_ = 105;
 
-    static final int MOVIE_DIR = 105;
+    static final int CNST_MOVIE_FAVOURITES_ = 106;
+    static final int CNST_MOVIE_FAVOURITES_ID_ = 107;
 
     // * http://developer.android.com/reference/android/content/UriMatcher.html
     // The URI Matcher used by this content provider / MovieProvider
@@ -65,17 +71,18 @@ public class MovieProvider extends ContentProvider {
         // e.g. "com.example.android.myproject_2/Movie"
         UriMatcher aUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-        aUriMatcher.addURI(authority, MovieContract.POPULAR, POPULAR_);
-        //aUriMatcher.addURI(authority, MovieContract.POPULAR + "/#", POPULAR_MOVIEID);
-        aUriMatcher.addURI(authority, MovieContract.POPULAR + "/*", POPULAR_MOVIEID);
-        //aUriMatcher.addURI(authority, MovieContract_x.POPULAR + "/*", POPULAR_MOVIEID);
+        aUriMatcher.addURI(authority, MovieContract.X_MOVIEREVIEW,          CNST_MOVIE_REVIEW_);
+      //aUriMatcher.addURI(authority, MovieContract.X_MOVIEREVIEW + "/#",   CNST_MOVIE_REVIEW_ID_);
+        aUriMatcher.addURI(authority, MovieContract.X_MOVIEREVIEW + "/*",   CNST_MOVIE_REVIEW_ID_);
 
-        aUriMatcher.addURI(authority, MovieContract.MOVIEINFO, MOVIEINFO_);
+        aUriMatcher.addURI(authority, MovieContract.X_MOVIEINFO,            CNST_MOVIE_INFO_);
+        aUriMatcher.addURI(authority, MovieContract.X_MOVIEINFO + "/*",     CNST_MOVIE_INFO_ID_);
 
-        aUriMatcher.addURI(authority, MovieContract.RATING, RATING_);
-        //aUriMatcher.addURI(authority, MovieContract.RATING + "/#", RATING_MOVIEID);
-        aUriMatcher.addURI(authority, MovieContract.RATING + "/*", RATING_MOVIEID);
-        //aUriMatcher.addURI(authority, MovieContract_x.MOVIE,      MOVIE_DIR);
+        aUriMatcher.addURI(authority, MovieContract.X_MOVIEVIDEO,           CNST_MOVIE_VIDEO_);
+		aUriMatcher.addURI(authority, MovieContract.X_MOVIEVIDEO + "/*",    CNST_MOVIE_VIDEO_ID_);
+
+        aUriMatcher.addURI(authority, MovieContract.X_MOVIEFAVOURITES,      CNST_MOVIE_FAVOURITES_);
+        aUriMatcher.addURI(authority, MovieContract.X_MOVIEFAVOURITES + "/*", CNST_MOVIE_FAVOURITES_ID_);
 
         return aUriMatcher;
     }
@@ -83,171 +90,154 @@ public class MovieProvider extends ContentProvider {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // The SQLiteQueryBuilder -- a convience class that helps build SQL queries
     //                      to be sent to SQLiteDatabase objects.
-    private static final SQLiteQueryBuilder popularSqLtQryBldr;
-    private static final SQLiteQueryBuilder ratedSQLtQryBuldr;
-    //private static final SQLiteQueryBuilder mMovie_SQLiteQueryBuilder;
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    private static final SQLiteQueryBuilder x_movieInfo_SQLiteQueryBuilder;
+    static  {
+        x_movieInfo_SQLiteQueryBuilder = new SQLiteQueryBuilder();
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        x_movieInfo_SQLiteQueryBuilder.setTables(
+                X_MovieInfoEntry.TABLE_NAME
+        );
+    }
+
+    private static final SQLiteQueryBuilder x_movieReview_SQLiteQueryBuilder;
     static {
-        popularSqLtQryBldr = new SQLiteQueryBuilder();
+        x_movieReview_SQLiteQueryBuilder = new SQLiteQueryBuilder();
 
         // .setTables -- Sets the list of tables to query.
-        popularSqLtQryBldr.setTables(/**/
-            /**/
-            MovieInfoEntry.TABLE_NAME
-                + " INNER JOIN " + PopularEntry.TABLE_NAME
-                + " ON "
-                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-                + " = "
-                + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID
-            /**/
-            /*
-            PopularEntry.TABLE_NAME
-            + " INNER JOIN " + MovieInfoEntry.TABLE_NAME
-                + " ON "
-                + "(" + PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID
-                + " = "
-                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-                + ");"
-            */
-            /**
-             PopularEntry.TABLE_NAME
-             **/
-
-
+        x_movieReview_SQLiteQueryBuilder.setTables(
+                X_MovieReviewEntry.TABLE_NAME
         );
     }
 
+    private static final SQLiteQueryBuilder x_movieVideo_SQLiteQueryBuilder;
     static {
-        ratedSQLtQryBuldr = new SQLiteQueryBuilder();
-
-        ratedSQLtQryBuldr.setTables(
-
-            MovieInfoEntry.TABLE_NAME
-                + " INNER JOIN " + RatingEntry.TABLE_NAME
-                + " ON "
-                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-                + " = "
-                + RatingEntry.TABLE_NAME + "." + RatingEntry.COL_KEY_ID
+        x_movieVideo_SQLiteQueryBuilder = new SQLiteQueryBuilder();
+        x_movieVideo_SQLiteQueryBuilder.setTables(
+                X_MovieVideosEntry.TABLE_NAME
         );
     }
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//    static {
-//        mRatedMovies_SQLiteQueryBuilder = new SQLiteQueryBuilder();
-//
-//        // .setTables -- Sets the list of tables to query.
-//        mRatedMovies_SQLiteQueryBuilder.setTables(
-//            RatingEntry.TABLE_NAME + " INNER JOIN " + MovieInfoEntry.TABLE_NAME
-//                + " ON "
-//                + RatingEntry.TABLE_NAME + "." + RatingEntry.COL_KEY_ID
-//                + " = "
-//                + MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry.COL_KEY_ID
-//        );
-//    }
+
+    private static final SQLiteQueryBuilder x_movieFavourites_SQLITEQueryBuilder;
+    static {
+        x_movieFavourites_SQLITEQueryBuilder = new SQLiteQueryBuilder();
+        x_movieFavourites_SQLITEQueryBuilder.setTables(MovieContract.X_MovieFavouritesEntry.TABLE_NAME);
+    }
 
 
+
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzz BEGIN zzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
     // ContentResolver > Content-Provider > "DATABASE"
-    // private Cursor getPopularMoviesData (Uri uri, String[] projection, String sortOrder) {
-    private Cursor getPopularMoviesData(
-        Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    // private Cursor getMovieReviewData (Uri uri, String[] projection, String sortOrder) {
+    private Cursor getMovieReviewData(
+            Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
-        Log.d(LOG_TAG, "---- INTO getPopularMoviesData() ---- call SQLiteQueryBuilder.query()"); // tky add
+        Log.d(LOG_TAG, "---- INTO getMovieReviewData() ---- call SQLiteQueryBuilder.query()"); // tky add
 
-        return popularSqLtQryBldr.query(
-            mvsSqLtOpnHlpr.getReadableDatabase()
-            , projection
-            , selection
-            , selectionArgs
-            , null
-            , null
-            , sortOrder
+
+        return x_movieReview_SQLiteQueryBuilder.query(
+                mvsSqLtOpnHlpr.getReadableDatabase()
+                , projection
+                , selection
+                , selectionArgs
+                , null
+                , null
+                , sortOrder
         );
     }
 
-//    private Cursor getMovieInfoData(
-//        Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder
-//    ) {
-//        return
-//
-//    }
+    //------------------------------------//
+    //---------- Movie Info --------------//
+    //------------------------------------//
+    // Table_X_MovieInfo.MovieID = ?
+    //
+    private static final String selection_MovieInfo_WithMovieId =
+            X_MovieInfoEntry.TABLE_NAME + "." + X_MovieInfoEntry.COL_MV_ID + " = ?";
 
-    // Popularity.MovieID = ?
-    private static final String sPopular_MovieId_Selection =
-        PopularEntry.TABLE_NAME + "." + PopularEntry.COL_MV_ID + " = ?";
-        //PopularEntry.TABLE_NAME + "." + PopularEntry.COL_KEY_ID + " = ?";
+    private Cursor getMovieInfoData_FromMovieId(Uri uri, String[] projection, String sortOrder) {
 
-    // ContentResolver > Content-Provider > "DATABASE"
-    // This method is to be used in Content-Provider's query method
-    private Cursor getPopularMovieData_fromMovieId(Uri uri, String[] projection, String sortOrder) {
+        String movieId = X_MovieInfoEntry.getMovieId_FromMovieInfoUri(uri);
 
-        // get the last segment in the uri
-        String mMovieId = PopularEntry.getMovieId_fromUri(uri);
+        SQLiteDatabase  read_SQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
+        String          selection = selection_MovieInfo_WithMovieId;
+        String[]        selectionArg = new String[]{movieId};
 
-        SQLiteDatabase readSqLtDB = mvsSqLtOpnHlpr.getReadableDatabase();
+        return x_movieInfo_SQLiteQueryBuilder.query(
+                            read_SQLiteDB, projection, selection, selectionArg,
+                            null, null, sortOrder);
 
-        //Log.d(LOG_TAG, "-- MovieProvider / getPopularMovieData_fromMovieId --");
-
-        // call database and query for the row with such mMovieId
-        return popularSqLtQryBldr.query(
-                                    readSqLtDB
-                                    , projection
-                                    , sPopular_MovieId_Selection
-                                    , new String[]{mMovieId}
-                                    , null
-                                    , null
-                                    , sortOrder
-        );
     }
-
-    // Rating.MovieID = ?
-    private static final String sRating_MovieId_Selection =
-            RatingEntry.TABLE_NAME + "." + RatingEntry.COL_MV_ID + " = ?";
-            //RatingEntry.TABLE_NAME + "." + RatingEntry.COL_KEY_ID + " = ?";
+    //------------------------------------//
+    //---------- Movie Review ------------//
+    //------------------------------------//
+    // Table_X_MovieReview.MovieID = ?
+    //
+    private static final String selection_MovieReview_WithMovieId =
+            X_MovieReviewEntry.TABLE_NAME + "." + X_MovieReviewEntry.COL_MV_ID + " = ?";
 
     // ContentResolver > Content-Provider > "DATABASE"
     // This method is to be used in Content-Provider's query method
-    private Cursor getRatingMovieData_fromMovieId(Uri uri, String[] projection, String sortOrder) {
+    //
+    // e.g. uri --> "content://com.example.android.myproject_2/moviereview/123"
+    //
+    private Cursor getMovieReviewData_FromMovieId(Uri uri, String[] projection, String sortOrder) {
 
         // get the last segment in the uri
-        String mMovieId = RatingEntry.getMovieId_fromUri(uri);
+        String mMovieId = X_MovieReviewEntry.getMovieId_FromMovieReviewUri(uri);
 
-        SQLiteDatabase readSqLtDB = mvsSqLtOpnHlpr.getReadableDatabase();
+        SQLiteDatabase read_SQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
 
         // call database and query for the row with such mMovieId
-        return ratedSQLtQryBuldr.query(
-                                    readSqLtDB
-                                    , projection
-                                    , sRating_MovieId_Selection
-                                    , new String[]{mMovieId}
-                                    , null
-                                    , null
-                                    , sortOrder
+        return x_movieReview_SQLiteQueryBuilder.query(
+                read_SQLiteDB
+                , projection
+                , selection_MovieReview_WithMovieId
+                , new String[]{mMovieId}
+                , null
+                , null
+                , sortOrder
         );
     }
 
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//    static {
-//        mMovie_SQLiteQueryBuilder = new SQLiteQueryBuilder();
-//
-//        mMovie_SQLiteQueryBuilder.setTables(
-//            MovieEntry.TABLE_NAME
-//        );
-//    }
-/*
-    // movie.votecount = ?
-    private static final String sMovie_VoteCount_Selection =
-        MovieEntry.TABLE_NAME + "."+ MovieEntry.COL_VOTECOUNT + " = ? ";
+    //------------------------------------//
+    //---------- Movie Video -------------//
+    //------------------------------------//
+    // Table_X_MovieVideo.MovieID = ?
+    //
+    private static final String selectMovieVideo_WithMovieId =
+            X_MovieVideosEntry.TABLE_NAME + "." + X_MovieVideosEntry.COL_MV_ID + " = ?";
+    //
+    // e.g. uri --> "content://com.example.android.myproject_2/movievideo/123"
+    //
+    private Cursor getMovieVideoKey_FromMovieId(Uri uri, String[] projection, String sortOrder) {
 
-    private Cursor getMovieBy_VoteCount
-        ( Uri uri, String[] projection, String sortOrder )
-    {
-// get
-        return null;
+        // get the last segment in the uri
+        String movieId = X_MovieVideosEntry.getMovieId_FromMovieVideoUri(uri);
+
+        SQLiteDatabase readSQLiteDataBase = mvsSqLtOpnHlpr.getReadableDatabase();
+
+        String selection = selectMovieVideo_WithMovieId;
+
+        String[] selectionArg = new String[]{movieId};
+
+        // call database and query for the row with such movieId
+        return x_movieVideo_SQLiteQueryBuilder.query(
+                      readSQLiteDataBase
+                      , projection              // get some columns
+                      , selection               // selection
+                      , selectionArg            // selectionArg
+                      , null
+                      , null
+                      , sortOrder
+              );
     }
-*/
+    //------------------------------------//
+    //---------- Movie Favourites -------------//
+    //------------------------------------//
+    // Table_X_MovieFavourites.MovieID = ?
+    //
 
     // + onCreate runs on the UI thread, so you should avoid executing any long-lasting tasks in this method.
     // + Your content provider is usually created at the start of your app.
@@ -266,220 +256,193 @@ public class MovieProvider extends ContentProvider {
     public String getType(Uri uri) {
 
         // Use the Uri Mather to determine what kind of URI this is.
-        final int aMatch = sUriMatcher.match(uri);
+        final int match = sUriMatcher.match(uri);
 
-        switch (aMatch) {
+        switch (match) {
 
-            case POPULAR_:          return PopularEntry.POPULARITY_MULTI_ITEM_CURSOR;
-            case POPULAR_MOVIEID:   return PopularEntry.POPULARITY_SINGLE_ITEM_CURSOR;
+			case CNST_MOVIE_REVIEW_:        return X_MovieReviewEntry.DIR_CURSOR_X_MOVIEREVIEW;
+            case CNST_MOVIE_REVIEW_ID_:     return X_MovieReviewEntry.ITEM_CURSOR_X_MOVIEREVIEW;
 
-            case MOVIEINFO_:        return MovieInfoEntry.DIR_CURSOR_MOVIEINFO;
+            case CNST_MOVIE_INFO_:        	return X_MovieInfoEntry.DIR_CURSOR_X_MOVIEINFO;
+            case CNST_MOVIE_INFO_ID_:       return X_MovieInfoEntry.ITEM_CURSOR_X_MOVIEINFO;
 
-            case RATING_:           return RatingEntry.RATING_MULTI_ITEM_CURSOR;
-            case RATING_MOVIEID:    return RatingEntry.RATING_SINGLE_ITEM_CURSOR;
-            //    case MOVIE_DIR:         return MovieEntry.DIR_CURSOR_MOVIE;
+            case CNST_MOVIE_VIDEO_:         return X_MovieVideosEntry.DIR_CURSOR_X_MOVIEVIDEO;
+            case CNST_MOVIE_VIDEO_ID_:      return X_MovieVideosEntry.ITEM_CURSOR_X_MOVIEVIDEO;
+
+            case CNST_MOVIE_FAVOURITES_:    return X_MovieFavouritesEntry.FAVOURITES_MULTI_ITEM_CURSOR;
+            case CNST_MOVIE_FAVOURITES_ID_: return X_MovieFavouritesEntry.FAVOURITES_SINGLE_ITEM_CURSOR;
 
             default:
                 throw new UnsupportedOperationException("Error: Unknown Uri " + uri);
         }
-        //return null;
     }
 
+    //
     // ContentResolver > "CONTENT PROVIDER" > Database
+    // reference, https://developer.android.com/reference/android/content/ContentProvider.html
+    // reference, https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.html
     //@Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         Cursor retCursor;
-        SQLiteDatabase rdblSqLtDB = mvsSqLtOpnHlpr.getReadableDatabase();
-
-        // Log.d(LOG_TAG, "---- Query() - :: " + uri.toString());  // tky add
+        SQLiteDatabase rdbl_SQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
+        final int match = sUriMatcher.match(uri);
 
         // The switch statement gets a URI, it will determine what kind of request it is,
         // and query the database accordingly.
-        switch (sUriMatcher.match(uri)) {
+        switch (match) {
 
-            //  Popularity/*
-            case POPULAR_MOVIEID: {
-                retCursor = getPopularMovieData_fromMovieId(uri, projection, sortOrder);
+            //---  movieinfo/*
+            case CNST_MOVIE_INFO_ID_: {
+                 retCursor = getMovieInfoData_FromMovieId(uri, projection, sortOrder);
                 break;
             }
-            //  Rating/*
-            case RATING_MOVIEID: {
-                retCursor = getRatingMovieData_fromMovieId(uri, projection, sortOrder);
+		    //---  moviereview/*
+            case CNST_MOVIE_REVIEW_ID_: {
+                retCursor = getMovieReviewData_FromMovieId(uri, projection, sortOrder);
                 break;
             }
-            // Popularity/
-            case POPULAR_: {
-                //Log.d(LOG_TAG, "==>> 264   Query/Popular, Uri: " + uri.toString());  // tky add
-
-                //   retCursor = getPopularMoviesData(uri, projection, selection, selectionArgs, sortOrder);
-                retCursor = rdblSqLtDB.query(
-                                                PopularEntry.TABLE_NAME,
-                                                projection,
-                                                selection,
-                                                selectionArgs,
-                                                null,
-                                                null,
-                                                sortOrder
-                                            );
-                // 26th Aprill, add this , error message about the squaredview
-                //Log.d(LOG_TAG, "<<== 277   Query/Popular, selection:-----------------------");
-//                Log.d(LOG_TAG, "---- 265 In  Query, selection:" + selection + "...selectionArg:" +selectionArgs[0]
-//                    + " ... " + " sortOrder:" + sortOrder);  // tky add
-
-                //Log.d(LOG_TAG, "xxxx Out Query, Uri: " + uri.toString());  // tky add
-//                retCursor =  popularSqLtQryBldr.query(
-//                    mvsSqLtOpnHlpr.getReadableDatabase()
-//                    , projection
-//                    , selection
-//                    , selectionArgs
-//                    , null
-//                    , null
-//                    , sortOrder
-//                );
+            //--- movievideo/*
+            case CNST_MOVIE_VIDEO_ID_: {
+                retCursor = getMovieVideoKey_FromMovieId(uri, projection, sortOrder);
                 break;
             }
-            case MOVIEINFO_: {
-                //Log.d(LOG_TAG, "==>> 294  Query/MovieInfo, Uri: " + uri.toString());  // tky add
-                //Log.d(LOG_TAG, "==>> 295  Query/MovieInfo, selection:" + selection + "...selectionArg:"+selectionArgs[0] + " ... " + " sortOrder:" + sortOrder );
-                //Log.d(LOG_TAG, "---- In  Query, MovieInfoUri: " + uri.toString());  // tky add
-                // retCursor = null;
-                retCursor = rdblSqLtDB.query(
-                                            MovieInfoEntry.TABLE_NAME,
-                                            projection,
-                                            selection,
-                                            selectionArgs,
-                                            null,
-                                            null,
-                                            sortOrder
-                                        );
+            //--- moviefavourites/*
+            case CNST_MOVIE_FAVOURITES_ID_:{
+                retCursor = null;  /// tky  need to code
+            }
+            break;
 
-                //Log.d(LOG_TAG, "<<== 308   Query/MovieInfo, selection:-----------------------");
-                //Log.d(LOG_TAG, "xxxx Out Query, MovieInfoUri: " + uri.toString());  // tky add
+            //---  moviereview/
+            case CNST_MOVIE_REVIEW_: {
+
+              //retCursor = getMovieReviewData(uri, projection, selection, selectionArgs, sortOrder);
+                retCursor = rdbl_SQLiteDB.query(
+                                    X_MovieReviewEntry.TABLE_NAME, projection,
+                                    selection, selectionArgs,
+                                    null, null, sortOrder
+                            );
                 break;
             }
-
-            //  Rating
-            case RATING_: {
-                /**/
-                // Log.d(LOG_TAG, "---- RatingUri: " + uri.toString());  // tky add
-                retCursor = rdblSqLtDB.query(
-                                            RatingEntry.TABLE_NAME,
-                                            projection,
-                                            selection,
-                                            selectionArgs,
-                                            null,
-                                            null,
-                                            sortOrder
-                                        );
-                 /**/
-                //retCursor = null;
+            // reference, Cursor query (String table,String[] columns,String selection,String[] selectionArgs,
+            //                          String groupBy, String having, String orderBy, String limit)
+            //---  movieinfo/
+            case CNST_MOVIE_INFO_: {
+                retCursor = rdbl_SQLiteDB.query(
+                                    X_MovieInfoEntry.TABLE_NAME, projection,
+                                    selection, selectionArgs,
+                                    null, null,
+                                    sortOrder, CURSOR_LIMIT
+                            );
                 break;
             }
-
-            /*
-            // Movie/
-            case MOVIE_DIR: {
-                retCursor = null;
+            //---  movievideo/
+            case CNST_MOVIE_VIDEO_: {
+                retCursor = rdbl_SQLiteDB.query(
+                                    X_MovieVideosEntry.TABLE_NAME, projection,
+                                    selection, selectionArgs,
+                                    null, null, sortOrder
+                            );
                 break;
             }
-            */
+            //--- moviefavourites/
+            case CNST_MOVIE_FAVOURITES_:{
+
+                retCursor = rdbl_SQLiteDB.query(
+                        X_MovieFavouritesEntry.TABLE_NAME,
+                        projection, selection, selectionArgs, null, null, sortOrder);
+                }
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
 
         }
-        if (retCursor == null) {
-           // Log.d(LOG_TAG, "---- retCursor is NULL");
-        } else {
-           // Log.d(LOG_TAG, "---- retCursor is not NULL");
-        }
-        // to uncomment later -- retCursor cannot be null
+
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         getContext().getContentResolver().notifyChange(uri, null);
         return retCursor;
     }
 
-
+    //
+    // ContentResolver > "CONTENT PROVIDER" > Database
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
-        final SQLiteDatabase wrtblSqlDb = mvsSqLtOpnHlpr.getWritableDatabase();
+        final SQLiteDatabase wrtbl_SQLiteDB = mvsSqLtOpnHlpr.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsUpdated;
 
         switch (match) {
-            case POPULAR_: {
-                rowsUpdated = wrtblSqlDb.update(PopularEntry.TABLE_NAME, values, selection, selectionArgs);
 
-                //Log.d(LOG_TAG, "---- update/uri: " + uri.toString() + " ++++ rowsUpdated: " + rowsUpdated); // tky add
+			case CNST_MOVIE_REVIEW_: {
+                rowsUpdated = wrtbl_SQLiteDB.update(X_MovieReviewEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
-            case MOVIEINFO_: {
-                rowsUpdated = wrtblSqlDb.update(MovieInfoEntry.TABLE_NAME, values, selection, selectionArgs);
+            case CNST_MOVIE_INFO_: {
+                rowsUpdated = wrtbl_SQLiteDB.update(X_MovieInfoEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
-            case RATING_: {
-                rowsUpdated = wrtblSqlDb.update(RatingEntry.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        //getContext().getContentResolver().notifyChange(uri, null);
         if (rowsUpdated != 0) {
-            //    if (rowsUpdated > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsUpdated;
-        //return 0;
     }
 
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
 
-        SQLiteDatabase wrtblSqLtDb = mvsSqLtOpnHlpr.getWritableDatabase();
+        SQLiteDatabase wrtbl_SQLiteDB = mvsSqLtOpnHlpr.getWritableDatabase();
         Uri retUri;
 
         switch (sUriMatcher.match(uri)) {
-            //---------------------
-            case POPULAR_: {
 
-                //Log.d(LOG_TAG, "----- insert()/POPULAR");
-                long _id = wrtblSqLtDb.insert(PopularEntry.TABLE_NAME, null, values);
-                //Log.d(LOG_TAG, "----- insert()/POPULAR inserted into PopularEntry _id = " + _id);
+            case CNST_MOVIE_VIDEO_: {
+                long _id = wrtbl_SQLiteDB.insert(X_MovieVideosEntry.TABLE_NAME, null, values);
+
                 if (_id > 0) {
-                    retUri = PopularEntry.buildUri_PopularityWithId(_id);
+                    retUri = X_MovieVideosEntry.buildUri_X_MovieVideoWithId(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
-            //---------------------
-            case MOVIEINFO_: {
-                //Log.d(LOG_TAG, "----- insert()/MOVIEINFO");
-                long _id = wrtblSqLtDb.insert(MovieInfoEntry.TABLE_NAME, null, values);
-                //Log.d(LOG_TAG, "----- insert()/MOVIEINFO inserted into MovieInfoEntry _id = " + _id);
+            case CNST_MOVIE_REVIEW_: {
+
+                long _id = wrtbl_SQLiteDB.insert(X_MovieReviewEntry.TABLE_NAME, null, values);
+
                 if (_id > 0) {
-                    retUri = MovieInfoEntry.buildUri_MovieInfo_Id(_id);
+                    retUri = X_MovieReviewEntry.buildUri_X_MovieReviewWithId(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
-            //---------------------
-            case RATING_: {
-                long _id = wrtblSqLtDb.insert(RatingEntry.TABLE_NAME, null, values);
+
+            case CNST_MOVIE_INFO_: {
+
+                long _id = wrtbl_SQLiteDB.insert(X_MovieInfoEntry.TABLE_NAME, null, values);
+
                 if (_id > 0) {
-                    retUri = RatingEntry.buildUri_RatingWithId(_id);
+                    retUri = X_MovieInfoEntry.buildUri_X_MovieInfoWithId(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
+                break;
             }
-            break;
+
+            /*case CNST_MOVIE_FAVOURITES_: {
+
+            }*/
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -496,25 +459,28 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
 
-        final SQLiteDatabase wrtblSqLtDb = mvsSqLtOpnHlpr.getWritableDatabase();
+        final SQLiteDatabase wrtbl_SQLiteDB = mvsSqLtOpnHlpr.getWritableDatabase();
         int rowsDeleted;
 
         if (selection == null) selection = "1";
 
         switch (sUriMatcher.match(uri)) {
 
-            case POPULAR_: {
-                rowsDeleted = wrtblSqLtDb.delete(PopularEntry.TABLE_NAME, selection, selectionArgs);
+			case CNST_MOVIE_REVIEW_: {
+                rowsDeleted = wrtbl_SQLiteDB.delete(X_MovieReviewEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
-            case MOVIEINFO_: {
-                rowsDeleted = wrtblSqLtDb.delete(MovieInfoEntry.TABLE_NAME, selection, selectionArgs);
+
+            case CNST_MOVIE_INFO_: {
+                rowsDeleted = wrtbl_SQLiteDB.delete(X_MovieInfoEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
-            case RATING_: {
-                rowsDeleted = wrtblSqLtDb.delete(RatingEntry.TABLE_NAME, selection, selectionArgs);
+
+            case CNST_MOVIE_VIDEO_: {
+                rowsDeleted = wrtbl_SQLiteDB.delete(X_MovieVideosEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri : " + uri);
         }
@@ -535,13 +501,32 @@ public class MovieProvider extends ContentProvider {
         int returnCount = 0;
 
         switch (match) {
-            case POPULAR_: {
+
+            case CNST_MOVIE_VIDEO_: {
                 wrtblSqLtDb.beginTransaction();
                 returnCount = 0;
-               // int returnCount = 0;
                 try {
                     for (ContentValues mvalue : values) {
-                        long _id = wrtblSqLtDb.insert(MovieContract.PopularEntry.TABLE_NAME, null, mvalue);  // ??
+                        long _id = wrtblSqLtDb.insert(X_MovieVideosEntry.TABLE_NAME, null, mvalue);
+                        if (_id != 1) {
+                            returnCount++;
+                        }
+                    }
+                    wrtblSqLtDb.setTransactionSuccessful();
+
+                } finally {
+                    wrtblSqLtDb.endTransaction();
+                }
+                break;
+            }
+
+			case CNST_MOVIE_REVIEW_: {
+                wrtblSqLtDb.beginTransaction();
+                returnCount = 0;
+
+                try {
+                    for (ContentValues mvalue : values) {
+                        long _id = wrtblSqLtDb.insert(X_MovieReviewEntry.TABLE_NAME, null, mvalue);  // ??
                         if (_id != -1) {
                             returnCount++;
                         }
@@ -550,17 +535,15 @@ public class MovieProvider extends ContentProvider {
                 } finally {
                     wrtblSqLtDb.endTransaction();
                 }
-             ///   getContext().getContentResolver().notifyChange(uri, null);
-             ///   return returnCount;
             }
             break;
-            //
-            case MOVIEINFO_: {
+
+            case CNST_MOVIE_INFO_: {
                 wrtblSqLtDb.beginTransaction();
                 returnCount = 0;
                 try {
                     for (ContentValues mvalue : values) {
-                        long _id = wrtblSqLtDb.insert(MovieContract.MovieInfoEntry.TABLE_NAME, null, mvalue);  // ??
+                        long _id = wrtblSqLtDb.insert(X_MovieInfoEntry.TABLE_NAME, null, mvalue);  // ??
                         if (_id != -1) {
                             returnCount++;
 
@@ -572,13 +555,14 @@ public class MovieProvider extends ContentProvider {
                 }
             }
             break;
+
             default:
-                //return super.bulkInsert(uri, values);
                 returnCount = super.bulkInsert(uri, values);
                 break;
 
         }
         getContext().getContentResolver().notifyChange(uri, null);
+
         return returnCount;
     }
 }
