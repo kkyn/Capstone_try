@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.myproject_2">
+    package="com.example.android.fnlprjct">
 
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Main_Activity"
-            android:label="MyProject_2">
+            android:label="@string/app_name1"> <!-- also refers to the label name of the start-icon -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,7 +44,7 @@
 
 
         <!-- The SyncAdapter's dummy authentication service -->
-        <service android:name="com.example.android.myproject_2.sync.MoviesAuthenticatorService">
+        <service android:name=".sync.MoviesAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
@@ -54,7 +54,7 @@
         </service>
         <!-- The SyncAdapter service -->
         <service
-            android:name="com.example.android.myproject_2.sync.MovieSyncService"
+            android:name=".sync.MovieSyncService"
             android:exported="true"
            >
             <!--  android:process=":sync" -->
@@ -68,7 +68,7 @@
 
         <!-- Step-3b -->
         <provider
-            android:authorities="com.example.android.myproject_2"
+            android:authorities="com.example.android.fnlprjct"
             android:name=".data.MovieProvider"
             android:syncable="true"/>
 

@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">MyProject_2</string>
+    <string name="app_name">My Final Project</string>
+
+    <string name="app_name1">My FinalProject</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="highest_rated">Highest Rated</string>
@@ -9,7 +11,8 @@
 
     <!-- SyncAdapter related -->
     <string name="sync_account_type">movies.example.com</string> <!-- name something different -->
-    <string name="content_authority">com.example.android.myproject_2</string> <!-- name of the content provider -->
+    <string name="content_authority">com.example.android.fnlprjct</string> <!-- name of the content provider -->
+    <!--<string name="content_authority">com.example.android.myproject_2</string>--> <!-- name of the content provider -->
 
     <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
 
