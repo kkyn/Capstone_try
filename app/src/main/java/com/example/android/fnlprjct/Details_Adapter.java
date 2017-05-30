@@ -33,7 +33,7 @@ public class Details_Adapter extends RecyclerView.Adapter<Details_Adapter.Detail
             switch (viewType) {
                 case VIEW_TYPE_A: {
 
-                    // Log.d(LOG_TAG, "-- Mv_RVwAdapter/onCreateViewHolder() --");
+                    // Log.d(LOG_TAG, "-- MvRVwAdapter/onCreateViewHolder() --");
                     //=================================
                     layout_id = R.layout.cardview_review;
                     //=================================

@@ -2,6 +2,7 @@ package com.example.android.fnlprjct;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,38 +10,60 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.squareup.picasso.Picasso;
+
+import android.support.v7.graphics.Palette;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /*
  * Created by kkyin on 8/5/2016.
  */
-public class Mv_RVwAdapter extends RecyclerView.Adapter<Mv_RVwAdapter.Mv_ViewHolder>
+public class MvRVwAdapter extends RecyclerView.Adapter<MvRVwAdapter.MvViewHolder>
 {
 
     private static final int VIEW_TYPE_A = 0;
 
     private Cursor mCursor;
-    public static final String LOG_TAG = Mv_RVwAdapter.class.getSimpleName();
+    public static final String LOG_TAG = MvRVwAdapter.class.getSimpleName();
 
+    /*@BindView(R.id.poster_imageview)
+    ImageView poster_imageview;*/
     //------------------------------------------------------
     //-------- ViewHolder stuff (begin) --------------------
     //------------------------------------------------------
     /**
      * Cache of the children views for a movies list item.
      */
-    public class Mv_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MvViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        /*@InjectView(R.id.poster_imageview)
+        ImageView poster_imageview;*/
 
-        public final ImageView imageView;
+        @BindView(R.id.poster_imageview)
+        //ImageView poster_imageview;
+        DynamicHeightNetworkImageView poster_imageview;
+
+        // public final ImageView imageView;
+        // public final DynamicHeightNetworkImageView imageView;
         /*public final Button button_Review;*/
 
-        public Mv_ViewHolder(View itemView) {
+        public MvViewHolder(View itemView) {
             super(itemView);
 
-            //=============================
-            imageView = (ImageView) itemView.findViewById(R.id.frgmntmv_imageview); /*frgmntmv_imageview*/
-            imageView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
+            poster_imageview.setOnClickListener(this);
+
+        //    poster_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
+
+         //       imageView = (DynamicHeightNetworkImageView) itemView.findViewById(R.id.poster_imageview); /*frgmntmv_imageview*/
+         //       imageView.setOnClickListener(this);
+
+        ///    imageView = (ImageView) itemView.findViewById(R.id.poster_imageview); /*frgmntmv_imageview*/
+        ///    imageView.setOnClickListener(this);
 //            imageView.setScaleType(ImageView.ScaleType.MATRIX);
 //            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 //            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
@@ -58,7 +81,7 @@ public class Mv_RVwAdapter extends RecyclerView.Adapter<Mv_RVwAdapter.Mv_ViewHol
             Log.d(LOG_TAG, "** Movie_ViewHolder.onClick");
 
             switch (view.getId()){
-                case R.id.frgmntmv_imageview :
+                case R.id.poster_imageview : /*frgmntm_imageview*/
                     onItemClickHandler_0.onItemClick_0(this); // 'this' refers to this 'ViewHolder'
                     break;
                 default: break;
@@ -77,11 +100,11 @@ public class Mv_RVwAdapter extends RecyclerView.Adapter<Mv_RVwAdapter.Mv_ViewHol
 
     // Declaration of interface
     public interface OnItemClickHandler_0 {
-        void onItemClick_0(Mv_ViewHolder viewHolder);
+        void onItemClick_0(MvViewHolder viewHolder);
     }
 
     // * provide  a suitable constructor( depends on the kind of data-set / how u want to interface ? )
-    public Mv_RVwAdapter(Context context, OnItemClickHandler_0 ref_onItemClickHandler_0) {
+    public MvRVwAdapter(Context context, OnItemClickHandler_0 ref_onItemClickHandler_0) {
         // super(context);
         this.context = context;
         this.onItemClickHandler_0 = ref_onItemClickHandler_0;
@@ -91,17 +114,14 @@ public class Mv_RVwAdapter extends RecyclerView.Adapter<Mv_RVwAdapter.Mv_ViewHol
     // * Called when RecyclerView needs a new 'RecyclerView.ViewHolder' of the given type to represent an item.
     // * Locate new views( invoked by the LayoutManager )
     @Override // RecyclerView.Adapter basic requirement
-    public Mv_ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MvViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (parent instanceof RecyclerView) {
 
             int layout_id = -1;
             switch (viewType) {
                 case VIEW_TYPE_A: {
-
-                    //=================================
                     layout_id = R.layout.movie_poster; /*cardview_movie*/
-                    //=================================
                     break;
                 }
             }
@@ -111,11 +131,11 @@ public class Mv_RVwAdapter extends RecyclerView.Adapter<Mv_RVwAdapter.Mv_ViewHol
             // * Control whether a view can take focus
             view.setFocusable(true);
 
-            Mv_ViewHolder movieViewHolder = new Mv_ViewHolder(view);
+            MvViewHolder mvViewHolder = new MvViewHolder(view);
 
-            view.setTag(movieViewHolder);
+            view.setTag(mvViewHolder);
 
-            return movieViewHolder;
+            return mvViewHolder;
         }
         else {
             throw new RuntimeException("Not bound to RecyclerViewSelection");
@@ -131,21 +151,71 @@ public class Mv_RVwAdapter extends RecyclerView.Adapter<Mv_RVwAdapter.Mv_ViewHol
     //
     // * param holder <-- output/returned ViewHolder-data from method onCreateViewHolder{..} ??!!
     @Override // RecyclerView.Adapter basic requirement
-    public void onBindViewHolder(Mv_ViewHolder holder, int position) {
+    public void onBindViewHolder(MvViewHolder holder, int position) {
         // - get and bind 'that'-element from the data-set at this 'position'
         // - replace the contents of the view with 'that'-element
         // holder.xxx ( data-set(position) ) ;
 
         // bind the view associated with the 'position'
         //     .into(holder.imageView);
+
+        //***********************
         if (mCursor.moveToPosition(position)) {
 
-            Picasso.with(context)
-                    .load(mCursor.getString(Main_Fragment.COLUMN_POSTERLINK))
-                    .placeholder(R.drawable.sample_1)
-                    .error(R.drawable.sample_0)
-                    .into(holder.imageView);
+            ImageLoader imageLoader = ImageLoaderHelper.getInstance(context).getImageLoader();
 
+            // Get Image-info from ImageLoader-object,
+            // with the given image's-Url-id and interface 'pointer'/ (cllback).
+
+            String stringUrl = mCursor.getString(Main_Fragment.COLUMN_POSTERLINK);
+
+            // Call Volley's imageloader get-method to get image from the Web
+            ImageLoader.ImageContainer myImageContainer = imageLoader.get
+                (
+                    stringUrl,
+                    new ImageLoader.ImageListener() {
+
+                        // Callback method
+                        @Override
+                        public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
+
+                            Bitmap bitmap = imageContainer.getBitmap();
+
+                            /*if (bitmap != null) {
+                                Palette p = Palette.generate(bitmap, 12);
+                                mMutedColor = p.getDarkMutedColor(0xFF770000); // 0xFF333333
+                                holder.bar_layout.setBackgroundColor(mMutedColor);
+                            }*/
+                        }
+
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                        }
+                    }
+                );
+            //----------------------------------------------
+            // -- thumb-nail-View --
+            // .setImageUrl -- define in ImageView
+            holder.poster_imageview.setImageUrl(stringUrl,imageLoader);
+            holder.poster_imageview.setAspectRatio(0.66f);
+
+            //***********************
+            /*Picasso.with(context)
+                .load(mCursor.getString(Main_Fragment.COLUMN_POSTERLINK))
+
+                // .resize(600,900) // tablet, portrait //resize(horizontalSize, verticalSize)
+                .resize(600, 700) // tablet, landscape
+                //.onlyScaleDown()
+                //.centerCrop() // or
+                .centerInside() // or
+
+                //.fit() // no
+                //.resizeDimen(500,600) // no
+
+                .placeholder(R.drawable.sample_1)
+                .error(R.drawable.sample_0)
+                .into(holder.poster_imageview); *//*holder.imageView*//**//*poster_imageview*//*
+            */
 
         }
     }

@@ -33,7 +33,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.Bind;
+//import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -67,7 +68,8 @@ public class MovieDetails_Fragment extends Fragment
     public boolean isFavouriteEnabled = false;
 
     ///////////////////////////////////////////////
-    private static final String[] PROJECTION_X_MOVIEINFO = new String[]{
+    private static final String[] PROJECTION_MOVIE_INFO =
+        new String[]{
             MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry._ID,
             MovieContract.MovieInfoEntry.COL_MV_ID,
             MovieInfoEntry.COL_FAVOURITES,
@@ -90,7 +92,8 @@ public class MovieDetails_Fragment extends Fragment
     public static final int INDX_MOVIE_RATING = 7;
 
     ///////////////////////////////////////////////
-    private static final String[] PROJECTION_X_MOVIEREVIEW = new String[]{
+    private static final String[] PROJECTION_MOVIE_REVIEW =
+        new String[]{
             MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
             MovieReviewEntry.TABLE_NAME + "." + MovieContract.MovieReviewEntry.COL_MV_ID,
             MovieReviewEntry.COL_REVIEWER,
@@ -103,20 +106,20 @@ public class MovieDetails_Fragment extends Fragment
 
     ///////////////////////////////////////////////
 
-    @Bind(com.example.android.fnlprjct.R.id.movie_title_textView)
-    TextView movie_title_textView;
-    @Bind(com.example.android.fnlprjct.R.id.thumbnail_imageView)
-    ImageView movie_thumbnail_imageview;
-    @Bind(com.example.android.fnlprjct.R.id.movie_release_date_textView)
-    TextView movie_release_date_textView;
-    @Bind(com.example.android.fnlprjct.R.id.movie_ratings)
-    TextView movie_ratings;
-    @Bind(com.example.android.fnlprjct.R.id.movie_synopsis)
-    TextView movie_synopsis;
-    @Bind(com.example.android.fnlprjct.R.id.video_button)
-    Button movie_video_button;
-    @Bind(R.id.favourite_button)
-    ImageButton movie_favourite_button;
+    @BindView(R.id.movietitle_tv)
+    TextView movietitle;
+    @BindView(R.id.moviethumbnail_iv)
+    ImageView moviethumbnail;
+    @BindView(R.id.moviereleasedate_tv)
+    TextView moviereleasedate;
+    @BindView(R.id.movieratings_tv)
+    TextView movieratings;
+    @BindView(R.id.moviesynopsis_tv)
+    TextView moviesynopsis;
+    @BindView(R.id.movievideo_btn)
+    Button movievideo;
+    @BindView(R.id.favourite_btn)
+    ImageButton moviefavourite;
 
     private TextView mTextView;
 
@@ -219,7 +222,7 @@ public class MovieDetails_Fragment extends Fragment
     }
 
     //-------------------------------------------
-    //-- for View.onClickListener, movie_video_button.setOnClickListener(this);
+    //-- for View.onClickListener, movievideo.setOnClickListener(this);
     //-------------------------------------------
     @Override
     public void onClick(View view) {
@@ -228,9 +231,9 @@ public class MovieDetails_Fragment extends Fragment
 
         switch (view.getId()) {
 
-            case R.id.video_button :
+            case R.id.movievideo_btn:
 
-            case R.id.thumbnail_imageView :
+            case R.id.moviethumbnail_iv:
 
                 //...................
                 // TODO: call DBAsyncTAsk , call method FetchComplete()
@@ -244,18 +247,18 @@ public class MovieDetails_Fragment extends Fragment
 
                 break;
 
-            case R.id.favourite_button :
+            case R.id.favourite_btn:
 
                 //movieID = mUri.getPathSegments().get(1);
 
                 isFavouriteEnabled = checkFavourites(movieID);
 
                 if (!isFavouriteEnabled) {
-                    movie_favourite_button.setImageResource(android.R.drawable.btn_star_big_on);
+                    moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
                     saveToFavourites(movieID);
                 }
                 else {
-                    movie_favourite_button.setImageResource(android.R.drawable.btn_star_big_off);
+                    moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
                     removeFromFavourites(movieID);
                 }
 
@@ -286,9 +289,9 @@ public class MovieDetails_Fragment extends Fragment
 
         ButterKnife.bind(this, rootView);
 
-        movie_video_button.setOnClickListener(this);
-        movie_thumbnail_imageview.setOnClickListener(this);
-        movie_favourite_button.setOnClickListener(this);
+        movievideo.setOnClickListener(this);
+        moviethumbnail.setOnClickListener(this);
+        moviefavourite.setOnClickListener(this);
 
         //++++++++++++++++++++++++++++++++++++++
         getLoaderManager().initLoader(DETAIL_MOVIE_LOADER, null, myTry_0);
@@ -361,7 +364,7 @@ public class MovieDetails_Fragment extends Fragment
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-            String[] mProjection = PROJECTION_X_MOVIEINFO;
+            String[] mProjection = PROJECTION_MOVIE_INFO;
 
             return new CursorLoader(getActivity(), mUri, mProjection, null, null, null);
         }
@@ -371,23 +374,23 @@ public class MovieDetails_Fragment extends Fragment
 
             if (cursor != null && cursor.moveToFirst()) {
 
-                movie_title_textView.setText(cursor.getString(INDX_MOVIE_TITLE));
-                movie_release_date_textView.setText(cursor.getString(INDX_RELEASEDATE));
-                movie_ratings.setText(cursor.getString(INDX_MOVIE_RATING));
-                movie_synopsis.setText(cursor.getString(INDX_OVERVIEW));
+                movietitle.setText(cursor.getString(INDX_MOVIE_TITLE));
+                moviereleasedate.setText(cursor.getString(INDX_RELEASEDATE));
+                movieratings.setText(cursor.getString(INDX_MOVIE_RATING));
+                moviesynopsis.setText(cursor.getString(INDX_OVERVIEW));
 
                 Picasso.with(getContext()).load(cursor.getString(INDX_BACKDROP_PATH))
                         .placeholder(R.drawable.sample_1)
                         .error(R.drawable.sample_0)
-                        .into(movie_thumbnail_imageview);
+                        .into(moviethumbnail);
 
                 int favouriteValue = cursor.getInt(INDX_FAVOURITES);
                 if (favouriteValue == 1) {
                     isFavouriteEnabled = true;
-                    movie_favourite_button.setImageResource(android.R.drawable.btn_star_big_on);
+                    moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
                 } else {
                     isFavouriteEnabled = false;
-                    movie_favourite_button.setImageResource(android.R.drawable.btn_star_big_off);
+                    moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
                 }
                 //...................
                 // TODO: call DBAsyncTAsk , call method FetchComplete()
@@ -413,7 +416,7 @@ public class MovieDetails_Fragment extends Fragment
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-            String[] mProjection = PROJECTION_X_MOVIEREVIEW;
+            String[] mProjection = PROJECTION_MOVIE_REVIEW;
             String mvID = mUri.getPathSegments().get(1);
             Uri xUri = ContentUris.withAppendedId(MovieContract.MovieReviewEntry.CONTENT_URI, Long.valueOf(mvID));
 

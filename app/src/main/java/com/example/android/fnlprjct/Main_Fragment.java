@@ -13,8 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.fnlprjct.data.MovieContract;
+import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MoviesSyncAdapter;
 
 /**
@@ -32,7 +32,7 @@ import com.example.android.fnlprjct.sync.MoviesSyncAdapter;
 public class Main_Fragment extends Fragment
                         implements LoaderManager.LoaderCallbacks<Cursor>
                                 , SharedPreferences.OnSharedPreferenceChangeListener
-                             //   ,Mv_RVwAdapter.OnItemClickHandler_0
+                             //   ,MvRVwAdapter.OnItemClickHandler_0
 {
     // constructor
     public Main_Fragment() {
@@ -42,11 +42,11 @@ public class Main_Fragment extends Fragment
     public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
-    private RecyclerView                mRecyclerView;
-    private Mv_RVwAdapter movie_Adapter;
+    private RecyclerView recyclerView;
+    private MvRVwAdapter rvAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private long itemID = 0;
-    private Uri mUri;
+    private Uri uri;
 
     private static final int MOVIE_FRAGMENT_ID = 0; // constant definition
 
@@ -64,32 +64,33 @@ public class Main_Fragment extends Fragment
         COLUMN_BACKDROP_PATH = 4;
     }
 
+    private static final String[] MOVIE_INFO_PROJECTION = new String[]{
+
+        MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
+        , MovieInfoEntry.COL_MV_ID
+        , MovieInfoEntry.COL_POPULARITY + " as sort_column"
+        , MovieInfoEntry.COL_POSTERLINK
+        , MovieInfoEntry.COL_BACKDROP_PATH
+    };
+
     // state the columns of data I want
-    private static final String[] X_MOVIE_INFO_PROJECTION_1 = new String[]{
+    private static final String[] MOVIE_INFO_PROJECTION_1 = new String[]{
 
-            MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry._ID
-            , MovieContract.MovieInfoEntry.COL_MV_ID
-            , MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
-            , MovieContract.MovieInfoEntry.COL_POSTERLINK
-            , MovieContract.MovieInfoEntry.COL_BACKDROP_PATH
+            MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
+            , MovieInfoEntry.COL_MV_ID
+            , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
+            , MovieInfoEntry.COL_POSTERLINK
+            , MovieInfoEntry.COL_BACKDROP_PATH
     };
 
-    private static final String[] X_MOVIE_INFO_PROJECTION = new String[]{
+    private static final String[] MOVIE_INFO_PROJECTION_2 = new String[]{
 
-            MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry._ID
-            , MovieContract.MovieInfoEntry.COL_MV_ID
-            , MovieContract.MovieInfoEntry.COL_POPULARITY + " as sort_column"
-            , MovieContract.MovieInfoEntry.COL_POSTERLINK
-            , MovieContract.MovieInfoEntry.COL_BACKDROP_PATH
-    };
-    private static final String[] X_MOVIE_INFO_PROJECTION_2 = new String[]{
-
-            MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry._ID
-            , MovieContract.MovieInfoEntry.COL_MV_ID
-            , MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
+            MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
+            , MovieInfoEntry.COL_MV_ID
+            , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
 //            ,MovieInfoEntry.COL_FAVOURITES
-            , MovieContract.MovieInfoEntry.COL_POSTERLINK
-            , MovieContract.MovieInfoEntry.COL_BACKDROP_PATH
+            , MovieInfoEntry.COL_POSTERLINK
+            , MovieInfoEntry.COL_BACKDROP_PATH
     };
     private static final String SELECTED_INDEX = "selected_index";
 
@@ -240,23 +241,23 @@ public class Main_Fragment extends Fragment
         String selection;
         String[] selectionArg ;
 
-        uri = MovieContract.MovieInfoEntry.CONTENT_URI;
+        uri = MovieInfoEntry.CONTENT_URI;
 
         String sortOrder;
         if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
-            sortOrder       = MovieContract.MovieInfoEntry.COL_POPULARITY + " DESC";
-            projection      = X_MOVIE_INFO_PROJECTION;
+            sortOrder       = MovieInfoEntry.COL_POPULARITY + " DESC";
+            projection      = MOVIE_INFO_PROJECTION;
             selection       = null;
             selectionArg    = null;
         } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
-            sortOrder       = MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
-            projection      = X_MOVIE_INFO_PROJECTION_1;
+            sortOrder       = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
+            projection      = MOVIE_INFO_PROJECTION_1;
             selection       = null;
             selectionArg = null;
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
-            sortOrder       = MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
-            projection      = X_MOVIE_INFO_PROJECTION_2;
-            selection       = MovieContract.MovieInfoEntry.COL_FAVOURITES + "=?";
+            sortOrder       = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
+            projection      = MOVIE_INFO_PROJECTION_2;
+            selection       = MovieInfoEntry.COL_FAVOURITES + "=?";
             selectionArg    = new String[]{"1"};
         }
 
@@ -293,10 +294,10 @@ public class Main_Fragment extends Fragment
          * Moves the query results into the adapter, causing the
          * RecyclerView fronting this adapter to re-display
         */
-        movie_Adapter.swapCursor(cursor);
+        rvAdapter.swapCursor(cursor);
 
         if (mPosition != RecyclerView.NO_POSITION) {
-            mRecyclerView.smoothScrollToPosition(mPosition);
+            recyclerView.smoothScrollToPosition(mPosition);
         }
     }
 
@@ -311,7 +312,7 @@ public class Main_Fragment extends Fragment
         /* Clears out the adapter's reference to the Cursor.
         * This prevents memory leaks.
         */
-        movie_Adapter.swapCursor(null);
+        rvAdapter.swapCursor(null);
     }
     //--------------------------------------------------------------
     //----------- LoaderCursor Stuff (End) -------------------------
@@ -371,7 +372,7 @@ public class Main_Fragment extends Fragment
     }
 
    /* private long getNewPosition(int position) {
-        return movie_Adapter.getItemId(position);
+        return rvAdapter.getItemId(position);
     }*/
 
 
@@ -381,27 +382,29 @@ public class Main_Fragment extends Fragment
     @Override //--- 1 ---
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        RecyclerView.LayoutManager mLayoutManager;
+        //GridLayoutManager gridlm;
+        //RecyclerView.LayoutManager layoutManager;
 
+        StaggeredGridLayoutManager stgrdgrdlm;
         //return super.onCreateView(inflater, container, savedInstanceState);
 
         //************************************************
         // tky comment ....
         // Implementation the interface, 'NAME'/OnItemClickHandler_0
         // with the method-name/onItemClick_0 found within the interface declaration.
-        Mv_RVwAdapter.OnItemClickHandler_0 ref_onItemClickHandler_0 =
+        MvRVwAdapter.OnItemClickHandler_0 ref_onItemClickHandler_0 =
 
-                new Mv_RVwAdapter.OnItemClickHandler_0() {
+                new MvRVwAdapter.OnItemClickHandler_0() {
                     @Override
-                    public void onItemClick_0(Mv_RVwAdapter.Mv_ViewHolder viewHolder) {
+                    public void onItemClick_0(MvRVwAdapter.MvViewHolder viewHolder) {
 
                         mPosition = viewHolder.getAdapterPosition();
 
-                        itemID = movie_Adapter.getItemId(mPosition);
-                        mUri = MovieContract.MovieInfoEntry.CONTENT_URI;
-                        mUri = ContentUris.withAppendedId(mUri, itemID);
+                        itemID = rvAdapter.getItemId(mPosition);
+                        uri = MovieInfoEntry.CONTENT_URI;
+                        uri = ContentUris.withAppendedId(uri, itemID);
 
-                        mCallBackListener.onItemSelectedInRecyclerView(mUri);
+                        mCallBackListener.onItemSelectedInRecyclerView(uri);
                         //-- or --
                         // ((CallBackListener) getActivity()).onItemSelectedInRecyclerView(tryUri);
 
@@ -409,22 +412,20 @@ public class Main_Fragment extends Fragment
 
         };
 
-        movie_Adapter = new Mv_RVwAdapter(getContext(), ref_onItemClickHandler_0);
+        rvAdapter = new MvRVwAdapter(getContext(), ref_onItemClickHandler_0);
         //************************************************
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_id4_movies);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.pane1_recyclerview);/*recyclerview_id4_movies*/
 
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        //mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        //gridlm = new GridLayoutManager(getContext(), 2);
+        stgrdgrdlm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
-        mLayoutManager = new GridLayoutManager(getContext(), 2);
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(movie_Adapter);
-        mRecyclerView.setHasFixedSize(true);
+        //recyclerView.setLayoutManager(gridlm);
+        recyclerView.setLayoutManager(stgrdgrdlm);
+        recyclerView.setAdapter(rvAdapter);
+        recyclerView.setHasFixedSize(true);
 
         if ((savedInstanceState != null) && savedInstanceState.containsKey(SELECTED_INDEX)) {
             mPosition = savedInstanceState.getInt(SELECTED_INDEX);

@@ -359,26 +359,44 @@ public class Utility {
         final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
         final String MOVIE_ = "movie";
         final String PARAM_API_KEY = "api_key";
+
+        final String REF_YEAR = "2017";
         /* */
 
         String sortBy = Utility.getPreferredSortSequence(context);
 
         // (1) build the Url
-        return
-                Uri.parse(MOVIE_DB_BASE_URL) // creates a Uri which parses the given encoded URI string
-                .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
+//        return
+//                Uri.parse(MOVIE_DB_BASE_URL) // creates a Uri which parses the given encoded URI string
+//                .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
+//
+//                .appendPath(DISCOVER_ /* discover/ */)
+//                .appendEncodedPath(MOVIE_ /* movie? */ )
+//
+//                .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
+//                .appendQueryParameter(PARAM_SORT_BY, sortBy) //.appendQueryParameter(PARAM_SORTBY, DESC)
+//
+//                //.appendQueryParameter("with_genres", "18")
+//                .appendQueryParameter(PARAM_COUNTRY, "US")
+//                .appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)
+//                .appendQueryParameter(PARAM_VOTECOUNT_GRTR, "50")
+//                .build();
 
-                .appendPath(DISCOVER_ /* discover/ */)
-                .appendEncodedPath(MOVIE_ /* movie? */ )
+        Uri uri = Uri.parse(MOVIE_DB_BASE_URL);
+        Uri.Builder builder = uri.buildUpon();
 
-                .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
-                .appendQueryParameter(PARAM_SORT_BY, sortBy) //.appendQueryParameter(PARAM_SORTBY, DESC)
+        builder
+            .appendPath(DISCOVER_)       // postfix a '/', e.g. discover/
+            .appendEncodedPath(MOVIE_)  // postfix a '?', e.g. movie?
+            .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY) // e.g. api_key=xxxxxx
+            .appendQueryParameter(PARAM_SORT_BY, sortBy)
+            .appendQueryParameter(PARAM_COUNTRY, "US")
+            .appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)
+            .appendQueryParameter(PARAM_VOTECOUNT_GRTR, "50");
 
-                //.appendQueryParameter("with_genres", "18")
-                .appendQueryParameter(PARAM_COUNTRY, "US")
-                .appendQueryParameter(PARAM_RELEASE_DATE, "2016")
-                .appendQueryParameter(PARAM_VOTECOUNT_GRTR, "50")
-                .build();
+        uri = builder.build();
+
+        return uri;
 
     }
 
@@ -405,8 +423,10 @@ public class Utility {
         // W342 = "w342/"; W500 = "w500/";
         // W780 = "w780/"; ORIGINAL = "original/";
 
+        final String W342 = "w342/";
         final String W780 = "w780/";
         final String W500 = "w500/";
+        final String ORIGINAL = "original/";
 
         Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
 
@@ -430,7 +450,7 @@ public class Utility {
             String mvPopularity  = movieInfo_JSONObject.getString(POPULARITY);
             String mvReleaseDate = movieInfo_JSONObject.getString(RELEASE_DATE);
 
-            String mvPosterPath   = TMDB_BASE_URL + W500 + movieInfo_JSONObject.getString(POSTER_PATH);
+            String mvPosterPath   = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + movieInfo_JSONObject.getString(POSTER_PATH);
             String mvBackDropPath = TMDB_BASE_URL + W780 + movieInfo_JSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
           //String mvBackDropPath = TMDB_BASE_URL + W500 + movieInfo_JSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
 

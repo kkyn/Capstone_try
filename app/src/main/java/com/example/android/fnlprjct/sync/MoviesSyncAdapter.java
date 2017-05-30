@@ -153,7 +153,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
 //xxyy            Log.d(LOG_TAG, "--------" + "sortBy ::: " + sortBy + "-----------");
 
-            long[] mMovieIDs  = Utility.get_MovieInfoFromJson(movieInfoInJsonStr,  sortBy, mContext); // ????
+            long[] mMovieIDs = Utility.get_MovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext); // ????
 
             Log.d(LOG_TAG, "  <--- OUTSIDE getMovieInfoFromJson(); ---");
 

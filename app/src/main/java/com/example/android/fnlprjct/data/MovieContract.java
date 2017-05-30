@@ -141,14 +141,14 @@ public class MovieContract {
         // cursor return >1 item from the URI/Content Provider.)
         // * Android uses a form, mime type, to describe the type returned by the URI.
         public static final String DIR_CURSOR_MOVIEREVIEW =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEREVIEW;
+            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEREVIEW;
 
         // * Item_Cursor string set cursor return 1 item, from the content provider.
         // (prefix, ContentResolver.CURSOR_ITEM_BASE_TYPE, implies
         // cursor return 1 item from the URI/Content Provider.)
         // * Android uses a form, mime type, to describe the type returned by the URI.
         public static  final String ITEM_CURSOR_MOVIEREVIEW =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEREVIEW;
+            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEREVIEW;
 
         //----------------------------------------
         // TABLE 2's name and column constants
@@ -199,10 +199,10 @@ public class MovieContract {
         public static Uri CONTENT_URI = URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEVIDEO).build();
         //--------------------------------------------------------------
         public static final String DIR_CURSOR_MOVIEVIDEO =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEVIDEO;
+            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEVIDEO;
 
         public static final String ITEM_CURSOR_MOVIEVIDEO =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEVIDEO;
+            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEVIDEO;
         //--------------------------------------------------------------
 
         //----------------------------------------
@@ -230,14 +230,10 @@ public class MovieContract {
         public static final Uri CONTENT_URI = URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEFAVOURITES).build();
 
         public static final String FAVOURITES_MULTI_ITEM_CURSOR =
-                                        ContentResolver.CURSOR_DIR_BASE_TYPE
-                                                + "/" + AUTHORITY
-                                                + "/" + MOVIEFAVOURITES;
+            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEFAVOURITES;
 
         public static final String FAVOURITES_SINGLE_ITEM_CURSOR =
-                                        ContentResolver.CURSOR_ITEM_BASE_TYPE
-                                                + "/" + AUTHORITY
-                                                + "/" + MOVIEFAVOURITES;
+            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEFAVOURITES;
 
         public static final String TABLE_NAME = "Table_Favourites";
         public static final String COL_MOV_ID = "MovieID";

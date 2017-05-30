@@ -27,7 +27,7 @@
             <!-- /////////////////////////////////////-->
 
             <TextView
-                android:id="@+id/movie_title_textView"
+                android:id="@+id/movietitle_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/mvdtls_textviewid_1"
@@ -38,32 +38,32 @@
             <!--android:textSize="30sp" android:text="@string/hello_world"-->
 
             <ImageView
-                android:id="@+id/thumbnail_imageView"
+                android:id="@+id/moviethumbnail_iv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/movie_title_textView" />
+                android:layout_below="@id/movietitle_tv" />
 
             <TextView
-                android:id="@+id/movie_release_date_textView"
+                android:id="@+id/moviereleasedate_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/thumbnail_imageView"
+                android:layout_below="@id/moviethumbnail_iv"
                 android:gravity="center_horizontal"
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/movie_ratings"
+                android:id="@+id/movieratings_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/movie_release_date_textView"
+                android:layout_below="@id/moviereleasedate_tv"
                 android:gravity="center_horizontal"
                 android:textSize="15dp" />
 
             <TextView
-                android:id="@+id/movie_synopsis"
+                android:id="@+id/moviesynopsis_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/movie_ratings"
+                android:layout_below="@id/movieratings_tv"
                 android:gravity="center_horizontal"
                 android:textColor="#000000"
                 android:textSize="20sp" />
@@ -72,11 +72,11 @@
                 android:id="@+id/mvdtl_space"
                 android:layout_width="10dp"
                 android:layout_height="2dp"
-                android:layout_below="@id/movie_synopsis"
+                android:layout_below="@id/moviesynopsis_tv"
                 android:layout_centerInParent="true" />
 
             <Button
-                android:id="@+id/video_button"
+                android:id="@+id/movievideo_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/mvdtl_space"
@@ -85,11 +85,11 @@
 
 
             <ImageButton
-                android:id="@+id/favourite_button"
+                android:id="@+id/favourite_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/mvdtl_space"
-                android:layout_toRightOf="@id/video_button"
+                android:layout_toRightOf="@id/movievideo_btn"
                 android:background="#00ffffff"
                 android:src="@android:drawable/btn_star" />
 
@@ -100,7 +100,7 @@
                 android:id="@+id/cardView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/favourite_button"
+                android:layout_below="@id/favourite_btn"
                 app:cardBackgroundColor="#f0f4c3"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="14.5sp"
