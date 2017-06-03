@@ -12,27 +12,25 @@ import android.os.IBinder;
  * sync adapter class, allowing the sync adapter framework to call
  * onPerformSync().
  */
-public class MovieSyncService extends Service {
+public class MSyncService extends Service {
 
     // Object to use as a thread-safe lock
     // Storage for an instance of the sync adapter
-    private static final Object sSyncAdapterLock = new Object();
-    private static MoviesSyncAdapter sMoviesSyncAdapter = null;
+    private static final Object LockSyncAdapter = new Object();
+    private static MSyncAdapter mSyncAdapter = null;
 
     /*
      * Instantiate the sync adapter object.
      */
     @Override
-    public void onCreate() {
-       // super.onCreate();
-        /*
-         * Create the sync adapter as a singleton.
-         * Set the sync adapter as syncable
-         * Disallow parallel syncs
-         */
-        synchronized (sSyncAdapterLock) {
-            if (sMoviesSyncAdapter == null) {
-                sMoviesSyncAdapter = new MoviesSyncAdapter(getApplicationContext(), true);
+    public void onCreate() { // super.onCreate();
+
+        // Create the sync adapter as a singleton.
+        // Set the sync adapter as syncable
+        // Disallow parallel syncs
+        synchronized (LockSyncAdapter) {
+            if (mSyncAdapter == null) {
+                mSyncAdapter = new MSyncAdapter(getApplicationContext(), true);
             }
         }
     }
@@ -50,7 +48,7 @@ public class MovieSyncService extends Service {
          * in the base class code when the SyncAdapter
          * constructors call super()
          */
-        return sMoviesSyncAdapter.getSyncAdapterBinder();
+        return mSyncAdapter.getSyncAdapterBinder();
         //return null;
     }
 }

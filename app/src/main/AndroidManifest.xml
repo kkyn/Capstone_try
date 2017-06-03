@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MovieDetails_Activity"
+            android:name=".MDetails_Activity"
             android:label="@string/title_activity_detailmovie"
             android:parentActivityName=".Main_Activity">
             <meta-data
@@ -44,7 +44,7 @@
 
 
         <!-- The SyncAdapter's dummy authentication service -->
-        <service android:name=".sync.MoviesAuthenticatorService">
+        <service android:name=".sync.MAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
@@ -54,7 +54,7 @@
         </service>
         <!-- The SyncAdapter service -->
         <service
-            android:name=".sync.MovieSyncService"
+            android:name=".sync.MSyncService"
             android:exported="true"
            >
             <!--  android:process=":sync" -->

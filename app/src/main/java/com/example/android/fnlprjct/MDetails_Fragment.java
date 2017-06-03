@@ -22,37 +22,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-//import butterknife.Bind;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieDetails_Fragment extends Fragment
+public class MDetails_Fragment extends Fragment
                              implements
                              // LoaderManager.LoaderCallbacks<Cursor>,
                               SharedPreferences.OnSharedPreferenceChangeListener
                             , View.OnClickListener
 {
 
-    public MovieDetails_Fragment() {
+    public MDetails_Fragment() {
         // Required empty public constructor
         setHasOptionsMenu(true);
     }
 
-    private static final String LOG_TAG = MovieDetails_Fragment.class.getSimpleName();
+    private static final String LOG_TAG = MDetails_Fragment.class.getSimpleName();
 
     private static final int DETAIL_MOVIE_LOADER = 3;
     private static final int MOVIE_REVIEW_LOADER = 4;
@@ -71,12 +69,12 @@ public class MovieDetails_Fragment extends Fragment
     private static final String[] PROJECTION_MOVIE_INFO =
         new String[]{
             MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry._ID,
-            MovieContract.MovieInfoEntry.COL_MV_ID,
+            MovieInfoEntry.COL_MV_ID,
             MovieInfoEntry.COL_FAVOURITES,
             MovieInfoEntry.COL_BACKDROP_PATH,
             MovieInfoEntry.COL_OVERVIEW,
-            MovieContract.MovieInfoEntry.COL_RELEASEDATE,
-            MovieContract.MovieInfoEntry.COL_TITLE,
+            MovieInfoEntry.COL_RELEASEDATE,
+            MovieInfoEntry.COL_TITLE,
             MovieInfoEntry.COL_VOTE_AVERAGE
     };
 
@@ -97,7 +95,7 @@ public class MovieDetails_Fragment extends Fragment
             MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
             MovieReviewEntry.TABLE_NAME + "." + MovieContract.MovieReviewEntry.COL_MV_ID,
             MovieReviewEntry.COL_REVIEWER,
-            MovieContract.MovieReviewEntry.COL_REVIEWCONTENT
+            MovieReviewEntry.COL_REVIEWCONTENT
     };
     //public static final int PROJECTION_RATING_ID = 0;
     //public static final int INDX_1_MOVIE_ID = 1;
@@ -109,7 +107,8 @@ public class MovieDetails_Fragment extends Fragment
     @BindView(R.id.movietitle_tv)
     TextView movietitle;
     @BindView(R.id.moviethumbnail_iv)
-    ImageView moviethumbnail;
+    DynamicHeightNetworkImageView  moviethumbnail;
+    //ImageView  moviethumbnail;
     @BindView(R.id.moviereleasedate_tv)
     TextView moviereleasedate;
     @BindView(R.id.movieratings_tv)
@@ -122,7 +121,7 @@ public class MovieDetails_Fragment extends Fragment
     ImageButton moviefavourite;
 
     private TextView mTextView;
-
+    //private DynamicHeightNetworkImageView moviethumbnail;
     //-----------------------------------------------------------
     //-- for FetchMoviesDbAsyncTask_1 ... AsyncTask<...> Stuff ----
     //-----------------------------------------------------------
@@ -163,9 +162,9 @@ public class MovieDetails_Fragment extends Fragment
     //-----------------------------------------------------------
     private void removeFromFavourites(String movieID) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieContract.MovieInfoEntry.COL_FAVOURITES, 0);
+        contentValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
 
-        String select = MovieContract.MovieInfoEntry.COL_MV_ID + "=?";
+        String select = MovieInfoEntry.COL_MV_ID + "=?";
         String[] selectArg = new String[]{movieID};
 
         int rowId = getActivity().getContentResolver().update(
@@ -182,11 +181,11 @@ public class MovieDetails_Fragment extends Fragment
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovieInfoEntry.COL_FAVOURITES, 1);
 
-        String select = MovieContract.MovieInfoEntry.COL_MV_ID + "=?";
+        String select = MovieInfoEntry.COL_MV_ID + "=?";
         String[] selectArg = new String[]{movieID};
 
         int rowId = getActivity().getContentResolver().update(
-                MovieContract.MovieInfoEntry.CONTENT_URI,
+                MovieInfoEntry.CONTENT_URI,
                 contentValues,
                 select,
                 selectArg
@@ -197,7 +196,7 @@ public class MovieDetails_Fragment extends Fragment
 
     private boolean checkFavourites(String movieID) {
 
-        String selection = MovieContract.MovieInfoEntry.COL_MV_ID + "=?" + " AND " + MovieInfoEntry.COL_FAVOURITES + "=?";
+        String selection = MovieInfoEntry.COL_MV_ID + "=?" + " AND " + MovieInfoEntry.COL_FAVOURITES + "=?";
         String[] selectionArg = new String[]{movieID, "1"};
 
         Boolean favouritesBoolean = false;
@@ -279,21 +278,27 @@ public class MovieDetails_Fragment extends Fragment
 
         Bundle mBundle = this.getArguments();
         if (mBundle != null) {
-            mUri = mBundle.getParcelable(MovieDetails_Fragment.DETAIL_URI);
+            mUri = mBundle.getParcelable(MDetails_Fragment.DETAIL_URI);
         }
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_moviedetails, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
 
         ButterKnife.bind(this, rootView);
 
         movievideo.setOnClickListener(this);
+
+      //  moviethumbnail = (DynamicHeightNetworkImageView) rootView.findViewById(R.id.moviethumbnail_iv);
         moviethumbnail.setOnClickListener(this);
         moviefavourite.setOnClickListener(this);
 
         //++++++++++++++++++++++++++++++++++++++
+        // https://developer.android.com/reference/android/support/v4/app/Fragment.html#getLoaderManager()
+        // https://developer.android.com/reference/android/support/v4/app/LoaderManager.html
+        // getLoaderManager() :- Return the LoaderManager for this fragment, creating it if needed.
+        // initLoader :- Ensures a loader is initialized and active
         getLoaderManager().initLoader(DETAIL_MOVIE_LOADER, null, myTry_0);
         getLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null, myTry_1);
         //++++++++++++++++++++++++++++++++++++++
@@ -379,10 +384,22 @@ public class MovieDetails_Fragment extends Fragment
                 movieratings.setText(cursor.getString(INDX_MOVIE_RATING));
                 moviesynopsis.setText(cursor.getString(INDX_OVERVIEW));
 
-                Picasso.with(getContext()).load(cursor.getString(INDX_BACKDROP_PATH))
+                // ------------------------
+                // ---- Using Volley ------
+                ImageLoader imageLoader = ImageLoaderHelper.getInstance(getContext()).getImageLoader();
+
+                String stringUrl = cursor.getString(INDX_BACKDROP_PATH);
+
+                Log.d(LOG_TAG, "? ? ? ?  " + stringUrl + " ? ? ? ?");
+                // -- thumb-nail-View --
+                // .setImageUrl -- define in ImageView
+                moviethumbnail.setImageUrl(stringUrl, imageLoader);
+                moviethumbnail.setAspectRatio(1.5f);
+
+                /*Picasso.with(getContext()).load(cursor.getString(INDX_BACKDROP_PATH))
                         .placeholder(R.drawable.sample_1)
                         .error(R.drawable.sample_0)
-                        .into(moviethumbnail);
+                        .into(moviethumbnail);*/
 
                 int favouriteValue = cursor.getInt(INDX_FAVOURITES);
                 if (favouriteValue == 1) {
@@ -399,12 +416,14 @@ public class MovieDetails_Fragment extends Fragment
                 mTask.execute(cursor.getString(INDX_MOVIE_ID));*/
                 //...................
 
+                cursor.close();
             }
         }
 
         @Override
-        public void onLoaderReset(Loader loader) {
+        public void onLoaderReset(Loader<Cursor> loader) {
             Log.d(LOG_TAG, "++ onLoaderReset() --");
+            loader = null;
         }
 
     };

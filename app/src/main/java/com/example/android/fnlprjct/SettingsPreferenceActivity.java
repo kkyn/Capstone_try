@@ -8,7 +8,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
-import com.example.android.fnlprjct.sync.MoviesSyncAdapter;
+import com.example.android.fnlprjct.sync.MSyncAdapter;
 
 //import static com.example.android.myproject_2.Main_Fragment.*;
 //==============================================
@@ -175,7 +175,7 @@ public class SettingsPreferenceActivity extends PreferenceActivity
                 getContentResolver().notifyChange(MovieInfoEntry.CONTENT_URI, null);
             }
 
-            MoviesSyncAdapter.syncImmediately(this);
+            MSyncAdapter.syncImmediately(this);
         }
 
     }

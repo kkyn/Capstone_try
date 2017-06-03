@@ -3,5 +3,5 @@
     android:id="@+id/pane2_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MovieDetails_Activity"
+    tools:context=".MDetails_Activity"
     tools:ignore="MergeRooFrame" />

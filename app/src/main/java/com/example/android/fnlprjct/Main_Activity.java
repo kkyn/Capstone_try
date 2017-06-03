@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.android.fnlprjct.sync.MoviesSyncAdapter;
+import com.example.android.fnlprjct.sync.MSyncAdapter;
 
 public class Main_Activity extends AppCompatActivity implements Main_Fragment.CallBackListener {
 
@@ -20,27 +20,22 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     private String mode;
 
     ////////////////////////////////////
-
     @Override //--- 2
     protected void onPause() {
         super.onPause();
     }
-
     @Override   //--- 3
     protected void onStop() {
         super.onStop();
     }
-
     @Override   //--- 4
     protected void onRestart() {
         super.onRestart();
     }
-
     @Override   //--- 5
     protected void onDestroy() {
         super.onDestroy();
     }
-
     ////////////////////////////////////
     @Override
     protected void onResume() {
@@ -81,7 +76,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
             is2Pane = true;
         }
 
-        MoviesSyncAdapter.initializeSyncAdapter(this);
+        MSyncAdapter.initializeSyncAdapter(this);
     }
 
     //------------------------------------------------
@@ -127,9 +122,9 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         if (is2Pane == true) {
 
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MovieDetails_Fragment.DETAIL_URI, uri);
+            bundle.putParcelable(MDetails_Fragment.DETAIL_URI, uri);
 
-            MovieDetails_Fragment movieDetails_Fragment = new MovieDetails_Fragment();
+            MDetails_Fragment movieDetails_Fragment = new MDetails_Fragment();
             movieDetails_Fragment.setArguments(bundle);
 
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
@@ -140,7 +135,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         else {
 
         /* Open a new view*/
-            Intent mIntent = new Intent(this, MovieDetails_Activity.class);
+            Intent mIntent = new Intent(this, MDetails_Activity.class);
             mIntent.setData(uri);
             startActivity(mIntent);
         }

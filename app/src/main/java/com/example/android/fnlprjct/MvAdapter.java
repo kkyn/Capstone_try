@@ -2,36 +2,28 @@ package com.example.android.fnlprjct;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.android.fnlprjct.data.MovieContract;
-import com.squareup.picasso.Picasso;
 
-import android.support.v7.graphics.Palette;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /*
  * Created by kkyin on 8/5/2016.
  */
-public class MvRVwAdapter extends RecyclerView.Adapter<MvRVwAdapter.MvViewHolder>
+public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
 {
-
     private static final int VIEW_TYPE_A = 0;
 
     private Cursor mCursor;
-    public static final String LOG_TAG = MvRVwAdapter.class.getSimpleName();
+    public static final String LOG_TAG = MvAdapter.class.getSimpleName();
 
-    /*@BindView(R.id.poster_imageview)
-    ImageView poster_imageview;*/
     //------------------------------------------------------
     //-------- ViewHolder stuff (begin) --------------------
     //------------------------------------------------------
@@ -40,40 +32,16 @@ public class MvRVwAdapter extends RecyclerView.Adapter<MvRVwAdapter.MvViewHolder
      */
     public class MvViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        /*@InjectView(R.id.poster_imageview)
-        ImageView poster_imageview;*/
-
         @BindView(R.id.poster_imageview)
-        //ImageView poster_imageview;
         DynamicHeightNetworkImageView poster_imageview;
-
-        // public final ImageView imageView;
-        // public final DynamicHeightNetworkImageView imageView;
-        /*public final Button button_Review;*/
 
         public MvViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+
             poster_imageview.setOnClickListener(this);
-
-        //    poster_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
-
-         //       imageView = (DynamicHeightNetworkImageView) itemView.findViewById(R.id.poster_imageview); /*frgmntmv_imageview*/
-         //       imageView.setOnClickListener(this);
-
-        ///    imageView = (ImageView) itemView.findViewById(R.id.poster_imageview); /*frgmntmv_imageview*/
-        ///    imageView.setOnClickListener(this);
-//            imageView.setScaleType(ImageView.ScaleType.MATRIX);
-//            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-//            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-//            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            //=============================
-            /*button_Review = (Button) itemView.findViewById(R.id.frgmntmv_button_review);
-            button_Review.setOnClickListener(this)*/;
-         //   button_Review.setClickable(true);
         }
-
 
         // Implement the OnClickListener callback, i.e. onClick(View);
         @Override
@@ -104,12 +72,11 @@ public class MvRVwAdapter extends RecyclerView.Adapter<MvRVwAdapter.MvViewHolder
     }
 
     // * provide  a suitable constructor( depends on the kind of data-set / how u want to interface ? )
-    public MvRVwAdapter(Context context, OnItemClickHandler_0 ref_onItemClickHandler_0) {
+    public MvAdapter(Context context, OnItemClickHandler_0 ref_onItemClickHandler_0) {
         // super(context);
         this.context = context;
         this.onItemClickHandler_0 = ref_onItemClickHandler_0;
     }
-
 
     // * Called when RecyclerView needs a new 'RecyclerView.ViewHolder' of the given type to represent an item.
     // * Locate new views( invoked by the LayoutManager )
@@ -169,8 +136,14 @@ public class MvRVwAdapter extends RecyclerView.Adapter<MvRVwAdapter.MvViewHolder
 
             String stringUrl = mCursor.getString(Main_Fragment.COLUMN_POSTERLINK);
 
+            // -- thumb-nail-View --
+            // .setImageUrl -- define in ImageView
+            holder.poster_imageview.setImageUrl(stringUrl,imageLoader);
+            holder.poster_imageview.setAspectRatio(0.66f);
+
+            //-------------------------------------
             // Call Volley's imageloader get-method to get image from the Web
-            ImageLoader.ImageContainer myImageContainer = imageLoader.get
+            /*ImageLoader.ImageContainer myImageContainer = imageLoader.get
                 (
                     stringUrl,
                     new ImageLoader.ImageListener() {
@@ -181,42 +154,18 @@ public class MvRVwAdapter extends RecyclerView.Adapter<MvRVwAdapter.MvViewHolder
 
                             Bitmap bitmap = imageContainer.getBitmap();
 
-                            /*if (bitmap != null) {
-                                Palette p = Palette.generate(bitmap, 12);
-                                mMutedColor = p.getDarkMutedColor(0xFF770000); // 0xFF333333
-                                holder.bar_layout.setBackgroundColor(mMutedColor);
-                            }*/
+                            //if (bitmap != null) {
+                            //    Palette p = Palette.generate(bitmap, 12);
+                            //    mMutedColor = p.getDarkMutedColor(0xFF770000); // 0xFF333333
+                            //    holder.bar_layout.setBackgroundColor(mMutedColor);
+                            //}
                         }
-
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
                         }
                     }
-                );
-            //----------------------------------------------
-            // -- thumb-nail-View --
-            // .setImageUrl -- define in ImageView
-            holder.poster_imageview.setImageUrl(stringUrl,imageLoader);
-            holder.poster_imageview.setAspectRatio(0.66f);
-
+                );*/
             //***********************
-            /*Picasso.with(context)
-                .load(mCursor.getString(Main_Fragment.COLUMN_POSTERLINK))
-
-                // .resize(600,900) // tablet, portrait //resize(horizontalSize, verticalSize)
-                .resize(600, 700) // tablet, landscape
-                //.onlyScaleDown()
-                //.centerCrop() // or
-                .centerInside() // or
-
-                //.fit() // no
-                //.resizeDimen(500,600) // no
-
-                .placeholder(R.drawable.sample_1)
-                .error(R.drawable.sample_0)
-                .into(holder.poster_imageview); *//*holder.imageView*//**//*poster_imageview*//*
-            */
-
         }
     }
 

@@ -348,40 +348,23 @@ public class Utility {
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     //=================================================
     //private
-    public static Uri formUri_MovieInfo(Context context) {
+    public static Uri formUri_4_MovieInfo(Context context) {
 
         final String DISCOVER_ = "discover";
+        final String MOVIE_ = "movie";
+        final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
+
+        final String PARAM_API_KEY = "api_key";
         final String PARAM_SORT_BY = "sort_by";
         final String PARAM_COUNTRY = "certification_country";
         final String PARAM_RELEASE_DATE = "primary_release_year";
         final String PARAM_VOTECOUNT_GRTR = "vote_count.gte";
 
-        final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
-        final String MOVIE_ = "movie";
-        final String PARAM_API_KEY = "api_key";
-
         final String REF_YEAR = "2017";
-        /* */
 
         String sortBy = Utility.getPreferredSortSequence(context);
 
-        // (1) build the Url
-//        return
-//                Uri.parse(MOVIE_DB_BASE_URL) // creates a Uri which parses the given encoded URI string
-//                .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
-//
-//                .appendPath(DISCOVER_ /* discover/ */)
-//                .appendEncodedPath(MOVIE_ /* movie? */ )
-//
-//                .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
-//                .appendQueryParameter(PARAM_SORT_BY, sortBy) //.appendQueryParameter(PARAM_SORTBY, DESC)
-//
-//                //.appendQueryParameter("with_genres", "18")
-//                .appendQueryParameter(PARAM_COUNTRY, "US")
-//                .appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)
-//                .appendQueryParameter(PARAM_VOTECOUNT_GRTR, "50")
-//                .build();
-
+        // (1) build the Url ---Begin--------
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL);
         Uri.Builder builder = uri.buildUpon();
 
@@ -389,20 +372,22 @@ public class Utility {
             .appendPath(DISCOVER_)       // postfix a '/', e.g. discover/
             .appendEncodedPath(MOVIE_)  // postfix a '?', e.g. movie?
             .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY) // e.g. api_key=xxxxxx
-            .appendQueryParameter(PARAM_SORT_BY, sortBy)
-            .appendQueryParameter(PARAM_COUNTRY, "US")
-            .appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)
-            .appendQueryParameter(PARAM_VOTECOUNT_GRTR, "50");
+            .appendQueryParameter(PARAM_SORT_BY, sortBy)            // sort_by=xxx
+            .appendQueryParameter(PARAM_COUNTRY, "US")              // certification_country=US
+            .appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)     // primary_release_year=2017
+            .appendQueryParameter(PARAM_VOTECOUNT_GRTR, "50");      // vote_count.gte=50
 
         uri = builder.build();
+        //-----End--------
 
         return uri;
-
     }
 
     // =================================================
-    // tky add, called at MoviesSyncAdapter
-    public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
+    // tky add, called at MSyncAdapter
+
+    public static long[] get_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
+    //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
 
         // long rowId;
         final String RESULTS        = "results";
@@ -430,8 +415,11 @@ public class Utility {
 
         Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
 
-        JSONObject movies_JSONObject = new JSONObject(moviesJsonStr);
-        JSONArray results_JSONArray = movies_JSONObject.getJSONArray(RESULTS);
+        //JSONObject movies_JSONObject = new JSONObject(moviesJsonStr);
+        JSONArray results_JSONArray = moviesJsonObj.getJSONArray(RESULTS);
+
+        //JSONObject movies_JSONObject = new JSONObject(moviesJsonStr);
+        //JSONArray results_JSONArray = movies_JSONObject.getJSONArray(RESULTS);
 
         long[] movie_IDs = new long[results_JSONArray.length()];
 

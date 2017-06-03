@@ -24,7 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
-import com.example.android.fnlprjct.sync.MoviesSyncAdapter;
+import com.example.android.fnlprjct.sync.MSyncAdapter;
 
 /**
  * A placeholder fragment (Main_Fragment) containing a simple view.
@@ -32,7 +32,7 @@ import com.example.android.fnlprjct.sync.MoviesSyncAdapter;
 public class Main_Fragment extends Fragment
                         implements LoaderManager.LoaderCallbacks<Cursor>
                                 , SharedPreferences.OnSharedPreferenceChangeListener
-                             //   ,MvRVwAdapter.OnItemClickHandler_0
+                             //   ,MvAdapter.OnItemClickHandler_0
 {
     // constructor
     public Main_Fragment() {
@@ -43,7 +43,7 @@ public class Main_Fragment extends Fragment
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     private RecyclerView recyclerView;
-    private MvRVwAdapter rvAdapter;
+    private MvAdapter rvAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private long itemID = 0;
     private Uri uri;
@@ -214,7 +214,7 @@ public class Main_Fragment extends Fragment
 
             getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
 
-            MoviesSyncAdapter.syncImmediately(getContext());
+            MSyncAdapter.syncImmediately(getContext());
         }
 
     }
@@ -392,11 +392,11 @@ public class Main_Fragment extends Fragment
         // tky comment ....
         // Implementation the interface, 'NAME'/OnItemClickHandler_0
         // with the method-name/onItemClick_0 found within the interface declaration.
-        MvRVwAdapter.OnItemClickHandler_0 ref_onItemClickHandler_0 =
+        MvAdapter.OnItemClickHandler_0 itemClickHndlr =
 
-                new MvRVwAdapter.OnItemClickHandler_0() {
+                new MvAdapter.OnItemClickHandler_0() {
                     @Override
-                    public void onItemClick_0(MvRVwAdapter.MvViewHolder viewHolder) {
+                    public void onItemClick_0(MvAdapter.MvViewHolder viewHolder) {
 
                         mPosition = viewHolder.getAdapterPosition();
 
@@ -412,7 +412,7 @@ public class Main_Fragment extends Fragment
 
         };
 
-        rvAdapter = new MvRVwAdapter(getContext(), ref_onItemClickHandler_0);
+        rvAdapter = new MvAdapter(getContext(), itemClickHndlr);
         //************************************************
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);

@@ -7,9 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MovieDetails_Activity extends AppCompatActivity {
+public class MDetails_Activity extends AppCompatActivity {
 
-    private static final String LOG_TAG = MovieDetails_Activity.class.getSimpleName();
+    private static final String LOG_TAG = MDetails_Activity.class.getSimpleName();
 
     private Uri mUri;
 
@@ -19,7 +19,7 @@ public class MovieDetails_Activity extends AppCompatActivity {
 
         setContentView(com.example.android.fnlprjct.R.layout.activity_moviedetails);
 
-        // ?? bundle from Main_Activity is passed on to the MovieDetails_Fragment ?? how/why ??, see code below !!
+        // ?? bundle from Main_Activity is passed on to the MDetails_Fragment ?? how/why ??, see code below !!
 
         Intent intent = this.getIntent();
         mUri = intent.getData();
@@ -28,11 +28,11 @@ public class MovieDetails_Activity extends AppCompatActivity {
         // Log.d(LOG_TAG, "yyyy onCreate / mUri : " + mUri.toString());
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(MovieDetails_Fragment.DETAIL_URI, mUri);
+        bundle.putParcelable(MDetails_Fragment.DETAIL_URI, mUri);
 
         // Create the detail fragment and add it to the activity
         // using a fragment transaction.
-        MovieDetails_Fragment mMovieDetailsFragment = new MovieDetails_Fragment();
+        MDetails_Fragment mMovieDetailsFragment = new MDetails_Fragment();
         mMovieDetailsFragment.setArguments(bundle);
 
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
@@ -42,7 +42,7 @@ public class MovieDetails_Activity extends AppCompatActivity {
 
         // --or--
         // getSupportFragmentManager().beginTransaction()
-        //                             .add(R.id.detail_movie_container, new MovieDetails_Fragment())
+        //                             .add(R.id.detail_movie_container, new MDetails_Fragment())
         //                             .commit();
 
     }

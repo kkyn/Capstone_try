@@ -33,7 +33,7 @@ public class Details_Adapter extends RecyclerView.Adapter<Details_Adapter.Detail
             switch (viewType) {
                 case VIEW_TYPE_A: {
 
-                    // Log.d(LOG_TAG, "-- MvRVwAdapter/onCreateViewHolder() --");
+                    // Log.d(LOG_TAG, "-- MvAdapter/onCreateViewHolder() --");
                     //=================================
                     layout_id = R.layout.cardview_review;
                     //=================================
@@ -61,8 +61,8 @@ public class Details_Adapter extends RecyclerView.Adapter<Details_Adapter.Detail
     @Override // basic requirement
     public void onBindViewHolder(Details_ViewHolder holder, int position) {
         if (mCursor.moveToPosition(position)) {
-            holder.Reviewer_tv.setText(mCursor.getString(MovieDetails_Fragment.INDX_1_REVIEWER));
-            holder.Review_tv.setText(mCursor.getString(MovieDetails_Fragment.INDX_1_REVIEWCONTENT));
+            holder.Reviewer_tv.setText(mCursor.getString(MDetails_Fragment.INDX_1_REVIEWER));
+            holder.Review_tv.setText(mCursor.getString(MDetails_Fragment.INDX_1_REVIEWCONTENT));
         }
     }
 
