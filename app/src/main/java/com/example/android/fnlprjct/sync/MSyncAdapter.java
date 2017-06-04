@@ -7,6 +7,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 //import android.content.ContentUris;
 //import android.content.ContentValues;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
@@ -37,6 +38,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -111,8 +113,8 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
             // JSONObject response = futureRequest.get(); // this will block
             Log.d(LOG_TAG, "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
 
-            long[] mMovieIDs = Utility.get_MovieInfoFromJson(response, sortBy, mContext); // ????
-
+            int[] mMovieIDs = Utility.get_x_MovieInfoFromJson(response, sortBy, mContext);
+            //long[] mMovieIDs = Utility.get_MovieInfoFromJson(response, sortBy, mContext); // ????
             Log.d(LOG_TAG, "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 
             // ***************** Movie Review **********************

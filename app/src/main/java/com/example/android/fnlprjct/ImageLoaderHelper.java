@@ -22,12 +22,12 @@ public class ImageLoaderHelper {
     int cacheSize = 50 * 1024 * 1024; // 4MiB
     // https://developer.android.com/reference/android/util/LruCache.html
     // https://developer.android.com/topic/performance/graphics/cache-bitmap.html
-    //private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(20);
-    private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(cacheSize){
-        protected int sizeOf(String key, Bitmap value) {
-            return value.getByteCount();
-        }
-    };
+    private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(10);
+    //private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(cacheSize){
+//        protected int sizeOf(String key, Bitmap value) {
+//            return value.getByteCount();
+//        }
+//    };
 
     private ImageLoader mImageLoader;
 
