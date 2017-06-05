@@ -19,7 +19,7 @@ public class ImageLoaderHelper {
         return sInstance;
     }
 
-    int cacheSize = 50 * 1024 * 1024; // 4MiB
+//    int cacheSize = 50 * 1024 * 1024; // 4MiB
     // https://developer.android.com/reference/android/util/LruCache.html
     // https://developer.android.com/topic/performance/graphics/cache-bitmap.html
     private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(10);

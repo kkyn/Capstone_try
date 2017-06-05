@@ -70,6 +70,17 @@
                 android:layout_gravity="center"
                 android:text="Video Clip" />
 
+            <!-- tky add, 5th June 2017 -->
+            <ImageButton
+                android:id="@+id/favourite_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_toRightOf="@id/movievideo_btn"
+                android:background="#00ffffff"
+                android:src="@android:drawable/btn_star" />
+            android:layout_below="@id/mvdtl_space"
+            
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_moviedetails"
                 android:layout_width="match_parent"

@@ -69,22 +69,22 @@ public class MovieProvider extends ContentProvider {
         // e.g. "com.example.android.myproject_2/Rating/*"
         // e.g. "com.example.android.myproject_2/MovieInfo"
         // e.g. "com.example.android.myproject_2/Movie"
-        UriMatcher aUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-        aUriMatcher.addURI(authority, MovieContract.MOVIEREVIEW,          CNST_MOVIE_REVIEW_);
-      //aUriMatcher.addURI(authority, MovieContract.MOVIEREVIEW + "/#",   CNST_MOVIE_REVIEW_ID_);
-        aUriMatcher.addURI(authority, MovieContract.MOVIEREVIEW + "/*",   CNST_MOVIE_REVIEW_ID_);
+        uriMatcher.addURI(authority, MovieContract.MOVIEREVIEW,             CNST_MOVIE_REVIEW_);
+      //uriMatcher.addURI(authority, MovieContract.MOVIEREVIEW + "/#",      CNST_MOVIE_REVIEW_ID_);
+        uriMatcher.addURI(authority, MovieContract.MOVIEREVIEW + "/*",      CNST_MOVIE_REVIEW_ID_);
 
-        aUriMatcher.addURI(authority, MovieContract.MOVIEINFO,            CNST_MOVIE_INFO_);
-        aUriMatcher.addURI(authority, MovieContract.MOVIEINFO + "/*",     CNST_MOVIE_INFO_ID_);
+        uriMatcher.addURI(authority, MovieContract.MOVIEINFO,               CNST_MOVIE_INFO_);
+        uriMatcher.addURI(authority, MovieContract.MOVIEINFO + "/*",        CNST_MOVIE_INFO_ID_);
 
-        aUriMatcher.addURI(authority, MovieContract.MOVIEVIDEO,           CNST_MOVIE_VIDEO_);
-		aUriMatcher.addURI(authority, MovieContract.MOVIEVIDEO + "/*",    CNST_MOVIE_VIDEO_ID_);
+        uriMatcher.addURI(authority, MovieContract.MOVIEVIDEO,              CNST_MOVIE_VIDEO_);
+		uriMatcher.addURI(authority, MovieContract.MOVIEVIDEO + "/*",       CNST_MOVIE_VIDEO_ID_);
 
-        aUriMatcher.addURI(authority, MovieContract.MOVIEFAVOURITES,      CNST_MOVIE_FAVOURITES_);
-        aUriMatcher.addURI(authority, MovieContract.MOVIEFAVOURITES + "/*", CNST_MOVIE_FAVOURITES_ID_);
+        uriMatcher.addURI(authority, MovieContract.MOVIEFAVOURITES,         CNST_MOVIE_FAVOURITES_);
+        uriMatcher.addURI(authority, MovieContract.MOVIEFAVOURITES + "/*",  CNST_MOVIE_FAVOURITES_ID_);
 
-        return aUriMatcher;
+        return uriMatcher;
     }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -498,8 +498,8 @@ public class MovieProvider extends ContentProvider {
                 wrtblSqLtDb.beginTransaction();
                 returnCount = 0;
                 try {
-                    for (ContentValues mvalue : values) {
-                        long _id = wrtblSqLtDb.insert(MovieVideosEntry.TABLE_NAME, null, mvalue);
+                    for (ContentValues cv : values) {
+                        long _id = wrtblSqLtDb.insert(MovieVideosEntry.TABLE_NAME, null, cv);
                         if (_id != 1) {
                             returnCount++;
                         }
@@ -517,8 +517,8 @@ public class MovieProvider extends ContentProvider {
                 returnCount = 0;
 
                 try {
-                    for (ContentValues mvalue : values) {
-                        long _id = wrtblSqLtDb.insert(MovieReviewEntry.TABLE_NAME, null, mvalue);  // ??
+                    for (ContentValues cv : values) {
+                        long _id = wrtblSqLtDb.insert(MovieReviewEntry.TABLE_NAME, null, cv);  // ??
                         if (_id != -1) {
                             returnCount++;
                         }
@@ -534,11 +534,10 @@ public class MovieProvider extends ContentProvider {
                 wrtblSqLtDb.beginTransaction();
                 returnCount = 0;
                 try {
-                    for (ContentValues mvalue : values) {
-                        long _id = wrtblSqLtDb.insert(MovieInfoEntry.TABLE_NAME, null, mvalue);  // ??
+                    for (ContentValues cv : values) {
+                        long _id = wrtblSqLtDb.insert(MovieInfoEntry.TABLE_NAME, null, cv);  // ??
                         if (_id != -1) {
                             returnCount++;
-
                         }
                     }
                     wrtblSqLtDb.setTransactionSuccessful();

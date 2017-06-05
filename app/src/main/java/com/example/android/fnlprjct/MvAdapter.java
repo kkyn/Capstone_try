@@ -95,8 +95,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
             // * Create a new view
             View view = LayoutInflater.from(parent.getContext()).inflate(layout_id, parent, false);
 
-            // * Control whether a view can take focus
-            view.setFocusable(true);
+            view.setFocusable(true);    // * Control whether a view can take focus
 
             MvViewHolder mvViewHolder = new MvViewHolder(view);
 

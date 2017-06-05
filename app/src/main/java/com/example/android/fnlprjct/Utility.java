@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieVideosEntry;
@@ -46,7 +45,7 @@ public class Utility {
 //    static URL url;
 
     public static String getPreferredSortSequence(Context context) {
-    //public static String getPreferredSortSequence(Context context) {
+        //public static String getPreferredSortSequence(Context context) {
 
         // get the file, SharedPreferences
         // Gets a SharedPreferences instance that points to the default file
@@ -57,11 +56,11 @@ public class Utility {
 
         String mstring = context.getString(R.string.pref_movies_sort_key);
         String mstringDefault = context.getString(R.string.pref_movies_sortby_default_value);
-    //    String mstring = String.valueOf((R.string.pref_sortmovies_key));
+        //    String mstring = String.valueOf((R.string.pref_sortmovies_key));
 
         String string = sharedPreferences.getString(mstring, mstringDefault);
 
-        Log.d(LOG_TAG, "1111 getPreferredSortSequence -- actualSortSeq : " + string );
+        Log.d(LOG_TAG, "1111 getPreferredSortSequence -- actualSortSeq : " + string);
 
         return string;
     }
@@ -70,42 +69,30 @@ public class Utility {
     // /**************************************************/
     /******************* Movie Reviews *******************/
     /*****************************************************/
-    public static void get_MovieReviews(Context context, int[] movieIDArray) throws  IOException, JSONException{ //MalformedURLException,
- // public static void get_MovieReviews(Context context, long[] movieIDArray) throws  IOException, JSONException{ //MalformedURLException,
+    public static void get_MovieReviews(Context context, int[] movieIDArray) throws IOException, JSONException { //MalformedURLException,
+        // public static void get_MovieReviews(Context context, long[] movieIDArray) throws  IOException, JSONException{ //MalformedURLException,
 
-        Uri mUri;
-        URL url;
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection httpUrlConnection; // = null;
         BufferedReader bufferedReader; // = null;
 
+        Uri mUri;
+        URL url;
         InputStream inputStream;
-        //StringBuilder stringBuffer;
         StringBuffer stringBuffer;
 
         Vector<ContentValues> vectorCV = new Vector<ContentValues>();
 
         if (movieIDArray.length > 0) {
 
-
             Log.d(LOG_TAG, "z z z z z z z z z z  " + movieIDArray.length + " y y y y y y y y y y y y");
             for (int movieId : movieIDArray) {
 
-                // (1) build the Url ---- Begin ----
-                mUri = Uri.parse(MOVIE_DB_BASE_URL);        // Creates a Uri from parsing the given encoded URI string
-                Uri.Builder uriBuilder = mUri.buildUpon();  // Obtain a builder (Uri.Builder) representing an existing URI
-
-                uriBuilder
-                    .appendPath(MOVIE_)                   // appendPath postfix a '/', e.g. movie/
-                    .appendPath(Integer.toString(movieId))    // appendPath postfix a '/', e.g. ID/
-                    //    .appendPath(Long.toString(movieId))    // appendPath postfix a '/', e.g. ID/
-                    .appendEncodedPath(REVIEWS_)          // appendEncodedPath postfix a '?', e.g.  reviews?
-                    .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY);  // appendQueryParameter infix a '=', e.g. api_key=xxxxxx
-
-                mUri = uriBuilder.build();
-                //build the Url ---- End ----
+                Log.d(LOG_TAG, "z z z z z z z z z z  " + movieId + " y y y y y y y y y y y y");
+                // (1) build the Url
+                mUri = formUri_4_MovieReview(movieId);
 
                 url = new URL(mUri.toString());
 
@@ -123,28 +110,24 @@ public class Utility {
                 // (4b) create a string-buffer
                 bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-                String line;
-                //   StringBuffer
                 stringBuffer = new StringBuffer();
-                //StringBuilder
-                //stringBuffer = new StringBuilder();
 
+                String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     line = line + "\n";
                     stringBuffer.append(line);
                 }
 
                 // (5) convert string-buffer to string
-                String movieReviewsJsonStr = stringBuffer.toString();
-                //movieReviewsInJsonStr
+                String reviewsJsonStr = stringBuffer.toString();
 
-                //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
                 final String RESULTS = "results";
                 final String AUTHOR = "author";
                 final String CONTENT = "content";
 
-                JSONObject movieReviewsJSONObject = new JSONObject(movieReviewsJsonStr);
-                JSONArray resultsJSONArray = movieReviewsJSONObject.getJSONArray(RESULTS);
+                JSONObject reviewsJSONObject = new JSONObject(reviewsJsonStr);
+
+                JSONArray resultsJSONArray = reviewsJSONObject.getJSONArray(RESULTS);
 
                 for (int index = 0; index < resultsJSONArray.length(); index++) {
 
@@ -161,76 +144,30 @@ public class Utility {
                     cv.put(MovieReviewEntry.COL_REVIEWCONTENT, content);
                     // cv.put(MovieReviewEntry.COL_KEY_ID, movieId);
 
+                    Log.d(LOG_TAG, "  <--- Add cv ------------------ " + index);
                     vectorCV.add(cv);
                 }
-                //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             }
 
-            ContentValues[] array_CV = new ContentValues[vectorCV.size()];
-            vectorCV.toArray(array_CV);
+            ContentValues[] arrayCV = new ContentValues[vectorCV.size()];
+            vectorCV.toArray(arrayCV);
             // -- or --
             //ContentValues[] arrayContentValues = Vctr.toArray(new ContentValues[Vctr.size()]);
 
             ContentResolver contentResolver = context.getContentResolver();
 
-            int size = contentResolver.bulkInsert(MovieReviewEntry.CONTENT_URI, array_CV);
+            Log.d(LOG_TAG, "x x x x x x x x x x x x x x x " + MovieReviewEntry.CONTENT_URI.toString());
+
+            int size = contentResolver.bulkInsert(MovieReviewEntry.CONTENT_URI, arrayCV);
         }
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//        if (vectorCV.size() > 0) {
-//
-//            ContentValues[] arrayCV = new ContentValues[vectorCV.size()];
-//
-//            vectorCV.toArray(arrayCV);
-//
-//            //-------------------
-//            //
-//            // context.getContentResolver().bulkInsert(MovieReviewEntry.CONTENT_URI, arrayCV);
-//
-//            //-------------------
-//            Uri uri;
-//            String[] projection = null;
-//            String   selection ;
-//            String[] selectionArg;
-//            String   sortOrder = null;
-//            Cursor   cursor;
-//
-//            for (ContentValues cv : arrayCV) {
-//
-//                //uri = MovieReviewEntry.buildUri_MovieReviewWithId(cv.getAsLong(MovieReviewEntry.COL_MV_ID));
-//                uri = MovieReviewEntry.CONTENT_URI;
-//
-//                projection = new String[]{MovieContract.MovieReviewEntry._ID};
-//
-//                selection = MovieReviewEntry.COL_MV_ID + "=? AND " +
-//                            MovieReviewEntry.COL_REVIEWER + "=?";
-//
-//                selectionArg = new String[]{String.valueOf(cv.getAsLong(MovieReviewEntry.COL_MV_ID)),
-//                                            cv.getAsString(MovieReviewEntry.COL_REVIEWER)
-//                                            };
-//
-//                cursor = context.getContentResolver().query(uri, projection, selection, selectionArg, sortOrder);
-//
-//                if (cursor != null) {
-//                    if (!cursor.moveToFirst()) {
-//                        context.getContentResolver().insert(MovieReviewEntry.CONTENT_URI, cv);
-//                    }
-//                }
-//
-//                cursor.close();
-//            }
-//            //--------------------
-//        }
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
     }
     /*****************************************************/
     /******************* Movie Video *********************/
     /*****************************************************/
     public static void get_MovieVideos(Context context, int[] movieIDArray) throws IOException, JSONException { //MalformedURLException,
-        //   public static void get_MovieVideos(Context context, long[] mMovieIDs) throws  IOException, JSONException{ //MalformedURLException,
 
-        //Uri mUri;
-        URL url;
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection httpUrlConnection; // = null;
@@ -238,31 +175,22 @@ public class Utility {
 
         // Will contain the raw JSON response as a string.
 //        String movieInfoInJsonStr;// = null;
-        Uri mUri; // = null;
+
+        Uri uri;
+        URL url;
 
         InputStream inputStream;
-        //StringBuilder stringBuffer;
         StringBuffer stringBuffer;
 
-        //   Vector<ContentValues> vectorOfCV = new Vector<ContentValues>();
         Vector<ContentValues> vectorCV = new Vector<>();
 
         if (movieIDArray.length > 0) {
             for (int movieId : movieIDArray) {
 
                 // (1) build the Url
-                mUri =
-                    Uri.parse(MOVIE_DB_BASE_URL) // creates a Uri which parses the given encoded URI string
-                        .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
+                uri = formUri_4_MovieVideo(movieId);
 
-                        .appendPath(MOVIE_  /* movie/ */)
-                        .appendPath(Integer.toString(movieId)  /* ID/ */)
-                        //      .appendPath(Long.toString(movieId)  /* ID/ */)
-                        .appendEncodedPath(VIDEOS_  /* videos? */)
-                        .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)
-                        .build();
-
-                url = new URL(mUri.toString());
+                url = new URL(uri.toString());
 
                 // (2) create request and open connection with the url
                 httpUrlConnection = (HttpURLConnection) url.openConnection();
@@ -328,54 +256,43 @@ public class Utility {
 
             ContentResolver contentResolver = context.getContentResolver();
 
+            Log.d(LOG_TAG, "y y y y y y y y y y y y y y y " + MovieVideosEntry.CONTENT_URI.toString());
             int size = contentResolver.bulkInsert(MovieVideosEntry.CONTENT_URI, arrayCV);
         }
-
-        // x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x
-//        if (vectorCV.size() > 0) {
-//            ContentValues[] arrayOfCV = new ContentValues[vectorCV.size()];
-//            vectorCV.toArray(arrayOfCV);
-//
-//            //---------------------------------
-//            //context.getContentResolver().bulkInsert(MovieVideosEntry.CONTENT_URI, arrayOfCV);
-//            //-------------------
-//            Uri uri;
-//            String[] projection = null;
-//            String selection;
-//            String[] selectionArg;
-//            String sortOrder = null;
-//            Cursor cursor;
-//
-//            for (ContentValues cv : arrayOfCV) {
-//
-//                //uri = MovieVideosEntry.buildUri_MovieReviewWithId(cv.getAsLong(MovieVideosEntry.COL_MV_ID)); // ???
-//                uri = MovieVideosEntry.CONTENT_URI;
-//
-//                projection = new String[]{MovieVideosEntry._ID};
-//
-//                selection = MovieVideosEntry.COL_MV_ID + "=?";
-//
-//                selectionArg = new String[]{String.valueOf(cv.getAsLong(MovieVideosEntry.COL_MV_ID))};
-//
-//                cursor = context.getContentResolver().query(uri, projection, selection, selectionArg, sortOrder);
-//
-//                if (cursor != null) {
-//                    if (!cursor.moveToFirst()) {
-//                        context.getContentResolver().insert(MovieVideosEntry.CONTENT_URI, cv);
-//                    }
-//                }
-//
-//                cursor.close();
-//            }
-//            //--------------------
-//
-//        }
-
     }
 
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     //=================================================
-    //private
+    private static Uri formUri_4_MovieVideo(int movieId) {
+
+        Uri uri =
+            Uri.parse(MOVIE_DB_BASE_URL)        // creates a Uri which parses the given encoded URI string
+                .buildUpon()                    // to obtain a builder (Uri.Builder) representing an existing URI
+
+                .appendPath(MOVIE_)                     // appendPath postfix a '/', e.g. movie/
+                .appendPath(Integer.toString(movieId))  // appendPath postfix a '/', e.g. ID/
+                .appendEncodedPath(VIDEOS_)             // appendEncodedPath postfix a '?', e.g.  reviews?
+                .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)// appendQueryParameter infix a '=', e.g. api_key=xxxxxx
+                .build();
+        return uri;
+    }
+
+    private static Uri formUri_4_MovieReview(int movieId) {
+
+        Uri uri = Uri.parse(MOVIE_DB_BASE_URL);        // Creates a Uri from parsing the given encoded URI string
+        Uri.Builder uriBuilder = uri.buildUpon();  // Obtain a builder (Uri.Builder) representing an existing URI
+
+        uriBuilder
+            .appendPath(MOVIE_)                   // appendPath postfix a '/', e.g. movie/
+            .appendPath(Integer.toString(movieId))    // appendPath postfix a '/', e.g. ID/
+            .appendEncodedPath(REVIEWS_)          // appendEncodedPath postfix a '?', e.g.  reviews?
+            .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY);  // appendQueryParameter infix a '=', e.g. api_key=xxxxxx
+
+        uri = uriBuilder.build();
+
+        return uri;
+    }
+
     public static Uri formUri_4_MovieInfo(Context context) {
 
         final String DISCOVER_ = "discover";
@@ -416,23 +333,22 @@ public class Utility {
     /*****************************************************/
     // =================================================
     // tky add, called at MSyncAdapter
-
     public static long[] get_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
-    //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
+        //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
 
         // long rowId;
-        final String RESULTS        = "results";
-        final String ID             = "id";
+        final String RESULTS = "results";
+        final String ID = "id";
         final String ORIGINAL_TITLE = "original_title";
-        final String POSTER_PATH    = "poster_path";
-        final String BACKDROP_PATH  = "backdrop_path";  // movie poster image thumbnail
-        final String OVERVIEW       = "overview";       // plot -- synopsis
-        final String RELEASE_DATE   = "release_date";
-        final String VOTE_AVERAGE   = "vote_average";   // user rating
-        final String VOTE_COUNT     = "vote_count";
-        final String POPULARITY     = "popularity";
+        final String POSTER_PATH = "poster_path";
+        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
+        final String OVERVIEW = "overview";       // plot -- synopsis
+        final String RELEASE_DATE = "release_date";
+        final String VOTE_AVERAGE = "vote_average";   // user rating
+        final String VOTE_COUNT = "vote_count";
+        final String POPULARITY = "popularity";
 
-        final String TMDB_BASE_URL  = "http://image.tmdb.org/t/p/";
+        final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
 
         // W92 = "w92/"; W154 = "w154/";
         // W185 = "w185/"; W342 = "w342/";
@@ -463,17 +379,17 @@ public class Utility {
 
             JSONObject aJSONObject = resultsJSONArray.getJSONObject(i);
 
-            long   mvId          = aJSONObject.getLong(ID);
-            String mvOrgTitle    = aJSONObject.getString(ORIGINAL_TITLE);
-            String mvOverview    = aJSONObject.getString(OVERVIEW); // plot synopsis
+            long mvId = aJSONObject.getLong(ID);
+            String mvOrgTitle = aJSONObject.getString(ORIGINAL_TITLE);
+            String mvOverview = aJSONObject.getString(OVERVIEW); // plot synopsis
             String mvVoteAverage = aJSONObject.getString(VOTE_AVERAGE);  // user rating
-            long   mvVoteCount   = aJSONObject.getLong(VOTE_COUNT);  // user, sum number of votes
-            String mvPopularity  = aJSONObject.getString(POPULARITY);
+            long mvVoteCount = aJSONObject.getLong(VOTE_COUNT);  // user, sum number of votes
+            String mvPopularity = aJSONObject.getString(POPULARITY);
             String mvReleaseDate = aJSONObject.getString(RELEASE_DATE);
 
-            String mvPosterPath   = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
+            String mvPosterPath = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
             String mvBackDropPath = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
-          //String mvBackDropPath = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
+            //String mvBackDropPath = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
 
             movie_IDs[i] = mvId;
 
@@ -492,7 +408,7 @@ public class Utility {
 
             //Log.d(LOG_TAG, "---------- get_MovieInfoFromJson --------- ");
 
-            if(!is_movieInDataBase(context, cv)){
+            if (!is_movieInDataBase(context, cv)) {
                 Vctr.add(cv);
                 Log.d(LOG_TAG, "+++++++++++++++  ADD INTO VECTOR  +++++++++++++++");
             }
@@ -506,20 +422,20 @@ public class Utility {
         return movie_IDs;
     }
 
-    private static long add_MovieInfo(ContentValues contentvalues, Context context){
+    private static long add_MovieInfo(ContentValues contentvalues, Context context) {
 
         long idNum = 0;
 
-        Uri         uri            = MovieInfoEntry.CONTENT_URI;
-        String[]    projection     = new String[]{MovieInfoEntry._ID};
-        String      selection      = MovieInfoEntry.COL_MV_ID + "=?";
-        String[]    selectionArg   = new String[]{String.valueOf(contentvalues.getAsLong(MovieInfoEntry.COL_MV_ID))};
+        Uri uri = MovieInfoEntry.CONTENT_URI;
+        String[] projection = new String[]{MovieInfoEntry._ID};
+        String selection = MovieInfoEntry.COL_MV_ID + "=?";
+        String[] selectionArg = new String[]{String.valueOf(contentvalues.getAsLong(MovieInfoEntry.COL_MV_ID))};
 
         ContentResolver contentResolver = context.getContentResolver();
 
-        Cursor mCursor = contentResolver.query(uri, projection, selection, selectionArg, null /*sortOrder*/ );
+        Cursor mCursor = contentResolver.query(uri, projection, selection, selectionArg, null /*sortOrder*/);
 
-        if(mCursor!=null) {
+        if (mCursor != null) {
             // Check presence or row/data
             if (mCursor.moveToFirst()) {
                 // get the '_id' value
@@ -534,29 +450,33 @@ public class Utility {
 
             Log.d(LOG_TAG, "---------- mValueId : " + idNum);
         }
-       return idNum;
+        return idNum;
     }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++
-    public static int[] get_x_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
+    //-- public static int[] get_x_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
+
     //public static Vector<ContentValues> get_x_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
-    // public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
+
+    public static int[] get_x_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
+
+        //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
 
         // long rowId;
-        final String RESULTS        = "results";
-        final String ID             = "id";
+        final String RESULTS = "results";
+        final String ID = "id";
         final String ORIGINAL_TITLE = "original_title";
-        final String POSTER_PATH    = "poster_path";
-        final String BACKDROP_PATH  = "backdrop_path";  // movie poster image thumbnail
-        final String OVERVIEW       = "overview";       // plot -- synopsis
-        final String RELEASE_DATE   = "release_date";
-        final String VOTE_AVERAGE   = "vote_average";   // user rating
-        final String VOTE_COUNT     = "vote_count";
-        final String POPULARITY     = "popularity";
+        final String POSTER_PATH = "poster_path";
+        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
+        final String OVERVIEW = "overview";       // plot -- synopsis
+        final String RELEASE_DATE = "release_date";
+        final String VOTE_AVERAGE = "vote_average";   // user rating
+        final String VOTE_COUNT = "vote_count";
+        final String POPULARITY = "popularity";
 
-        final String TMDB_BASE_URL  = "http://image.tmdb.org/t/p/";
+        final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
 
         // W92 = "w92/"; W154 = "w154/";
         // W185 = "w185/"; W342 = "w342/";
@@ -571,13 +491,13 @@ public class Utility {
         Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
 
         //-------------------
-        JSONArray resultsJSONArray = moviesJsonObj.getJSONArray(RESULTS);
+        //-- JSONArray resultsJSONArray = moviesJsonObj.getJSONArray(RESULTS);
 
-        //JSONObject movies_JSONObject = new JSONObject(moviesJsonStr);
-        //JSONArray resultsJSONArray = movies_JSONObject.getJSONArray(RESULTS);
+        JSONObject movies_JSONObject = new JSONObject(moviesJsonStr);
+        JSONArray resultsJSONArray = movies_JSONObject.getJSONArray(RESULTS);
         //-------------------
 
-        List<String>  mvIdStringList = new ArrayList<>();
+        List<String> mvIdStringList = new ArrayList<>();
 
         Vector<ContentValues> Vctr = new Vector<ContentValues>();
 
@@ -587,15 +507,15 @@ public class Utility {
 
             JSONObject aJSONObject = resultsJSONArray.getJSONObject(i);
 
-            long   mvId          = aJSONObject.getLong(ID);
-            String mvOrgTitle    = aJSONObject.getString(ORIGINAL_TITLE);
-            String mvOverview    = aJSONObject.getString(OVERVIEW); // plot synopsis
+            long mvId = aJSONObject.getLong(ID);
+            String mvOrgTitle = aJSONObject.getString(ORIGINAL_TITLE);
+            String mvOverview = aJSONObject.getString(OVERVIEW); // plot synopsis
             String mvVoteAverage = aJSONObject.getString(VOTE_AVERAGE);  // user rating
-            long   mvVoteCount   = aJSONObject.getLong(VOTE_COUNT);  // user, sum number of votes
-            String mvPopularity  = aJSONObject.getString(POPULARITY);
+            long mvVoteCount = aJSONObject.getLong(VOTE_COUNT);  // user, sum number of votes
+            String mvPopularity = aJSONObject.getString(POPULARITY);
             String mvReleaseDate = aJSONObject.getString(RELEASE_DATE);
 
-            String mvPosterPath   = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
+            String mvPosterPath = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
             String mvBackDropPath = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
             //String mvBackDropPath = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
 
@@ -620,7 +540,7 @@ public class Utility {
 
                 Vctr.add(cv);
 
-                mvIdStringList.add(Integer.toString((int)mvId));
+                mvIdStringList.add(Integer.toString((int) mvId));
 
                 Log.d(LOG_TAG, "+++++++++++++++  ADD INTO VECTOR  +++++++++++++++" + mvId);
             }
@@ -643,9 +563,9 @@ public class Utility {
 
         mvIdStringList.toArray(mvIdStringArray);
 
-        for(int i=0; i < mvIdStringArray.length-1; i++ ){
+        for (int i = 0; i < mvIdStringArray.length; i++) {
 
-            mvIdIntArray[i]= Integer.parseInt(mvIdStringArray[i]);
+            mvIdIntArray[i] = Integer.parseInt(mvIdStringArray[i]);
         }
         //----------------------------------------------
 
@@ -653,19 +573,19 @@ public class Utility {
         //return movie_IDs;
     }
 
-    private static boolean is_movieInDataBase(/*Uri uri,*/ Context context, ContentValues cv){
+    private static boolean is_movieInDataBase(/*Uri uri,*/ Context context, ContentValues cv) {
 
         //Uri         mUri            = uri; // e.g. MovieInfoEntry.CONTENT_URI;
-        Uri         uri            = MovieInfoEntry.CONTENT_URI;
-        String[]    projection     = new String[]{MovieInfoEntry._ID};
-        String      selection      = MovieInfoEntry.COL_MV_ID + "=?";
-        String[]    selectionArg   = new String[]{String.valueOf(cv.getAsLong(MovieInfoEntry.COL_MV_ID))};
+        Uri uri = MovieInfoEntry.CONTENT_URI;
+        String[] projection = new String[]{MovieInfoEntry._ID};
+        String selection = MovieInfoEntry.COL_MV_ID + "=?";
+        String[] selectionArg = new String[]{String.valueOf(cv.getAsLong(MovieInfoEntry.COL_MV_ID))};
 
         ContentResolver contentResolver = context.getContentResolver();
 
-        Cursor cursor = contentResolver.query(uri, projection, selection, selectionArg, null /*sortOrder*/ );
+        Cursor cursor = contentResolver.query(uri, projection, selection, selectionArg, null /*sortOrder*/);
 
-        return (cursor!=null && cursor.moveToFirst());
+        return (cursor != null && cursor.moveToFirst());
 
         /*if(cursor!=null && cursor.moveToFirst()){
             return true;

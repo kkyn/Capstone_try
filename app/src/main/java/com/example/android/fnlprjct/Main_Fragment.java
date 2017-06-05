@@ -30,9 +30,9 @@ import com.example.android.fnlprjct.sync.MSyncAdapter;
  * A placeholder fragment (Main_Fragment) containing a simple view.
  */
 public class Main_Fragment extends Fragment
-                        implements LoaderManager.LoaderCallbacks<Cursor>
-                                , SharedPreferences.OnSharedPreferenceChangeListener
-                             //   ,MvAdapter.OnItemClickHandler_0
+    implements LoaderManager.LoaderCallbacks<Cursor>
+    , SharedPreferences.OnSharedPreferenceChangeListener
+    //   ,MvAdapter.OnItemClickHandler_0
 {
     // constructor
     public Main_Fragment() {
@@ -56,7 +56,7 @@ public class Main_Fragment extends Fragment
     static final int COLUMN_POSTERLINK;
     static final int COLUMN_BACKDROP_PATH;
 
-    static{
+    static {
         COLUMN_POPULAR_ID = 0;
         COLUMN_MV_ID = 1;
         COLUMN_KEY_ID = 2;
@@ -64,34 +64,35 @@ public class Main_Fragment extends Fragment
         COLUMN_BACKDROP_PATH = 4;
     }
 
-    private static final String[] MOVIE_INFO_PROJECTION = new String[]{
-
-        MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-        , MovieInfoEntry.COL_MV_ID
-        , MovieInfoEntry.COL_POPULARITY + " as sort_column"
-        , MovieInfoEntry.COL_POSTERLINK
-        , MovieInfoEntry.COL_BACKDROP_PATH
-    };
+    private static final String[] MOVIEINFO_COLUMN_PROJECTION_POPULARITY =
+        new String[]{
+            MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
+            , MovieInfoEntry.COL_MV_ID
+            , MovieInfoEntry.COL_POPULARITY + " as sort_column"
+            , MovieInfoEntry.COL_POSTERLINK
+         //   , MovieInfoEntry.COL_BACKDROP_PATH
+        };
 
     // state the columns of data I want
-    private static final String[] MOVIE_INFO_PROJECTION_1 = new String[]{
-
+    private static final String[] MOVIEINFO_COLUMN_PROJECTION_VOTEAVERAGE =
+        new String[]{
             MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
             , MovieInfoEntry.COL_MV_ID
             , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
             , MovieInfoEntry.COL_POSTERLINK
             , MovieInfoEntry.COL_BACKDROP_PATH
-    };
+        };
 
-    private static final String[] MOVIE_INFO_PROJECTION_2 = new String[]{
-
+    private static final String[] MOVIEINFO_COLUMN_PROJECTION_FAVOURITES =
+        new String[]{
             MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
             , MovieInfoEntry.COL_MV_ID
             , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
 //            ,MovieInfoEntry.COL_FAVOURITES
             , MovieInfoEntry.COL_POSTERLINK
             , MovieInfoEntry.COL_BACKDROP_PATH
-    };
+        };
+
     private static final String SELECTED_INDEX = "selected_index";
 
     //-------------------------
@@ -102,7 +103,7 @@ public class Main_Fragment extends Fragment
     // Container Activity must implement this interface
     public interface CallBackListener {
 
-         void onItemSelectedInRecyclerView(Uri mUri);
+        void onItemSelectedInRecyclerView(Uri mUri);
     }
 
     @Override
@@ -195,7 +196,7 @@ public class Main_Fragment extends Fragment
         super.onPause();
     }
 
-    void myRestartLoaderCode(){
+    void myRestartLoaderCode() {
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
@@ -210,7 +211,7 @@ public class Main_Fragment extends Fragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        if ( key.equals(getString(R.string.pref_movies_sort_key)) ) {
+        if (key.equals(getString(R.string.pref_movies_sort_key))) {
 
             getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
 
@@ -235,43 +236,47 @@ public class Main_Fragment extends Fragment
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
+
         Uri uri;
         String[] projection;
-
         String selection;
-        String[] selectionArg ;
+        String[] selectionArg;
+        String sortOrder;
 
         uri = MovieInfoEntry.CONTENT_URI;
 
-        String sortOrder;
         if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
-            sortOrder       = MovieInfoEntry.COL_POPULARITY + " DESC";
-            projection      = MOVIE_INFO_PROJECTION;
-            selection       = null;
-            selectionArg    = null;
-        } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
-            sortOrder       = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
-            projection      = MOVIE_INFO_PROJECTION_1;
-            selection       = null;
+            projection = MOVIEINFO_COLUMN_PROJECTION_POPULARITY;
+            selection = null;
             selectionArg = null;
+            sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
+
+        } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
+            projection = MOVIEINFO_COLUMN_PROJECTION_VOTEAVERAGE;
+            selection = null;
+            selectionArg = null;
+            sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
+
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
-            sortOrder       = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
-            projection      = MOVIE_INFO_PROJECTION_2;
-            selection       = MovieInfoEntry.COL_FAVOURITES + "=?";
-            selectionArg    = new String[]{"1"};
+            projection = MOVIEINFO_COLUMN_PROJECTION_FAVOURITES;
+            selection = MovieInfoEntry.COL_FAVOURITES + "=?";
+            selectionArg = new String[]{"1"};
+            sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
         }
 
-        //
+        // https://www.w3schools.com/sql/
+        // https://developer.android.com/reference/android/content/ContentResolver.html
+        // #query(android.net.Uri,%20java.lang.String[],%20java.lang.String,%20java.lang.String[],%20java.lang.String)
         // https://developer.android.com/reference/android/content/CursorLoader.html
         // CursorLoader(Context context, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)
         //
         return new CursorLoader(
-                getActivity(),           // context
-                uri,                     // uri
-                projection,              // projection
-                selection,               // selection
-                selectionArg,            // selectionArg
-                sortOrder                // sortOrder
+            getActivity(),           // context
+            uri,                     // uri
+            projection,              // projection
+            selection,               // selection
+            selectionArg,            // selectionArg
+            sortOrder                // sortOrder
         );
     }
 
@@ -284,8 +289,10 @@ public class Main_Fragment extends Fragment
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
         Log.d(LOG_TAG, "----   onLoadFinished(), loader ID : " + loader.getId() + " --");
-        if (cursor == null) {Log.d(LOG_TAG, "----   onLoadFinished(), cursor,NULL --");}
-        else                {Log.d(LOG_TAG, "----   onLoadFinished(), cursor,NOT NULL -- cursor count : " + cursor.getCount() + " --");
+        if (cursor == null) {
+            Log.d(LOG_TAG, "----   onLoadFinished(), cursor,NULL --");
+        } else {
+            Log.d(LOG_TAG, "----   onLoadFinished(), cursor,NOT NULL -- cursor count : " + cursor.getCount() + " --");
 
         }
 
@@ -294,7 +301,7 @@ public class Main_Fragment extends Fragment
          * Moves the query results into the adapter, causing the
          * RecyclerView fronting this adapter to re-display
         */
-        rvAdapter.swapCursor(cursor);
+        rvAdapter.swapCursor(cursor); // notifyDataSetChanged() is called in swapCursor()
 
         if (mPosition != RecyclerView.NO_POSITION) {
             recyclerView.smoothScrollToPosition(mPosition);
@@ -309,9 +316,8 @@ public class Main_Fragment extends Fragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-        /* Clears out the adapter's reference to the Cursor.
-        * This prevents memory leaks.
-        */
+        // Clears out the adapter's reference to the Cursor.
+        // This prevents memory leaks.
         rvAdapter.swapCursor(null);
     }
     //--------------------------------------------------------------
@@ -335,7 +341,7 @@ public class Main_Fragment extends Fragment
         int id = item.getItemId();
 
         //if (id == com.example.android.myproject_2.R.id.most_popular) {
-        if (id==R.id.most_popular){
+        if (id == R.id.most_popular) {
 
             //------------------------------------------------
             // get the file, SharedPreferences
@@ -394,23 +400,22 @@ public class Main_Fragment extends Fragment
         // with the method-name/onItemClick_0 found within the interface declaration.
         MvAdapter.OnItemClickHandler_0 itemClickHndlr =
 
-                new MvAdapter.OnItemClickHandler_0() {
-                    @Override
-                    public void onItemClick_0(MvAdapter.MvViewHolder viewHolder) {
+            new MvAdapter.OnItemClickHandler_0() {
+                @Override
+                public void onItemClick_0(MvAdapter.MvViewHolder viewHolder) {
 
-                        mPosition = viewHolder.getAdapterPosition();
+                    mPosition = viewHolder.getAdapterPosition();
 
-                        itemID = rvAdapter.getItemId(mPosition);
-                        uri = MovieInfoEntry.CONTENT_URI;
-                        uri = ContentUris.withAppendedId(uri, itemID);
+                    itemID = rvAdapter.getItemId(mPosition);
+                    uri = MovieInfoEntry.CONTENT_URI;
+                    uri = ContentUris.withAppendedId(uri, itemID);
 
-                        mCallBackListener.onItemSelectedInRecyclerView(uri);
-                        //-- or --
-                        // ((CallBackListener) getActivity()).onItemSelectedInRecyclerView(tryUri);
+                    mCallBackListener.onItemSelectedInRecyclerView(uri);
+                    //-- or --
+                    // ((CallBackListener) getActivity()).onItemSelectedInRecyclerView(tryUri);
 
-                    }
-
-        };
+                }
+            };
 
         rvAdapter = new MvAdapter(getContext(), itemClickHndlr);
         //************************************************
@@ -420,10 +425,11 @@ public class Main_Fragment extends Fragment
         recyclerView = (RecyclerView) rootView.findViewById(R.id.pane1_recyclerview);/*recyclerview_id4_movies*/
 
         //gridlm = new GridLayoutManager(getContext(), 2);
-        stgrdgrdlm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-
         //recyclerView.setLayoutManager(gridlm);
+        // --or--
+        stgrdgrdlm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(stgrdgrdlm);
+
         recyclerView.setAdapter(rvAdapter);
         recyclerView.setHasFixedSize(true);
 
