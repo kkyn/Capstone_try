@@ -21,7 +21,7 @@
     <!-- //////////////////////////////// -->
 
     <fragment
-        android:id="@+id/container_id4_fragment_main"
+        android:id="@+id/container_fragment_main"
         android:name="com.example.android.fnlprjct.Main_Fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

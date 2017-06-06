@@ -1,10 +1,37 @@
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             tools:context="com.example.android.fnlprjct.Main_Fragment"
+    >
+
+    &lt;!&ndash;<android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"&ndash;&gt;
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/pane1_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            />
+    &lt;!&ndash;</android.support.v4.widget.SwipeRefreshLayout>&ndash;&gt;
+
+</FrameLayout>-->
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
 <!-- <?xml version="1.0" encoding="utf-8"?> -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.fnlprjct.Main_Fragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+
+    >
 
     <!--<TextView
         android:layout_width="match_parent"
@@ -21,6 +48,6 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
          />
-    a<!--ndroid:id="@+id/recyclerview_id4_movies"-->
+    <!--ndroid:id="@+id/recyclerview_id4_movies"-->
 
 </FrameLayout>

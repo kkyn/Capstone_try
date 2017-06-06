@@ -13,8 +13,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -138,9 +140,13 @@ public class Main_Fragment extends Fragment
         super.onDestroyView();  //Log.d(LOG_TAG, "---- 7 onDestroyView() --");
     }
 
-    @Override // --- 1a ----
+    // onViewCreated() is called immediately after onCreateView() method.
+    @Override // --- 1b ----
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);  //Log.d(LOG_TAG, "---- 1a onViewCreated(View view, @Nullable Bundle savedInstanceState) --");
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
     }
 
     @Override // --- 0 ----
@@ -332,7 +338,7 @@ public class Main_Fragment extends Fragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_moviefragment, menu);
+        inflater.inflate(R.menu.menu_main_fragment, menu);
     }
 
     @Override
@@ -385,7 +391,7 @@ public class Main_Fragment extends Fragment
     /* When the system is ready for the Fragment to appear, this displays
      * the Fragment's View
      */
-    @Override //--- 1 ---
+    @Override //--- 1a ---
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //GridLayoutManager gridlm;

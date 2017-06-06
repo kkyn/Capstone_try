@@ -48,16 +48,16 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         // displayMode -> 1 ==> portrait, 2 ==> landscape
 
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        Main_Fragment mainFragment = (Main_Fragment) fragmentManager.findFragmentById(R.id.container_id4_fragment_main);
+        Main_Fragment mainFragment = (Main_Fragment) fragmentManager.findFragmentById(R.id.container_fragment_main);
         if ( mainFragment != null ) {
 
             mainFragment.myRestartLoaderCode();
         }
     }
 
+
     @Override
-    protected void
-    onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(com.example.android.fnlprjct.R.layout.activity_main);

@@ -17,7 +17,7 @@ public class MDetails_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(com.example.android.fnlprjct.R.layout.activity_moviedetails);
+        setContentView(com.example.android.fnlprjct.R.layout.activity_details);
 
         // ?? bundle from Main_Activity is passed on to the MDetails_Fragment ?? how/why ??, see code below !!
 

@@ -8,7 +8,7 @@ the 'id' to this fragment is associated to,
 the UI layout fragment referenced in android:name="com....Main_Fragment".
 -->
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container_id4_fragment_main"
+    android:id="@+id/container_fragment_main"
     android:name="com.example.android.fnlprjct.Main_Fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
