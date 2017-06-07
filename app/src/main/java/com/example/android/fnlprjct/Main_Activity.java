@@ -3,6 +3,8 @@ package com.example.android.fnlprjct;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,10 +49,11 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
 
         // displayMode -> 1 ==> portrait, 2 ==> landscape
 
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        Main_Fragment mainFragment = (Main_Fragment) fragmentManager.findFragmentById(R.id.container_fragment_main);
-        if ( mainFragment != null ) {
+        FragmentManager fMngr = getSupportFragmentManager();
 
+        Main_Fragment mainFragment = (Main_Fragment) fMngr.findFragmentById(R.id.container_fragment_main);
+
+        if ( mainFragment != null ) {
             mainFragment.myRestartLoaderCode();
         }
     }
@@ -113,10 +116,14 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     //----------- OPTIONS MENU Stuff (End) -------------------
     //------------------------------------------------
 
+    // -------- Implementing Callback methods called from Fragment ----
+    // -------- Declared in Fragment associate with this Activity -----
+    //-----------------------------------------------------------------
     @Override
     public void onItemSelectedInRecyclerView(Uri uri) {
 
         displayMode = getResources().getConfiguration().orientation;
+
         mode = (displayMode==1)? "portrait" :"landscape";
 
         if (is2Pane == true) {
@@ -124,13 +131,15 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
             Bundle bundle = new Bundle();
             bundle.putParcelable(MDetails_Fragment.DETAIL_URI, uri);
 
-            MDetails_Fragment movieDetails_Fragment = new MDetails_Fragment();
-            movieDetails_Fragment.setArguments(bundle);
+            MDetails_Fragment dtlsFrgmnt = new MDetails_Fragment();
+            dtlsFrgmnt.setArguments(bundle);
 
-            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.pane2_container, movieDetails_Fragment);
-            fragmentTransaction.commit();
+            FragmentManager frgmntMngr = getSupportFragmentManager();
+            FragmentTransaction frgmntTrnsctn = frgmntMngr.beginTransaction();
+
+            frgmntTrnsctn.replace(R.id.pane2_container, dtlsFrgmnt);
+
+            frgmntTrnsctn.commit();
         }
         else {
 

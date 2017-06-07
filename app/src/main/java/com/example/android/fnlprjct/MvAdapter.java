@@ -50,7 +50,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
 
             switch (view.getId()){
                 case R.id.poster_imageview : /*frgmntm_imageview*/
-                    onItemClickHandler_0.onItemClick_0(this); // 'this' refers to this 'ViewHolder'
+                    itmClckHndlr.onClick0(this); // 'this' refers to this 'ViewHolder'
                     break;
                 default: break;
             }
@@ -64,18 +64,18 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     //-------- RecyclerView.Adapter stuff  (begin) ---------
     //------------------------------------------------------
     final private Context context;
-    final private OnItemClickHandler_0 onItemClickHandler_0; //
+    final private ItemClickHandler0 itmClckHndlr; //
 
     // Declaration of interface
-    public interface OnItemClickHandler_0 {
-        void onItemClick_0(MvViewHolder viewHolder);
+    public interface ItemClickHandler0 {
+        void onClick0(MvViewHolder viewHolder);
     }
 
     // * provide  a suitable constructor( depends on the kind of data-set / how u want to interface ? )
-    public MvAdapter(Context context, OnItemClickHandler_0 ref_onItemClickHandler_0) {
+    public MvAdapter(Context context, ItemClickHandler0 itemClickHandler) {
         // super(context);
         this.context = context;
-        this.onItemClickHandler_0 = ref_onItemClickHandler_0;
+        this.itmClckHndlr = itemClickHandler;
     }
 
     // * Called when RecyclerView needs a new 'RecyclerView.ViewHolder' of the given type to represent an item.

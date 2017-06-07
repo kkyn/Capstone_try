@@ -34,7 +34,7 @@ import com.example.android.fnlprjct.sync.MSyncAdapter;
 public class Main_Fragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>
     , SharedPreferences.OnSharedPreferenceChangeListener
-    //   ,MvAdapter.OnItemClickHandler_0
+    //   ,MvAdapter.ItemClickHandler0
 {
     // constructor
     public Main_Fragment() {
@@ -140,6 +140,14 @@ public class Main_Fragment extends Fragment
         super.onDestroyView();  //Log.d(LOG_TAG, "---- 7 onDestroyView() --");
     }
 
+    @Override // --- 0 ----
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Add this line in order for this fragment to handle menu events.
+        setHasOptionsMenu(true);    //Log.d(LOG_TAG, "---- 0 onCreate() --");
+    }
+
     // onViewCreated() is called immediately after onCreateView() method.
     @Override // --- 1b ----
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -149,22 +157,14 @@ public class Main_Fragment extends Fragment
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
     }
 
-    @Override // --- 0 ----
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Add this line in order for this fragment to handle menu events.
-        setHasOptionsMenu(true);    //Log.d(LOG_TAG, "---- 0 onCreate() --");
-    }
-
     @Override // --- 2 ----
     public void onActivityCreated(Bundle savedInstanceState) {
 
         // returns a loader-object, there is no need to keep it around.
-        // LoaderManager will take of the details.
+        // LoaderManager will take care of the details.
         // Loaders are uniquely identified, e.g. POPULAR_LOADER_ID
-        // Prepare the loader.  Either re-connect with an existing one,
-        // or start a new one.
+        // Prepare the loader.
+        // Either re-connect with an existing one or start a new one.
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().initLoader(MOVIE_FRAGMENT_ID, null, this);
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -195,7 +195,7 @@ public class Main_Fragment extends Fragment
     @Override //--- 5 ----
     public void onPause() {
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext()/*getActivity()*/);
 
         sp.unregisterOnSharedPreferenceChangeListener(this);
 
@@ -402,13 +402,13 @@ public class Main_Fragment extends Fragment
 
         //************************************************
         // tky comment ....
-        // Implementation the interface, 'NAME'/OnItemClickHandler_0
-        // with the method-name/onItemClick_0 found within the interface declaration.
-        MvAdapter.OnItemClickHandler_0 itemClickHndlr =
+        // Implementation the interface, 'NAME'/ItemClickHandler0
+        // with the method-name/onClick0 found within the interface declaration.
+        MvAdapter.ItemClickHandler0 itemClickHandler =
 
-            new MvAdapter.OnItemClickHandler_0() {
+            new MvAdapter.ItemClickHandler0() {
                 @Override
-                public void onItemClick_0(MvAdapter.MvViewHolder viewHolder) {
+                public void onClick0(MvAdapter.MvViewHolder viewHolder) {
 
                     mPosition = viewHolder.getAdapterPosition();
 
@@ -423,7 +423,7 @@ public class Main_Fragment extends Fragment
                 }
             };
 
-        rvAdapter = new MvAdapter(getContext(), itemClickHndlr);
+        rvAdapter = new MvAdapter(getContext(), itemClickHandler);
         //************************************************
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);

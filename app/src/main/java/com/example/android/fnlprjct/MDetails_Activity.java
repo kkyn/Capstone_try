@@ -1,11 +1,16 @@
 package com.example.android.fnlprjct;
 
+import android.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 public class MDetails_Activity extends AppCompatActivity {
 
@@ -32,14 +37,17 @@ public class MDetails_Activity extends AppCompatActivity {
 
         // Create the detail fragment and add it to the activity
         // using a fragment transaction.
-        MDetails_Fragment mMovieDetailsFragment = new MDetails_Fragment();
-        mMovieDetailsFragment.setArguments(bundle);
+        MDetails_Fragment dtlsFrgmnt = new MDetails_Fragment();
 
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.pane2_container, mMovieDetailsFragment);
-        fragmentTransaction.commit();
+        dtlsFrgmnt.setArguments(bundle);
 
+        FragmentManager fMngr = getSupportFragmentManager();
+
+        FragmentTransaction fTrnsctn = fMngr.beginTransaction();
+
+        fTrnsctn.add(R.id.pane2_container, dtlsFrgmnt);
+
+        fTrnsctn.commit();
         // --or--
         // getSupportFragmentManager().beginTransaction()
         //                             .add(R.id.detail_movie_container, new MDetails_Fragment())
@@ -78,5 +86,63 @@ public class MDetails_Activity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+//# # # # # # # # # # # # # # # # # # # # # # # # # # #
+//# # # # # # # # # # # # # # # # # # # # # # # # # # #
+    //-------------------------------------------------//
+    ///----- BEGIN, FRAGMENT-STATUS-PAGER-ADAPTER ----///
+    //-------------------------------------------------//
+    /**
+     * A pager-adapter that represents ArticleDetailFragment objects.
+     */
+    // Creates a class that extends the FragmentStatePagerAdapter abstract class
+//    private class MyFrgmntPgrAdptr extends FragmentStatePagerAdapter {
+//
+//        public MyFrgmntPgrAdptr(FragmentManager fm) {
+//            super(fm);
+//        }
+//
+//        // Called to inform the adapter of which item is currently considered to be the "primary",
+//        // that is the one show to the user as the current page.
+//        @Override
+//        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+//            super.setPrimaryItem(container, position, object);
+//
+//            ArticleDetailFragment fragment = (ArticleDetailFragment) object;
+//
+//            if (fragment != null) {
+//
+//            }
+//        }
+//
+//        // Implement the getItem() method to supply instances of ArticleDetailFragment as new pages.
+//        @Override
+//        public Fragment getItem(int position) {
+//
+//            mCursor.moveToPosition(position);
+//
+//            long itemID = mCursor.getLong(ArticleLoader.Query._ID);
+//
+//            ArticleDetailFragment dtlFragment = ArticleDetailFragment.newInstance(itemID);
+//
+//            return (Fragment) dtlFragment;
+//        }
+//
+//        // The pager adapter also requires that you implement the getCount() method,
+//        // which returns the amount of pages the adapter will create.
+//        @Override
+//        public int getCount() {
+//
+//            if(mCursor!=null) {
+//                int intCount = mCursor.getCount();
+//                return intCount;
+//            }
+//            else return 0;
+//        }
+//    }
+    //-------------------------------------------------//
+    ///----- END, FRAGMENT-STATUS-PAGER-ADAPTER ------///
+    //-------------------------------------------------//
+
+//# # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 }
