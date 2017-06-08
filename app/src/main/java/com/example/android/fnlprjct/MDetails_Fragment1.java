@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -49,12 +50,31 @@ public class MDetails_Fragment1 extends Fragment
         setHasOptionsMenu(true);
     }
 
+    // tky comment ---------------------------------------------
+    // + Used by the caller, MyFrgmntPgrAdptr/FragmentStatePagerAdapter
+    // + To create a new instance of ArticleDetailFragment/Fragment,
+    //    providing "num" as an argument.
+    //---------------------------------------------------------------
+    public static MDetails_Fragment1 newInstance(int itemId) {
+
+        Bundle arguments = new Bundle();
+        arguments.putInt("MyKey1", itemId); // ?? itemId ??
+
+        MDetails_Fragment1 fragment = new MDetails_Fragment1();
+
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private static final String LOG_TAG = MDetails_Fragment1.class.getSimpleName();
 
     private static final int DETAIL_MOVIE_LOADER = 3;
     private static final int MOVIE_REVIEW_LOADER = 4;
 
     private Uri mUri;
+    private Uri uri;
+    private int mItemId;
 
     static final String DETAIL_URI = "URI";
     static final String MOVIE_ID = "MovieID";
@@ -107,7 +127,6 @@ public class MDetails_Fragment1 extends Fragment
     TextView movietitle;
     @BindView(R.id.moviethumbnail_iv)
     DynamicHeightNetworkImageView  moviethumbnail;
-    //ImageView  moviethumbnail;
     @BindView(R.id.moviereleasedate_tv)
     TextView moviereleasedate;
     @BindView(R.id.movieratings_tv)
@@ -269,16 +288,31 @@ public class MDetails_Fragment1 extends Fragment
     //-------------------------------------------
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Return the arguments supplied when the fragment was instantiated, if any.
+        Bundle bundle = this.getArguments();
+        if (bundle.containsKey("MyKey1") == true) {
+            mItemId = bundle.getInt("MyKey1");
+
+            uri = MovieInfoEntry.CONTENT_URI;
+            uri = ContentUris.withAppendedId(uri, mItemId);
+            mUri = uri;
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         /*Intent intent = getActivity().getIntent();
         mUriString = intent.getDataString();
         mUri = intent.getData();*/
 
-        Bundle mBundle = this.getArguments();
-        if (mBundle != null) {
-            mUri = mBundle.getParcelable(MDetails_Fragment1.DETAIL_URI);
-        }
+//        Bundle mBundle = this.getArguments();
+//        if (mBundle != null) {
+//            mUri = mBundle.getParcelable(MDetails_Fragment1.DETAIL_URI);
+//        }
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
@@ -315,7 +349,6 @@ public class MDetails_Fragment1 extends Fragment
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -344,7 +377,6 @@ public class MDetails_Fragment1 extends Fragment
         //sp.registerOnSharedPreferenceChangeListener(listener);
 
         super.onResume();
-
     }
 
     //-----------------------------------------------------------

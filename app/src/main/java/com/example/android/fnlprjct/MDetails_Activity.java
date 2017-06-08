@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -25,27 +26,41 @@ public class MDetails_Activity extends AppCompatActivity {
         setContentView(com.example.android.fnlprjct.R.layout.activity_details);
 
         // ?? bundle from Main_Activity is passed on to the MDetails_Fragment ?? how/why ??, see code below !!
-
+        // (1) Get the 'intent' with the start-of-this-activity.
+        // (2) Get the data attached with the 'intent'
         Intent intent = this.getIntent();
         mUri = intent.getData();
+
+        Log.d(LOG_TAG, "yyyy MDetails_Activity / onCreate / mUri : " + mUri.toString());
 
         // Log.d(LOG_TAG, "yyyy onCreate / savedInstanceState == null / DetailMoviewFragment --");
         // Log.d(LOG_TAG, "yyyy onCreate / mUri : " + mUri.toString());
 
+        //-- Begin-- Attach data to a fragment
+        // (1) Place 'data' into bundle
         Bundle bundle = new Bundle();
         bundle.putParcelable(MDetails_Fragment.DETAIL_URI, mUri);
 
+        Log.d(LOG_TAG, "( ( ( ( ( ( ( " + mUri.toString()+ " ) ) ) ) ) ) ) ");
+
+        // (2) Attach the bundle to a fragment
         // Create the detail fragment and add it to the activity
         // using a fragment transaction.
-        MDetails_Fragment dtlsFrgmnt = new MDetails_Fragment();
-
-        dtlsFrgmnt.setArguments(bundle);
+        NewFragment newFragment = new NewFragment();
+        newFragment.setArguments(bundle);
+        //-- End  -- Attach data to a fragment
 
         FragmentManager fMngr = getSupportFragmentManager();
-
         FragmentTransaction fTrnsctn = fMngr.beginTransaction();
 
-        fTrnsctn.add(R.id.pane2_container, dtlsFrgmnt);
+        fTrnsctn.add(R.id.pane2_container, newFragment);
+        /*
+        MDetails_Fragment dtlFrgmnt = new MDetails_Fragment();
+        dtlFrgmnt.setArguments(bundle);
+        FragmentManager fMngr = getSupportFragmentManager();
+        FragmentTransaction fTrnsctn = fMngr.beginTransaction();
+        fTrnsctn.add(R.id.pane2_container, dtlFrgmnt);
+         */
 
         fTrnsctn.commit();
         // --or--
