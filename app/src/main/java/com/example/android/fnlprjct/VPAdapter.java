@@ -15,10 +15,14 @@ public class VPAdapter extends FragmentStatePagerAdapter {
 
     private static final String LOG_TAG = VPAdapter.class.getSimpleName();
 
-    Cursor cursor;
+    private Cursor cursor;
+   // private MDetails_Fragment fgmnt1;
+    /*private*/
+   String sortMovieBy;
 
-    public VPAdapter(FragmentManager fMngr) {
+    public VPAdapter(FragmentManager fMngr, String sortMovieBy) {
         super(fMngr);
+        this.sortMovieBy = sortMovieBy;
     }
     /*public VPAdapter(FragmentManager fMngr, Cursor cursor) {
         super(fMngr);
@@ -27,13 +31,16 @@ public class VPAdapter extends FragmentStatePagerAdapter {
 
     // Called to inform the adapter of which item is currently considered to be the "primary",
     // that is the one show to the user as the current page.
-    // --- Deprecated ---
-    /*@Override
+    // --- Deprecated --- ???
+    @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         super.setPrimaryItem(container, position, object);
 
-        MDetails_Fragment fragment = (MDetails_Fragment) object;
-    }*/
+        Log.d(LOG_TAG, "  - - - - - - setPrimaryItem /position : " + position + " + + + + + +");
+
+        /*MDetails_Fragment*///fgmnt1 = (MDetails_Fragment) object;
+
+    }
 
     //-------------------------------------------------------
     // (1) In this adpater, with the new 'position'.
@@ -41,24 +48,27 @@ public class VPAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
+        Log.d(LOG_TAG, "  - - - - - - getItem /position : " + position + " + + + + + +");
 
         cursor.moveToPosition(position);
-        int specificValue = cursor.getInt(1); // get the movie-Id
-        Log.d(LOG_TAG, " ( ( ( ( ( ( ( " + position + " ) ) ) ) ) ) ");
+
+        int movieId = cursor.getInt(MyQuery.MovieInfo.COL_MOVIE_ID);
+
+        Log.d(LOG_TAG, "  - - - - - - " + position + " + + + + + +");
+
         // Here we call an newinstance which create a new MDetails-Fragment with a given argument.
         // The 'argument-value' comes from the cursor residing/given in/to this ViewPager-Adapter.
         // To display at the ViewPager UI
-        MDetails_Fragment1 fgmnt1 = MDetails_Fragment1.newInstance(specificValue);
+        MDetails_Fragment1 fgmnt1 = MDetails_Fragment1.newInstance(movieId);
 
         return (Fragment) fgmnt1;
-        //return null;
     }
 
     // (1) In this adapter, get the number of 'items'.
     @Override
     public int getCount() {
 
-        if (cursor != null) {
+        if (cursor != null && cursor.moveToFirst()) {
             return cursor.getCount();
         } else {
             return 0;
@@ -72,4 +82,22 @@ public class VPAdapter extends FragmentStatePagerAdapter {
 
         this.notifyDataSetChanged();
     }
+
+    //-----------------------------------------------
+    // tky copied
+    // Force a refresh of the page when a different fragment is displayed.
+    /*@Override
+    public int getItemPosition(Object object) {
+        //return super.getItemPosition(object);
+        // this method will be called for every fragment in the ViewPager
+        if (object instanceof MDetails_Fragment1){
+            return POSITION_UNCHANGED;  // don't force a reload
+        } else {
+            // POSITION_NONE means something like: this fragment is no longer valid
+            // triggering the ViewPager to re-build the instance of this fragment.
+            return POSITION_NONE;
+        }
+    }*/
+    //-----------------------------------------------
+
 }

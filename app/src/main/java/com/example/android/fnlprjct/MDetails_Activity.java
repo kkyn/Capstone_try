@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class MDetails_Activity extends AppCompatActivity {
 
@@ -43,17 +44,18 @@ public class MDetails_Activity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "( ( ( ( ( ( ( " + mUri.toString()+ " ) ) ) ) ) ) ) ");
 
-        // (2) Attach the bundle to a fragment
-        // Create the detail fragment and add it to the activity
-        // using a fragment transaction.
-        NewFragment newFragment = new NewFragment();
-        newFragment.setArguments(bundle);
-        //-- End  -- Attach data to a fragment
+        if (savedInstanceState == null) {
+            // (2) Attach the bundle to a fragment
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
+            NewFragment newFragment = new NewFragment();
+            newFragment.setArguments(bundle);
+            //-- End  -- Attach data to a fragment
 
-        FragmentManager fMngr = getSupportFragmentManager();
-        FragmentTransaction fTrnsctn = fMngr.beginTransaction();
+            FragmentManager fMngr = getSupportFragmentManager();
+            FragmentTransaction fTrnsctn = fMngr.beginTransaction();
 
-        fTrnsctn.add(R.id.pane2_container, newFragment);
+            fTrnsctn.add(R.id.pane2_container, newFragment);
         /*
         MDetails_Fragment dtlFrgmnt = new MDetails_Fragment();
         dtlFrgmnt.setArguments(bundle);
@@ -62,14 +64,25 @@ public class MDetails_Activity extends AppCompatActivity {
         fTrnsctn.add(R.id.pane2_container, dtlFrgmnt);
          */
 
-        fTrnsctn.commit();
-        // --or--
-        // getSupportFragmentManager().beginTransaction()
-        //                             .add(R.id.detail_movie_container, new MDetails_Fragment())
-        //                             .commit();
-
+            fTrnsctn.commit();
+            // --or--
+            // getSupportFragmentManager().beginTransaction()
+            //                             .add(R.id.detail_movie_container, new MDetails_Fragment())
+            //                             .commit();
+        }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putInt("outState", 8);
+        Toast.makeText(this, "+ + + + + Detail_Activity/onSaveInstanceState ", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

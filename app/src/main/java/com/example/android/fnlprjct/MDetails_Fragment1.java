@@ -85,30 +85,6 @@ public class MDetails_Fragment1 extends Fragment
     public boolean isFavouriteEnabled = false;
 
     ///////////////////////////////////////////////
-    private static final String[] PROJECTION_MOVIE_INFO =
-        new String[]{
-            MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID,
-            MovieInfoEntry.COL_MV_ID,
-            MovieInfoEntry.COL_FAVOURITES,
-            MovieInfoEntry.COL_BACKDROP_PATH,
-            MovieInfoEntry.COL_OVERVIEW,
-            MovieInfoEntry.COL_RELEASEDATE,
-            MovieInfoEntry.COL_TITLE,
-            MovieInfoEntry.COL_VOTE_AVERAGE
-    };
-
-    // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
-    // must change.
-    //public static final int PROJECTION_RATING_ID = 0;
-    public static final int INDX_MOVIE_ID = 1;
-    public static final int INDX_FAVOURITES = 2;
-    public static final int INDX_BACKDROP_PATH = 3;
-    public static final int INDX_OVERVIEW = 4;
-    public static final int INDX_RELEASEDATE = 5;
-    public static final int INDX_MOVIE_TITLE = 6;
-    public static final int INDX_MOVIE_RATING = 7;
-
-    ///////////////////////////////////////////////
     private static final String[] PROJECTION_MOVIE_REVIEW =
         new String[]{
             MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
@@ -400,7 +376,7 @@ public class MDetails_Fragment1 extends Fragment
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-            String[] mProjection = PROJECTION_MOVIE_INFO;
+            String[] mProjection = MyQuery.MovieInfo.PROJECTION;
 
             return new CursorLoader(getActivity(), mUri, mProjection, null, null, null);
         }
@@ -410,16 +386,16 @@ public class MDetails_Fragment1 extends Fragment
 
             if (cursor != null && cursor.moveToFirst()) {
 
-                movietitle.setText(cursor.getString(INDX_MOVIE_TITLE));
-                moviereleasedate.setText(cursor.getString(INDX_RELEASEDATE));
-                movieratings.setText(cursor.getString(INDX_MOVIE_RATING));
-                moviesynopsis.setText(cursor.getString(INDX_OVERVIEW));
+                movietitle.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE));
+                moviereleasedate.setText(cursor.getString(MyQuery.MovieInfo.COL_RELEASEDATE));
+                movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_RATING));
+                moviesynopsis.setText(cursor.getString(MyQuery.MovieInfo.COL_OVERVIEW));
 
                 // ------------------------
                 // ---- Using Volley ------
                 ImageLoader imageLoader = ImageLoaderHelper.getInstance(getContext()).getImageLoader();
 
-                String stringUrl = cursor.getString(INDX_BACKDROP_PATH);
+                String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_BACKDROP_PATH);
 
                 Log.d(LOG_TAG, "? ? ? ?  " + stringUrl + " ? ? ? ?");
                 // -- thumb-nail-View --
@@ -432,7 +408,8 @@ public class MDetails_Fragment1 extends Fragment
                         .error(R.drawable.sample_0)
                         .into(moviethumbnail);*/
 
-                int favouriteValue = cursor.getInt(INDX_FAVOURITES);
+                int favouriteValue = cursor.getInt(MyQuery.MovieInfo.COL_FAVOURITES);
+
                 if (favouriteValue == 1) {
                     isFavouriteEnabled = true;
                     moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
