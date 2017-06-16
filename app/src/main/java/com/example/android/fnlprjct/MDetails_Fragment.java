@@ -115,8 +115,8 @@ public class MDetails_Fragment extends Fragment
 
     ///////////////////////////////////////////////
 
-    @BindView(R.id.movietitle_tv)
-    TextView movietitle;
+    /*@BindView(R.id.movietitle_tv)
+    TextView movietitle;*/
     @BindView(R.id.moviethumbnail_iv)
     DynamicHeightNetworkImageView  moviethumbnail;
     //ImageView  moviethumbnail;
@@ -295,6 +295,7 @@ public class MDetails_Fragment extends Fragment
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+        //xx View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
 
@@ -389,7 +390,7 @@ public class MDetails_Fragment extends Fragment
 
             if (cursor != null && cursor.moveToFirst()) {
 
-                movietitle.setText(cursor.getString(INDX_MOVIE_TITLE));
+                //movietitle.setText(cursor.getString(INDX_MOVIE_TITLE));
                 moviereleasedate.setText(cursor.getString(INDX_RELEASEDATE));
                 movieratings.setText(cursor.getString(INDX_MOVIE_RATING));
                 moviesynopsis.setText(cursor.getString(INDX_OVERVIEW));

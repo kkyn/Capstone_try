@@ -40,7 +40,8 @@ public class Details_Adapter extends RecyclerView.Adapter<Details_Adapter.Detail
                     break;
                 }
             }
-            View view = LayoutInflater.from(parent.getContext()).inflate(layout_id, parent, false);
+            View view = LayoutInflater.from(context).inflate(layout_id, parent, false);
+            //View view = LayoutInflater.from(parent.getContext()).inflate(layout_id, parent, false);
 
             // * Control whether a view can take focus
             view.setFocusable(true);

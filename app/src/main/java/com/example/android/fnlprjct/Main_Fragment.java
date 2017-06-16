@@ -44,7 +44,7 @@ public class Main_Fragment extends Fragment
     public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
-    private RecyclerView recyclerView;
+    private RecyclerView rv;
     private MvAdapter rvAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private long itemID = 0;
@@ -100,7 +100,7 @@ public class Main_Fragment extends Fragment
     //-------------------------
     //--- Interface stuff -----
     //-------------------------
-    CallBackListener mCallBackListener;
+    CallBackListener mainCallBackListener;
 
     // Container Activity must implement this interface
     public interface CallBackListener {
@@ -115,7 +115,7 @@ public class Main_Fragment extends Fragment
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mCallBackListener = (CallBackListener) context;
+            mainCallBackListener = (CallBackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement CallBackListener");
         }
@@ -309,9 +309,9 @@ public class Main_Fragment extends Fragment
         */
         rvAdapter.swapCursor(cursor); // notifyDataSetChanged() is called in swapCursor()
 
-        if (mPosition != RecyclerView.NO_POSITION) {
-            recyclerView.smoothScrollToPosition(mPosition);
-        }
+       /* if (mPosition != RecyclerView.NO_POSITION) {
+            rv.smoothScrollToPosition(mPosition);
+        }*/
     }
 
     // Called when a previously created loader is being reset, and thus making its data unavailable.
@@ -416,7 +416,7 @@ public class Main_Fragment extends Fragment
                     uri = MovieInfoEntry.CONTENT_URI;
                     uri = ContentUris.withAppendedId(uri, itemID);
 
-                    mCallBackListener.onItemSelectedInRecyclerView(uri);
+                    mainCallBackListener.onItemSelectedInRecyclerView(uri);
                     //-- or --
                     // ((CallBackListener) getActivity()).onItemSelectedInRecyclerView(tryUri);
 
@@ -428,16 +428,16 @@ public class Main_Fragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.pane1_recyclerview);/*recyclerview_id4_movies*/
+        rv = (RecyclerView) rootView.findViewById(R.id.pane1_recyclerview);/*recyclerview_id4_movies*/
 
         //gridlm = new GridLayoutManager(getContext(), 2);
-        //recyclerView.setLayoutManager(gridlm);
+        //rv.setLayoutManager(gridlm);
         // --or--
         stgrdgrdlm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(stgrdgrdlm);
+        rv.setLayoutManager(stgrdgrdlm);
 
-        recyclerView.setAdapter(rvAdapter);
-        recyclerView.setHasFixedSize(true);
+        rv.setAdapter(rvAdapter);
+        rv.setHasFixedSize(true);
 
         if ((savedInstanceState != null) && savedInstanceState.containsKey(SELECTED_INDEX)) {
             mPosition = savedInstanceState.getInt(SELECTED_INDEX);

@@ -1,3 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Is actually a <FrameLayout ...-->
+<!--<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true">
+
+    <TextView
+        android:id="@+id/mvdtls_textviewid_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|right"
+        android:text="layout/fragment_moviedetails.xml " />
+
+    &lt;!&ndash; Is a LinearLayout ... and orientation is vertical &ndash;&gt;
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize">
+
+                <com.example.android.fnlprjct.DynamicHeightNetworkImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:fitsSystemWindows="true">
+
+                </com.example.android.fnlprjct.DynamicHeightNetworkImageView>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.design.widget.CoordinatorLayout>-->
+
+<!-- ############################################### -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lnrlyt_id_4_moviedetails"
     android:layout_width="match_parent"
@@ -21,14 +66,14 @@
                 android:gravity="top|right"
                 android:text="layout/fragment_moviedetails.xml " />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/movietitle_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/hello_world"
                 android:textColor="#000000"
-                android:textSize="30sp" />
+                android:textSize="30sp" />-->
 
             <com.example.android.fnlprjct.DynamicHeightNetworkImageView
                 android:id="@+id/moviethumbnail_iv"

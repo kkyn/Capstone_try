@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardview_4_reviews"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-
-    app:cardBackgroundColor="#f0f4c3"
+    card_view:cardBackgroundColor="#ffffffee"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="6dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:contentPadding="14sp"
+    card_view:contentPaddingBottom="14sp"
+    >
+    card_view:cardBackgroundColor="#f0f4c3"
     app:cardCornerRadius="5dp"
     app:cardElevation="14.5sp"
     app:cardMaxElevation="8sp"
-    app:cardUseCompatPadding="true"
-    app:contentPadding="14.5sp"
-    app:contentPaddingBottom="14.5sp">
+
+    card_view:contentPadding="14.5sp"
+    card_view:contentPaddingBottom="14.5sp"
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"/>
 
         <TextView
             android:id="@+id/Review_textView"
@@ -32,6 +39,6 @@
             android:layout_below="@id/Reviewer_textView"
             android:layout_gravity="center_vertical"
             android:clickable="false"
-            android:text="TextView" />
+            android:text="TextView"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

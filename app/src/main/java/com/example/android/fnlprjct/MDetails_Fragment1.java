@@ -17,6 +17,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,8 +100,8 @@ public class MDetails_Fragment1 extends Fragment
 
     ///////////////////////////////////////////////
 
-    @BindView(R.id.movietitle_tv)
-    TextView movietitle;
+    /*@BindView(R.id.movietitle_tv)
+    TextView movietitle;*/
     @BindView(R.id.moviethumbnail_iv)
     DynamicHeightNetworkImageView  moviethumbnail;
     @BindView(R.id.moviereleasedate_tv)
@@ -113,7 +114,9 @@ public class MDetails_Fragment1 extends Fragment
     Button movievideo;
     @BindView(R.id.favourite_btn)
     ImageButton moviefavourite;
-
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    //Toolbar mToolbar;
     private TextView mTextView;
     //private DynamicHeightNetworkImageView moviethumbnail;
     //-----------------------------------------------------------
@@ -291,9 +294,9 @@ public class MDetails_Fragment1 extends Fragment
 //        }
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_details1, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
+        RecyclerView rView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
 
         ButterKnife.bind(this, rootView);
 
@@ -303,6 +306,35 @@ public class MDetails_Fragment1 extends Fragment
         moviethumbnail.setOnClickListener(this);
         moviefavourite.setOnClickListener(this);
 
+        // **************************************
+        // --- old way ?? ---
+        //mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null.
+        //-- To to use setSupportActionBar in fragment, use '((AppCompatActivity)getActivity()).'  --
+        //((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        //((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // --- new way ?? --- using
+        // https://material.io/icons/#ic_arrow_back
+        // https://developer.android.com/reference/android/support/v7/widget/Toolbar.html
+        if (mToolbar != null ){
+
+            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_1);
+
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    //----------------------------------------------------------------
+                    // Indirect a call to a method via ArticaleDetailActivity/Activity.
+                    // supportFinishAfterTransition() -- refers to a method in FragmentActivity.java
+                    //----------------------------------------------------------------
+                    //getActivityCast().supportFinishAfterTransition();   // onSupportNavigateUp();
+                }
+            });
+        }
+        // **************************************
         //++++++++++++++++++++++++++++++++++++++
         // https://developer.android.com/reference/android/support/v4/app/Fragment.html#getLoaderManager()
         // https://developer.android.com/reference/android/support/v4/app/LoaderManager.html
@@ -316,8 +348,8 @@ public class MDetails_Fragment1 extends Fragment
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(details_adapter);
+        rView.setLayoutManager(layoutManager);
+        rView.setAdapter(details_adapter);
 
         return rootView;
     }
@@ -386,7 +418,7 @@ public class MDetails_Fragment1 extends Fragment
 
             if (cursor != null && cursor.moveToFirst()) {
 
-                movietitle.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE));
+                //movietitle.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE));
                 moviereleasedate.setText(cursor.getString(MyQuery.MovieInfo.COL_RELEASEDATE));
                 movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_RATING));
                 moviesynopsis.setText(cursor.getString(MyQuery.MovieInfo.COL_OVERVIEW));

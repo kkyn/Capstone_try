@@ -19,10 +19,11 @@ import butterknife.ButterKnife;
  */
 public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
 {
+    public static final String LOG_TAG = MvAdapter.class.getSimpleName();
+
     private static final int VIEW_TYPE_A = 0;
 
     private Cursor mCursor;
-    public static final String LOG_TAG = MvAdapter.class.getSimpleName();
 
     //------------------------------------------------------
     //-------- ViewHolder stuff (begin) --------------------

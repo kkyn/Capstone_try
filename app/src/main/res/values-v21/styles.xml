@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- Base application theme. -->
+
+    <!-- Disable the theme-provided ActionBar. -->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+
+    <!-- Enable use of Toolbar as ActionBar -->
     <!--<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!--<style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">-->
 
-        <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
         <!-- Customize your theme here. -->
         <!-- tky add, june6 2017-->
         <item name="colorPrimary">@color/lime_300</item>
         <item name="colorPrimaryDark">@color/lime_700</item>
         <item name="colorAccent">@color/pink_a400</item>
+
+
+         ....... enable window content transitions .......
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:windowTransitionBackgroundFadeDuration">@integer/duration_fade</item>
     </style>
 </resources>

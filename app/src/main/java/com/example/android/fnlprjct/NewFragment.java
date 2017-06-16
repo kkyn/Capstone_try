@@ -71,7 +71,7 @@ public class NewFragment extends Fragment
         Bundle mBundle = this.getArguments();
         if (mBundle != null) {
             mUri = mBundle.getParcelable(MDetails_Fragment.DETAIL_URI);
-            Toast.makeText(getContext(), "uri : " + mUri.toString(), Toast.LENGTH_LONG).show();
+        //    Toast.makeText(getContext(), "uri : " + mUri.toString(), Toast.LENGTH_LONG).show();
             movieId = Integer.parseInt(MovieContract.MovieInfoEntry.getMovieId_FromMovieInfoUri(mUri));
         }
 
@@ -93,7 +93,7 @@ public class NewFragment extends Fragment
             @Override
             public void onPageSelected(int position) {
                 Log.d(LOG_TAG, " ( ( ( ( ( position : " + position + " ) ) ) ) ) )");
-                Toast.makeText(getActivity()," ( ( ( ( ( position : " + position + " ) ) ) ) ) )", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity()," ( ( ( ( ( position : " + position + " ) ) ) ) ) )", Toast.LENGTH_SHORT).show();
 
                 currentPage = position;
 
