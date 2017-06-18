@@ -50,12 +50,13 @@ public class NewFragment extends Fragment
         Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreate  ) ) ) ) ) ) ");
         Log.d(LOG_TAG, " ( ( ( ( ( ( (  Before getLoaderManager().initLoader  ) ) ) ) ) ) ");
 
-        this.getLoaderManager().initLoader(LOADER_ID,null,this);
+        this.getLoaderManager().initLoader(LOADER_ID, null, this);
 
         Log.d(LOG_TAG, " ( ( ( ( ( ( (  After getLoaderManager().initLoader  ) ) ) ) ) ) ");
 
-        FragmentManager fmgr = getFragmentManager();
-        pagerAdapter = new VPAdapter(fmgr, sortMoviesBy);
+        FragmentManager fMngr = getFragmentManager(); // when called in Fragment
+
+        pagerAdapter = new VPAdapter(fMngr, sortMoviesBy);
 
         Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreate  ) ) ) ) ) ) ");
 
@@ -70,7 +71,7 @@ public class NewFragment extends Fragment
 
         Bundle mBundle = this.getArguments();
         if (mBundle != null) {
-            mUri = mBundle.getParcelable(MDetails_Fragment.DETAIL_URI);
+            mUri = mBundle.getParcelable(MDetails_Fragment1.DETAIL_URI);
         //    Toast.makeText(getContext(), "uri : " + mUri.toString(), Toast.LENGTH_LONG).show();
             movieId = Integer.parseInt(MovieContract.MovieInfoEntry.getMovieId_FromMovieInfoUri(mUri));
         }
@@ -131,12 +132,12 @@ public class NewFragment extends Fragment
         //---------------------------------------
         if (savedInstanceState != null) {
 
-            Toast.makeText(getContext(), "+ + + + + savedInstanceState NOT NULL ", Toast.LENGTH_SHORT).show();
+      //--      Toast.makeText(getContext(), "+ + + + + savedInstanceState NOT NULL ", Toast.LENGTH_SHORT).show();
             // Restore last state for checked position.
             //mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
         }
         else {
-            Toast.makeText(getContext(), "+ + + + + savedInstanceState     NULL ", Toast.LENGTH_SHORT).show();
+      //--      Toast.makeText(getContext(), "+ + + + + savedInstanceState     NULL ", Toast.LENGTH_SHORT).show();
 
         }
 

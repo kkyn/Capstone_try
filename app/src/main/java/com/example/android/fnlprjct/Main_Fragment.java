@@ -34,7 +34,7 @@ import com.example.android.fnlprjct.sync.MSyncAdapter;
 public class Main_Fragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>
     , SharedPreferences.OnSharedPreferenceChangeListener
-    //   ,MvAdapter.ItemClickHandler0
+    //   ,MvAdapter.ItemClickListener
 {
     // constructor
     public Main_Fragment() {
@@ -105,7 +105,9 @@ public class Main_Fragment extends Fragment
     // Container Activity must implement this interface
     public interface CallBackListener {
 
-        void onItemSelectedInRecyclerView(Uri mUri);
+        void onItemSelectedInRecyclerView(MvAdapter.MvViewHolder viewHolder, long itemId);
+        //void onItemSelectedInRecyclerView(Uri mUri); // -- old --
+
     }
 
     @Override
@@ -402,15 +404,28 @@ public class Main_Fragment extends Fragment
 
         //************************************************
         // tky comment ....
-        // Implementation the interface, 'NAME'/ItemClickHandler0
+        // Implementation the interface, 'NAME'/ItemClickListener
         // with the method-name/onClick0 found within the interface declaration.
-        MvAdapter.ItemClickHandler0 itemClickHandler =
+        MvAdapter.ItemClickListener adapterCallBackListener =
 
-            new MvAdapter.ItemClickHandler0() {
+            new MvAdapter.ItemClickListener() {
+
                 @Override
                 public void onClick0(MvAdapter.MvViewHolder viewHolder) {
 
+                    // ************* new ***********************
                     mPosition = viewHolder.getAdapterPosition();
+                    itemID = rvAdapter.getItemId(mPosition);
+
+                    String srcView_SharedElementTransition = getString(R.string.shared_name) + itemID;
+                    //String srcView_SharedElementTransition = "photo" + itemID;
+
+                    viewHolder.poster_imageview.setTransitionName(srcView_SharedElementTransition);
+
+                    mainCallBackListener.onItemSelectedInRecyclerView(viewHolder, itemID);
+
+                    // ************* old ***********************
+                    /*mPosition = viewHolder.getAdapterPosition();
 
                     itemID = rvAdapter.getItemId(mPosition);
                     uri = MovieInfoEntry.CONTENT_URI;
@@ -418,12 +433,13 @@ public class Main_Fragment extends Fragment
 
                     mainCallBackListener.onItemSelectedInRecyclerView(uri);
                     //-- or --
-                    // ((CallBackListener) getActivity()).onItemSelectedInRecyclerView(tryUri);
+                    // ((CallBackListener) getActivity()).onItemSelectedInRecyclerView(tryUri);*/
+                    // ************* old ***********************
 
                 }
             };
 
-        rvAdapter = new MvAdapter(getContext(), itemClickHandler);
+        rvAdapter = new MvAdapter(getContext(), adapterCallBackListener);
         //************************************************
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);

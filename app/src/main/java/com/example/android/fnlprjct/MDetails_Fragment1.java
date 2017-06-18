@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -59,7 +61,8 @@ public class MDetails_Fragment1 extends Fragment
     public static MDetails_Fragment1 newInstance(int itemId) {
 
         Bundle arguments = new Bundle();
-        arguments.putInt("MyKey1", itemId); // ?? itemId ??
+        arguments.putInt(ITEMID_KEY, itemId); // ?? itemId ??
+       /// arguments.putInt("MyKey1", itemId); // ?? itemId ??
 
         MDetails_Fragment1 fragment = new MDetails_Fragment1();
 
@@ -69,6 +72,7 @@ public class MDetails_Fragment1 extends Fragment
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private static final String LOG_TAG = MDetails_Fragment1.class.getSimpleName();
+    private static final String ITEMID_KEY = "ItemID_Key";
 
     private static final int DETAIL_MOVIE_LOADER = 3;
     private static final int MOVIE_REVIEW_LOADER = 4;
@@ -81,8 +85,8 @@ public class MDetails_Fragment1 extends Fragment
     static final String MOVIE_ID = "MovieID";
     private String videoId;
 
-    private Details_Adapter details_adapter;
-
+    private Details_Adapter dtlsAdapter;
+    String trgtShrdElmtTrnstn;
     public boolean isFavouriteEnabled = false;
 
     ///////////////////////////////////////////////
@@ -139,10 +143,10 @@ public class MDetails_Fragment1 extends Fragment
                     String mVideoPath = "vnd.youtube:" + videoId;
                     Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoPath));
 
-                    PackageManager manager = getContext().getPackageManager();
+                    PackageManager pckgMngr = getContext().getPackageManager();
 
                     // Check for youtube app in device. ??
-                    List<ResolveInfo> infos = manager.queryIntentActivities(mIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                    List<ResolveInfo> infos = pckgMngr.queryIntentActivities(mIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
                     // There is no youtube app in device
                      if (infos.size() == 0) {
@@ -271,9 +275,12 @@ public class MDetails_Fragment1 extends Fragment
         super.onCreate(savedInstanceState);
 
         //Return the arguments supplied when the fragment was instantiated, if any.
+        // ?????? is it needed ???
         Bundle bundle = this.getArguments();
-        if (bundle.containsKey("MyKey1") == true) {
-            mItemId = bundle.getInt("MyKey1");
+        if (bundle.containsKey(ITEMID_KEY) == true) {
+            mItemId = bundle.getInt(ITEMID_KEY);
+        /*if (bundle.containsKey("MyKey1") == true) {
+            mItemId = bundle.getInt("MyKey1");*/
 
             uri = MovieInfoEntry.CONTENT_URI;
             uri = ContentUris.withAppendedId(uri, mItemId);
@@ -306,6 +313,11 @@ public class MDetails_Fragment1 extends Fragment
         moviethumbnail.setOnClickListener(this);
         moviefavourite.setOnClickListener(this);
 
+        trgtShrdElmtTrnstn = getString(R.string.shared_name) + mItemId;
+        //trgtShrdElmtTrnstn = "photo" + mItemId;
+
+        ViewCompat.setTransitionName(moviethumbnail, trgtShrdElmtTrnstn);
+        /// moviethumbnail
         // **************************************
         // --- old way ?? ---
         //mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
@@ -344,12 +356,12 @@ public class MDetails_Fragment1 extends Fragment
         getLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null, myTry_1);
         //++++++++++++++++++++++++++++++++++++++
 
-        details_adapter = new Details_Adapter(getContext());
+        dtlsAdapter = new Details_Adapter(getContext());
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager lytMngr = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        rView.setLayoutManager(layoutManager);
-        rView.setAdapter(details_adapter);
+        rView.setLayoutManager(lytMngr);
+        rView.setAdapter(dtlsAdapter);
 
         return rootView;
     }
@@ -435,6 +447,8 @@ public class MDetails_Fragment1 extends Fragment
                 moviethumbnail.setImageUrl(stringUrl, imageLoader);
                 moviethumbnail.setAspectRatio(1.5f);
 
+                scheduleStartPostponedTransition(moviethumbnail);
+
                 /*Picasso.with(getContext()).load(cursor.getString(INDX_BACKDROP_PATH))
                         .placeholder(R.drawable.sample_1)
                         .error(R.drawable.sample_0)
@@ -466,6 +480,20 @@ public class MDetails_Fragment1 extends Fragment
             loader = null;
         }
 
+        ////////////////////////////////////////////////////////////
+        private void scheduleStartPostponedTransition(final View sharedElement) {
+            sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                        getActivity().startPostponedEnterTransition();
+                        return true;
+                    }
+                });
+        }
+
+        ////////////////////////////////////////////////////////////
     };
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -486,13 +514,13 @@ public class MDetails_Fragment1 extends Fragment
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-            details_adapter.swapCursor(data);
+            dtlsAdapter.swapCursor(data);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
 
-            details_adapter.swapCursor(null);
+            dtlsAdapter.swapCursor(null);
         }
     };
 

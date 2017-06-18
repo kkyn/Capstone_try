@@ -13,6 +13,8 @@
         <item name="colorPrimary">@color/lime_300</item>
         <item name="colorPrimaryDark">@color/lime_700</item>
         <item name="colorAccent">@color/pink_a400</item>
+
+        <!--<item name="android:colorControlHighlight">@color/lime_700</item>--> <!-- A -->
     </style>
 
     <!-- .............................. -->

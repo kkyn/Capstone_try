@@ -64,7 +64,14 @@
                 app:layout_collapseMode="pin"
 
 
+                android:background="?attr/selectableItemBackground"
+
                 >
+                android:background="@drawable/ripple"
+                android:background="?attr/selectableItemBackground" <!-- A -->
+                android:background="?attr/selectableItemBackgroundBorderless"   <!-- A -->
+
+                android:background="@drawable/ripple"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 
                 app:theme="@style/ToolbarStyle"

@@ -1,14 +1,22 @@
 package com.example.android.fnlprjct;
 
+import android.app.ActivityOptions;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v4.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
 
 public class Main_Activity extends AppCompatActivity implements Main_Fragment.CallBackListener {
@@ -20,6 +28,10 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
 
     private int displayMode;
     private String mode;
+
+    private int mPosition = RecyclerView.NO_POSITION;
+    private long itemID = 0;
+    private Uri uri;
 
     ////////////////////////////////////
     @Override //--- 2
@@ -119,7 +131,33 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     // -------- Implementing Callback methods called from Fragment ----
     // -------- Declared in Fragment associate with this Activity -----
     //-----------------------------------------------------------------
+
+    // ************* new ***********************
     @Override
+    public void onItemSelectedInRecyclerView(MvAdapter.MvViewHolder viewHolder, long itemId) {
+
+        ImageView poster_imageview1 = viewHolder.poster_imageview;
+        //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_imageview;
+
+        final Pair<View, String> pair1 = Pair.create((View)poster_imageview1, viewHolder.poster_imageview.getTransitionName());
+        //final Pair<View, String> pair1 = new Pair<>((View)poster_imageview1, viewHolder.poster_imageview.getTransitionName());
+
+        // http://guides.codepath.com/android/shared-element-activity-transition
+        ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(Main_Activity.this, pair1);
+        //ActivityOptions option = ActivityOptions.makeSceneTransitionAnimation(Main_Activity.this, pair1);
+
+        Bundle bundle = option.toBundle();
+
+        uri = MovieContract.MovieInfoEntry.CONTENT_URI;
+        uri = ContentUris.withAppendedId(uri, itemId);
+
+        Intent mIntent = new Intent(this, MDetails_Activity.class);
+        mIntent.setData(uri);
+
+        startActivity(mIntent, bundle);
+    }
+    // ************* old ***********************
+    /*@Override
     public void onItemSelectedInRecyclerView(Uri uri) {
 
         displayMode = getResources().getConfiguration().orientation;
@@ -143,11 +181,12 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         }
         else {
 
-        /* Open a new view*/
+        // Open a new view
             Intent mIntent = new Intent(this, MDetails_Activity.class);
             mIntent.setData(uri);
             startActivity(mIntent);
         }
-    }
+    }*/
+    // ************* old ***********************
 
 }

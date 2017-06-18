@@ -6,5 +6,7 @@
     <!-- tky add june5 2017-->
     <dimen name="toolbar_title_left_padding">72dp</dimen>
 
-    <integer name="duration_fade">250</integer>
+    <integer name="duration_slide">490</integer>
+    <integer name="duration_explode">290</integer>
+
 </resources>

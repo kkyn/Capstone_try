@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="@integer/duration_explode"
+    >
+
+    <explode
+        />
+    <!--android:interpolator="@android:interpolator/bounce"-->
+
+    <changeBounds/>
+    <changeTransform/>
+    <changeClipBounds/>
+    <changeImageTransform/>
+
+</transitionSet>
+
+
+<!--<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <explode xmlns:android="http://schemas.android.com/apk/res/"
+             android:duration="@integer/duration_explode"
+        />
+    <changeBounds/>
+    <changeTransform/>
+    <changeClipBounds/>
+    <changeImageTransform/>
+</transitionSet>-->

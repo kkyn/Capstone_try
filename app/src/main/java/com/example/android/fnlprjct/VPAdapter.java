@@ -43,8 +43,9 @@ public class VPAdapter extends FragmentStatePagerAdapter {
     }
 
     //-------------------------------------------------------
-    // (1) In this adpater, with the new 'position'.
+    // (1) In this adapter, with the new 'position'.
     // (2) Instantiate and Inflate a page fragment w.r.t. the 'position'.
+    // (3) The FragmentManager calls this method, 'I' don't call !!
     @Override
     public Fragment getItem(int position) {
 

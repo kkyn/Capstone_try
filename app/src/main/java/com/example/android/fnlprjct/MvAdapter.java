@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.example.android.fnlprjct.data.MovieContract;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +36,8 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     public class MvViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.poster_imageview)
-        DynamicHeightNetworkImageView poster_imageview;
+        ImageView poster_imageview;
+        //DynamicHeightNetworkImageView poster_imageview;
 
         public MvViewHolder(View itemView) {
             super(itemView);
@@ -51,7 +54,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
 
             switch (view.getId()){
                 case R.id.poster_imageview : /*frgmntm_imageview*/
-                    itmClckHndlr.onClick0(this); // 'this' refers to this 'ViewHolder'
+                    clickListener.onClick0(this); // 'this' refers to this 'ViewHolder'
                     break;
                 default: break;
             }
@@ -65,18 +68,19 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     //-------- RecyclerView.Adapter stuff  (begin) ---------
     //------------------------------------------------------
     final private Context context;
-    final private ItemClickHandler0 itmClckHndlr; //
+    final private ItemClickListener clickListener; // "IttemClickHandler0" , "ittmClckHndlr"
 
     // Declaration of interface
-    public interface ItemClickHandler0 {
+    public interface ItemClickListener {
+
         void onClick0(MvViewHolder viewHolder);
     }
 
     // * provide  a suitable constructor( depends on the kind of data-set / how u want to interface ? )
-    public MvAdapter(Context context, ItemClickHandler0 itemClickHandler) {
+    public MvAdapter(Context context, ItemClickListener clickListener) { // "ittemClickHandler"
         // super(context);
         this.context = context;
-        this.itmClckHndlr = itemClickHandler;
+        this.clickListener = clickListener;
     }
 
     // * Called when RecyclerView needs a new 'RecyclerView.ViewHolder' of the given type to represent an item.
@@ -98,11 +102,11 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
 
             view.setFocusable(true);    // * Control whether a view can take focus
 
-            MvViewHolder mvViewHolder = new MvViewHolder(view);
+            MvViewHolder viewHolder = new MvViewHolder(view);
 
-            view.setTag(mvViewHolder);
+            view.setTag(viewHolder);
 
-            return mvViewHolder;
+            return viewHolder;
         }
         else {
             throw new RuntimeException("Not bound to RecyclerViewSelection");
@@ -118,7 +122,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     //
     // * param holder <-- output/returned ViewHolder-data from method onCreateViewHolder{..} ??!!
     @Override // RecyclerView.Adapter basic requirement
-    public void onBindViewHolder(MvViewHolder holder, int position) {
+    public void onBindViewHolder(MvViewHolder viewHolder, int position) {
         // - get and bind 'that'-element from the data-set at this 'position'
         // - replace the contents of the view with 'that'-element
         // holder.xxx ( data-set(position) ) ;
@@ -129,7 +133,16 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
         //***********************
         if (mCursor.moveToPosition(position)) {
 
-            ImageLoader imageLoader = ImageLoaderHelper.getInstance(context).getImageLoader();
+            // ++++++++++++++++++++++++++++++++++++++++++
+            Picasso.with(context)
+                .load(mCursor.getString(Main_Fragment.COLUMN_POSTERLINK))
+                .placeholder(R.drawable.sample_1)
+                .error(R.drawable.sample_0)
+                .fit()  //  .resize(600,200)
+              //  .centerCrop()
+                .into(viewHolder.poster_imageview);
+            // ++++++++++++++++++++++++++++++++++++++++++
+            /*ImageLoader imageLoader = ImageLoaderHelper.getInstance(context).getImageLoader();
 
             // Get Image-info from ImageLoader-object,
             // with the given image's-Url-id and interface 'pointer'/ (cllback).
@@ -138,9 +151,9 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
 
             // -- thumb-nail-View --
             // .setImageUrl -- define in ImageView
-            holder.poster_imageview.setImageUrl(stringUrl,imageLoader);
-            holder.poster_imageview.setAspectRatio(0.66f);
-
+            viewHolder.poster_imageview.setImageUrl(stringUrl,imageLoader);
+            viewHolder.poster_imageview.setAspectRatio(0.66f);*/
+            // ++++++++++++++++++++++++++++++++++++++++++
             //-------------------------------------
             // Call Volley's imageloader get-method to get image from the Web
             /*ImageLoader.ImageContainer myImageContainer = imageLoader.get

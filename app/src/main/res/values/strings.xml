@@ -55,4 +55,6 @@
 
  <!--   <string name="pref_sortmovies_by_ratings" translatable="false">ratings</string>
  -->
+    <!-- /////////////////////////// -->
+    <string name="shared_name">photo</string>
 </resources>

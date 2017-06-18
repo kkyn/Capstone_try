@@ -16,12 +16,32 @@
         <item name="colorPrimary">@color/lime_300</item>
         <item name="colorPrimaryDark">@color/lime_700</item>
         <item name="colorAccent">@color/pink_a400</item>
+        <!--<item name="colorBackground">#f2f2f2</item>-->
+
+        <!--<item name="android:colorControlHighlight">@color/lime_700</item>-->
+
+        <!--<item name="StatusBarColor">?android:colorPrimary</item>--> .. don't seem to work ...
 
 
-         ....... enable window content transitions .......
+         <!-- ....... enable window content transitions ....... -->
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowActivityTransitions">true</item>
 
-        <item name="android:windowTransitionBackgroundFadeDuration">@integer/duration_fade</item>
+        <item name="android:windowTransitionBackgroundFadeDuration">@integer/duration_slide</item>
+
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/explode</item>
+        <item name="android:windowExitTransition">@transition/explode</item>
+
+
+        check this section, (A)
+        <!-- ....... specify shared element transition ....... -->
+        ... ok ...
+        <item name="android:windowSharedElementExitTransition">@transition/v21_sharedelementtransition</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/v21_sharedelementtransition</item>
+        ... no Good ...
+        <!--<item name="android:windowSharedElementExitTransition">@transition/change_image_transform</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform</item>-->
     </style>
 </resources>
