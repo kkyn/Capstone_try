@@ -8,6 +8,12 @@
         />
     <!--android:interpolator="@android:interpolator/bounce"-->
 
+    <!-- correct ??? -->
+    <arcMotion
+        android:maximumAngle="90"
+        android:minimumHorizontalAngle="90"
+        android:minimumVerticalAngle="30"/>
+
     <changeBounds/>
     <changeTransform/>
     <changeClipBounds/>

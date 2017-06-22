@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ripple drawable/element -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="@android:color/white">
+    "#ff0000ff"
+
+    <!-- mask layer -->
+    <item android:id="@android:id/mask">
+        <shape
+            android:shape="rectangle">
+            rectangle
+            <solid android:color="@android:color/white"/>
+            <corners
+                android:radius="10dp"/>
+        </shape>
+    </item>
+
+    <!-- child layer -->
+    <!--<item android:drawable="?android:colorAccent" />-->
+
+    @color/lime_700
+    @android:color/holo_blue_bright
+    <!--<item android:drawable="@drawable/ic_arrow_back_1" />-->
+
+</ripple>

@@ -3,13 +3,14 @@
     <!-- Base application theme. -->
     <!-- disable the theme-provided ActionBar -->
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <!--<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">-->
-    <!--<style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"> <!-- to use toolbar as an actionBar -->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">--> <!-- to use toolbar as an actionBar -->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">--> <!-- to use toolbar as an actionBar -->
 
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
         <!-- Customize your theme here. -->
         <!-- tky add, june6 2017-->
+        <!--<item name="colorPrimary">@color/pink_a400</item>-->
         <item name="colorPrimary">@color/lime_300</item>
         <item name="colorPrimaryDark">@color/lime_700</item>
         <item name="colorAccent">@color/pink_a400</item>
@@ -18,11 +19,25 @@
     </style>
 
     <!-- .............................. -->
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <!--<style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">--> <!-- copied -->
+        <!-- set the color of the title text, and also overflow-icon in the Toolbar  -->
+        <!--<item name="android:textColorPrimary">@color/white</item>-->
+        <!--<item name="android:textColorPrimary">@android:color/holo_blue_light</item>-->
+    </style>
+    <!-- .............................. -->
+
     <style name="ToolbarStyle" parent="AppTheme">
         <item name="android:textColorSecondary">@color/white</item>
     </style>
     <!--<style name="ToolbarStyle" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:homeAsUpIndicator">@drawable/ic_arrow_3_back</item>
     </style>-->
+    <!-- .............................. -->
 
+    <!-- This configures the styles for the title within the Toolbar  -->
+    <!--<style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>-->
 </resources>

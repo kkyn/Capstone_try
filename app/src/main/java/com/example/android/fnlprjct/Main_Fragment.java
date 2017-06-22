@@ -1,7 +1,6 @@
 package com.example.android.fnlprjct;
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -13,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -27,6 +27,9 @@ import android.view.ViewGroup;
 
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A placeholder fragment (Main_Fragment) containing a simple view.
@@ -97,6 +100,9 @@ public class Main_Fragment extends Fragment
 
     private static final String SELECTED_INDEX = "selected_index";
 
+
+    @BindView(R.id.toolbar) Toolbar tool_bar;
+    /*Toolbar tool_bar;*/
     //-------------------------
     //--- Interface stuff -----
     //-------------------------
@@ -155,8 +161,18 @@ public class Main_Fragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);  //Log.d(LOG_TAG, "---- 1a onViewCreated(View view, @Nullable Bundle savedInstanceState) --");
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        if (tool_bar != null ) {
+
+            // Sets the Toolbar to act as the ActionBar for this Activity window.
+            // Make sure the tool_bar exists in the activity and is not null
+            ((AppCompatActivity) getActivity()).setSupportActionBar(tool_bar); // <!-- to set the Toolbar to act as the ActionBar  -->
+
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("MY_FINAL_PROJECT");
+
+        }
+
     }
 
     @Override // --- 2 ----
@@ -443,6 +459,8 @@ public class Main_Fragment extends Fragment
         //************************************************
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        ButterKnife.bind(this, rootView);
 
         rv = (RecyclerView) rootView.findViewById(R.id.pane1_recyclerview);/*recyclerview_id4_movies*/
 

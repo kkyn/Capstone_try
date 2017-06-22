@@ -7,48 +7,70 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <!-- Use of Toolbar as/for App-Bar/Action-Bar, (A) -->
     <!-- Is a LinearLayout ... and orientation is vertical -->
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="?attr/colorPrimary">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        android:layout_height="wrap_content"
+        >
+
+        android:background="?attr/colorPrimary"
+
+        android:layout_height="110dp"
+
+        <!-- to use toolbar as an actionBar, to use getSupportActionBar(), CollapsingToolbarLayout removed -->
+       <!-- <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:minHeight="40dp"
+
             app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed|snap"
-            >
+            >-->
             <!--android:fitsSystemWindows="true"-->
             <!--app:layout_scrollFlags="scroll|enterAlways"-->
             <!--app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
             <!--app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed|enterAlwaysCollapsed"-->
             <!--app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlwaysCollapsed"-->
 
-
+            <!-- to use toolbar as an actionBar , toolbar defined this way -->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="?attr/colorPrimary"
+                android:minHeight="?android:attr/actionBarSize"
+
+                app:theme="@style/ToolbarTheme"
                 app:layout_collapseMode="pin"
+
+
                 >
+                app:theme="@style/ToolbarTheme"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:background="?attr/colorPrimary" <!-- added to accommodate device with pre-21, (A) -->
+
+                app:titleTextColor="@android:color/white"
+
+                android:layout_height="?android:attr/actionBarSize"
+
                 <!--android:elevation="4dp", for >= API21 -->
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 <!--app:layout_collapseMode="pin"-->
                 <!--android:layout_marginBottom="@dimen/detail_body_bottom_margin"-->
 
-                <ImageView
+                <!--<ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/toolbar_title_left_padding"
                     android:layout_marginStart="@dimen/toolbar_title_left_padding"
                     android:src="@drawable/sample_2"
                     app:layout_collapseMode="parallax"
-                    />
+                    />-->
+
                 android:layout_marginStart="@dimen/toolbar_title_left_padding" <!-- api >16 -->
                 android:src="@drawable/logo"
 
@@ -64,7 +86,7 @@
             android:layout_height=""
             android:layout_height="match_parent"
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+        <!--</android.support.design.widget.CollapsingToolbarLayout>-->
 
     </android.support.design.widget.AppBarLayout>
 

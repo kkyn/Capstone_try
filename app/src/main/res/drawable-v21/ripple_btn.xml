@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ripple drawable/element -->
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight"
+    >
+    android:color="@color/lime_300"
+    android:color="?attr/colorControlHighlight"
+    "#77777777"
+
+    <!-- mask layer -->
+    <item android:id="@android:id/mask"
+        >
+        <shape
+            android:shape="rectangle">
+            oval
+            rectangle
+            <!--<solid android:color="?attr/colorPrimaryDark"/>-->
+            <solid android:color="@android:color/white"/>
+            <corners
+                android:radius="10dp"/>
+        </shape>
+    </item>
+
+    <!-- child layer --> <!-- the constant color layer -->
+    <!-- the child layer, bound the ripple -->
+    <item android:drawable="@color/lightgray"/>
+    <!--<item android:drawable="?attr/colorAccent"/>-->
+    <!--<item android:drawable="@color/lime_500"/>-->
+    <!--<item android:drawable="?android:colorAccent"/>-->
+    <!--<item android:drawable="@android:color/white"/>-->
+</ripple>

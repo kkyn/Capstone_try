@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ripple drawable/element -->
+<!--<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="@color/pink_a400"
+    >
+    @color/lime_300
+    @color/pink_a400
+
+</ripple>-->
+
+    <!-- //////////////////////////////// -->
+<!-- ripple drawable/element -->
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight"
+    >
+    android:color="@color/lime_300"
+    android:color="?attr/colorControlHighlight"
+    "#77777777"
+    <!-- mask layer -->
+    <item android:id="@android:id/mask"
+        >
+        <shape
+            android:shape="rectangle">
+            rectangle
+            <!--<solid android:color="?attr/colorPrimaryDark"/>-->
+            <solid android:color="@android:color/white"/>
+            <corners
+                android:radius="10dp"/>
+        </shape>
+    </item>
+
+    <!-- child layer --> <!-- the constant color layer -->
+    <!-- the child layer, bound the ripple -->
+    <!--<item android:drawable="@color/lightgray"/>-->
+    <!--<item android:drawable="?attr/colorAccent"/>-->
+    <!--<item android:drawable="@color/lime_500"/>-->
+    <!--<item android:drawable="?android:colorAccent"/>-->
+    <!--<item android:drawable="@android:color/white"/>-->
+</ripple>
+
+    <!-- //////////////////////////////// -->
+<!-- ripple drawable/element -->
+<!--<ripple android:color="?attr/colorControlHighlight"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    "#77777777"
+    &lt;!&ndash; mask layer &ndash;&gt;
+    <item android:id="@android:id/mask"
+        >
+        <shape
+            android:shape="rectangle">
+            rectangle
+            <solid android:color="@android:color/white"/>
+            <corners
+                android:radius="10dp"/>
+        </shape>
+    </item>
+    &lt;!&ndash; child layer &ndash;&gt;
+    <item android:drawable="?android:colorAccent" />
+    &lt;!&ndash;<item android:drawable="@android:color/white"/>&ndash;&gt;
+</ripple>-->
+
+<!-- //////////////////////////////// -->
+<!--<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="?android:colorControlHighlight"
+    >
+    #ff0000ff
+    40ffffff
+    #ffff00
+    ?android:attr/colorPrimary
+    android:color="?android:colorControlHighlight"
+    <item android:id="@android:id/mask">
+        <shape
+            android:shape="rectangle">
+            rectangle
+            <solid android:color="?android:colorAccent"/>
+            <corners
+                android:radius="10dp"/>
+        </shape>
+    </item>
+    &lt;!&ndash;<item android:drawable="@drawable/ic_arrow_back_1" />&ndash;&gt;
+    &lt;!&ndash;<item android:drawable="@drawable/rounded_corners" />&ndash;&gt;
+</ripple>-->
+<!-- //////////////////////////////// -->
+<!--
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="#ffff00"
+    >
+    #ffff00ff
+</ripple>-->

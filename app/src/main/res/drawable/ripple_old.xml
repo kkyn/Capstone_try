@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
     <!-- https://stackoverflow.com/questions/27070269/ripple-effect-for-lollipop-views -->
 
+<!-- ripple drawable/element -->
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
         android:color="@android:color/white">
     "#ff0000ff"
 
+    <!-- mask layer -->
     <item android:id="@android:id/mask">
         <shape
             android:shape="rectangle">
@@ -15,13 +17,16 @@
         </shape>
     </item>
 
-    <item android:drawable="?android:colorAccent" />
+    <!-- child layer -->
+    <!--<item android:drawable="?android:colorAccent" />-->
+
     @color/lime_700
     @android:color/holo_blue_bright
     <!--<item android:drawable="@drawable/ic_arrow_back_1" />-->
 
 </ripple>
-<!-- ////////////////////////// -->
+
+<!-- /////////////////////////////////////////////// -->
 <!--
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="#ff00ff00">

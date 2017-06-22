@@ -6,19 +6,53 @@
     <!-- Disable the theme-provided ActionBar. -->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
 
+    <!--don't work, begin -->
+    <!--<style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>-->
+    <!--don't work, end -->
+
     <!-- Enable use of Toolbar as ActionBar -->
-    <!--<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+   <!-- <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
     <!--<style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">-->
 
         <!-- Customize your theme here. -->
         <!-- tky add, june6 2017-->
-        <item name="colorPrimary">@color/lime_300</item>
-        <item name="colorPrimaryDark">@color/lime_700</item>
-        <item name="colorAccent">@color/pink_a400</item>
-        <!--<item name="colorBackground">#f2f2f2</item>-->
 
+        <!-- your app branding color for the app bar -->
+        <!--<item name="colorPrimary">@color/pink_a400</item>-->
+        <item name="colorPrimary">@color/lime_300</item>
+
+        <!-- darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/lime_700</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated
+         which is used to tint widgets -->
+        <!-- theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/pink_a400</item>
+
+        <!-- //////////////////////////////////////////////// -->
+        <!--???? You can also set colorControlNormal, colorControlActivated colorControlHighlight & colorSwitchThumbNormal. -->
+        <!-- colorControlNormal controls the ‘normal’ state of components such as an unselected EditText, and unselected Checkboxes and RadioButtons -->
+        <!-- colorControlActivated overrides colorAccent as the activated or checked state for Checkboxes and RadioButtons -->
+        <!-- colorControlHighlight controls the ripple coloring -->
+        <!-- //////////////////////////////////////////////// -->
+        <item name="android:colorControlHighlight">@color/lime_300</item>
         <!--<item name="android:colorControlHighlight">@color/lime_700</item>-->
+
+        <!--<item name="android:textColorSecondary">@color/white</item>--> <!-- only set/change overflow-icon color to white -->
+
+        <!-- background color of 'home', e.g. bottom-layer ?? -->
+        <item name="android:windowBackground">@color/lightgray</item>
+
+        <!-- Under Theme.AppCompat.Light.NoActionBar, -->
+        <!-- default color is black for "android:textColorPrimary", refers to colors for text in 'views' -->
+        <item name="android:textColorPrimary">@color/orange_500</item>
+        <!--<item name="android:textColorPrimary">@color/purple_500</item>-->
+
+        <!--<item name="colorBackground">#f2f2f2</item>-->
 
         <!--<item name="StatusBarColor">?android:colorPrimary</item>--> .. don't seem to work ...
 
@@ -43,5 +77,28 @@
         ... no Good ...
         <!--<item name="android:windowSharedElementExitTransition">@transition/change_image_transform</item>
         <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform</item>-->
+    </style>
+
+    <!-- .............................. -->
+    <!-- .............................. -->
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <!--<style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">--> <!-- copied -->
+
+    <!-- set the color of the title text, and also (?) overflow-icon in the Toolbar  -->
+
+        <!-- Under ThemeOverlay.AppCompat.Dark.ActionBar, -->
+        <!-- default color is white for "android:textColorPrimary", refers to colors for text in 'views' -->
+        <!-- White is the default color in ThemeOverlay.AppCompat.Dark.ActionBar -->
+        <!--<item name="android:textColorPrimary">@color/white</item>-->
+        <item name="android:textColorPrimary">@android:color/holo_blue_light</item>
+    </style>
+
+    <!-- .............................. -->
+    <!-- This configures the styles for the title within the Toolbar  -->
+    <style name="Toolbar.TitleText" parent="AppTheme">
+    <!--<style name="Toolbar.TitleText" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
+    <!--<style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">-->
+        <item name="android:textSize">21sp</item>
+        <item name="android:textStyle">italic</item>
     </style>
 </resources>

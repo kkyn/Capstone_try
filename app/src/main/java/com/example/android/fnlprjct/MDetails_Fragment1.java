@@ -16,6 +16,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +38,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.android.fnlprjct.R.attr.colorAccent;
+import static com.example.android.fnlprjct.R.attr.theme;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -106,20 +110,13 @@ public class MDetails_Fragment1 extends Fragment
 
     /*@BindView(R.id.movietitle_tv)
     TextView movietitle;*/
-    @BindView(R.id.moviethumbnail_iv)
-    DynamicHeightNetworkImageView  moviethumbnail;
-    @BindView(R.id.moviereleasedate_tv)
-    TextView moviereleasedate;
-    @BindView(R.id.movieratings_tv)
-    TextView movieratings;
-    @BindView(R.id.moviesynopsis_tv)
-    TextView moviesynopsis;
-    @BindView(R.id.movievideo_btn)
-    Button movievideo;
-    @BindView(R.id.favourite_btn)
-    ImageButton moviefavourite;
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    @BindView(R.id.moviethumbnail_iv) DynamicHeightNetworkImageView  moviethumbnail;
+    @BindView(R.id.moviereleasedate_tv) TextView moviereleasedate;
+    @BindView(R.id.movieratings_tv) TextView movieratings;
+    @BindView(R.id.moviesynopsis_tv) TextView moviesynopsis;
+    @BindView(R.id.movievideo_btn) Button movievideo;
+    @BindView(R.id.favourite_btn) ImageButton moviefavourite;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     //Toolbar mToolbar;
     private TextView mTextView;
     //private DynamicHeightNetworkImageView moviethumbnail;
@@ -254,11 +251,15 @@ public class MDetails_Fragment1 extends Fragment
                 isFavouriteEnabled = checkFavourites(movieID);
 
                 if (!isFavouriteEnabled) {
-                    moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
+                    moviefavourite.setImageResource(R.drawable.ic_on_star);
+                   // moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
+
                     saveToFavourites(movieID);
                 }
                 else {
-                    moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
+                    moviefavourite.setImageResource(R.drawable.ic_off_star);
+                    //moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
+
                     removeFromFavourites(movieID);
                 }
 
@@ -320,9 +321,9 @@ public class MDetails_Fragment1 extends Fragment
         /// moviethumbnail
         // **************************************
         // --- old way ?? ---
-        //mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        //mToolbar = (Toolbar) rootView.findViewById(R.id.tool_bar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null.
+        // Make sure the tool_bar exists in the activity and is not null.
         //-- To to use setSupportActionBar in fragment, use '((AppCompatActivity)getActivity()).'  --
         //((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         //((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -332,7 +333,7 @@ public class MDetails_Fragment1 extends Fragment
         // https://developer.android.com/reference/android/support/v7/widget/Toolbar.html
         if (mToolbar != null ){
 
-            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_1);
+            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back2);
 
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -342,9 +343,24 @@ public class MDetails_Fragment1 extends Fragment
                     // Indirect a call to a method via ArticaleDetailActivity/Activity.
                     // supportFinishAfterTransition() -- refers to a method in FragmentActivity.java
                     //----------------------------------------------------------------
-                    //getActivityCast().supportFinishAfterTransition();   // onSupportNavigateUp();
+                    // https://developer.android.com/reference/android/support/v4/app/Fragment.html
+                    // https://developer.android.com/reference/android/support/v4/app/FragmentActivity.html
+                    // getActivity() --- Return the FragmentActivity this fragment is currently associated with.
+                    // supportFinishAfterTransition() --- Reverses the Activity Scene entry Transition and triggers the calling Activity to reverse its exit Transition
+                    getActivity().supportFinishAfterTransition();
+                    // onSupportNavigateUp();
                 }
             });
+            mToolbar.setTitle("HELLO");
+            //mToolbar.setTitleTextColor(0xffaff000);
+            //@color/primary_text
+            mToolbar.setTitleTextColor(getResources().getColor(R.color.pink_a400));
+//            mToolbar.setTitleTextColor(getResources().getColor(android.R.color.primary_text_light));
+
+            /*((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);*/ ///?????
+
+            //mToolbar.setSubtitle("HELLO_Man");
+
         }
         // **************************************
         //++++++++++++++++++++++++++++++++++++++
@@ -370,6 +386,18 @@ public class MDetails_Fragment1 extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        /*mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    //----------------------------------------------------------------
+                    // Indirect a call to a method via ArticaleDetailActivity/Activity.
+                    // supportFinishAfterTransition() -- refers to a method in FragmentActivity.java
+                    //----------------------------------------------------------------
+                    getActivity().supportFinishAfterTransition(); // onSupportNavigateUp();
+                }
+            });*/
     }
 
     @Override
@@ -458,10 +486,14 @@ public class MDetails_Fragment1 extends Fragment
 
                 if (favouriteValue == 1) {
                     isFavouriteEnabled = true;
-                    moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
+                    moviefavourite.setImageResource(R.drawable.ic_on_star);
+                 //   moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
+
                 } else {
                     isFavouriteEnabled = false;
-                    moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
+                    moviefavourite.setImageResource(R.drawable.ic_off_star);
+                    //moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
+
                 }
                 //...................
                 // TODO: call DBAsyncTAsk , call method FetchComplete()
