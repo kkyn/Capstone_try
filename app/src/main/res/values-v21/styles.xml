@@ -54,7 +54,7 @@
 
         <!--<item name="colorBackground">#f2f2f2</item>-->
 
-        <!--<item name="StatusBarColor">?android:colorPrimary</item>--> .. don't seem to work ...
+        <item name="android:statusBarColor">?android:colorPrimary</item> .. don't seem to work ...
 
 
          <!-- ....... enable window content transitions ....... -->

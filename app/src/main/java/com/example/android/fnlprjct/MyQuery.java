@@ -53,7 +53,7 @@ public class MyQuery {
                 MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID,
                 MovieInfoEntry.COL_MV_ID,
                 MovieInfoEntry.COL_FAVOURITES,
-                MovieInfoEntry.COL_BACKDROP_PATH,
+                MovieInfoEntry.COL_POSTERLINK,  // MovieInfoEntry.COL_BACKDROP_PATH,
                 MovieInfoEntry.COL_OVERVIEW,
                 MovieInfoEntry.COL_RELEASEDATE,
                 MovieInfoEntry.COL_TITLE,
@@ -65,7 +65,7 @@ public class MyQuery {
         //public static final int PROJECTION_RATING_ID = 0;
          int COL_MOVIE_ID = 1;
          int COL_FAVOURITES = 2;
-        int COL_BACKDROP_PATH = 3;
+        int COL_POSTERLINK = 3;       // int COL_BACKDROP_PATH = 3;
         int COL_OVERVIEW = 4;
         int COL_RELEASEDATE = 5;
         int COL_MOVIE_TITLE = 6;

@@ -36,8 +36,8 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     public class MvViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.poster_imageview)
-        ImageView poster_imageview;
-        //DynamicHeightNetworkImageView poster_imageview;
+        //ImageView poster_imageview;
+        DynamicHeightNetworkImageView poster_imageview;
 
         public MvViewHolder(View itemView) {
             super(itemView);
@@ -134,15 +134,20 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
         if (mCursor.moveToPosition(position)) {
 
             // ++++++++++++++++++++++++++++++++++++++++++
-            Picasso.with(context)
+            /*Picasso.with(context)
                 .load(mCursor.getString(Main_Fragment.COLUMN_POSTERLINK))
                 .placeholder(R.drawable.sample_1)
                 .error(R.drawable.sample_0)
-                .fit()  //  .resize(600,200)
+//                .resizeDimen(200,0) // no good
+//                .resize(2000,500)   // --A-- //  .resize(600,200)
+//                .onlyScaleDown()    // --A--
+//                .centerInside()     // --A--
+                .fit()                 // --B--
               //  .centerCrop()
-                .into(viewHolder.poster_imageview);
+
+                .into(viewHolder.poster_imageview);*/
             // ++++++++++++++++++++++++++++++++++++++++++
-            /*ImageLoader imageLoader = ImageLoaderHelper.getInstance(context).getImageLoader();
+            ImageLoader imageLoader = ImageLoaderHelper.getInstance(context).getImageLoader();
 
             // Get Image-info from ImageLoader-object,
             // with the given image's-Url-id and interface 'pointer'/ (cllback).
@@ -152,7 +157,12 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
             // -- thumb-nail-View --
             // .setImageUrl -- define in ImageView
             viewHolder.poster_imageview.setImageUrl(stringUrl,imageLoader);
-            viewHolder.poster_imageview.setAspectRatio(0.66f);*/
+
+            viewHolder.poster_imageview.setAspectRatio(0.66f); // 1.5f, // --combo 1 --
+            viewHolder.poster_imageview.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
+            viewHolder.poster_imageview.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
+//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);
+//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_START);
             // ++++++++++++++++++++++++++++++++++++++++++
             //-------------------------------------
             // Call Volley's imageloader get-method to get image from the Web

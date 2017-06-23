@@ -27,12 +27,14 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -110,7 +112,9 @@ public class MDetails_Fragment1 extends Fragment
 
     /*@BindView(R.id.movietitle_tv)
     TextView movietitle;*/
+    /*@BindView(R.id.moviethumbnail_iv) ImageView moviethumbnail;*/
     @BindView(R.id.moviethumbnail_iv) DynamicHeightNetworkImageView  moviethumbnail;
+
     @BindView(R.id.moviereleasedate_tv) TextView moviereleasedate;
     @BindView(R.id.movieratings_tv) TextView movieratings;
     @BindView(R.id.moviesynopsis_tv) TextView moviesynopsis;
@@ -463,18 +467,41 @@ public class MDetails_Fragment1 extends Fragment
                 movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_RATING));
                 moviesynopsis.setText(cursor.getString(MyQuery.MovieInfo.COL_OVERVIEW));
 
-                // ------------------------
-                // ---- Using Volley ------
+                // ++++++++++++++++++++++++++++++++++++++++++
+                /*Picasso.with(getContext())
+                    .load(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK))
+                    .placeholder(R.drawable.sample_1)
+                    .error(R.drawable.sample_0)
+                    .fit()  //  .resize(600,200)
+                      .centerCrop()
+                    .into(moviethumbnail);*/
+                // ++++++++++++++++++++++++++++++++++++++++++
+                // -------------------------------
+                // ---- Using Volley, begin ------
+                // -------------------------------
                 ImageLoader imageLoader = ImageLoaderHelper.getInstance(getContext()).getImageLoader();
 
-                String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_BACKDROP_PATH);
+                String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK);
+                //String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_BACKDROP_PATH);
 
                 Log.d(LOG_TAG, "? ? ? ?  " + stringUrl + " ? ? ? ?");
                 // -- thumb-nail-View --
                 // .setImageUrl -- define in ImageView
                 moviethumbnail.setImageUrl(stringUrl, imageLoader);
-                moviethumbnail.setAspectRatio(1.5f);
 
+                moviethumbnail.setAspectRatio(0.66f); // 1.5f   // --combo 1 --
+//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);
+                  moviethumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
+//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_START);
+                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
+//                  moviethumbnail.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//                moviethumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP); // lousy
+
+//                moviethumbnail.setScaleType(ImageView.ScaleType.MATRIX);
+
+                // -------------------------------
+                // ---- Using Volley, end --------
+                // -------------------------------
                 scheduleStartPostponedTransition(moviethumbnail);
 
                 /*Picasso.with(getContext()).load(cursor.getString(INDX_BACKDROP_PATH))
