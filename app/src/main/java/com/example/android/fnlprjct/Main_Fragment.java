@@ -362,31 +362,65 @@ public class Main_Fragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        // get the file, SharedPreferences
+        // Gets a SharedPreferences instance that points to the default file
+        // that is used by the preference framework in the given context.
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        // Create a new Editor for these preferences, through which you can make modifications to
+        // the data in the preferences and atomically commit those changes back to the SharedPreferences object.
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
         int id = item.getItemId();
 
-        //if (id == com.example.android.myproject_2.R.id.most_popular) {
         if (id == R.id.most_popular) {
-
-            //------------------------------------------------
-            // get the file, SharedPreferences
-            // Gets a SharedPreferences instance that points to the default file
-            // that is used by the preference framework in the given context.
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-            // Create a new Editor for these preferences, through which you can make modifications to
-            // the data in the preferences and atomically commit those changes back to the SharedPreferences object.
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-
             // Set a String value in the preferences editor, to be written back once commit() or apply() are called.
             editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_default_value));
 
+            // Commit your preferences changes back from this Editor to the SharedPreferences object it is editing.
             editor.apply();
 
             return true;
-            //------------------------------------------------
-
         }
+        else if (id == R.id.most_rated) {
+            editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_ratings));
+            editor.apply();
+            return true;
+        }
+        else if (id == R.id.my_favorites) {
+            editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_favourites));
+            editor.apply();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+
+
+//        int id = item.getItemId();
+//
+//        //if (id == com.example.android.myproject_2.R.id.most_popular) {
+//        if (id == R.id.most_popular) {
+//
+//            //------------------------------------------------
+//            // get the file, SharedPreferences
+//            // Gets a SharedPreferences instance that points to the default file
+//            // that is used by the preference framework in the given context.
+//            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+//
+//            // Create a new Editor for these preferences, through which you can make modifications to
+//            // the data in the preferences and atomically commit those changes back to the SharedPreferences object.
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//            // Set a String value in the preferences editor, to be written back once commit() or apply() are called.
+//            editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_default_value));
+//
+//            editor.apply();
+//
+//            return true;
+//            //------------------------------------------------
+//
+//        }
+//        return super.onOptionsItemSelected(item);
 
     }
     //------------------------------------------------

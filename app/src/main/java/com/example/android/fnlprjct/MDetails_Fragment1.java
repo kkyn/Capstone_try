@@ -234,7 +234,7 @@ public class MDetails_Fragment1 extends Fragment
 
             case R.id.movievideo_btn:
 
-            case R.id.moviethumbnail_iv:
+           // case R.id.moviethumbnail_iv: // commented to disable 'click' to start movie video
 
                 //...................
                 // TODO: call DBAsyncTAsk , call method FetchComplete()
@@ -315,7 +315,7 @@ public class MDetails_Fragment1 extends Fragment
         movievideo.setOnClickListener(this);
 
       //  moviethumbnail = (DynamicHeightNetworkImageView) rootView.findViewById(R.id.moviethumbnail_iv);
-        moviethumbnail.setOnClickListener(this);
+        //moviethumbnail.setOnClickListener(this);
         moviefavourite.setOnClickListener(this);
 
         trgtShrdElmtTrnstn = getString(R.string.shared_name) + mItemId;
@@ -489,11 +489,11 @@ public class MDetails_Fragment1 extends Fragment
                 // .setImageUrl -- define in ImageView
                 moviethumbnail.setImageUrl(stringUrl, imageLoader);
 
-                moviethumbnail.setAspectRatio(0.66f); // 1.5f   // --combo 1 --
-//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);
-                  moviethumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
-//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_START);
-                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
+                moviethumbnail.setAspectRatio(1.0f); // 1.5f, 0.66f     // --combo 1 --,-- combo2,1.0f --, combo3,1.0f
+                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);   // combo3
+//                  moviethumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
+//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_START); // -- combo2 --
+//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
 //                  moviethumbnail.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 //                moviethumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP); // lousy
 

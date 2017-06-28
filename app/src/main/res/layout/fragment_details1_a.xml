@@ -33,9 +33,17 @@
         android:layout_gravity="center"
         android:text="tryBtn"
         android:textAllCaps="false"
-        android:background="@drawable/ripple_btn"
-        />
 
+
+
+        />
+    android:background="@drawable/ripple_btn"
+    android:layout_margin="16dp"
+    android:padding="15dp"
+    android:elevation="28dp"
+
+    android:backgroundTint="@color/lime_300"
+    style="@style/Widget.AppCompat.Button.Colored"
     android:background="@drawable/ripple_btn"
     android:background="?attr/selectableItemBackground"
 
@@ -44,11 +52,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:text="Video Clip"
 
-        android:background="?attr/selectableItemBackground"
-
         />
+    style="@style/Widget.AppCompat.Button.Colored"
+    style="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:background="?attr/selectableItemBackground"
+
     android:background="@drawable/ripple_btn"
     style="@style/Widget.AppCompat.Button.Colored" <!-- A -->
     android:background="@drawable/ripple" <!-- add ripple-drawable layer in background -->

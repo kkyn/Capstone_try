@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_margin="@dimen/widget_margin">
+
+    <!--<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#bbDEDFDE"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/widget_layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#aaDEDFDE"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+            <ImageView
+                android:id="@+id/widget_img_launcher"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/ic_launcher"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/WidgetTitle"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/black"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
+                android:paddingStart="@dimen/widget_header_padding"
+                android:paddingLeft="@dimen/widget_header_padding"
+                android:paddingEnd="@dimen/widget_header_padding"
+                android:paddingRight="@dimen/widget_header_padding"/>
+
+            android:text="Widget Header"
+        </LinearLayout>-->
+
+        <!--<ListView
+            android:id="@+id/widget_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>-->
+        <GridView
+            android:id="@+id/widget_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:numColumns="2"
+            android:horizontalSpacing="5dp"
+            android:background="@color/lime_300"
+            android:verticalSpacing="0dp">
+
+            android:stretchMode="columnWidth"
+
+        </GridView>
+        <!--<GridView
+            android:id="@+id/widget_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:columnWidth="150dp"
+            android:horizontalSpacing="0dp"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+
+            android:verticalSpacing="0dp">
+
+        </GridView>-->
+
+    <!--</LinearLayout>-->
+    <!-- Original -->
+    <!--<ListView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>-->
+
+    <!--    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+
+                  android:id="@+id/grid_view"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+
+                  android:columnWidth="150dp"
+                  android:horizontalSpacing="0dp"
+                  android:numColumns="auto_fit"
+                  android:stretchMode="columnWidth"
+
+                  android:verticalSpacing="0dp"
+                  tools:context=".MoviesFragment">
+
+        </GridView>-->
+
+
+    <!--    <StackView
+            android:id="@+id/widget_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:loopViews="true"/>
+        android:id="@+id/stack_view"
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@drawable/widget_item_background"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="Empty-View"
+            android:textSize="20sp" />
+        android:text="@string/empty_view_text"-->
+</FrameLayout>
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_margin="@dimen/widget_margin">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#bbDEDFDE"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/widget_layout_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#aaDEDFDE"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+        <ImageView
+            android:id="@+id/widget_img_launcher"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_launcher"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/WidgetTitle"
+            android:layout_gravity="center_vertical"
+            android:textColor="@android:color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold"
+            android:paddingStart="@dimen/widget_header_padding"
+            android:paddingLeft="@dimen/widget_header_padding"
+            android:paddingEnd="@dimen/widget_header_padding"
+            android:paddingRight="@dimen/widget_header_padding"/>
+
+        android:text="Widget Header"
+    </LinearLayout>
+
+    &lt;!&ndash;<ListView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>&ndash;&gt;
+    <GridView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:numColumns="2"
+        android:horizontalSpacing="5dp"
+        android:background="@color/lime_300"
+        android:verticalSpacing="0dp">
+
+        android:stretchMode="columnWidth"
+
+    </GridView>
+    &lt;!&ndash;<GridView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:columnWidth="150dp"
+        android:horizontalSpacing="0dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+
+        android:verticalSpacing="0dp">
+
+    </GridView>&ndash;&gt;
+
+</LinearLayout>
+    &lt;!&ndash; Original &ndash;&gt;
+    &lt;!&ndash;<ListView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>&ndash;&gt;
+
+&lt;!&ndash;    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+
+              android:id="@+id/grid_view"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+
+              android:columnWidth="150dp"
+              android:horizontalSpacing="0dp"
+              android:numColumns="auto_fit"
+              android:stretchMode="columnWidth"
+
+              android:verticalSpacing="0dp"
+              tools:context=".MoviesFragment">
+
+    </GridView>&ndash;&gt;
+
+
+&lt;!&ndash;    <StackView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:loopViews="true"/>
+    android:id="@+id/stack_view"
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@drawable/widget_item_background"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:text="Empty-View"
+        android:textSize="20sp" />
+    android:text="@string/empty_view_text"&ndash;&gt;
+</FrameLayout>-->
+
+<!-- ............................................... -->
+<!-- // tky comment,
+     (A) initial code are auto-generated when use File > New > Widget > App Widget, wizard -->
+
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#09C"
+                android:padding="@dimen/widget_margin">
+
+
+    &lt;!&ndash; to replace textview with listview &ndash;&gt;
+    <TextView
+        android:id="@+id/appwidget_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:background="#09C"
+        android:contentDescription="@string/appwidget_text"
+        android:text="@string/appwidget_text"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"/>
+
+</RelativeLayout>-->

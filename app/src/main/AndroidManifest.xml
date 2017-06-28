@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.fnlprjct">
+          package="com.example.android.fnlprjct">
 
     <!-- This permission is necessary in order for Sunshine to perform network access. -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- Permissions required by the sync adapter -->
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".MyApplication"
         android:theme="@style/AppTheme">
         <activity
             android:name=".Main_Activity"
             android:label="@string/app_name1"> <!-- also refers to the label name of the start-icon -->
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
@@ -31,7 +31,7 @@
             android:parentActivityName=".Main_Activity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Main_Activity" />
+                android:value=".Main_Activity"/>
         </activity>
         <activity
             android:name=".SettingsPreferenceActivity"
@@ -39,39 +39,53 @@
             android:parentActivityName=".Main_Activity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Main_Activity" />
+                android:value=".Main_Activity"/>
         </activity>
-
 
         <!-- The SyncAdapter's dummy authentication service -->
         <service android:name=".sync.MAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
-            <meta-data android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator"/>
 
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator"/>
         </service>
         <!-- The SyncAdapter service -->
         <service
             android:name=".sync.MSyncService"
-            android:exported="true"
-           >
-            <!--  android:process=":sync" -->
+            android:exported="true">
+
+            <!-- android:process=":sync" -->
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
+
             <meta-data
-                    android:name="android.content.SyncAdapter"
-                    android:resource="@xml/syncadapter"/>
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter"/>
         </service>
 
         <!-- Step-3b -->
         <provider
-            android:authorities="com.example.android.fnlprjct"
             android:name=".data.MovieProvider"
-            android:syncable="true"/>
+            android:authorities="com.example.android.fnlprjct"
+            android:syncable="true"
+            android:exported="true"/>
 
+        <receiver android:name=".widget.CollectionWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/my_move_app_widget_info"/>
+        </receiver>
+
+        <service android:name=".widget.WidgetService"
+                 android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 
 </manifest>

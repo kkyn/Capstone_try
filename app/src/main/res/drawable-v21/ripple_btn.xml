@@ -4,6 +4,8 @@
 <ripple
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="?attr/colorControlHighlight"
+    android:radius="10dp"
+
     >
     android:color="@color/lime_300"
     android:color="?attr/colorControlHighlight"
@@ -12,20 +14,19 @@
     <!-- mask layer -->
     <item android:id="@android:id/mask"
         >
-        <shape
-            android:shape="rectangle">
+        <shape android:shape="rectangle">
             oval
             rectangle
             <!--<solid android:color="?attr/colorPrimaryDark"/>-->
             <solid android:color="@android:color/white"/>
-            <corners
-                android:radius="10dp"/>
+
+            <corners android:radius="10dp"/>
         </shape>
     </item>
 
     <!-- child layer --> <!-- the constant color layer -->
     <!-- the child layer, bound the ripple -->
-    <item android:drawable="@color/lightgray"/>
+    <!--<item android:drawable="@color/lightgray"/>-->
     <!--<item android:drawable="?attr/colorAccent"/>-->
     <!--<item android:drawable="@color/lime_500"/>-->
     <!--<item android:drawable="?android:colorAccent"/>-->

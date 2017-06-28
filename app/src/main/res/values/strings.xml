@@ -1,12 +1,16 @@
 <resources>
     <string name="app_name">My Final Project</string>
-
     <string name="app_name1">My FinalProject</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="highest_rated">Highest Rated</string>
+
+    <!--<string name="hello_world">Hello world!</string>-->
+
     <string name="highest_count">Highest Count</string>
+
     <string name="most_popular">Most Popular</string>
+    <string name="highest_rated">Highest Rated</string>
+    <string name="my_favorites">My Favorites</string>
+    <string name="action_settings">Settings</string>
+
     <string name="title_activity_detailmovie">DetailmovieActivity</string>
 
     <!-- SyncAdapter related -->
@@ -50,11 +54,20 @@
 
     <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
- <!--   <string name="pref_sortmovies_by_ratings" translatable="false">ratings</string>
+    <!--   <string name="pref_sortmovies_by_ratings" translatable="false">ratings</string>
  -->
     <!-- /////////////////////////// -->
     <string name="shared_name">photo</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+
+    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <string name="WidgetTitle">Widget-Header</string>
+    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <string name="pref_year_title">Select Year :</string>
+    <string name="pref_year_key" translatable="false">Year</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.example.android.fnlprjct;
 
-import android.app.ActivityOptions;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v4.util.Pair;
@@ -114,10 +112,10 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     @Override public boolean
     onCreateOptionsMenu(Menu menu) {
         // Inflate the 'menu';
-        // This add items in 'R.menu.menu_main' to the action bar, 'menu' if it is present.
+        // This add items in 'R.menu.menu_main_activtiy' to the action bar, 'menu' if it is present.
         // @1st param -- Resource ID for an XML layout resource to load (e.g., R.menu.main_activity)
         // @2nd param -- menu, The Menu to inflate into. The items and submenus will be added to this Menu
-        this.getMenuInflater().inflate(com.example.android.fnlprjct.R.menu.menu_main, menu);
+        this.getMenuInflater().inflate(com.example.android.fnlprjct.R.menu.menu_main_activtiy, menu);
 
         return true;
     }

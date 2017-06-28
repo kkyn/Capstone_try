@@ -31,14 +31,14 @@
             android:fitsSystemWindows="true"
             android:minHeight="?android:attr/actionBarSize"
 
-            app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
+
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginStart="72dp"
-            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
 
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             >
-
+            app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
             app:expandedTitleMarginStart="72dp"
 
             android:minHeight="40dp"
