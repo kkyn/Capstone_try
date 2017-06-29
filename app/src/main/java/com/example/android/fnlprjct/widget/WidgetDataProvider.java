@@ -17,8 +17,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by kkyin on 24/6/2017.
@@ -31,7 +29,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     String[] mProjection = MyQuery.MovieInfo.PROJECTION;
     String selection = null;                                    // e.g. Quote.COLUMN_SYMBOL + "=?";
     String selectionArg[] = null;                               // e.g. new String[]{"1"};
-    String sortOrder  = MovieContract.MovieInfoEntry.COL_POPULARITY + " ASC";  // e.g. "COLUMN_NAME ASC", DESC/ASC
+    String sortOrder  = MovieContract.MovieInfoEntry.COL_POPULARITY + " DESC";  // e.g. "COLUMN_NAME ASC", DESC/ASC
     Cursor cursor = null;
 
     // Context --- the widget needs to get the package name to be associated with our app.
@@ -43,12 +41,6 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     Context context;
     Intent intent;
 
-//    private void initData() {
-//        collection.clear();
-//        for (int i=0; i<=10; i++) {
-//            collection.add("ListView Item " + i);
-//        }
-//    }
 
 
     public WidgetDataProvider(Context context, Intent intent) { // passing the context and get the intent
@@ -60,7 +52,13 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onCreate() {
 //        initData();
+        if (cursor != null) {
+            cursor.close();
+        }
+        cursor = context.getContentResolver().query(uri, mProjection, selection, selectionArg, sortOrder);
+
         Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onCreate ");
+
 
     }
 
@@ -82,11 +80,6 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         }
         cursor = context.getContentResolver().query(uri, mProjection, selection, selectionArg, sortOrder);
 
-
-        /*Uri uri = MovieContract.MovieInfoEntry.CONTENT_URI;
-        uri = ContentUris.withAppendedId(uri, mItemId);
-        Uri mUri = uri;
-        String[] mProjection = MyQuery.MovieInfo.PROJECTION;*/
     }
 
     // Called when the last RemoteViewsAdapter that is associated with this factory is unbound.
@@ -101,37 +94,20 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         int count = cursor.getCount();
         Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > getCount " + count);
         return cursor.getCount();
-        //return collection.size();
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
-        //return null;
-//        cursor.moveToPosition(position);
-//        RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.gridview);
-//        try {
-//            Bitmap b = Picasso.with(context)
-//            .load(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK))
-//            // .placeholder(R.drawable.sample_1)
-//            //.error(R.drawable.sample_2)
-//           // .fit()
-//            .transform(new Croptransform()).get(); //
-//           // .into(remoteView);
-//            remoteView.setImageViewBitmap(R.id.gridview_item, b);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return remoteView;
+
         // -------------------------------------
         cursor.moveToPosition(position);
-        RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.gridview);
+        RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.grid_item);
         Uri imageUri = Uri.parse(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK));
         try {
-            Bitmap b = Picasso.with(context).load(imageUri)
-               // .resizeDimen(50,50)
-                .get();
+            Bitmap b = Picasso.with(context).load(imageUri).get();
+
          //   Bitmap b = Picasso.with(context).load(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK)).get();
-            remoteView.setImageViewBitmap(R.id.gridview_item, b);
+            remoteView.setImageViewBitmap(R.id.imageview_id, b);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,67 +116,13 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
         // ---------------------------------------
 
-///--        cursor.moveToPosition(position);
 
-///--        RemoteViews remoteView = new RemoteViews(context.getPackageName(), android.R.layout.simple_list_item_1);
-
-        //RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.gridview);
-
-///--        String surii = cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK);
-///--        Log.d(LOG_TAG, "----"+ surii);
-
-        /*Uri urii = Uri.parse(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK));
-        Log.d(LOG_TAG, "----"+urii.toString());*/
-
-//        remoteView.setImageViewUri(R.id.gridview_item, cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK));
-//        remoteView.setImageViewUri(R.id.gridview_item, Uri.parse(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK)));
-
-        /*Picasso.with(context)
-            .load(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK))
-            .placeholder(R.drawable.sample_1)
-            .error(R.drawable.sample_2)
-            .fit()
-            .into((Target) remoteView);*/
-
-//        return remoteView;
-        // ++++++++++++++++++++++++++++++++++++++++++
-            /*Picasso.with(context)
-                .load(mCursor.getString(Main_Fragment.COLUMN_POSTERLINK))
-                .placeholder(R.drawable.sample_1)
-                .error(R.drawable.sample_0)
-//                .resizeDimen(200,0) // no good
-//                .resize(2000,500)   // --A-- //  .resize(600,200)
-//                .onlyScaleDown()    // --A--
-//                .centerInside()     // --A--
-                .fit()                 // --B--
-                //  .centerCrop()
-
-                .into(viewHolder.poster_imageview);*/
-        // ++++++++++++++++++++++++++++++++++++++++++
-
-        /*remoteView.setTextViewText(android.R.id.text1, cursor.getString(MyQuery.MovieInfo.COL_RELEASEDATE));
-        remoteView.setTextColor(android.R.id.text1, Color.BLACK);
-        return remoteView;*/
-
-       // cursor.moveToPosition(position);
-        // moviereleasedate.setText(cursor.getString(MyQuery.MovieInfo.COL_RELEASEDATE));
-        /*RemoteViews remoteView = new RemoteViews(context.getPackageName(), android.R.layout.simple_list_item_1);
-        remoteView.setTextViewText(android.R.id.text1, cursor.getString(MyQuery.MovieInfo.COL_RELEASEDATE));
-        remoteView.setTextColor(android.R.id.text1, Color.BLACK);
-        return remoteView;*/
-
-        /*RemoteViews remoteView = new RemoteViews(context.getPackageName(),
-            android.R.layout.simple_list_item_1);
-        remoteView.setTextViewText(android.R.id.text1, collection.get(position));
-        // this is where you will putting you data, and so we're just going to be sending a color
-        // here right now.
-        remoteView.setTextColor(android.R.id.text1, Color.BLACK);
-        return remoteView;*/
     }
 
     @Override
     public RemoteViews getLoadingView() {
-        return null;
+
+        return new RemoteViews(context.getPackageName(), R.layout.grid_item);
     }
 
     @Override
@@ -210,7 +132,8 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public long getItemId(int position) {
-        return position;   // --0--
+        if (cursor == null) return 0;
+        else return cursor.getPosition();
     }
 
     @Override
@@ -220,7 +143,16 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         return true; // -- false--
     }
 
-    public class Croptransform implements Transformation {
+}
+//0000000000000000000000000000000000000000000000
+/*Picasso.with(context)
+            .load(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK))
+            .placeholder(R.drawable.sample_1)
+            .error(R.drawable.sample_2)
+            .fit()
+            .into((Target) remoteView);*/
+
+    /*public class Croptransform implements Transformation {
         @Override
         public Bitmap transform(Bitmap source) {
             //return null;
@@ -240,5 +172,19 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
             //return null;
             return "square()";
         }
-    }
-}
+    }*/
+//        cursor.moveToPosition(position);
+//        RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.grid_item);
+//        try {
+//            Bitmap b = Picasso.with(context)
+//            .load(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK))
+//            // .placeholder(R.drawable.sample_1)
+//            //.error(R.drawable.sample_2)
+//           // .fit()
+//            .transform(new Croptransform()).get(); //
+//           // .into(remoteView);
+//            remoteView.setImageViewBitmap(R.id.gridview_item, b);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return remoteView;

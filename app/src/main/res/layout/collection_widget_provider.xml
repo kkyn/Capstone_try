@@ -47,12 +47,12 @@
         <GridView
             android:id="@+id/widget_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
 
             android:numColumns="2"
             android:horizontalSpacing="5dp"
             android:background="@color/lime_300"
-            android:verticalSpacing="0dp">
+            android:verticalSpacing="5dp">
 
             android:stretchMode="columnWidth"
 

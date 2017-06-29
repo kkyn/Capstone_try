@@ -81,7 +81,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/my_move_app_widget_info"/>
+                android:resource="@xml/collection_widget_provider_info"/>
         </receiver>
 
         <service android:name=".widget.WidgetService"

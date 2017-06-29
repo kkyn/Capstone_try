@@ -52,24 +52,11 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             .transform(new GrayscaleTransformation(picasso)) //
             .into(updateViews, R.id.image, appWidgetIds);*/
         // ++++++++++++++++++++++++++
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        String defaultValue = context.getString(R.string.pref_movies_sortby_default_value);
-        String string = sp.getString(context.getString(R.string.pref_movies_sort_key), defaultValue);
-        Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > updateAppWidget ----- " + string);
-
-
-        // Notifies the specified collection view in the specified AppWidget instance to invalidate its data.
-        //appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
-
-        // views.setEmptyView(R.id.widget_list, R.id.empty_view); // tky add
 
         // Instruct the widget manager to update the widget
         // Set the RemoteViews to use for the specified appWidgetIds.
         appWidgetManager.updateAppWidget(appWidgetId, views);
 
-
-        // Notifies the specified collection view in the specified AppWidget instance to invalidate its data.
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
     }
 
     // auto-generated
@@ -155,18 +142,11 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
 
         //context.getp
         SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.pref_movies_sort_key), Context.MODE_PRIVATE);
-       // SharedPreferences sp = context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
-//        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.pref_movies_sort_key), MODE_PRIVATE);
 
         String defaultValue = context.getString(R.string.pref_movies_sortby_default_value);
-//        String string = context.getString(R.string.pref_movies_sort_key);
-//        String string = context.getString(R.string.pref_movies_sortby_ratings_label);
 
         String string = sp.getString(context.getString(R.string.pref_movies_sort_key), defaultValue);
 
-        //String string = sp.getString(context.getString(R.string.pref_movies_sort_key), "xxx");
-//        String string = sp.getString(context.getString(R.string.pref_movies_sortby_default_value), "xxx");
-//        String string = sp.getString(context.getString(R.string.pref_movies_sortby_ratings_label), "xxx");
 
         Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > onDeleted " + string);
     }
