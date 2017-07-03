@@ -173,6 +173,7 @@ public class NewFragment extends Fragment
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
+        String searchYear = Utility.getPreferredYear(getContext());
 
         Uri uri = MovieInfoEntry.CONTENT_URI;
 
@@ -183,14 +184,18 @@ public class NewFragment extends Fragment
 
         if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
             projection = MyQuery.Popularity.PROJECTION;
-            selection = null;
-            selectionArg = null;
+            selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
+            selectionArg = new String[]{searchYear};
+            /*selection = null;
+            selectionArg = null;*/
             sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
 
         } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
             projection = MyQuery.VoteAverage.PROJECTION;
-            selection = null;
-            selectionArg = null;
+            selection = MovieInfoEntry.COL_YEAR + "=?";
+            selectionArg = new String[]{searchYear};
+            /*selection = null;
+            selectionArg = null;*/
             sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
 
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))

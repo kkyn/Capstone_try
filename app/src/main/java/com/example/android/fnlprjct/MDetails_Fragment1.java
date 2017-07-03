@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -95,6 +96,8 @@ public class MDetails_Fragment1 extends Fragment
     String trgtShrdElmtTrnstn;
     public boolean isFavouriteEnabled = false;
 
+    private AnimatedVectorDrawable emptyHeart;
+    private AnimatedVectorDrawable fillHeart;
     ///////////////////////////////////////////////
     private static final String[] PROJECTION_MOVIE_REVIEW =
         new String[]{
@@ -119,7 +122,7 @@ public class MDetails_Fragment1 extends Fragment
     @BindView(R.id.movieratings_tv) TextView movieratings;
     @BindView(R.id.moviesynopsis_tv) TextView moviesynopsis;
     @BindView(R.id.movievideo_btn) Button movievideo;
-    @BindView(R.id.favourite_btn) ImageButton moviefavourite;
+    @BindView(R.id.favourite_btn) /*ImageButton*/ ImageView moviefavourite; // ImageView > ImageButton > FloatingActionButton
     @BindView(R.id.toolbar) Toolbar mToolbar;
     //Toolbar mToolbar;
     private TextView mTextView;
@@ -255,13 +258,19 @@ public class MDetails_Fragment1 extends Fragment
                 isFavouriteEnabled = checkFavourites(movieID);
 
                 if (!isFavouriteEnabled) {
-                    moviefavourite.setImageResource(R.drawable.ic_on_star);
-                   // moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
+                    moviefavourite.setImageDrawable(fillHeart);
+                    fillHeart.start();
+                    //moviefavourite.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    //moviefavourite.setImageResource(R.drawable.ic_on_star);
+                    // moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
 
                     saveToFavourites(movieID);
                 }
                 else {
-                    moviefavourite.setImageResource(R.drawable.ic_off_star);
+                    moviefavourite.setImageDrawable(emptyHeart);
+                    emptyHeart.start();
+                    // moviefavourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    //moviefavourite.setImageResource(R.drawable.ic_off_star);
                     //moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
 
                     removeFromFavourites(movieID);
@@ -314,6 +323,10 @@ public class MDetails_Fragment1 extends Fragment
 
         movievideo.setOnClickListener(this);
 
+        // ----------------------
+        emptyHeart = (AnimatedVectorDrawable) getActivity().getDrawable(R.drawable.avd_heart_empty);
+        fillHeart = (AnimatedVectorDrawable) getActivity().getDrawable(R.drawable.avd_heart_fill);
+        // ----------------------
       //  moviethumbnail = (DynamicHeightNetworkImageView) rootView.findViewById(R.id.moviethumbnail_iv);
         //moviethumbnail.setOnClickListener(this);
         moviefavourite.setOnClickListener(this);
@@ -513,12 +526,18 @@ public class MDetails_Fragment1 extends Fragment
 
                 if (favouriteValue == 1) {
                     isFavouriteEnabled = true;
-                    moviefavourite.setImageResource(R.drawable.ic_on_star);
-                 //   moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
+                    moviefavourite.setImageDrawable(fillHeart);
+                    fillHeart.start();
+                    //   moviefavourite.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    //   moviefavourite.setImageResource(R.drawable.ic_on_star);
+                    //   moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
 
                 } else {
                     isFavouriteEnabled = false;
-                    moviefavourite.setImageResource(R.drawable.ic_off_star);
+                    moviefavourite.setImageDrawable(emptyHeart);
+                    emptyHeart.start();
+                    //moviefavourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    //moviefavourite.setImageResource(R.drawable.ic_off_star);
                     //moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
 
                 }

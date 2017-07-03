@@ -92,11 +92,30 @@
 
     <include
         layout="@layout/fragment_main_base"
+        android:id="@+id/fragment_main_base_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
+    <!-- FAB -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/edit_fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+
+        android:layout_marginLeft="16dp"
+
+        app:fabSize="auto"
+        app:elevation="6dp"
+        app:layout_anchor="@id/fragment_main_base_id"
+        app:layout_anchorGravity="bottom|end"
+        app:pressedTranslationZ="12dp"
+        app:srcCompat="@drawable/ic_mode_edit_black_24dp"
+        />
 </android.support.design.widget.CoordinatorLayout>
 
 

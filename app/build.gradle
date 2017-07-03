@@ -11,10 +11,14 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.fnlprjct"
-        minSdkVersion 19 // --21--, --16--, --14--,  11
+        minSdkVersion 21 // --19--, --21--, --16--, --14--,  11
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
+        // tk add, to enable vectorDrawables
+        //For Gradle Plugin 2.0+
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

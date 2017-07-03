@@ -52,10 +52,10 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onCreate() {
 //        initData();
-        if (cursor != null) {
+        /*if (cursor != null) {  // -x-x-x-x
             cursor.close();
         }
-        cursor = context.getContentResolver().query(uri, mProjection, selection, selectionArg, sortOrder);
+        cursor = context.getContentResolver().query(uri, mProjection, selection, selectionArg, sortOrder);*/
 
         Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onCreate ");
 
@@ -86,6 +86,9 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDestroy() {
         Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onDestroy ");
+        if(cursor != null){ // -x-x-x-
+            cursor.close();
+        }
     }
 
     @Override

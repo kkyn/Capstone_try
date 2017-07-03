@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -24,9 +25,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
+import com.example.android.fnlprjct.ui.Changeyear_dialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,6 +105,7 @@ public class Main_Fragment extends Fragment
 
 
     @BindView(R.id.toolbar) Toolbar tool_bar;
+    @BindView(R.id.edit_fab) FloatingActionButton editfab;
     /*Toolbar tool_bar;*/
     //-------------------------
     //--- Interface stuff -----
@@ -162,14 +166,18 @@ public class Main_Fragment extends Fragment
         super.onViewCreated(view, savedInstanceState);  //Log.d(LOG_TAG, "---- 1a onViewCreated(View view, @Nullable Bundle savedInstanceState) --");
 
         if (tool_bar != null ) {
+            // ++++++++++++++++++++++++
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String str = sp.getString(getString(R.string.pref_year_key), "2017");
 
+            // ++++++++++++++++++++++++
             // Sets the Toolbar to act as the ActionBar for this Activity window.
             // Make sure the tool_bar exists in the activity and is not null
             ((AppCompatActivity) getActivity()).setSupportActionBar(tool_bar); // <!-- to set the Toolbar to act as the ActionBar  -->
 
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle("MY_FINAL_PROJECT");
+            actionBar.setTitle("FINAL_PROJECT : " + str);
 
         }
 
@@ -260,6 +268,7 @@ public class Main_Fragment extends Fragment
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
+        String searchYear = Utility.getPreferredYear(getContext());
 
         Uri uri;
         String[] projection;
@@ -271,14 +280,18 @@ public class Main_Fragment extends Fragment
 
         if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
             projection = MOVIEINFO_COLUMN_PROJECTION_POPULARITY;
-            selection = null;
-            selectionArg = null;
+            selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
+            selectionArg = new String[]{searchYear};
+            /*selection = null;
+            selectionArg = null;*/
             sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
 
         } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
             projection = MOVIEINFO_COLUMN_PROJECTION_VOTEAVERAGE;
-            selection = null;
-            selectionArg = null;
+            selection = MovieInfoEntry.COL_YEAR + "=?";
+            selectionArg = new String[]{searchYear};
+            /*selection = null;
+            selectionArg = null;*/
             sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
 
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
@@ -510,6 +523,19 @@ public class Main_Fragment extends Fragment
         if ((savedInstanceState != null) && savedInstanceState.containsKey(SELECTED_INDEX)) {
             mPosition = savedInstanceState.getInt(SELECTED_INDEX);
         }
+
+        // +++++++++++++++++++++++++++++++++++++++++++++
+        editfab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getContext(), "AAAAAAAA edit_fab_clicked ", Toast.LENGTH_SHORT).show();
+                // https://developer.android.com/reference/android/app/DialogFragment.html
+                // Create and show the dialog.
+                new Changeyear_dialog().show(getFragmentManager(), "Show_DialogFragment");
+            }
+        });
+        // +++++++++++++++++++++++++++++++++++++++++++++
 
         return rootView;
     }

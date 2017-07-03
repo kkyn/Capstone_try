@@ -59,6 +59,7 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
                    + MovieInfoEntry.COL_MV_ID         + TYPE_INT_NOT_NULL     + COMMA //" INTEGER UNIQUE NOT NULL, " -or- " INTEGER NOT NULL, "
                    + MovieInfoEntry.COL_TITLE         + TYPE_TEXT_NOT_NULL    + COMMA
                    + MovieInfoEntry.COL_RELEASEDATE   + TYPE_TEXT_NOT_NULL    + COMMA //" INTEGER NOT NULL, "
+                   + MovieInfoEntry.COL_YEAR          + TYPE_TEXT_NOT_NULL    + COMMA //" INTEGER NOT NULL, "
                    + MovieInfoEntry.COL_POPULARITY    + TYPE_TEXT_NOT_NULL    + COMMA
                    + MovieInfoEntry.COL_VOTE_AVERAGE  + TYPE_TEXT_NOT_NULL    + COMMA //" REAL NOT NULL, "
                    + MovieInfoEntry.COL_VOTE_COUNT    + TYPE_INT_NOT_NULL     + COMMA //" INTEGER NOT NULL, "

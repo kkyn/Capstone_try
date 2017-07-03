@@ -1,0 +1,200 @@
+package com.example.android.fnlprjct.ui;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.android.fnlprjct.R;
+import com.example.android.fnlprjct.data.MovieContract;
+import com.example.android.fnlprjct.sync.MSyncAdapter;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+
+/**
+ * Created by kkyin on 2/7/2017.
+ */
+//  https://developer.android.com/reference/android/app/DialogFragment.html
+//  https://developer.android.com/guide/topics/ui/dialogs.html
+//  https://developer.android.com/reference/android/app/AlertDialog.Builder.html
+    // https://developer.android.com/reference/android/widget/TextView.html
+
+public class Changeyear_dialog extends DialogFragment
+                implements SharedPreferences.OnSharedPreferenceChangeListener
+        // , MainFragement.callbackx
+{
+
+    private static final String LOG_TAG = Changeyear_dialog.class.getSimpleName();
+
+    // Empty constructor required for DialogFragment
+    public Changeyear_dialog(){
+    }
+
+    @BindView(R.id.year_dialog) TextView enterYear_tv;
+//    View view;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        /*SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.registerOnSharedPreferenceChangeListener(this);*/
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    /*@Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //return super.onCreateView(inflater, container, savedInstanceState);
+
+        // +++++++++++ View Inflater Stuff ++++++++++++++
+        //LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+
+        //View
+            view = inflater.inflate(R.layout.dialog_changeyear, null);
+
+        ButterKnife.bind(this, view);
+
+        // Set a special listener to be called when an action is performed on the text view.
+        // Interface definition for a callback to be invoked when an action is performed on the editor.
+        enterYear_tv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            // Called when an action is being performed.
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                //v.getText().toString();
+                Toast.makeText(getContext(),"--- " + v.getText().toString(), Toast.LENGTH_SHORT ).show();
+                Toast.makeText(getContext(),"Clicked search, setOnEditorActionListener", Toast.LENGTH_SHORT).show();
+
+                //return false;
+                return true;
+            }
+        });
+
+        return view;
+    }*/
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        //return super.onCreateDialog(savedInstanceState);
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+
+        // +++++++++++ View Inflater Stuff ++++++++++++++
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+
+        View view = layoutInflater.inflate(R.layout.dialog_changeyear, null);
+
+        ButterKnife.bind(this, view);
+
+        // Set a special listener to be called when an action is performed on the text view.
+        // Interface definition for a callback to be invoked when an action is performed on the editor.
+        enterYear_tv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            // Called when an action is being performed.
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                //v.getText().toString();
+                Toast.makeText(getContext(),"--- " + v.getText().toString(), Toast.LENGTH_SHORT ).show();
+                Toast.makeText(getContext(),"Clicked search, setOnEditorActionListener", Toast.LENGTH_SHORT).show();
+                searchMoviesYear();
+                //return false;
+                return true;
+            }
+        });
+
+
+        // +++++++++++ AlertDialog Builder Stuff ++++++++++++++
+        dialogBuilder.setView(view);
+        dialogBuilder.setTitle(R.string.dialog_title);
+
+        dialogBuilder.setPositiveButton(
+            getString(R.string.dialog_search),
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    searchMoviesYear();
+                }
+            });
+
+        dialogBuilder.setNegativeButton(
+            getString(R.string.dialog_cancel), null
+        );
+
+        Dialog dialog = dialogBuilder.create();
+
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        //dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        return dialog;
+    }
+
+    // -------------------------------------------------
+    private void searchMoviesYear() {
+
+        String yearKey = getResources().getString(R.string.pref_year_key);
+        String year = enterYear_tv.getText().toString();
+
+        Toast.makeText(getContext(),
+            "dialog> setPositiveButton> onClick> searchMoviesYear() > "
+                + yearKey + " - " + year, Toast.LENGTH_LONG).show();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(yearKey, year);
+        editor.apply();
+
+        //MSyncAdapter.syncImmediately(getContext());
+
+    }
+
+
+
+    //---------------------------------------------------------------------------------------------
+    //------ SETTING FOR implementation of SharedPreferences.OnSharedPreferenceChangeListener -----
+    //---------------------------------------------------------------------------------------------
+    // For SharedPreferences.OnSharedPreferenceChangeListener
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        Toast.makeText(getContext(),"onSharedPreferenceChanged 0", Toast.LENGTH_SHORT).show();
+
+        if (key.equals(getResources().getString(R.string.pref_year_key))) {
+
+            Toast.makeText(getContext(),"onSharedPreferenceChanged 1", Toast.LENGTH_SHORT).show();
+            //getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
+            getContext().getContentResolver().notifyChange(MovieContract.MovieInfoEntry.CONTENT_URI, null);
+            MSyncAdapter.syncImmediately(getContext());
+        }
+    }
+}

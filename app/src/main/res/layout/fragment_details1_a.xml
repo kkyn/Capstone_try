@@ -69,14 +69,14 @@
     android:background="?attr/colorControlHighlight" <!-- color is gray -->
 
     <!-- tky add, 5th June 2017 -->
-    <ImageButton
+    <!--<ImageButton
         android:id="@+id/favourite_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
 
         android:background="?attr/selectableItemBackgroundBorderless"
-        />
+        />-->
 
     android:background="?attr/selectableItemBackground"
     android:background="@drawable/ripple_btn"

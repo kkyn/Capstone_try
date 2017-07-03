@@ -63,6 +63,8 @@ public class MovieContract {
         public static final String COL_MV_ID = "MovieID";
         public static final String COL_TITLE = "Title";
 
+        public static final String COL_YEAR = "Year";
+
         public static final String COL_RELEASEDATE = "ReleaseDate";
         public static final String COL_OVERVIEW = "Overview";
 

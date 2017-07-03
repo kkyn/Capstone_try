@@ -31,6 +31,7 @@ public class MyQuery {
                 , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
                 , MovieInfoEntry.COL_POSTERLINK
                 , MovieInfoEntry.COL_BACKDROP_PATH
+                , MovieInfoEntry.COL_YEAR
             };
     }
     //-------------------------------------------------
@@ -43,6 +44,7 @@ public class MyQuery {
                 , MovieInfoEntry.COL_POPULARITY + " as sort_column"
                 , MovieInfoEntry.COL_POSTERLINK
                 //, MovieInfoEntry.COL_BACKDROP_PATH
+                , MovieInfoEntry.COL_YEAR
             };
     }
     //-------------------------------------------------
@@ -57,7 +59,8 @@ public class MyQuery {
                 MovieInfoEntry.COL_OVERVIEW,
                 MovieInfoEntry.COL_RELEASEDATE,
                 MovieInfoEntry.COL_TITLE,
-                MovieInfoEntry.COL_VOTE_AVERAGE
+                MovieInfoEntry.COL_VOTE_AVERAGE,
+                MovieInfoEntry.COL_YEAR
             };
 
         // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
@@ -70,6 +73,7 @@ public class MyQuery {
         int COL_RELEASEDATE = 5;
         int COL_MOVIE_TITLE = 6;
         int COL_MOVIE_RATING = 7;
+        int COL_YEAR = 8;
 
         /*String[] PROJECTION = {
             ItemsContract.Items._ID,

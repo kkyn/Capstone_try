@@ -65,6 +65,16 @@ public class Utility {
         return string;
     }
 
+    public static String getPreferredYear(Context context) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String year = sharedPreferences.getString(context.getString(R.string.pref_year_key), context.getResources().getString(R.string.default_year));
+//        String year = sharedPreferences.getString(context.getString(R.string.pref_year_key), "2015");
+
+
+        return year;
+        //return null;
+    }
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     // /**************************************************/
     /******************* Movie Reviews *******************/
@@ -305,8 +315,9 @@ public class Utility {
         final String PARAM_RELEASE_DATE = "primary_release_year";
         final String PARAM_VOTECOUNT_GRTR = "vote_count.gte";
 
-        final String REF_YEAR = "2017";
+        //final String REF_YEAR = "2017";
 
+        String searchYearBy = Utility.getPreferredYear(context);
         String sortBy = Utility.getPreferredSortSequence(context);
 
         // (1) build the Url ---Begin--------
@@ -319,10 +330,17 @@ public class Utility {
             .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY) // e.g. api_key=xxxxxx
             .appendQueryParameter(PARAM_SORT_BY, sortBy)            // sort_by=xxx
             .appendQueryParameter(PARAM_COUNTRY, "US")              // certification_country=US
-            .appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)     // primary_release_year=2017
+
+            //.appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)     // primary_release_year=2017
+            .appendQueryParameter(PARAM_RELEASE_DATE, searchYearBy)             // primary_release_year=2017
+
             .appendQueryParameter(PARAM_VOTECOUNT_GRTR, "50");      // vote_count.gte=50
 
         uri = uriBuilder.build();
+
+        String aStrng;
+        aStrng = uri.toString();
+        Log.d(LOG_TAG, " ---- " + aStrng);
         //-----End--------
 
         return uri;
@@ -490,6 +508,7 @@ public class Utility {
 
         Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
 
+        String searchYearBy = Utility.getPreferredYear(context);
         //-------------------
         //-- JSONArray resultsJSONArray = moviesJsonObj.getJSONArray(RESULTS);
 
@@ -526,6 +545,8 @@ public class Utility {
             cv.put(MovieInfoEntry.COL_MV_ID, mvId);
             cv.put(MovieInfoEntry.COL_TITLE, mvOrgTitle);
             cv.put(MovieInfoEntry.COL_RELEASEDATE, mvReleaseDate);
+
+            cv.put(MovieInfoEntry.COL_YEAR, searchYearBy);
             cv.put(MovieInfoEntry.COL_POPULARITY, mvPopularity);
             cv.put(MovieInfoEntry.COL_VOTE_AVERAGE, mvVoteAverage);
             cv.put(MovieInfoEntry.COL_VOTE_COUNT, mvVoteCount);
