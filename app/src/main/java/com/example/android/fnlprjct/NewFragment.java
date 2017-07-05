@@ -183,22 +183,21 @@ public class NewFragment extends Fragment
         String sortOrder;
 
         if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
+
             projection = MyQuery.Popularity.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
             selectionArg = new String[]{searchYear};
-            /*selection = null;
-            selectionArg = null;*/
             sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
 
         } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
+
             projection = MyQuery.VoteAverage.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";
             selectionArg = new String[]{searchYear};
-            /*selection = null;
-            selectionArg = null;*/
             sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
 
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
+
             projection = MyQuery.Favourites.PROJECTION;
             selection = MovieInfoEntry.COL_FAVOURITES + "=?";
             selectionArg = new String[]{"1"};

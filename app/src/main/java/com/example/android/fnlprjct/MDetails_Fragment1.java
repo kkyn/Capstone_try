@@ -17,7 +17,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,15 +33,11 @@ import android.widget.Toast;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.example.android.fnlprjct.R.attr.colorAccent;
-import static com.example.android.fnlprjct.R.attr.theme;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,7 +93,7 @@ public class MDetails_Fragment1 extends Fragment
     private AnimatedVectorDrawable emptyHeart;
     private AnimatedVectorDrawable fillHeart;
     ///////////////////////////////////////////////
-    private static final String[] PROJECTION_MOVIE_REVIEW =
+    /*private static final String[] PROJECTION_MOVIE_REVIEW =
         new String[]{
             MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
             MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MV_ID,
@@ -109,7 +103,7 @@ public class MDetails_Fragment1 extends Fragment
     //public static final int PROJECTION_RATING_ID = 0;
     //public static final int INDX_1_MOVIE_ID = 1;
     public static final int INDX_1_REVIEWER = 2;
-    public static final int INDX_1_REVIEWCONTENT = 3;
+    public static final int INDX_1_REVIEWCONTENT = 3;*/
 
     ///////////////////////////////////////////////
 
@@ -121,7 +115,8 @@ public class MDetails_Fragment1 extends Fragment
     @BindView(R.id.moviereleasedate_tv) TextView moviereleasedate;
     @BindView(R.id.movieratings_tv) TextView movieratings;
     @BindView(R.id.moviesynopsis_tv) TextView moviesynopsis;
-    @BindView(R.id.movievideo_btn) Button movievideo;
+    @BindView(R.id.movievideo_btn) ImageView movievideo;
+    //@BindView(R.id.movievideo_btn) Button movievideo;
     @BindView(R.id.favourite_btn) /*ImageButton*/ ImageView moviefavourite; // ImageView > ImageButton > FloatingActionButton
     @BindView(R.id.toolbar) Toolbar mToolbar;
     //Toolbar mToolbar;
@@ -260,18 +255,12 @@ public class MDetails_Fragment1 extends Fragment
                 if (!isFavouriteEnabled) {
                     moviefavourite.setImageDrawable(fillHeart);
                     fillHeart.start();
-                    //moviefavourite.setImageResource(R.drawable.ic_favorite_black_24dp);
-                    //moviefavourite.setImageResource(R.drawable.ic_on_star);
-                    // moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
 
                     saveToFavourites(movieID);
                 }
                 else {
                     moviefavourite.setImageDrawable(emptyHeart);
                     emptyHeart.start();
-                    // moviefavourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                    //moviefavourite.setImageResource(R.drawable.ic_off_star);
-                    //moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
 
                     removeFromFavourites(movieID);
                 }
@@ -350,7 +339,7 @@ public class MDetails_Fragment1 extends Fragment
         // https://developer.android.com/reference/android/support/v7/widget/Toolbar.html
         if (mToolbar != null ){
 
-            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back2);
+            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -465,9 +454,9 @@ public class MDetails_Fragment1 extends Fragment
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-            String[] mProjection = MyQuery.MovieInfo.PROJECTION;
+            String[] projection = MyQuery.MovieInfo.PROJECTION;
 
-            return new CursorLoader(getActivity(), mUri, mProjection, null, null, null);
+            return new CursorLoader(getActivity(), mUri, projection, null, null, null);
         }
 
         @Override
@@ -502,8 +491,13 @@ public class MDetails_Fragment1 extends Fragment
                 // .setImageUrl -- define in ImageView
                 moviethumbnail.setImageUrl(stringUrl, imageLoader);
 
-                moviethumbnail.setAspectRatio(1.0f); // 1.5f, 0.66f     // --combo 1 --,-- combo2,1.0f --, combo3,1.0f
-                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);   // combo3
+                moviethumbnail.setAspectRatio(0.66f); // 1.0f, 1.5f, 0.66f     // --combo 1 --,-- combo2,1.0f --, combo3,1.0f
+                //moviethumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
+                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
+
+
+//--                moviethumbnail.setAspectRatio(1.0f); // 1.5f, 0.66f     // --combo 1 --,-- combo2,1.0f --, combo3,1.0f
+//--                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);   // combo3
 //                  moviethumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
 //                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_START); // -- combo2 --
 //                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
@@ -528,17 +522,11 @@ public class MDetails_Fragment1 extends Fragment
                     isFavouriteEnabled = true;
                     moviefavourite.setImageDrawable(fillHeart);
                     fillHeart.start();
-                    //   moviefavourite.setImageResource(R.drawable.ic_favorite_black_24dp);
-                    //   moviefavourite.setImageResource(R.drawable.ic_on_star);
-                    //   moviefavourite.setImageResource(android.R.drawable.btn_star_big_on);
 
                 } else {
                     isFavouriteEnabled = false;
                     moviefavourite.setImageDrawable(emptyHeart);
                     emptyHeart.start();
-                    //moviefavourite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                    //moviefavourite.setImageResource(R.drawable.ic_off_star);
-                    //moviefavourite.setImageResource(android.R.drawable.btn_star_big_off);
 
                 }
                 //...................
@@ -581,11 +569,11 @@ public class MDetails_Fragment1 extends Fragment
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-            String[] mProjection = PROJECTION_MOVIE_REVIEW;
+            String[] projection = MyQuery.Reviews.PROJECTION;
             String mvID = mUri.getPathSegments().get(1);
             Uri xUri = ContentUris.withAppendedId(MovieReviewEntry.CONTENT_URI, Long.valueOf(mvID));
 
-            return new CursorLoader(getActivity(), xUri, mProjection, null, null, null);
+            return new CursorLoader(getActivity(), xUri, projection, null, null, null);
 
         }
 

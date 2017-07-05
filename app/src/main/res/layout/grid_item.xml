@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
 
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-           android:id="@+id/imageview_id"
-           android:layout_width="wrap_content"
-           android:layout_height="80dp"
-           android:scaleType="fitXY"
-
+    android:background="@color/lime_700"
     >
-android:layout_height="100dp"
+    android:layout_height="wrap_content"
 
-android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textview_id"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
 
-android:scaleType="fitCenter"
-android:layout_width="match_parent"
-android:layout_height="50dp"
-</ImageView>
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="#fffffff8"
+        android:textStyle="bold"
+        />
+
+    android:ellipsize="marquee"
+    android:scrollHorizontally="true"
+    android:ellipsize="middle"
+    <!--<TextView
+        android:id="@+id/movieratings_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+
+        />-->
+    android:layout_alignRight="@+id/imageview_id"
+</RelativeLayout>

@@ -69,6 +69,13 @@
                 android:scaleType="centerCrop"
             </com.example.android.fnlprjct.DynamicHeightNetworkImageView>
 
+            <!-- Scrim --><!-- use big V, not small V -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/photo_background_protection">
+            </View>
+
             <!-- Toolbar, id=toolbar -->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -199,7 +206,7 @@
         app:layout_anchor="@id/fragment_main_base_id"
         app:layout_anchorGravity="bottom|end"
         app:pressedTranslationZ="12dp"
-        app:srcCompat="@drawable/ic_mode_edit_black_24dp"
+        app:srcCompat="@drawable/ic_mode_edit_white_24dp"
         />-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/favourite_btn"

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -13,10 +12,6 @@ import android.widget.RemoteViewsService;
 import com.example.android.fnlprjct.MyQuery;
 import com.example.android.fnlprjct.R;
 import com.example.android.fnlprjct.data.MovieContract;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
-
-import java.io.IOException;
 
 /**
  * Created by kkyin on 24/6/2017.
@@ -103,7 +98,18 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     public RemoteViews getViewAt(int position) {
 
         // -------------------------------------
+        // 1 July 2017
         cursor.moveToPosition(position);
+        RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.grid_item);
+
+        //  -- viewId, text --
+        remoteView.setTextViewText(R.id.textview_id, cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE));
+        //remoteView.setTextViewText(R.id.movieratings_tv, cursor.getString(MyQuery.MovieInfo.COL_MOVIE_RATING));
+
+        return remoteView;
+        // -------------------------------------
+        // -------------------------------------
+        /*cursor.moveToPosition(position);
         RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.grid_item);
         Uri imageUri = Uri.parse(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK));
         try {
@@ -115,7 +121,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
             e.printStackTrace();
         }
 
-        return remoteView;
+        return remoteView;*/
 
         // ---------------------------------------
 

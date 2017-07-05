@@ -135,9 +135,10 @@ public class Changeyear_dialog extends DialogFragment
         // +++++++++++ AlertDialog Builder Stuff ++++++++++++++
         dialogBuilder.setView(view);
         dialogBuilder.setTitle(R.string.dialog_title);
+        dialogBuilder.setMessage("Do not enter beyond this year");
 
         dialogBuilder.setPositiveButton(
-            getString(R.string.dialog_search),
+            getString(R.string.dialog_summit),
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

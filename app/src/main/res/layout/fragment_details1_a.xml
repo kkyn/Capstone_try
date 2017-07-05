@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textSize="20dp"/>
+        android:textSize="15sp"/>
 
     <TextView
         android:id="@+id/movieratings_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textSize="15dp"/>
+        android:textSize="15sp"/>
 
     <TextView
         android:id="@+id/moviesynopsis_tv"
@@ -25,16 +26,26 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textColor="#000000"
-        android:textSize="20sp"/>
-    <Button
+        android:textSize="15sp"/>
+
+    <ImageView
+        android:id="@+id/movievideo_btn"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+
+        app:srcCompat="@drawable/youtube_play"
+
+        />
+    android:id="@+id/try_btn" <!-- commented July5 2017, movievideo_btn placed here at Imageview -->
+
+    <!--<Button
         android:id="@+id/try_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="tryBtn"
         android:textAllCaps="false"
-
-
 
         />
     android:background="@drawable/ripple_btn"
@@ -45,9 +56,10 @@
     android:backgroundTint="@color/lime_300"
     style="@style/Widget.AppCompat.Button.Colored"
     android:background="@drawable/ripple_btn"
-    android:background="?attr/selectableItemBackground"
+    android:background="?attr/selectableItemBackground"-->
 
-    <Button
+    <!-- commented July5 2017, movievideo_btn placed at Imageview -->
+    <!--<Button
         android:id="@+id/movievideo_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,7 +67,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:text="Video Clip"
 
-        />
+        />-->
     style="@style/Widget.AppCompat.Button.Colored"
     style="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:background="?attr/selectableItemBackground"

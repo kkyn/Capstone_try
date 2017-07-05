@@ -1,5 +1,6 @@
 package com.example.android.fnlprjct;
 
+import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 /**
  * Created by kkyin on 8/6/2017.
@@ -7,6 +8,20 @@ import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 
 public class MyQuery {
 
+    public interface Reviews {
+
+        String[] PROJECTION = {
+            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
+            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MV_ID,
+            MovieReviewEntry.COL_REVIEWER,
+            MovieReviewEntry.COL_REVIEWCONTENT
+        };
+        // These constant values are related to the index positions in
+        // string array 'PROJECTION'
+        int COL_MV_ID = 1;
+        int COL_REVIEWER = 2;
+        int COL_REVIEWCONTENT = 3;
+    }
     public interface Favourites {
 
         String[] PROJECTION =
@@ -14,9 +29,7 @@ public class MyQuery {
                 MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
                 , MovieInfoEntry.COL_MV_ID
                 , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
-//            ,MovieInfoEntry.COL_FAVOURITES
                 , MovieInfoEntry.COL_POSTERLINK
-                , MovieInfoEntry.COL_BACKDROP_PATH
             };
     }
     //-------------------------------------------------
@@ -30,7 +43,6 @@ public class MyQuery {
                 , MovieInfoEntry.COL_MV_ID
                 , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
                 , MovieInfoEntry.COL_POSTERLINK
-                , MovieInfoEntry.COL_BACKDROP_PATH
                 , MovieInfoEntry.COL_YEAR
             };
     }
@@ -43,7 +55,6 @@ public class MyQuery {
                 , MovieInfoEntry.COL_MV_ID
                 , MovieInfoEntry.COL_POPULARITY + " as sort_column"
                 , MovieInfoEntry.COL_POSTERLINK
-                //, MovieInfoEntry.COL_BACKDROP_PATH
                 , MovieInfoEntry.COL_YEAR
             };
     }

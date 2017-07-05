@@ -69,14 +69,15 @@
     <string name="add_widget">Add widget</string>
 
     <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
-    <string name="WidgetTitle">Widget-Header</string>
+    <string name="WidgetTitle">Movies</string>
+    <!--<string name="WidgetTitle">Widget-Header</string>-->
     <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
     <string name="pref_year_title">Select Year :</string>
     <!--<string name="pref_year_key" translatable="false">Year</string>-->
     <string name="widget_name">MyWidget</string>
     <string name="dialog_title">Enter Year of Interest</string>
-    <string name="dialog_search">SEARCH</string>
-    <string name="dialog_cancel">CANCEL</string>
+    <string name="dialog_summit">Summit</string>
+    <string name="dialog_cancel">Cancel</string>
     <string name="default_year">2017</string>
 
 </resources>

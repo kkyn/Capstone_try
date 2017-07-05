@@ -72,35 +72,6 @@ public class Main_Fragment extends Fragment
         COLUMN_BACKDROP_PATH = 4;
     }
 
-    private static final String[] MOVIEINFO_COLUMN_PROJECTION_POPULARITY =
-        new String[]{
-            MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-            , MovieInfoEntry.COL_MV_ID
-            , MovieInfoEntry.COL_POPULARITY + " as sort_column"
-            , MovieInfoEntry.COL_POSTERLINK
-         //   , MovieInfoEntry.COL_BACKDROP_PATH
-        };
-
-    // state the columns of data I want
-    private static final String[] MOVIEINFO_COLUMN_PROJECTION_VOTEAVERAGE =
-        new String[]{
-            MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-            , MovieInfoEntry.COL_MV_ID
-            , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
-            , MovieInfoEntry.COL_POSTERLINK
-            , MovieInfoEntry.COL_BACKDROP_PATH
-        };
-
-    private static final String[] MOVIEINFO_COLUMN_PROJECTION_FAVOURITES =
-        new String[]{
-            MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-            , MovieInfoEntry.COL_MV_ID
-            , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
-//            ,MovieInfoEntry.COL_FAVOURITES
-            , MovieInfoEntry.COL_POSTERLINK
-            , MovieInfoEntry.COL_BACKDROP_PATH
-        };
-
     private static final String SELECTED_INDEX = "selected_index";
 
 
@@ -279,23 +250,21 @@ public class Main_Fragment extends Fragment
         uri = MovieInfoEntry.CONTENT_URI;
 
         if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
-            projection = MOVIEINFO_COLUMN_PROJECTION_POPULARITY;
+
+            projection = MyQuery.Popularity.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
             selectionArg = new String[]{searchYear};
-            /*selection = null;
-            selectionArg = null;*/
             sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
 
         } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
-            projection = MOVIEINFO_COLUMN_PROJECTION_VOTEAVERAGE;
+
+            projection = MyQuery.VoteAverage.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";
             selectionArg = new String[]{searchYear};
-            /*selection = null;
-            selectionArg = null;*/
             sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
 
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
-            projection = MOVIEINFO_COLUMN_PROJECTION_FAVOURITES;
+            projection = MyQuery.Favourites.PROJECTION;
             selection = MovieInfoEntry.COL_FAVOURITES + "=?";
             selectionArg = new String[]{"1"};
             sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
@@ -407,33 +376,6 @@ public class Main_Fragment extends Fragment
         }
 
         return super.onOptionsItemSelected(item);
-
-
-//        int id = item.getItemId();
-//
-//        //if (id == com.example.android.myproject_2.R.id.most_popular) {
-//        if (id == R.id.most_popular) {
-//
-//            //------------------------------------------------
-//            // get the file, SharedPreferences
-//            // Gets a SharedPreferences instance that points to the default file
-//            // that is used by the preference framework in the given context.
-//            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//
-//            // Create a new Editor for these preferences, through which you can make modifications to
-//            // the data in the preferences and atomically commit those changes back to the SharedPreferences object.
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
-//
-//            // Set a String value in the preferences editor, to be written back once commit() or apply() are called.
-//            editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_default_value));
-//
-//            editor.apply();
-//
-//            return true;
-//            //------------------------------------------------
-//
-//        }
-//        return super.onOptionsItemSelected(item);
 
     }
     //------------------------------------------------

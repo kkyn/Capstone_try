@@ -114,7 +114,7 @@
         app:layout_anchor="@id/fragment_main_base_id"
         app:layout_anchorGravity="bottom|end"
         app:pressedTranslationZ="12dp"
-        app:srcCompat="@drawable/ic_mode_edit_black_24dp"
+        app:srcCompat="@drawable/ic_mode_edit_white_24dp"
         />
 </android.support.design.widget.CoordinatorLayout>
 
