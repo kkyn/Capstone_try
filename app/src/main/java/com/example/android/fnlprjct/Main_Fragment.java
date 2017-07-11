@@ -1,7 +1,9 @@
 package com.example.android.fnlprjct;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,10 +11,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -25,11 +30,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
-import com.example.android.fnlprjct.ui.Changeyear_dialog;
+import com.example.android.fnlprjct.ui.ChangeYearDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,13 +47,19 @@ import butterknife.ButterKnife;
 public class Main_Fragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>
     , SharedPreferences.OnSharedPreferenceChangeListener
+    ,ChangeYearDialogFragment.EditYearDialogListener
     //   ,MvAdapter.ItemClickListener
 {
     // constructor
     public Main_Fragment() {
 
     }
+    @Override
+    public void  onFinishEditYearDialog(String inputText){
+        Toast.makeText(getContext(), "New Year brought into fragment level" + inputText, Toast.LENGTH_LONG).show();
+        actionBar.setTitle("FINAL_PROJECT : " + inputText);
 
+    }
     public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
@@ -73,7 +86,7 @@ public class Main_Fragment extends Fragment
     }
 
     private static final String SELECTED_INDEX = "selected_index";
-
+    ActionBar actionBar;
 
     @BindView(R.id.toolbar) Toolbar tool_bar;
     @BindView(R.id.edit_fab) FloatingActionButton editfab;
@@ -86,7 +99,8 @@ public class Main_Fragment extends Fragment
     // Container Activity must implement this interface
     public interface CallBackListener {
 
-        void onItemSelectedInRecyclerView(MvAdapter.MvViewHolder viewHolder, long itemId);
+        void onItemSelectedInRecyclerView(Intent intent, Bundle bundle);
+        //void onItemSelectedInRecyclerView(MvAdapter.MvViewHolder viewHolder, long itemId);
         //void onItemSelectedInRecyclerView(Uri mUri); // -- old --
 
     }
@@ -146,7 +160,8 @@ public class Main_Fragment extends Fragment
             // Make sure the tool_bar exists in the activity and is not null
             ((AppCompatActivity) getActivity()).setSupportActionBar(tool_bar); // <!-- to set the Toolbar to act as the ActionBar  -->
 
-            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            //ActionBar
+                actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("FINAL_PROJECT : " + str);
 
@@ -418,7 +433,7 @@ public class Main_Fragment extends Fragment
                 @Override
                 public void onClick0(MvAdapter.MvViewHolder viewHolder) {
 
-                    // ************* new ***********************
+                    // ************* newer ***********************
                     mPosition = viewHolder.getAdapterPosition();
                     itemID = rvAdapter.getItemId(mPosition);
 
@@ -427,7 +442,39 @@ public class Main_Fragment extends Fragment
 
                     viewHolder.poster_imageview.setTransitionName(srcView_SharedElementTransition);
 
-                    mainCallBackListener.onItemSelectedInRecyclerView(viewHolder, itemID);
+                    // ????????????????????
+                    ImageView poster_imageview1 = viewHolder.poster_imageview;
+                    //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_imageview;
+
+                    final Pair<View, String> pair1 = Pair.create((View) poster_imageview1, viewHolder.poster_imageview.getTransitionName());
+                    //final Pair<View, String> pair1 = new Pair<>((View)poster_imageview1, viewHolder.poster_imageview.getTransitionName());
+
+                    // http://guides.codepath.com/android/shared-element-activity-transition
+                    ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pair1);
+                    //         ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(Main_Activity.this, pair1);
+                    //ActivityOptions option = ActivityOptions.makeSceneTransitionAnimation(Main_Activity.this, pair1);
+
+                    Bundle bundle = option.toBundle();
+
+                    uri = MovieContract.MovieInfoEntry.CONTENT_URI;
+                    uri = ContentUris.withAppendedId(uri, itemID);
+
+                    Intent intent = new Intent(getActivity(), MDetails_Activity.class);
+                    intent.setData(uri);
+                    // ????????????????????
+
+                    mainCallBackListener.onItemSelectedInRecyclerView(intent, bundle);
+
+                    // ************* new ***********************
+                    /*mPosition = viewHolder.getAdapterPosition();
+                    itemID = rvAdapter.getItemId(mPosition);
+
+                    String srcView_SharedElementTransition = getString(R.string.shared_name) + itemID;
+                    //String srcView_SharedElementTransition = "photo" + itemID;
+
+                    viewHolder.poster_imageview.setTransitionName(srcView_SharedElementTransition);
+
+                    mainCallBackListener.onItemSelectedInRecyclerView(viewHolder, itemID);*/
 
                     // ************* old ***********************
                     /*mPosition = viewHolder.getAdapterPosition();
@@ -471,15 +518,25 @@ public class Main_Fragment extends Fragment
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getContext(), "AAAAAAAA edit_fab_clicked ", Toast.LENGTH_SHORT).show();
+                showChangeYearDialog();
+
+                /*Toast.makeText(getContext(), "AAAAAAAA edit_fab_clicked ", Toast.LENGTH_SHORT).show();*/
                 // https://developer.android.com/reference/android/app/DialogFragment.html
                 // Create and show the dialog.
-                new Changeyear_dialog().show(getFragmentManager(), "Show_DialogFragment");
+                /*new ChangeYearDialogFragment().show(getFragmentManager(), "Show_DialogFragment");*/
             }
         });
         // +++++++++++++++++++++++++++++++++++++++++++++
 
         return rootView;
     }
+    private void showChangeYearDialog(){
 
+        FragmentManager fm = getFragmentManager();
+        ChangeYearDialogFragment chngyrDialog = ChangeYearDialogFragment.newInstance();
+
+        chngyrDialog.setTargetFragment(this, 1); // 1 : say is Constants.DIALOG_REQUEST_CODE
+        chngyrDialog.show(fm, "changeyear");
+
+    }
 }

@@ -11,7 +11,6 @@
     <!-- Is a LinearLayout ... and orientation is vertical -->
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         >
 
@@ -36,19 +35,21 @@
             <!--app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlwaysCollapsed"-->
 
             <!-- to use toolbar as an actionBar , toolbar defined this way -->
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?android:attr/actionBarSize"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="4dp"
+            android:minHeight="?android:attr/actionBarSize"
 
-                app:theme="@style/ToolbarTheme"
-                app:layout_collapseMode="pin"
+            app:layout_collapseMode="pin"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
 
+            >
+            app:theme="@style/ToolbarTheme"
+            android:background="?attr/colorPrimary"
 
-                >
                 app:theme="@style/ToolbarTheme"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 android:background="?attr/colorPrimary" <!-- added to accommodate device with pre-21, (A) -->
@@ -116,6 +117,7 @@
         app:pressedTranslationZ="12dp"
         app:srcCompat="@drawable/ic_mode_edit_white_24dp"
         />
+
 </android.support.design.widget.CoordinatorLayout>
 
 
@@ -141,7 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="... layout/fragment_main.xml" />
+            android:text="... layout/fragment_main.xml />
 
     </LinearLayout>
 

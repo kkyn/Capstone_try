@@ -289,6 +289,18 @@ public class MDetails_Fragment1 extends Fragment
             uri = ContentUris.withAppendedId(uri, mItemId);
             mUri = uri;
         }
+
+        // tky add, july10 2017,
+        // must add this to solve the change-of-orientation where
+        // the 'Details_Activity' gets recreated but the loader in LoaderManager still exist.
+        //
+        // https://developer.android.com/reference/android/support/v4/app/LoaderManager.html
+        // Starts a new or restarts an existing Loader in this manager, registers the callbacks to it,
+        // and (if the activity/fragment is currently started) starts loading it.
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, myTry_0); //  help maintain position ??
+        getLoaderManager().restartLoader(MOVIE_REVIEW_LOADER, null, myTry_1); //  help maintain position ??
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     }
 
     @Override
@@ -358,9 +370,13 @@ public class MDetails_Fragment1 extends Fragment
                 }
             });
             mToolbar.setTitle("HELLO");
+
+            // tky comment,
+            // ? color of text, no effect, the color is dependent on the accentColor in styles
+            // --------
             //mToolbar.setTitleTextColor(0xffaff000);
             //@color/primary_text
-            mToolbar.setTitleTextColor(getResources().getColor(R.color.pink_a400));
+            //mToolbar.setTitleTextColor(getResources().getColor(R.color.pink_a400));
 //            mToolbar.setTitleTextColor(getResources().getColor(android.R.color.primary_text_light));
 
             /*((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);*/ ///?????

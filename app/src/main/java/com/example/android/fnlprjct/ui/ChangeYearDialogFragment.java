@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,18 +32,34 @@ import butterknife.ButterKnife;
 //  https://developer.android.com/reference/android/app/AlertDialog.Builder.html
     // https://developer.android.com/reference/android/widget/TextView.html
 
-public class Changeyear_dialog extends DialogFragment
+public class ChangeYearDialogFragment extends DialogFragment
                 implements SharedPreferences.OnSharedPreferenceChangeListener
         // , MainFragement.callbackx
 {
 
-    private static final String LOG_TAG = Changeyear_dialog.class.getSimpleName();
+    private static final String LOG_TAG = ChangeYearDialogFragment.class.getSimpleName();
 
     // Empty constructor required for DialogFragment
-    public Changeyear_dialog(){
+    public ChangeYearDialogFragment(){
     }
 
-    @BindView(R.id.year_dialog) TextView enterYear_tv;
+    public static ChangeYearDialogFragment
+    newInstance(){
+        ChangeYearDialogFragment cyDialog = new ChangeYearDialogFragment();
+        return cyDialog;
+    }
+
+    public interface EditYearDialogListener {
+        void onFinishEditYearDialog(String inputText);
+    }
+
+
+    private void sendBackResult(){
+        EditYearDialogListener
+            listener = (EditYearDialogListener) getTargetFragment();
+            listener.onFinishEditYearDialog(enterYear_et.getText().toString());
+    }
+    @BindView(R.id.year_dialog) EditText enterYear_et;
 //    View view;
 
 
@@ -82,7 +99,7 @@ public class Changeyear_dialog extends DialogFragment
 
         // Set a special listener to be called when an action is performed on the text view.
         // Interface definition for a callback to be invoked when an action is performed on the editor.
-        enterYear_tv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        enterYear_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             // Called when an action is being performed.
             @Override
@@ -116,7 +133,7 @@ public class Changeyear_dialog extends DialogFragment
 
         // Set a special listener to be called when an action is performed on the text view.
         // Interface definition for a callback to be invoked when an action is performed on the editor.
-        enterYear_tv.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        enterYear_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             // Called when an action is being performed.
             @Override
@@ -144,6 +161,7 @@ public class Changeyear_dialog extends DialogFragment
                 public void onClick(DialogInterface dialog, int which) {
 
                     searchMoviesYear();
+                    sendBackResult();
                 }
             });
 
@@ -164,7 +182,7 @@ public class Changeyear_dialog extends DialogFragment
     private void searchMoviesYear() {
 
         String yearKey = getResources().getString(R.string.pref_year_key);
-        String year = enterYear_tv.getText().toString();
+        String year = enterYear_et.getText().toString();
 
         Toast.makeText(getContext(),
             "dialog> setPositiveButton> onClick> searchMoviesYear() > "
@@ -195,6 +213,7 @@ public class Changeyear_dialog extends DialogFragment
             Toast.makeText(getContext(),"onSharedPreferenceChanged 1", Toast.LENGTH_SHORT).show();
             //getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
             getContext().getContentResolver().notifyChange(MovieContract.MovieInfoEntry.CONTENT_URI, null);
+
             MSyncAdapter.syncImmediately(getContext());
         }
     }

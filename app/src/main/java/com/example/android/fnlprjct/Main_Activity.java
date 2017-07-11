@@ -144,8 +144,14 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     // -------- Declared in Fragment associate with this Activity -----
     //-----------------------------------------------------------------
 
-    // ************* new ***********************
+    // ************* newer ***********************
     @Override
+    public void onItemSelectedInRecyclerView(Intent intent, Bundle bundle) {
+
+        startActivity(intent, bundle);
+    }
+    // ************* new ***********************
+    /*@Override
     public void onItemSelectedInRecyclerView(MvAdapter.MvViewHolder viewHolder, long itemId) {
 
         ImageView poster_imageview1 = viewHolder.poster_imageview;
@@ -167,7 +173,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         mIntent.setData(uri);
 
         startActivity(mIntent, bundle);
-    }
+    }*/
     // ************* old ***********************
     /*@Override
     public void onItemSelectedInRecyclerView(Uri uri) {
