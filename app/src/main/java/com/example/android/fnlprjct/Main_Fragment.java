@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +20,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -47,19 +50,15 @@ import butterknife.ButterKnife;
 public class Main_Fragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>
     , SharedPreferences.OnSharedPreferenceChangeListener
-    ,ChangeYearDialogFragment.EditYearDialogListener
+    , SwipeRefreshLayout.OnRefreshListener
     //   ,MvAdapter.ItemClickListener
 {
     // constructor
     public Main_Fragment() {
 
     }
-    @Override
-    public void  onFinishEditYearDialog(String inputText){
-        Toast.makeText(getContext(), "New Year brought into fragment level" + inputText, Toast.LENGTH_LONG).show();
-        actionBar.setTitle("FINAL_PROJECT : " + inputText);
 
-    }
+
     public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
@@ -84,17 +83,92 @@ public class Main_Fragment extends Fragment
         COLUMN_POSTERLINK = 3;
         COLUMN_BACKDROP_PATH = 4;
     }
+    public static final int DIALOG_REQUEST_CODE = 1;
+    public static final String DIALOG = "changeyear";
+    public static final String DIALOG_KEY = "changeyear_key";
+
+    // https://developer.android.com/reference/android/app/Fragment.html
+    // Start-A-Fragment-In-A-Fragment .... Start Dialog in Fragment
+    // Step 1 : ( Instantiate a 'source'-Fragment,
+    //              reference 'this' fragment as the 'return'/'target'-Fragment  )
+    private void showChangeYearDialog(){
+
+        FragmentManager fm = getFragmentManager();
+
+        ChangeYearDialogFragment chngyrDialog = ChangeYearDialogFragment.newInstance();
+
+        chngyrDialog.setTargetFragment(this, DIALOG_REQUEST_CODE); // 1 : say is Constants.DIALOG_REQUEST_CODE
+//        chngyrDialog.setTargetFragment(this, 1); // 1 : say is Constants.DIALOG_REQUEST_CODE
+
+        chngyrDialog.show(fm, DIALOG);
+
+    }
+    // Start-A-Fragment-In-A-Fragment .... Start Dialog in Fragment
+    // Step 3 : ( Retrieve data from 'source'-fragment )
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == DIALOG_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.getExtras().containsKey(DIALOG_KEY)) {
+
+                    String value = data.getExtras().getString(DIALOG_KEY);
+
+                    actionBar.setTitle("FINAL_PROJECT : " + value);
+
+                    onRefresh();
+                }
+            }
+        }
+    }
 
     private static final String SELECTED_INDEX = "selected_index";
     ActionBar actionBar;
 
     @BindView(R.id.toolbar) Toolbar tool_bar;
     @BindView(R.id.edit_fab) FloatingActionButton editfab;
+    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+
     /*Toolbar tool_bar;*/
     //-------------------------
     //--- Interface stuff -----
     //-------------------------
     CallBackListener mainCallBackListener;
+
+    // DEFINITION/IMPLEMENTATION for interface
+    // SwipeRefreshLayout.OnRefreshListener
+    @Override
+    public void onRefresh() {
+
+        if (networkUp()){
+
+            Toast.makeText(getContext(),"In OnRefresh...network is up --- Yeah", Toast.LENGTH_LONG).show();
+
+            swipeRefreshLayout.setRefreshing(false);
+
+            //getContext().getContentResolver().notifyChange(MovieInfoEntry.CONTENT_URI, null);
+
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            //MSyncAdapter.syncImmediately(getContext());
+        }
+        else {
+            Toast.makeText(getContext(), "Sorry, there is not access to network.", Toast.LENGTH_LONG).show();
+        }
+    }
+    // Check for network connectivity
+    //
+    private boolean networkUp() {
+
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
 
     // Container Activity must implement this interface
     public interface CallBackListener {
@@ -160,8 +234,7 @@ public class Main_Fragment extends Fragment
             // Make sure the tool_bar exists in the activity and is not null
             ((AppCompatActivity) getActivity()).setSupportActionBar(tool_bar); // <!-- to set the Toolbar to act as the ActionBar  -->
 
-            //ActionBar
-                actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle("FINAL_PROJECT : " + str);
 
@@ -527,16 +600,8 @@ public class Main_Fragment extends Fragment
             }
         });
         // +++++++++++++++++++++++++++++++++++++++++++++
+        swipeRefreshLayout.setOnRefreshListener(this); // 'connect'/'bind' instance in xml with implementation
 
         return rootView;
-    }
-    private void showChangeYearDialog(){
-
-        FragmentManager fm = getFragmentManager();
-        ChangeYearDialogFragment chngyrDialog = ChangeYearDialogFragment.newInstance();
-
-        chngyrDialog.setTargetFragment(this, 1); // 1 : say is Constants.DIALOG_REQUEST_CODE
-        chngyrDialog.show(fm, "changeyear");
-
     }
 }

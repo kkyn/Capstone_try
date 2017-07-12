@@ -1,8 +1,10 @@
 package com.example.android.fnlprjct.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.fnlprjct.Main_Fragment;
 import com.example.android.fnlprjct.R;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
@@ -49,16 +52,18 @@ public class ChangeYearDialogFragment extends DialogFragment
         return cyDialog;
     }
 
-    public interface EditYearDialogListener {
-        void onFinishEditYearDialog(String inputText);
+
+    //----------------------------------------------------------------
+    // Start-A-Fragment-In-A-Fragment .... Start Dialog in Fragment
+    // Step 2 : ( Return data to 'source'/'target'-fragment )
+    private void sendBackResult() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Main_Fragment.DIALOG_KEY, enterYear_et.getText().toString());
+        Intent intent = new Intent().putExtras(bundle);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+
     }
 
-
-    private void sendBackResult(){
-        EditYearDialogListener
-            listener = (EditYearDialogListener) getTargetFragment();
-            listener.onFinishEditYearDialog(enterYear_et.getText().toString());
-    }
     @BindView(R.id.year_dialog) EditText enterYear_et;
 //    View view;
 
