@@ -69,23 +69,23 @@ public class MDetails_Fragment extends Fragment
     private static final String[] PROJECTION_MOVIE_INFO =
         {
             MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID,
-            MovieInfoEntry.COL_MV_ID,
+            MovieInfoEntry.COL_MOVIE_ID,
             MovieInfoEntry.COL_FAVOURITES,
-            MovieInfoEntry.COL_BACKDROP_PATH,
+            MovieInfoEntry.COL_BACKDROPLINK,
             MovieInfoEntry.COL_OVERVIEW,
-            MovieInfoEntry.COL_RELEASEDATE,
-            MovieInfoEntry.COL_TITLE,
+            MovieInfoEntry.COL_RELEASE_DATE,
+            MovieInfoEntry.COL_ORIGINAL_TITLE,
             MovieInfoEntry.COL_VOTE_AVERAGE
         };
     /*private static final String[] PROJECTION_MOVIE_INFO =
         new String[]{
             MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID,
-            MovieInfoEntry.COL_MV_ID,
+            MovieInfoEntry.COL_MOVIE_ID,
             MovieInfoEntry.COL_FAVOURITES,
-            MovieInfoEntry.COL_BACKDROP_PATH,
+            MovieInfoEntry.COL_BACKDROPLINK,
             MovieInfoEntry.COL_OVERVIEW,
-            MovieInfoEntry.COL_RELEASEDATE,
-            MovieInfoEntry.COL_TITLE,
+            MovieInfoEntry.COL_RELEASE_DATE,
+            MovieInfoEntry.COL_ORIGINAL_TITLE,
             MovieInfoEntry.COL_VOTE_AVERAGE
     };*/
 
@@ -104,7 +104,7 @@ public class MDetails_Fragment extends Fragment
     private static final String[] PROJECTION_MOVIE_REVIEW =
         new String[]{
             MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
-            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MV_ID,
+            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MOVIE_ID,
             MovieReviewEntry.COL_REVIEWER,
             MovieReviewEntry.COL_REVIEWCONTENT
     };
@@ -176,7 +176,7 @@ public class MDetails_Fragment extends Fragment
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
 
-        String select = MovieInfoEntry.COL_MV_ID + "=?";
+        String select = MovieInfoEntry.COL_MOVIE_ID + "=?";
         String[] selectArg = new String[]{movieID};
 
         int rowId = getActivity().getContentResolver().update(
@@ -193,7 +193,7 @@ public class MDetails_Fragment extends Fragment
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovieInfoEntry.COL_FAVOURITES, 1);
 
-        String select = MovieInfoEntry.COL_MV_ID + "=?";
+        String select = MovieInfoEntry.COL_MOVIE_ID + "=?";
         String[] selectArg = new String[]{movieID};
 
         int rowId = getActivity().getContentResolver().update(
@@ -208,7 +208,7 @@ public class MDetails_Fragment extends Fragment
 
     private boolean checkFavourites(String movieID) {
 
-        String selection = MovieInfoEntry.COL_MV_ID + "=?" + " AND " + MovieInfoEntry.COL_FAVOURITES + "=?";
+        String selection = MovieInfoEntry.COL_MOVIE_ID + "=?" + " AND " + MovieInfoEntry.COL_FAVOURITES + "=?";
         String[] selectionArg = new String[]{movieID, "1"};
 
         Boolean favouritesBoolean = false;

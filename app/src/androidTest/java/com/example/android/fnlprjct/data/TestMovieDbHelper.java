@@ -104,15 +104,15 @@ public class TestMovieDbHelper extends AndroidTestCase {
         final HashSet<String> X_MovieInfoColumnHashSet = new HashSet<String>();
 
         X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry._ID);
-        X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_MV_ID);
-        X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_TITLE);
-        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_RELEASEDATE);
+        X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_MOVIE_ID);
+        X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_ORIGINAL_TITLE);
+        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_RELEASE_DATE);
         X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE);
         X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_POPULARITY);
         X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_VOTE_COUNT);
         X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_OVERVIEW);
         X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_POSTERLINK);
-        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_BACKDROP_PATH); // new
+        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_BACKDROPLINK); // new
      // X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);     // new
 
         // now, do our tables contain the correct columns?
@@ -139,7 +139,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         final HashSet<String> X_MovieReviewColumnHashSet = new HashSet<String>();
 
         X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry._ID);
-        X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_MV_ID);
+        X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_MOVIE_ID);
         X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_REVIEWER);
         X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_REVIEWCONTENT);
 
@@ -173,16 +173,16 @@ public class TestMovieDbHelper extends AndroidTestCase {
 
         MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry._ID);
         MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_POSTERLINK);  // y
-        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_MV_ID);   // y
+        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_MOVIE_ID);   // y
         
-        MovieInfoColumnHashSet.add(MovieInfoEntry.COL_TITLE);   // y
-        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_RELEASEDATE); // y
+        MovieInfoColumnHashSet.add(MovieInfoEntry.COL_ORIGINAL_TITLE);   // y
+        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_RELEASE_DATE); // y
         MovieInfoColumnHashSet.add(MovieInfoEntry.COL_OVERVIEW);    // y
         MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE);    // y
         MovieInfoColumnHashSet.add(MovieInfoEntry.COL_POPULARITY);  // y
         MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_VOTE_COUNT);  // y
 
-        MovieInfoColumnHashSet.add(MovieInfoEntry.COL_BACKDROP_PATH); // new
+        MovieInfoColumnHashSet.add(MovieInfoEntry.COL_BACKDROPLINK); // new
     //    MovieInfoColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);     // new
         //--------------------------------------------------------------
 

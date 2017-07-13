@@ -1,19 +1,16 @@
 package com.example.android.fnlprjct;
 
-import android.app.Fragment;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 public class MDetails_Activity extends AppCompatActivity {
@@ -62,23 +59,24 @@ public class MDetails_Activity extends AppCompatActivity {
             // (2) Attach the bundle to a fragment
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            NewFragment nwFrgmnt = new NewFragment();
-            nwFrgmnt.setArguments(bundle);
+            PagerView_Details_Fragment pagerViewDetailsFragment = new PagerView_Details_Fragment();
+
+            pagerViewDetailsFragment.setArguments(bundle);
             //-- End  -- Attach data to a fragment
 
-            FragmentManager fMngr = getSupportFragmentManager();
-            FragmentTransaction fTrnsctn = fMngr.beginTransaction();
+            FragmentManager frgmntMngr = getSupportFragmentManager();
+            FragmentTransaction frgmntTrnsctn = frgmntMngr.beginTransaction();
 
-            fTrnsctn.add(R.id.pane2_container, nwFrgmnt);
-            fTrnsctn.commit();
+            frgmntTrnsctn.add(R.id.fragmentdetail_container, pagerViewDetailsFragment);
+            frgmntTrnsctn.commit();
 
             /*
             MDetails_Fragment dtlFrgmnt = new MDetails_Fragment();
             dtlFrgmnt.setArguments(bundle);
             FragmentManager fMngr = getSupportFragmentManager();
-            FragmentTransaction fTrnsctn = fMngr.beginTransaction();
-            fTrnsctn.add(R.id.pane2_container, dtlFrgmnt);
-            fTrnsctn.commit();
+            FragmentTransaction frgmntTrnsctn = fMngr.beginTransaction();
+            frgmntTrnsctn.add(R.id.pane2_container, dtlFrgmnt);
+            frgmntTrnsctn.commit();
             // --or--
             // getSupportFragmentManager().beginTransaction()
             //                             .add(R.id.detail_movie_container, new MDetails_Fragment())

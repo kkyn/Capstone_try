@@ -35,10 +35,22 @@ public class Utility {
     public static String LOG_TAG = Utility.class.getSimpleName();
 
     private static final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/"; //"http://api.themoviedb.org/3/"
+    private static final String DISCOVER_ = "discover";
     private static final String MOVIE_ = "movie";
     private static final String VIDEOS_ = "videos";
     private static final String REVIEWS_ = "reviews";
+
     private static final String PARAM_API_KEY = "api_key";
+    private static final String PARAM_SORT_BY = "sort_by";
+    private static final String PARAM_COUNTRY = "certification_country";
+    private static final String PARAM_RELEASE_DATE = "primary_release_year";
+    private static final String PARAM_VOTECOUNT_GRTR = "vote_count.gte";
+
+//    private static final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/"; //"http://api.themoviedb.org/3/"
+//    private static final String MOVIE_ = "movie";
+//    private static final String VIDEOS_ = "videos";
+//    private static final String REVIEWS_ = "reviews";
+//    private static final String PARAM_API_KEY = "api_key";
 
     static Uri uri;
 //    static Uri buildUri;
@@ -60,7 +72,7 @@ public class Utility {
 
         String string = sharedPreferences.getString(mstring, mstringDefault);
 
-        Log.d(LOG_TAG, "1111 getPreferredSortSequence -- actualSortSeq : " + string);
+        /*Log.d(LOG_TAG, "1111 getPreferredSortSequence -- actualSortSeq : " + string);*/
 
         return string;
     }
@@ -70,7 +82,6 @@ public class Utility {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String year = sharedPreferences.getString(context.getString(R.string.pref_year_key), context.getResources().getString(R.string.default_year));
 //        String year = sharedPreferences.getString(context.getString(R.string.pref_year_key), "2015");
-
 
         return year;
         //return null;
@@ -148,7 +159,7 @@ public class Utility {
 
                     ContentValues cv = new ContentValues();
 
-                    cv.put(MovieReviewEntry.COL_MV_ID, movieId);
+                    cv.put(MovieReviewEntry.COL_MOVIE_ID, movieId);
                     cv.put(MovieReviewEntry.COL_REVIEWER, author);
 
                     cv.put(MovieReviewEntry.COL_REVIEWCONTENT, content);
@@ -250,7 +261,7 @@ public class Utility {
                         ContentValues cv = new ContentValues();
 
                         cv.put(MovieVideosEntry.COL_VIDEO_KEY, videoKey);
-                        cv.put(MovieVideosEntry.COL_MV_ID, movieId);
+                        cv.put(MovieVideosEntry.COL_MOVIE_ID, movieId);
 
                         /*context.getContentResolver()
                                 .insert(MovieContract.MovieVideosEntry.CONTENT_URI, contentValues);*/
@@ -273,6 +284,9 @@ public class Utility {
 
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     //=================================================
+    /***************************************************************/
+    /******************* Form Uri Movie Video **********************/
+    /***************************************************************/
     private static Uri formUri_4_MovieVideo(int movieId) {
 
         Uri uri =
@@ -287,6 +301,9 @@ public class Utility {
         return uri;
     }
 
+    /***************************************************************/
+    /******************* Form Uri Movie Reivews ********************/
+    /***************************************************************/
     private static Uri formUri_4_MovieReview(int movieId) {
 
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL);        // Creates a Uri from parsing the given encoded URI string
@@ -303,21 +320,24 @@ public class Utility {
         return uri;
     }
 
+    /***************************************************************/
+    /******************* Form Uri Movie Info ***********************/
+    /***************************************************************/
     public static Uri formUri_4_MovieInfo(Context context) {
 
-        final String DISCOVER_ = "discover";
-        final String MOVIE_ = "movie";
-        final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
-
-        final String PARAM_API_KEY = "api_key";
-        final String PARAM_SORT_BY = "sort_by";
-        final String PARAM_COUNTRY = "certification_country";
-        final String PARAM_RELEASE_DATE = "primary_release_year";
-        final String PARAM_VOTECOUNT_GRTR = "vote_count.gte";
+//        final String DISCOVER_ = "discover";
+//        final String MOVIE_ = "movie";
+//        final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
+//
+//        final String PARAM_API_KEY = "api_key";
+//        final String PARAM_SORT_BY = "sort_by";
+//        final String PARAM_COUNTRY = "certification_country";
+//        final String PARAM_RELEASE_DATE = "primary_release_year";
+//        final String PARAM_VOTECOUNT_GRTR = "vote_count.gte";
 
         //final String REF_YEAR = "2017";
 
-        String searchYearBy = Utility.getPreferredYear(context);
+        String year = Utility.getPreferredYear(context);
         String sortBy = Utility.getPreferredSortSequence(context);
 
         // (1) build the Url ---Begin--------
@@ -329,12 +349,12 @@ public class Utility {
             .appendEncodedPath(MOVIE_)  // postfix a '?', e.g. movie?
             .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY) // e.g. api_key=xxxxxx
             .appendQueryParameter(PARAM_SORT_BY, sortBy)            // sort_by=xxx
-            .appendQueryParameter(PARAM_COUNTRY, "US")              // certification_country=US
+            .appendQueryParameter(PARAM_COUNTRY, context.getString(R.string.certification_country)/*"US"*/)              // certification_country=US
 
             //.appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)     // primary_release_year=2017
-            .appendQueryParameter(PARAM_RELEASE_DATE, searchYearBy)             // primary_release_year=2017
+            .appendQueryParameter(PARAM_RELEASE_DATE, year)             // primary_release_year=2017
 
-            .appendQueryParameter(PARAM_VOTECOUNT_GRTR, "50");      // vote_count.gte=50
+            .appendQueryParameter(PARAM_VOTECOUNT_GRTR, context.getString(R.string.vote_count_gte)/*"50"*/);      // vote_count.gte=50
 
         uri = uriBuilder.build();
 
@@ -351,94 +371,94 @@ public class Utility {
     /*****************************************************/
     // =================================================
     // tky add, called at MSyncAdapter
-    public static long[] get_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
-        //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
-
-        // long rowId;
-        final String RESULTS = "results";
-        final String ID = "id";
-        final String ORIGINAL_TITLE = "original_title";
-        final String POSTER_PATH = "poster_path";
-        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
-        final String OVERVIEW = "overview";       // plot -- synopsis
-        final String RELEASE_DATE = "release_date";
-        final String VOTE_AVERAGE = "vote_average";   // user rating
-        final String VOTE_COUNT = "vote_count";
-        final String POPULARITY = "popularity";
-
-        final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
-
-        // W92 = "w92/"; W154 = "w154/";
-        // W185 = "w185/"; W342 = "w342/";
-        // W342 = "w342/"; W500 = "w500/";
-        // W780 = "w780/"; ORIGINAL = "original/";
-
-        final String W342 = "w342/";
-        final String W780 = "w780/";
-        final String W500 = "w500/";
-        final String ORIGINAL = "original/";
-
-        Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
-
-        //-------------------
-        JSONArray resultsJSONArray = moviesJsonObj.getJSONArray(RESULTS);
-
-        //JSONObject movies_JSONObject = new JSONObject(moviesJsonStr);
-        //JSONArray resultsJSONArray = movies_JSONObject.getJSONArray(RESULTS);
-        //-------------------
-
-        long[] movie_IDs = new long[resultsJSONArray.length()];
-
-        //++++++++++++++++++
-//        Vector<ContentValues> mVofCV = new Vector<ContentValues>(resultsJSONArray.length());
-        Vector<ContentValues> Vctr = new Vector<ContentValues>();
-        //++++++++++++++++++
-        for (int i = 0; i < resultsJSONArray.length(); i++) {
-
-            JSONObject aJSONObject = resultsJSONArray.getJSONObject(i);
-
-            long mvId = aJSONObject.getLong(ID);
-            String mvOrgTitle = aJSONObject.getString(ORIGINAL_TITLE);
-            String mvOverview = aJSONObject.getString(OVERVIEW); // plot synopsis
-            String mvVoteAverage = aJSONObject.getString(VOTE_AVERAGE);  // user rating
-            long mvVoteCount = aJSONObject.getLong(VOTE_COUNT);  // user, sum number of votes
-            String mvPopularity = aJSONObject.getString(POPULARITY);
-            String mvReleaseDate = aJSONObject.getString(RELEASE_DATE);
-
-            String mvPosterPath = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
-            String mvBackDropPath = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
-            //String mvBackDropPath = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
-
-            movie_IDs[i] = mvId;
-
-            ContentValues cv = new ContentValues();
-
-            cv.put(MovieInfoEntry.COL_MV_ID, mvId);    // Adds a value to the set.
-            cv.put(MovieInfoEntry.COL_TITLE, mvOrgTitle);
-            cv.put(MovieInfoEntry.COL_RELEASEDATE, mvReleaseDate);
-            cv.put(MovieInfoEntry.COL_POPULARITY, mvPopularity);
-            cv.put(MovieInfoEntry.COL_VOTE_AVERAGE, mvVoteAverage);
-            cv.put(MovieInfoEntry.COL_VOTE_COUNT, mvVoteCount);
-            cv.put(MovieInfoEntry.COL_FAVOURITES, 0);
-            cv.put(MovieInfoEntry.COL_OVERVIEW, mvOverview);
-            cv.put(MovieInfoEntry.COL_POSTERLINK, mvPosterPath);
-            cv.put(MovieInfoEntry.COL_BACKDROP_PATH, mvBackDropPath);
-
-            //Log.d(LOG_TAG, "---------- get_MovieInfoFromJson --------- ");
-
-            if (!is_movieInDataBase(context, cv)) {
-                Vctr.add(cv);
-                Log.d(LOG_TAG, "+++++++++++++++  ADD INTO VECTOR  +++++++++++++++");
-            }
-            //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-            add_MovieInfo(cv, context);
-
-            //Log.d(LOG_TAG, "---------- mValueId : " );
-            //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-        }
-        return movie_IDs;
-    }
+//    public static long[] get_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
+//        //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
+//
+//        // long rowId;
+//        final String RESULTS = "results";
+//        final String ID = "id";
+//        final String ORIGINAL_TITLE = "original_title";
+//        final String POSTER_PATH = "poster_path";
+//        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
+//        final String OVERVIEW = "overview";       // plot -- synopsis
+//        final String RELEASE_DATE = "release_date";
+//        final String VOTE_AVERAGE = "vote_average";   // user rating
+//        final String VOTE_COUNT = "vote_count";
+//        final String POPULARITY = "popularity";
+//
+//        final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
+//
+//        // W92 = "w92/"; W154 = "w154/";
+//        // W185 = "w185/"; W342 = "w342/";
+//        // W342 = "w342/"; W500 = "w500/";
+//        // W780 = "w780/"; ORIGINAL = "original/";
+//
+//        final String W342 = "w342/";
+//        final String W780 = "w780/";
+//        final String W500 = "w500/";
+//        final String ORIGINAL = "original/";
+//
+//        Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
+//
+//        //-------------------
+//        JSONArray resultsJSONArray = moviesJsonObj.getJSONArray(RESULTS);
+//
+//        //JSONObject movies_JSONObject = new JSONObject(moviesJsonStr);
+//        //JSONArray resultsJSONArray = movies_JSONObject.getJSONArray(RESULTS);
+//        //-------------------
+//
+//        long[] movie_IDs = new long[resultsJSONArray.length()];
+//
+//        //++++++++++++++++++
+////        Vector<ContentValues> mVofCV = new Vector<ContentValues>(resultsJSONArray.length());
+//        Vector<ContentValues> Vctr = new Vector<ContentValues>();
+//        //++++++++++++++++++
+//        for (int i = 0; i < resultsJSONArray.length(); i++) {
+//
+//            JSONObject aJSONObject = resultsJSONArray.getJSONObject(i);
+//
+//            long mvId = aJSONObject.getLong(ID);
+//            String mvOrgTitle = aJSONObject.getString(ORIGINAL_TITLE);
+//            String mvOverview = aJSONObject.getString(OVERVIEW); // plot synopsis
+//            String mvVoteAverage = aJSONObject.getString(VOTE_AVERAGE);  // user rating
+//            long mvVoteCount = aJSONObject.getLong(VOTE_COUNT);  // user, sum number of votes
+//            String mvPopularity = aJSONObject.getString(POPULARITY);
+//            String mvReleaseDate = aJSONObject.getString(RELEASE_DATE);
+//
+//            String mvPosterPath = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
+//            String mvBackDropPath = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
+//            //String mvBackDropPath = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
+//
+//            movie_IDs[i] = mvId;
+//
+//            ContentValues cv = new ContentValues();
+//
+//            cv.put(MovieInfoEntry.COL_MOVIE_ID, mvId);    // Adds a value to the set.
+//            cv.put(MovieInfoEntry.COL_ORIGINAL_TITLE, mvOrgTitle);
+//            cv.put(MovieInfoEntry.COL_RELEASE_DATE, mvReleaseDate);
+//            cv.put(MovieInfoEntry.COL_POPULARITY, mvPopularity);
+//            cv.put(MovieInfoEntry.COL_VOTE_AVERAGE, mvVoteAverage);
+//            cv.put(MovieInfoEntry.COL_VOTE_COUNT, mvVoteCount);
+//            cv.put(MovieInfoEntry.COL_FAVOURITES, 0);
+//            cv.put(MovieInfoEntry.COL_OVERVIEW, mvOverview);
+//            cv.put(MovieInfoEntry.COL_POSTERLINK, mvPosterPath);
+//            cv.put(MovieInfoEntry.COL_BACKDROPLINK, mvBackDropPath);
+//
+//            //Log.d(LOG_TAG, "---------- get_MovieInfoFromJson --------- ");
+//
+//            if (!is_movieInDataBase(context, cv)) {
+//                Vctr.add(cv);
+//                Log.d(LOG_TAG, "+++++++++++++++  ADD INTO VECTOR  +++++++++++++++");
+//            }
+//            //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+//            add_MovieInfo(cv, context);
+//
+//            //Log.d(LOG_TAG, "---------- mValueId : " );
+//            //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+//
+//        }
+//        return movie_IDs;
+//    }
 
     private static long add_MovieInfo(ContentValues contentvalues, Context context) {
 
@@ -446,8 +466,8 @@ public class Utility {
 
         Uri uri = MovieInfoEntry.CONTENT_URI;
         String[] projection = new String[]{MovieInfoEntry._ID};
-        String selection = MovieInfoEntry.COL_MV_ID + "=?";
-        String[] selectionArg = new String[]{String.valueOf(contentvalues.getAsLong(MovieInfoEntry.COL_MV_ID))};
+        String selection = MovieInfoEntry.COL_MOVIE_ID + "=?";
+        String[] selectionArg = new String[]{String.valueOf(contentvalues.getAsLong(MovieInfoEntry.COL_MOVIE_ID))};
 
         ContentResolver contentResolver = context.getContentResolver();
 
@@ -471,30 +491,39 @@ public class Utility {
         return idNum;
     }
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //-- public static int[] get_x_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
+    /*********************************************************/
+    /******************* Get Movie Info  *********************/
+    /*********************************************************/
 
-    //public static Vector<ContentValues> get_x_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
+    //-- public static int[] getMovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
 
-    public static int[] get_x_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
+    //public static Vector<ContentValues> getMovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
+
+    public static int[] getMovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
 
         //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
 
         // long rowId;
         final String RESULTS = "results";
         final String ID = "id";
-        final String ORIGINAL_TITLE = "original_title";
-        final String POSTER_PATH = "poster_path";
-        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
-        final String OVERVIEW = "overview";       // plot -- synopsis
-        final String RELEASE_DATE = "release_date";
-        final String VOTE_AVERAGE = "vote_average";   // user rating
-        final String VOTE_COUNT = "vote_count";
-        final String POPULARITY = "popularity";
 
         final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
+        final String POSTER_PATH = "poster_path";
+        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
+
+        // long rowId;
+//        final String RESULTS = "results";
+//        final String ID = "id";
+//        final String ORIGINAL_TITLE = "original_title";
+//        final String POSTER_PATH = "poster_path";
+//        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
+//        final String OVERVIEW = "overview";       // plot -- synopsis
+//        final String RELEASE_DATE = "release_date";
+//        final String VOTE_AVERAGE = "vote_average";   // user rating
+//        final String VOTE_COUNT = "vote_count";
+//        final String POPULARITY = "popularity";
+//
+//        final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
 
         // W92 = "w92/"; W154 = "w154/";
         // W185 = "w185/"; W342 = "w342/";
@@ -527,33 +556,34 @@ public class Utility {
             JSONObject aJSONObject = resultsJSONArray.getJSONObject(i);
 
             long mvId = aJSONObject.getLong(ID);
-            String mvOrgTitle = aJSONObject.getString(ORIGINAL_TITLE);
-            String mvOverview = aJSONObject.getString(OVERVIEW); // plot synopsis
-            String mvVoteAverage = aJSONObject.getString(VOTE_AVERAGE);  // user rating
-            long mvVoteCount = aJSONObject.getLong(VOTE_COUNT);  // user, sum number of votes
-            String mvPopularity = aJSONObject.getString(POPULARITY);
-            String mvReleaseDate = aJSONObject.getString(RELEASE_DATE);
 
-            String mvPosterPath = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
-            String mvBackDropPath = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
-            //String mvBackDropPath = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
+            String originalTitle = aJSONObject.getString(MovieInfoEntry.COL_ORIGINAL_TITLE);
+            String overview = aJSONObject.getString(MovieInfoEntry.COL_OVERVIEW); // plot synopsis
+            String voteAverage = aJSONObject.getString(MovieInfoEntry.COL_VOTE_AVERAGE);  // user rating
+            long voteCount = aJSONObject.getLong(MovieInfoEntry.COL_VOTE_COUNT);  // user, sum number of votes
+            String popularity = aJSONObject.getString(MovieInfoEntry.COL_POPULARITY);
+            String releaseDate = aJSONObject.getString(MovieInfoEntry.COL_RELEASE_DATE);
+
+            String posterLink = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
+            String backdropLink = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
+            //String backdropLink = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
 
             //movie_IDs[i] = (int)mvId;
 
             ContentValues cv = new ContentValues();
 
-            cv.put(MovieInfoEntry.COL_MV_ID, mvId);
-            cv.put(MovieInfoEntry.COL_TITLE, mvOrgTitle);
-            cv.put(MovieInfoEntry.COL_RELEASEDATE, mvReleaseDate);
+            cv.put(MovieInfoEntry.COL_MOVIE_ID, mvId);
+            cv.put(MovieInfoEntry.COL_ORIGINAL_TITLE, originalTitle);
+            cv.put(MovieInfoEntry.COL_RELEASE_DATE, releaseDate);
 
             cv.put(MovieInfoEntry.COL_YEAR, searchYearBy);
-            cv.put(MovieInfoEntry.COL_POPULARITY, mvPopularity);
-            cv.put(MovieInfoEntry.COL_VOTE_AVERAGE, mvVoteAverage);
-            cv.put(MovieInfoEntry.COL_VOTE_COUNT, mvVoteCount);
+            cv.put(MovieInfoEntry.COL_POPULARITY, popularity);
+            cv.put(MovieInfoEntry.COL_VOTE_AVERAGE, voteAverage);
+            cv.put(MovieInfoEntry.COL_VOTE_COUNT, voteCount);
             cv.put(MovieInfoEntry.COL_FAVOURITES, 0);
-            cv.put(MovieInfoEntry.COL_OVERVIEW, mvOverview);
-            cv.put(MovieInfoEntry.COL_POSTERLINK, mvPosterPath);
-            cv.put(MovieInfoEntry.COL_BACKDROP_PATH, mvBackDropPath);
+            cv.put(MovieInfoEntry.COL_OVERVIEW, overview);
+            cv.put(MovieInfoEntry.COL_POSTERLINK, posterLink);
+            cv.put(MovieInfoEntry.COL_BACKDROPLINK, backdropLink);
 
             //Log.d(LOG_TAG, "---------- get_MovieInfoFromJson --------- ");
 
@@ -599,8 +629,8 @@ public class Utility {
         //Uri         mUri            = uri; // e.g. MovieInfoEntry.CONTENT_URI;
         Uri uri = MovieInfoEntry.CONTENT_URI;
         String[] projection = new String[]{MovieInfoEntry._ID};
-        String selection = MovieInfoEntry.COL_MV_ID + "=?";
-        String[] selectionArg = new String[]{String.valueOf(cv.getAsLong(MovieInfoEntry.COL_MV_ID))};
+        String selection = MovieInfoEntry.COL_MOVIE_ID + "=?";
+        String[] selectionArg = new String[]{String.valueOf(cv.getAsLong(MovieInfoEntry.COL_MOVIE_ID))};
 
         ContentResolver contentResolver = context.getContentResolver();
 

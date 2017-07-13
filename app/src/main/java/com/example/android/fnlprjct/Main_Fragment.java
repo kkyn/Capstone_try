@@ -51,11 +51,9 @@ public class Main_Fragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>
     , SharedPreferences.OnSharedPreferenceChangeListener
     , SwipeRefreshLayout.OnRefreshListener
-    //   ,MvAdapter.ItemClickListener
 {
     // constructor
     public Main_Fragment() {
-
     }
 
 
@@ -342,7 +340,7 @@ public class Main_Fragment extends Fragment
             projection = MyQuery.Popularity.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
             selectionArg = new String[]{searchYear};
-            sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
+            sortOrder = MovieInfoEntry.COL_VOTE_COUNT + " DESC";
 
         } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
 

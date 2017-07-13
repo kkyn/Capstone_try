@@ -158,7 +158,7 @@ static void validateCursorValue(//String error,
 
         // Here I use the input rowId of cursor as the 'COL_KEY_ID', for testing only.
 //xxx        cntValues.put(MovieReviewEntry.COL_KEY_ID, rowId);
-        cntValues.put(MovieReviewEntry.COL_MV_ID, 12);
+        cntValues.put(MovieReviewEntry.COL_MOVIE_ID, 12);
         cntValues.put(MovieReviewEntry.COL_REVIEWER, "XMovie_Reviewer");
         cntValues.put(MovieReviewEntry.COL_REVIEWCONTENT, "XMovie_ReviewContent");
 
@@ -170,9 +170,9 @@ static void validateCursorValue(//String error,
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(MovieContract.MovieInfoEntry.COL_MV_ID,         12);  // y
-        contentValues.put(MovieContract.MovieInfoEntry.COL_TITLE,         "XMovie_Title"); // y
-        contentValues.put(MovieContract.MovieInfoEntry.COL_RELEASEDATE,   "XMovie_ReleaseDate"); // y
+        contentValues.put(MovieContract.MovieInfoEntry.COL_MOVIE_ID,         12);  // y
+        contentValues.put(MovieContract.MovieInfoEntry.COL_ORIGINAL_TITLE,         "XMovie_Title"); // y
+        contentValues.put(MovieContract.MovieInfoEntry.COL_RELEASE_DATE,   "XMovie_ReleaseDate"); // y
         contentValues.put(MovieContract.MovieInfoEntry.COL_OVERVIEW,      "XMovie_Overview"); // y
 
         contentValues.put(MovieContract.MovieInfoEntry.COL_VOTE_COUNT,    123); // y
@@ -182,7 +182,7 @@ static void validateCursorValue(//String error,
         contentValues.put(MovieContract.MovieInfoEntry.COL_FAVOURITES,    0);
 
         contentValues.put(MovieInfoEntry.COL_POSTERLINK,    "XMovie_PosterLink"); // y
-        contentValues.put(MovieInfoEntry.COL_BACKDROP_PATH, "XMovie_BackDrop_Path");
+        contentValues.put(MovieInfoEntry.COL_BACKDROPLINK, "XMovie_BackDrop_Path");
 
         return contentValues;
     }

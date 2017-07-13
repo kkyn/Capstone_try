@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
@@ -23,21 +22,21 @@ import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
  * Created by kkyin on 7/6/2017.
  */
 
-public class NewFragment extends Fragment
+public class PagerView_Details_Fragment extends Fragment
                     implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    private static final String LOG_TAG = NewFragment.class.getSimpleName();
+    private static final String LOG_TAG = PagerView_Details_Fragment.class.getSimpleName();
     private static final int LOADER_ID = 4;
 
     private Cursor cursor;
     private ViewPager pager;
-    private VPAdapter pagerAdapter;
+    private PagerViewAdapter pagerAdapter;
 
     int currentPage;
     Uri mUri;
     int movieId;
 
-    public NewFragment(){
+    public PagerView_Details_Fragment(){
     }
 
 
@@ -56,7 +55,7 @@ public class NewFragment extends Fragment
 
         FragmentManager fMngr = getFragmentManager(); // when called in Fragment
 
-        pagerAdapter = new VPAdapter(fMngr, sortMoviesBy);
+        pagerAdapter = new PagerViewAdapter(fMngr, sortMoviesBy);
 
         Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreate  ) ) ) ) ) ) ");
 
@@ -187,7 +186,8 @@ public class NewFragment extends Fragment
             projection = MyQuery.Popularity.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
             selectionArg = new String[]{searchYear};
-            sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
+            sortOrder = MovieInfoEntry.COL_VOTE_COUNT + " DESC"; // ???? just change July12 2017
+            //sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
 
         } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
 

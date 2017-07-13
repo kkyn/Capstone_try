@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +50,7 @@ public class MDetails_Fragment1 extends Fragment
 
     public MDetails_Fragment1() {
         // Required empty public constructor
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     // tky comment ---------------------------------------------
@@ -86,7 +85,7 @@ public class MDetails_Fragment1 extends Fragment
     static final String MOVIE_ID = "MovieID";
     private String videoId;
 
-    private Details_Adapter dtlsAdapter;
+    private Details_Adapter detailsAdapter;
     String trgtShrdElmtTrnstn;
     public boolean isFavouriteEnabled = false;
 
@@ -96,7 +95,7 @@ public class MDetails_Fragment1 extends Fragment
     /*private static final String[] PROJECTION_MOVIE_REVIEW =
         new String[]{
             MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
-            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MV_ID,
+            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MOVIE_ID,
             MovieReviewEntry.COL_REVIEWER,
             MovieReviewEntry.COL_REVIEWCONTENT
     };
@@ -118,8 +117,10 @@ public class MDetails_Fragment1 extends Fragment
     @BindView(R.id.movievideo_btn) ImageView movievideo;
     //@BindView(R.id.movievideo_btn) Button movievideo;
     @BindView(R.id.favourite_btn) /*ImageButton*/ ImageView moviefavourite; // ImageView > ImageButton > FloatingActionButton
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-    //Toolbar mToolbar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.recycler_view_moviedetails) RecyclerView recyclerView;
+
+    //Toolbar toolbar;
     private TextView mTextView;
     //private DynamicHeightNetworkImageView moviethumbnail;
     //-----------------------------------------------------------
@@ -164,7 +165,7 @@ public class MDetails_Fragment1 extends Fragment
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
 
-        String select = MovieInfoEntry.COL_MV_ID + "=?";
+        String select = MovieInfoEntry.COL_MOVIE_ID + "=?";
         String[] selectArg = new String[]{movieID};
 
         int rowId = getActivity().getContentResolver().update(
@@ -181,7 +182,7 @@ public class MDetails_Fragment1 extends Fragment
         ContentValues contentValues = new ContentValues();
         contentValues.put(MovieInfoEntry.COL_FAVOURITES, 1);
 
-        String select = MovieInfoEntry.COL_MV_ID + "=?";
+        String select = MovieInfoEntry.COL_MOVIE_ID + "=?";
         String[] selectArg = new String[]{movieID};
 
         int rowId = getActivity().getContentResolver().update(
@@ -196,7 +197,7 @@ public class MDetails_Fragment1 extends Fragment
 
     private boolean checkFavourites(String movieID) {
 
-        String selection = MovieInfoEntry.COL_MV_ID + "=?" + " AND " + MovieInfoEntry.COL_FAVOURITES + "=?";
+        String selection = MovieInfoEntry.COL_MOVIE_ID + "=?" + " AND " + MovieInfoEntry.COL_FAVOURITES + "=?";
         String[] selectionArg = new String[]{movieID, "1"};
 
         Boolean favouritesBoolean = false;
@@ -298,8 +299,8 @@ public class MDetails_Fragment1 extends Fragment
         // Starts a new or restarts an existing Loader in this manager, registers the callbacks to it,
         // and (if the activity/fragment is currently started) starts loading it.
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, myTry_0); //  help maintain position ??
-        getLoaderManager().restartLoader(MOVIE_REVIEW_LOADER, null, myTry_1); //  help maintain position ??
+        getLoaderManager().restartLoader(DETAIL_MOVIE_LOADER, null, detailsLoaderCallback_0); //  help maintain position ??
+        getLoaderManager().restartLoader(MOVIE_REVIEW_LOADER, null, reviewLoaderCallback_1); //  help maintain position ??
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     }
 
@@ -318,7 +319,7 @@ public class MDetails_Fragment1 extends Fragment
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details1, container, false);
 
-        RecyclerView rView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
 
         ButterKnife.bind(this, rootView);
 
@@ -339,21 +340,21 @@ public class MDetails_Fragment1 extends Fragment
         /// moviethumbnail
         // **************************************
         // --- old way ?? ---
-        //mToolbar = (Toolbar) rootView.findViewById(R.id.tool_bar);
+        //toolbar = (Toolbar) rootView.findViewById(R.id.tool_bar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the tool_bar exists in the activity and is not null.
         //-- To to use setSupportActionBar in fragment, use '((AppCompatActivity)getActivity()).'  --
-        //((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        //((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         //((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // --- new way ?? --- using
         // https://material.io/icons/#ic_arrow_back
         // https://developer.android.com/reference/android/support/v7/widget/Toolbar.html
-        if (mToolbar != null ){
+        if (toolbar != null ){
 
-            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 
-            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -369,19 +370,19 @@ public class MDetails_Fragment1 extends Fragment
                     // onSupportNavigateUp();
                 }
             });
-            mToolbar.setTitle("HELLO");
+            toolbar.setTitle("HELLO");
 
             // tky comment,
             // ? color of text, no effect, the color is dependent on the accentColor in styles
             // --------
-            //mToolbar.setTitleTextColor(0xffaff000);
+            //toolbar.setTitleTextColor(0xffaff000);
             //@color/primary_text
-            //mToolbar.setTitleTextColor(getResources().getColor(R.color.pink_a400));
-//            mToolbar.setTitleTextColor(getResources().getColor(android.R.color.primary_text_light));
+            //toolbar.setTitleTextColor(getResources().getColor(R.color.pink_a400));
+//            toolbar.setTitleTextColor(getResources().getColor(android.R.color.primary_text_light));
 
-            /*((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);*/ ///?????
+            /*((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);*/ ///?????
 
-            //mToolbar.setSubtitle("HELLO_Man");
+            //toolbar.setSubtitle("HELLO_Man");
 
         }
         // **************************************
@@ -390,16 +391,16 @@ public class MDetails_Fragment1 extends Fragment
         // https://developer.android.com/reference/android/support/v4/app/LoaderManager.html
         // getLoaderManager() :- Return the LoaderManager for this fragment, creating it if needed.
         // initLoader :- Ensures a loader is initialized and active
-        getLoaderManager().initLoader(DETAIL_MOVIE_LOADER, null, myTry_0);
-        getLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null, myTry_1);
+        getLoaderManager().initLoader(DETAIL_MOVIE_LOADER, null, detailsLoaderCallback_0);
+        getLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null, reviewLoaderCallback_1);
         //++++++++++++++++++++++++++++++++++++++
 
-        dtlsAdapter = new Details_Adapter(getContext());
+        detailsAdapter = new Details_Adapter(getContext());
 
         LinearLayoutManager lytMngr = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-        rView.setLayoutManager(lytMngr);
-        rView.setAdapter(dtlsAdapter);
+        recyclerView.setLayoutManager(lytMngr);
+        recyclerView.setAdapter(detailsAdapter);
 
         return rootView;
     }
@@ -409,7 +410,7 @@ public class MDetails_Fragment1 extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /*mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        /*toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -461,11 +462,11 @@ public class MDetails_Fragment1 extends Fragment
     //-- LoaderManager.LoaderCallbacks<Cursor> ------------------
     //----------- LOADER Stuff ----------------------------------
     //-----------------------------------------------------------
-    //    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new MyTryLoader(context, mUri);
-    //    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new MyTryLoader(this.getActivity(), mUri);
-    //    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new MyTryLoader(getActivity(), mUri);
-    //    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new MyTryLoader(getContext(), mUri);
-    private LoaderManager.LoaderCallbacks<Cursor> myTry_0 = new LoaderManager.LoaderCallbacks<Cursor>()
+    //    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new MyTryLoader(context, mUri);
+    //    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new MyTryLoader(this.getActivity(), mUri);
+    //    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new MyTryLoader(getActivity(), mUri);
+    //    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new MyTryLoader(getContext(), mUri);
+    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new LoaderManager.LoaderCallbacks<Cursor>()
     {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -482,7 +483,15 @@ public class MDetails_Fragment1 extends Fragment
 
                 //movietitle.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE));
                 moviereleasedate.setText(cursor.getString(MyQuery.MovieInfo.COL_RELEASEDATE));
-                movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_RATING));
+
+                String string = Utility.getPreferredSortSequence(getContext());
+                if (string.equals(getString(R.string.pref_movies_sortby_ratings))){
+                    movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_VOTE_AVERAGE));
+                }else{
+                    movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_VOTE_COUNT));
+                }
+                //movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_VOTE_AVERAGE));
+
                 moviesynopsis.setText(cursor.getString(MyQuery.MovieInfo.COL_OVERVIEW));
 
                 // ++++++++++++++++++++++++++++++++++++++++++
@@ -500,7 +509,7 @@ public class MDetails_Fragment1 extends Fragment
                 ImageLoader imageLoader = ImageLoaderHelper.getInstance(getContext()).getImageLoader();
 
                 String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK);
-                //String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_BACKDROP_PATH);
+                //String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_BACKDROPLINK);
 
                 Log.d(LOG_TAG, "? ? ? ?  " + stringUrl + " ? ? ? ?");
                 // -- thumb-nail-View --
@@ -580,7 +589,8 @@ public class MDetails_Fragment1 extends Fragment
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    private LoaderManager.LoaderCallbacks<Cursor> myTry_1 = new LoaderManager.LoaderCallbacks<Cursor>()
+    private LoaderManager.LoaderCallbacks<Cursor> reviewLoaderCallback_1 =
+                new LoaderManager.LoaderCallbacks<Cursor>()
     {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -596,13 +606,13 @@ public class MDetails_Fragment1 extends Fragment
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-            dtlsAdapter.swapCursor(data);
+            detailsAdapter.swapCursor(data);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
 
-            dtlsAdapter.swapCursor(null);
+            detailsAdapter.swapCursor(null);
         }
     };
 

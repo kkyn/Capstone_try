@@ -60,24 +60,23 @@ public class MovieContract {
 
         // Column contains foreign-key used in the SortByTable
         public static final String COL_KEY_ID = "KeyID";
-        public static final String COL_MV_ID = "MovieID";
-        public static final String COL_TITLE = "Title";
+        public static final String COL_MOVIE_ID = "MovieID";
 
         public static final String COL_YEAR = "Year";
-
-        public static final String COL_RELEASEDATE = "ReleaseDate";
-        public static final String COL_OVERVIEW = "Overview";
-
-
-        public static final String COL_VOTE_COUNT = "VoteCount";
-        public static final String COL_VOTE_AVERAGE = "VoteAverage";
-        public static final String COL_POPULARITY = "Popularity";
 
         public static final String COL_FAVOURITES = "Favourites";
 
         public static final String COL_POSTERLINK = "PosterLink";
-        public static final String COL_BACKDROP_PATH = "BackDropPath";
+        public static final String COL_BACKDROPLINK = "BackdropLink";
         public static final String COL_VIDEOLINK = "VideoLink";
+
+        public static final String COL_ORIGINAL_TITLE = "original_title";
+        public static final String COL_RELEASE_DATE = "release_date";
+        public static final String COL_OVERVIEW = "overview";
+        public static final String COL_POPULARITY = "popularity";
+        public static final String COL_VOTE_COUNT = "vote_count";
+        public static final String COL_VOTE_AVERAGE = "vote_average";
+
 
         // Step-2
         //-------------------------------------------------------//
@@ -158,7 +157,7 @@ public class MovieContract {
         public static final String TABLE_NAME = "Table_MovieReview";
 
         public static final String COL_KEY_ID = "KeyID";
-        public static final String COL_MV_ID = "MovieID";
+        public static final String COL_MOVIE_ID = "MovieID";
         public static final String COL_TITLE = "Title";
         public static final String COL_REVIEWER = "Reviewer";
         public static final String COL_REVIEWCONTENT = "ReviewerContent";
@@ -212,7 +211,7 @@ public class MovieContract {
         //----------------------------------------
         public static final String TABLE_NAME = "Table_MovieVideo";
      //   public static final String COL_KEY_ID = "KeyID";
-        public static final String COL_MV_ID = "MovieID";
+        public static final String COL_MOVIE_ID = "MovieID";
         public static final String COL_VIDEO_KEY = "VideoKey";
 
         public static String getMovieId_FromMovieVideoUri(Uri uri) {

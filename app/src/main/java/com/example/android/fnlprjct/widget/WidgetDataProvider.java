@@ -104,7 +104,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
         //  -- viewId, text --
         remoteView.setTextViewText(R.id.textview_id, cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE));
-        //remoteView.setTextViewText(R.id.movieratings_tv, cursor.getString(MyQuery.MovieInfo.COL_MOVIE_RATING));
+        //remoteView.setTextViewText(R.id.movieratings_tv, cursor.getString(MyQuery.MovieInfo.COL_VOTE_AVERAGE));
 
         return remoteView;
         // -------------------------------------

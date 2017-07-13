@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.example.android.fnlprjct.data.MovieContract;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -225,7 +224,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
         if (mCursor != null && mCursor.moveToPosition(position)) {
 
            // columnIndex = mCursor.getColumnIndex("MovieID");
-            columnIndex = mCursor.getColumnIndex(MovieContract.MovieInfoEntry.COL_MV_ID);
+            columnIndex = mCursor.getColumnIndex(MovieContract.MovieInfoEntry.COL_MOVIE_ID);
 
             return mCursor.getLong(columnIndex);
         }

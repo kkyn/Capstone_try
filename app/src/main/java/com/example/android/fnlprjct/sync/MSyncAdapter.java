@@ -7,7 +7,6 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 //import android.content.ContentUris;
 //import android.content.ContentValues;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
@@ -16,20 +15,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 //import com.example.android.myproject_2.BuildConfig;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
-import com.example.android.fnlprjct.MyRqstQ;
 import com.example.android.fnlprjct.R;
 import com.example.android.fnlprjct.Utility;
 //import com.example.android.myproject_2.data.MovieContract;
 
 //import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 //import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -38,10 +31,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Vector;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /*
  * Created by kkyin on 2/7/2016.
@@ -113,7 +102,7 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
 //            // JSONObject response = futureRequest.get(); // this will block
 //            Log.d(LOG_TAG, "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
 //
-//            int[] mMovieIDs = Utility.get_x_MovieInfoFromJson(response, sortBy, mContext);
+//            int[] mMovieIDs = Utility.getMovieInfoFromJson(response, sortBy, mContext);
 //            //long[] mMovieIDs = Utility.get_MovieInfoFromJson(response, sortBy, mContext); // ????
 //            Log.d(LOG_TAG, "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 //
@@ -213,11 +202,11 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
             // (5)
             movieInfoInJsonStr = stringBuilder.toString();
 
-            Log.d(LOG_TAG, "  <--- INTO get_x_MovieInfoFromJson() ------------------");
+            Log.d(LOG_TAG, "  <--- INTO getMovieInfoFromJson() ------------------");
             //long[] mMovieIDs = Utility.get_MovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext); // ????
 
-            int[] mMovieIDs = Utility.get_x_MovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext); // ????
-            //int[] mMovieIDs = Utility.get_x_MovieInfoFromJson(response, sortBy, mContext);
+            int[] mMovieIDs = Utility.getMovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext); // ????
+            //int[] mMovieIDs = Utility.getMovieInfoFromJson(response, sortBy, mContext);
 
 
             // ***************** Movie Review ********************

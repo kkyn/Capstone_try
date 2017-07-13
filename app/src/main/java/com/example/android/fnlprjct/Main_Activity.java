@@ -1,23 +1,18 @@
 package com.example.android.fnlprjct;
 
-import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v4.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
-import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
 
 public class Main_Activity extends AppCompatActivity implements Main_Fragment.CallBackListener {
@@ -99,7 +94,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         // ToDO : add fragmentTransaction
         // The view with 'id' only exist within layout 'activity_main.xml' file,
         // if the device is a tablet.
-        if (findViewById(R.id.pane2_container) != null) {
+        if (findViewById(R.id.fragmentdetail_container) != null) {
             is2Pane = true;
         }
 

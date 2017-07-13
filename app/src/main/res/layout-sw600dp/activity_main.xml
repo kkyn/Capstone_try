@@ -50,7 +50,7 @@
     <!-- ///////////////////////////////////////////////////// -->
 
     <LinearLayout
-        android:id="@+id/pane2_container"
+        android:id="@+id/fragmentdetail_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="false"

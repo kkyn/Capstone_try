@@ -55,10 +55,10 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
 
                 "CREATE TABLE " + MovieInfoEntry.TABLE_NAME
                    + " ("
-                   + MovieInfoEntry._ID               + TYPE_INT_PRIMARY_KEY + AUTOINCREMENT + COMMA
-                   + MovieInfoEntry.COL_MV_ID         + TYPE_INT_NOT_NULL     + COMMA //" INTEGER UNIQUE NOT NULL, " -or- " INTEGER NOT NULL, "
-                   + MovieInfoEntry.COL_TITLE         + TYPE_TEXT_NOT_NULL    + COMMA
-                   + MovieInfoEntry.COL_RELEASEDATE   + TYPE_TEXT_NOT_NULL    + COMMA //" INTEGER NOT NULL, "
+                   + MovieInfoEntry._ID                + TYPE_INT_PRIMARY_KEY + AUTOINCREMENT + COMMA
+                   + MovieInfoEntry.COL_MOVIE_ID       + TYPE_INT_NOT_NULL    + COMMA //" INTEGER UNIQUE NOT NULL, " -or- " INTEGER NOT NULL, "
+                   + MovieInfoEntry.COL_ORIGINAL_TITLE + TYPE_TEXT_NOT_NULL   + COMMA
+                   + MovieInfoEntry.COL_RELEASE_DATE   + TYPE_TEXT_NOT_NULL   + COMMA //" INTEGER NOT NULL, "
                    + MovieInfoEntry.COL_YEAR          + TYPE_TEXT_NOT_NULL    + COMMA //" INTEGER NOT NULL, "
                    + MovieInfoEntry.COL_POPULARITY    + TYPE_TEXT_NOT_NULL    + COMMA
                    + MovieInfoEntry.COL_VOTE_AVERAGE  + TYPE_TEXT_NOT_NULL    + COMMA //" REAL NOT NULL, "
@@ -66,7 +66,7 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
                    + MovieInfoEntry.COL_FAVOURITES    + TYPE_INT_NOT_NULL     + COMMA
                    + MovieInfoEntry.COL_OVERVIEW      + TYPE_TEXT_NOT_NULL    + COMMA
                    + MovieInfoEntry.COL_POSTERLINK    + TYPE_TEXT_NOT_NULL    + COMMA
-                   + MovieInfoEntry.COL_BACKDROP_PATH + TYPE_TEXT_NOT_NULL
+                   + MovieInfoEntry.COL_BACKDROPLINK  + TYPE_TEXT_NOT_NULL
                    + ");";
 
         final String SQL_CREATE_TABLE_MOVIE_REVIEW =
@@ -75,7 +75,7 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
                     + " ("
                     + MovieReviewEntry._ID               + TYPE_INT_PRIMARY_KEY + AUTOINCREMENT + COMMA //" INTEGER PRIMARY KEY, "
 
-                    + MovieReviewEntry.COL_MV_ID         + TYPE_INT_NOT_NULL + COMMA //" INTEGER UNIQUE NOT NULL, "
+                    + MovieReviewEntry.COL_MOVIE_ID + TYPE_INT_NOT_NULL + COMMA //" INTEGER UNIQUE NOT NULL, "
 
                     + MovieReviewEntry.COL_REVIEWER 	 + TYPE_TEXT_NOT_NULL + COMMA
                     + MovieReviewEntry.COL_REVIEWCONTENT + TYPE_TEXT_NOT_NULL
@@ -87,7 +87,7 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + MovieVideosEntry.TABLE_NAME
                     + " ("
                     + MovieVideosEntry._ID            + TYPE_INT_PRIMARY_KEY + AUTOINCREMENT + COMMA
-                    + MovieVideosEntry.COL_MV_ID      + TYPE_INT_NOT_NULL     + COMMA // TYPE_INT_UNIQUE_NOT_NULL
+                    + MovieVideosEntry.COL_MOVIE_ID + TYPE_INT_NOT_NULL     + COMMA // TYPE_INT_UNIQUE_NOT_NULL
                     + MovieVideosEntry.COL_VIDEO_KEY  + TYPE_INT_NOT_NULL
                     + " )";
 

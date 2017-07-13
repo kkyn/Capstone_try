@@ -146,7 +146,7 @@ public class MovieProvider extends ContentProvider {
     // Table_X_MovieInfo.MovieID = ?
     //
     private static final String selection_MovieInfo_WithMovieId =
-            MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry.COL_MV_ID + " = ?";
+            MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry.COL_MOVIE_ID + " = ?";
 
     private Cursor getMovieInfoData_FromMovieId(Uri uri, String[] projection, String sortOrder) {
 
@@ -167,7 +167,7 @@ public class MovieProvider extends ContentProvider {
     // Table_X_MovieReview.MovieID = ?
     //
     private static final String selection_MovieReview_WithMovieId =
-            MovieReviewEntry.TABLE_NAME + "." + MovieContract.MovieReviewEntry.COL_MV_ID + " = ?";
+            MovieReviewEntry.TABLE_NAME + "." + MovieContract.MovieReviewEntry.COL_MOVIE_ID + " = ?";
 
     // ContentResolver > Content-Provider > "DATABASE"
     // This method is to be used in Content-Provider's query method
@@ -199,7 +199,7 @@ public class MovieProvider extends ContentProvider {
     // Table_X_MovieVideo.MovieID = ?
     //
     private static final String selectMovieVideo_WithMovieId =
-            MovieVideosEntry.TABLE_NAME + "." + MovieContract.MovieVideosEntry.COL_MV_ID + " = ?";
+            MovieVideosEntry.TABLE_NAME + "." + MovieContract.MovieVideosEntry.COL_MOVIE_ID + " = ?";
     //
     // e.g. uri --> "content://com.example.android.myproject_2/movievideo/123"
     //

@@ -11,20 +11,20 @@ import android.view.ViewGroup;
  * Created by kkyin on 6/6/2017.
  */
 
-public class VPAdapter extends FragmentStatePagerAdapter {
+public class PagerViewAdapter extends FragmentStatePagerAdapter {
 
-    private static final String LOG_TAG = VPAdapter.class.getSimpleName();
+    private static final String LOG_TAG = PagerViewAdapter.class.getSimpleName();
 
     private Cursor cursor;
    // private MDetails_Fragment fgmnt1;
     /*private*/
    String sortMovieBy;
 
-    public VPAdapter(FragmentManager fMngr, String sortMovieBy) {
+    public PagerViewAdapter(FragmentManager fMngr, String sortMovieBy) {
         super(fMngr);
         this.sortMovieBy = sortMovieBy;
     }
-    /*public VPAdapter(FragmentManager fMngr, Cursor cursor) {
+    /*public PagerViewAdapter(FragmentManager fMngr, Cursor cursor) {
         super(fMngr);
         this.cursor = cursor;
     }*/

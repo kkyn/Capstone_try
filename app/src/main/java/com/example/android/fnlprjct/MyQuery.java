@@ -12,7 +12,7 @@ public class MyQuery {
 
         String[] PROJECTION = {
             MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
-            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MV_ID,
+            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MOVIE_ID,
             MovieReviewEntry.COL_REVIEWER,
             MovieReviewEntry.COL_REVIEWCONTENT
         };
@@ -27,7 +27,7 @@ public class MyQuery {
         String[] PROJECTION =
             {
                 MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-                , MovieInfoEntry.COL_MV_ID
+                , MovieInfoEntry.COL_MOVIE_ID
                 , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
                 , MovieInfoEntry.COL_POSTERLINK
             };
@@ -40,7 +40,7 @@ public class MyQuery {
         String[] PROJECTION =
             {
                 MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-                , MovieInfoEntry.COL_MV_ID
+                , MovieInfoEntry.COL_MOVIE_ID
                 , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
                 , MovieInfoEntry.COL_POSTERLINK
                 , MovieInfoEntry.COL_YEAR
@@ -52,8 +52,11 @@ public class MyQuery {
         String[] PROJECTION =
             {
                 MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
-                , MovieInfoEntry.COL_MV_ID
-                , MovieInfoEntry.COL_POPULARITY + " as sort_column"
+                , MovieInfoEntry.COL_MOVIE_ID
+
+                , MovieInfoEntry.COL_VOTE_COUNT + " as sort_column"
+                //, MovieInfoEntry.COL_POPULARITY + " as sort_column"
+
                 , MovieInfoEntry.COL_POSTERLINK
                 , MovieInfoEntry.COL_YEAR
             };
@@ -64,27 +67,29 @@ public class MyQuery {
         String[] PROJECTION =
             {
                 MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID,
-                MovieInfoEntry.COL_MV_ID,
+                MovieInfoEntry.COL_MOVIE_ID,
                 MovieInfoEntry.COL_FAVOURITES,
-                MovieInfoEntry.COL_POSTERLINK,  // MovieInfoEntry.COL_BACKDROP_PATH,
+                MovieInfoEntry.COL_POSTERLINK,  // MovieInfoEntry.COL_BACKDROPLINK,
                 MovieInfoEntry.COL_OVERVIEW,
-                MovieInfoEntry.COL_RELEASEDATE,
-                MovieInfoEntry.COL_TITLE,
+                MovieInfoEntry.COL_RELEASE_DATE,
+                MovieInfoEntry.COL_ORIGINAL_TITLE,
                 MovieInfoEntry.COL_VOTE_AVERAGE,
+                MovieInfoEntry.COL_VOTE_COUNT,
                 MovieInfoEntry.COL_YEAR
             };
 
         // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
         // must change.
         //public static final int PROJECTION_RATING_ID = 0;
-         int COL_MOVIE_ID = 1;
-         int COL_FAVOURITES = 2;
-        int COL_POSTERLINK = 3;       // int COL_BACKDROP_PATH = 3;
+        int COL_MOVIE_ID = 1;
+        int COL_FAVOURITES = 2;
+        int COL_POSTERLINK = 3;       // int COL_BACKDROPLINK = 3;
         int COL_OVERVIEW = 4;
         int COL_RELEASEDATE = 5;
         int COL_MOVIE_TITLE = 6;
-        int COL_MOVIE_RATING = 7;
-        int COL_YEAR = 8;
+        int COL_VOTE_AVERAGE = 7;
+        int COL_VOTE_COUNT = 8;
+        int COL_YEAR = 9;
 
         /*String[] PROJECTION = {
             ItemsContract.Items._ID,

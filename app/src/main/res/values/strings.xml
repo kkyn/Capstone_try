@@ -80,4 +80,7 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="default_year">2017</string>
 
+    <string name="certification_country">US</string>
+    <string name="vote_count_gte">50</string>
+
 </resources>

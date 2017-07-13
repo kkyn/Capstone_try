@@ -210,18 +210,18 @@ public class TestMovieProvider extends AndroidTestCase {
 
             ContentValues mMovieInfoValues = new ContentValues();
 
-            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_MV_ID, j);
-            mMovieInfoValues.put(MovieInfoEntry.COL_TITLE, "MyMovie_" + j);
+            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_MOVIE_ID, j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_ORIGINAL_TITLE, "MyMovie_" + j);
             mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_POSTERLINK, "PosterLink_" + j);
             mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_OVERVIEW, "OverView_"+ j);
-            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_RELEASEDATE, "ReleaseDate_" + j);
+            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_RELEASE_DATE, "ReleaseDate_" + j);
 
             mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE, "VoteAverage_" + j);
             mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_POPULARITY, "Popularity_" + j);
             mMovieInfoValues.put(MovieInfoEntry.COL_VOTE_COUNT, "VoteCount_" + j);
             mMovieInfoValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
 
-            mMovieInfoValues.put(MovieInfoEntry.COL_BACKDROP_PATH, "BackDropPath_" + j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_BACKDROPLINK, "BackDropPath_" + j);
          //   mMovieInfoValues.put(MovieInfoEntry.COL_VIDEOLINK, "VideoLink_" + j);
 
             mValuesArray[i] = mMovieInfoValues;
