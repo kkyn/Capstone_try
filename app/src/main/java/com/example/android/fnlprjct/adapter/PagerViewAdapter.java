@@ -1,4 +1,4 @@
-package com.example.android.fnlprjct;
+package com.example.android.fnlprjct.adapter;
 
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.view.ViewGroup;
+
+import com.example.android.fnlprjct.Detail_Fragment1;
+import com.example.android.fnlprjct.MyQuery;
 
 /**
  * Created by kkyin on 6/6/2017.
@@ -16,7 +19,7 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
     private static final String LOG_TAG = PagerViewAdapter.class.getSimpleName();
 
     private Cursor cursor;
-   // private MDetails_Fragment fgmnt1;
+   // private Detail_Fragment fgmnt1;
     /*private*/
    String sortMovieBy;
 
@@ -38,7 +41,7 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
 
         Log.d(LOG_TAG, "  - - - - - - setPrimaryItem /position : " + position + " + + + + + +");
 
-        /*MDetails_Fragment*///fgmnt1 = (MDetails_Fragment) object;
+        /*Detail_Fragment*///fgmnt1 = (Detail_Fragment) object;
 
     }
 
@@ -60,7 +63,7 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
         // Here we call an newinstance which create a new MDetails-Fragment with a given argument.
         // The 'argument-value' comes from the cursor residing/given in/to this ViewPager-Adapter.
         // To display at the ViewPager UI
-        MDetails_Fragment1 fgmnt1 = MDetails_Fragment1.newInstance(movieId);
+        Detail_Fragment1 fgmnt1 = Detail_Fragment1.newInstance(movieId);
 
         return (Fragment) fgmnt1;
     }
@@ -91,7 +94,7 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
     public int getItemPosition(Object object) {
         //return super.getItemPosition(object);
         // this method will be called for every fragment in the ViewPager
-        if (object instanceof MDetails_Fragment1){
+        if (object instanceof Detail_Fragment1){
             return POSITION_UNCHANGED;  // don't force a reload
         } else {
             // POSITION_NONE means something like: this fragment is no longer valid

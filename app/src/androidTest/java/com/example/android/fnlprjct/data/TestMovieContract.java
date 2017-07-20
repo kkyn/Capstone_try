@@ -68,7 +68,7 @@ public class TestMovieContract extends AndroidTestCase {
         assertEquals(
                 "Error: 'X_MovieInfo' Uri doesn't match our expected result",
                 mUri.toString(),
-                "content://com.example.android.myproject_2/movieinfo/%2FXMovie" );
+                "content://com.example.android.fnlprjct/movieinfo/%2FXMovie" );
     }
     public void test_buildUri_MovieInfoWithId() {
 
@@ -118,7 +118,7 @@ public class TestMovieContract extends AndroidTestCase {
 
         assertEquals("Error: 'X_MovieReview' Uri doesn't match our expected result",
                 mUri.toString(),
-                "content://com.example.android.myproject_2/moviereview/%2FXMovie");
+                "content://com.example.android.fnlprjct/moviereview/%2FXMovie");
     }
     public void test_buildUri_X_MovieReviewWithId() {
 

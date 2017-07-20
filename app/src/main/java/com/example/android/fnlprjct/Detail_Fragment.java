@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.example.android.fnlprjct.adapter.DetailRcyclrVw_Adapter;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
@@ -38,19 +39,19 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MDetails_Fragment extends Fragment
+public class Detail_Fragment extends Fragment
                              implements
                              // LoaderManager.LoaderCallbacks<Cursor>,
                               SharedPreferences.OnSharedPreferenceChangeListener
                             , View.OnClickListener
 {
 
-    public MDetails_Fragment() {
+    public Detail_Fragment() {
         // Required empty public constructor
         setHasOptionsMenu(true);
     }
 
-    private static final String LOG_TAG = MDetails_Fragment.class.getSimpleName();
+    private static final String LOG_TAG = Detail_Fragment.class.getSimpleName();
 
     private static final int DETAIL_MOVIE_LOADER = 3;
     private static final int MOVIE_REVIEW_LOADER = 4;
@@ -61,7 +62,7 @@ public class MDetails_Fragment extends Fragment
     static final String MOVIE_ID = "MovieID";
     private String videoId;
 
-    private Details_Adapter details_adapter;
+    private DetailRcyclrVw_Adapter detailRcyclrVw_adapter;
 
     public boolean isFavouriteEnabled = false;
 
@@ -290,7 +291,7 @@ public class MDetails_Fragment extends Fragment
 
         Bundle mBundle = this.getArguments();
         if (mBundle != null) {
-            mUri = mBundle.getParcelable(MDetails_Fragment.DETAIL_URI);
+            mUri = mBundle.getParcelable(Detail_Fragment.DETAIL_URI);
         }
 
         // Inflate the layout for this fragment
@@ -314,12 +315,12 @@ public class MDetails_Fragment extends Fragment
         getLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null, myTry_1);
         //++++++++++++++++++++++++++++++++++++++
 
-        details_adapter = new Details_Adapter(getContext());
+        detailRcyclrVw_adapter = new DetailRcyclrVw_Adapter(getContext());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(details_adapter);
+        recyclerView.setAdapter(detailRcyclrVw_adapter);
 
         return rootView;
     }
@@ -457,13 +458,13 @@ public class MDetails_Fragment extends Fragment
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-            details_adapter.swapCursor(data);
+            detailRcyclrVw_adapter.swapCursor(data);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
 
-            details_adapter.swapCursor(null);
+            detailRcyclrVw_adapter.swapCursor(null);
         }
     };
 }

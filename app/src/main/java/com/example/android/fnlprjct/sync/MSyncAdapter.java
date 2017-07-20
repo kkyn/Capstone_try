@@ -342,6 +342,18 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
 
         } else {
             ContentResolver.addPeriodicSync(account, authority, new Bundle(), syncInterval);
+
+            //---------------------------------------------
+            // tky add, July17 2017
+            //Utility.BroadcastMessage();
+            //Utility.BroadcastMessage(getAppContext());
+            /*Intent intent = new Intent();
+                   intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            getAppContext().sendBroadcast(intent);*/
+            //getAppContext().sendBroadcast(intent);
+            //---------------------------------------------
+
+
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.android.fnlprjct.widget;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,8 +10,10 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.example.android.fnlprjct.MyApplication;
 import com.example.android.fnlprjct.MyQuery;
 import com.example.android.fnlprjct.R;
+import com.example.android.fnlprjct.Utility;
 import com.example.android.fnlprjct.data.MovieContract;
 
 /**
@@ -21,10 +24,10 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     private static final String LOG_TAG = WidgetDataProvider.class.getSimpleName();
 
     Uri uri = MovieContract.MovieInfoEntry.CONTENT_URI;
-    String[] mProjection = MyQuery.MovieInfo.PROJECTION;
-    String selection = null;                                    // e.g. Quote.COLUMN_SYMBOL + "=?";
-    String selectionArg[] = null;                               // e.g. new String[]{"1"};
-    String sortOrder  = MovieContract.MovieInfoEntry.COL_POPULARITY + " DESC";  // e.g. "COLUMN_NAME ASC", DESC/ASC
+//    String[] mProjection = MyQuery.MovieInfo.PROJECTION;
+//    String selection = null;                                    // e.g. Quote.COLUMN_SYMBOL + "=?";
+//    String selectionArg[] = null;                               // e.g. new String[]{"1"};
+//    String sortOrder  = MovieContract.MovieInfoEntry.COL_POPULARITY + " DESC";  // e.g. "COLUMN_NAME ASC", DESC/ASC
     Cursor cursor = null;
 
     // Context --- the widget needs to get the package name to be associated with our app.
@@ -35,7 +38,6 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 //    List<String> collection = new ArrayList<>();
     Context context;
     Intent intent;
-
 
 
     public WidgetDataProvider(Context context, Intent intent) { // passing the context and get the intent
@@ -65,22 +67,53 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 //        initData();
         Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onDataSetChanged ");
 
-        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.pref_movies_sort_key), Context.MODE_PRIVATE);
+        /*SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.pref_movies_sort_key), Context.MODE_PRIVATE);
         String defaultValue = context.getString(R.string.pref_movies_sortby_default_value);
         String string = sp.getString(context.getString(R.string.pref_movies_sort_key), defaultValue);
-        Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onDataSetChanged " + string);
+        Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onDataSetChanged " + string);*/
 
+        //-------------------------------
+        String sortMoviesBy = Utility.getPreferredSortSequence(MyApplication.getAppContext());
+        String searchYear = Utility.getPreferredYear(MyApplication.getAppContext());
+        String[] xprojection;
+        String xselection;  /*= MovieInfoEntry.COL_YEAR + "=?"; // e.g. Quote.COLUMN_SYMBOL + "=?";*/
+        String xselectionArg[]; /*= new String[]{sortMoviesBy,searchYear};// e.g. new String[]{"1"};*/
+        String xsortOrder;
+
+        if (sortMoviesBy.equals(context.getResources().getString(R.string.pref_movies_sortby_default_value))) {
+
+            xprojection = MyQuery.MovieInfo.PROJECTION;    // pick the selected columns
+            xselection = MovieContract.MovieInfoEntry.COL_YEAR + "=?";                                       //
+            xselectionArg = new String[]{searchYear};
+            xsortOrder = MovieContract.MovieInfoEntry.COL_VOTE_COUNT + " DESC";
+
+        }
+        else {
+            xprojection = MyQuery.MovieInfo.PROJECTION;
+            xselection = MovieContract.MovieInfoEntry.COL_YEAR + "=?";                                       //
+            xselectionArg = new String[]{searchYear};
+            xsortOrder = MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
+        }
+//
         if (cursor != null) {
             cursor.close();
         }
-        cursor = context.getContentResolver().query(uri, mProjection, selection, selectionArg, sortOrder);
+        ContentResolver contentResolver = context.getContentResolver();
+        cursor = contentResolver.query(uri, xprojection, xselection, xselectionArg, xsortOrder);
+        //cursor = context.getContentResolver().query(uri, xprojection, xselection, xselectionArg, xsortOrder);
+        //--------------------------------
+
+        /*if (cursor != null) {
+            cursor.close();
+        }
+        cursor = context.getContentResolver().query(uri, mProjection, selection, selectionArg, sortOrder);*/
 
     }
 
     // Called when the last RemoteViewsAdapter that is associated with this factory is unbound.
     @Override
     public void onDestroy() {
-        Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onDestroy ");
+        /*Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onDestroy ");*/
         if(cursor != null){ // -x-x-x-
             cursor.close();
         }

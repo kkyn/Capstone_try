@@ -1,4 +1,4 @@
-package com.example.android.fnlprjct;
+package com.example.android.fnlprjct.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.example.android.fnlprjct.DynamicHeightNetworkImageView;
+import com.example.android.fnlprjct.ImageLoaderHelper;
+import com.example.android.fnlprjct.Main_Fragment;
+import com.example.android.fnlprjct.R;
 import com.example.android.fnlprjct.data.MovieContract;
 
 import butterknife.BindView;
@@ -18,9 +22,9 @@ import butterknife.ButterKnife;
 /*
  * Created by kkyin on 8/5/2016.
  */
-public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
+public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder>
 {
-    public static final String LOG_TAG = MvAdapter.class.getSimpleName();
+    public static final String LOG_TAG = MainRcyclrVw_Adapter.class.getSimpleName();
 
     private static final int VIEW_TYPE_A = 0;
 
@@ -32,13 +36,11 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     /**
      * Cache of the children views for a movies list item.
      */
-    public class MvViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MainRcyclrVw_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @BindView(R.id.poster_imageview)
-        //ImageView poster_imageview;
-        DynamicHeightNetworkImageView poster_imageview;
+        @BindView(R.id.poster_imageview) public DynamicHeightNetworkImageView poster_imageview;
 
-        public MvViewHolder(View itemView) {
+        public MainRcyclrVw_ViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
@@ -69,14 +71,16 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     final private Context context;
     final private ItemClickListener clickListener; // "IttemClickHandler0" , "ittmClckHndlr"
 
-    // Declaration of interface
+    // Declaration of interface listener, i.e. ItemClickListener,
+    // for this RecyclerView Adapter, i.e. MainRcyclrVw_Adapter
+    //
     public interface ItemClickListener {
 
-        void onClick0(MvViewHolder viewHolder);
+        void onClick0(MainRcyclrVw_ViewHolder viewHolder);
     }
 
     // * provide  a suitable constructor( depends on the kind of data-set / how u want to interface ? )
-    public MvAdapter(Context context, ItemClickListener clickListener) { // "ittemClickHandler"
+    public MainRcyclrVw_Adapter(Context context, ItemClickListener clickListener) { // "ittemClickHandler"
         // super(context);
         this.context = context;
         this.clickListener = clickListener;
@@ -85,7 +89,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     // * Called when RecyclerView needs a new 'RecyclerView.ViewHolder' of the given type to represent an item.
     // * Locate new views( invoked by the LayoutManager )
     @Override // RecyclerView.Adapter basic requirement
-    public MvViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MainRcyclrVw_ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (parent instanceof RecyclerView) {
 
@@ -101,7 +105,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
 
             view.setFocusable(true);    // * Control whether a view can take focus
 
-            MvViewHolder viewHolder = new MvViewHolder(view);
+            MainRcyclrVw_ViewHolder viewHolder = new MainRcyclrVw_ViewHolder(view);
 
             view.setTag(viewHolder);
 
@@ -121,7 +125,7 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
     //
     // * param holder <-- output/returned ViewHolder-data from method onCreateViewHolder{..} ??!!
     @Override // RecyclerView.Adapter basic requirement
-    public void onBindViewHolder(MvViewHolder viewHolder, int position) {
+    public void onBindViewHolder(MainRcyclrVw_ViewHolder viewHolder, int position) {
         // - get and bind 'that'-element from the data-set at this 'position'
         // - replace the contents of the view with 'that'-element
         // holder.xxx ( data-set(position) ) ;
@@ -133,18 +137,6 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvViewHolder>
         if (mCursor.moveToPosition(position)) {
 
             // ++++++++++++++++++++++++++++++++++++++++++
-            /*Picasso.with(context)
-                .load(mCursor.getString(Main_Fragment.COLUMN_POSTERLINK))
-                .placeholder(R.drawable.sample_1)
-                .error(R.drawable.sample_0)
-//                .resizeDimen(200,0) // no good
-//                .resize(2000,500)   // --A-- //  .resize(600,200)
-//                .onlyScaleDown()    // --A--
-//                .centerInside()     // --A--
-                .fit()                 // --B--
-              //  .centerCrop()
-
-                .into(viewHolder.poster_imageview);*/
             // ++++++++++++++++++++++++++++++++++++++++++
             ImageLoader imageLoader = ImageLoaderHelper.getInstance(context).getImageLoader();
 

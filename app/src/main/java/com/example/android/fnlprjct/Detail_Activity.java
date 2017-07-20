@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class MDetails_Activity extends AppCompatActivity {
+public class Detail_Activity extends AppCompatActivity {
 
-    private static final String LOG_TAG = MDetails_Activity.class.getSimpleName();
+    private static final String LOG_TAG = Detail_Activity.class.getSimpleName();
 
     private Uri mUri;
 
@@ -37,13 +37,13 @@ public class MDetails_Activity extends AppCompatActivity {
         // tky add, copied
         postponeEnterTransition(); // tky add, -----------------------
 
-        // ?? bundle from Main_Activity is passed on to the MDetails_Fragment ?? how/why ??, see code below !!
+        // ?? bundle from Main_Activity is passed on to the Detail_Fragment ?? how/why ??, see code below !!
         // (1) Get the 'intent' with the start-of-this-activity.
         // (2) Get the data attached with the 'intent'
         Intent intent = this.getIntent();
         mUri = intent.getData();
 
-        Log.d(LOG_TAG, "yyyy MDetails_Activity / onCreate / mUri : " + mUri.toString());
+        Log.d(LOG_TAG, "yyyy Detail_Activity / onCreate / mUri : " + mUri.toString());
 
         // Log.d(LOG_TAG, "yyyy onCreate / savedInstanceState == null / DetailMoviewFragment --");
         // Log.d(LOG_TAG, "yyyy onCreate / mUri : " + mUri.toString());
@@ -51,7 +51,7 @@ public class MDetails_Activity extends AppCompatActivity {
         //-- Begin-- Attach data to a fragment
         // (1) Place 'data' into bundle
         Bundle bundle = new Bundle();
-        bundle.putParcelable(MDetails_Fragment.DETAIL_URI, mUri);
+        bundle.putParcelable(Detail_Fragment.DETAIL_URI, mUri);
 
         Log.d(LOG_TAG, "( ( ( ( ( ( ( " + mUri.toString()+ " ) ) ) ) ) ) ) ");
 
@@ -59,7 +59,7 @@ public class MDetails_Activity extends AppCompatActivity {
             // (2) Attach the bundle to a fragment
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            PagerView_Details_Fragment pagerViewDetailsFragment = new PagerView_Details_Fragment();
+            Detail_FragmentPv pagerViewDetailsFragment = new Detail_FragmentPv();
 
             pagerViewDetailsFragment.setArguments(bundle);
             //-- End  -- Attach data to a fragment
@@ -71,7 +71,7 @@ public class MDetails_Activity extends AppCompatActivity {
             frgmntTrnsctn.commit();
 
             /*
-            MDetails_Fragment dtlFrgmnt = new MDetails_Fragment();
+            Detail_Fragment dtlFrgmnt = new Detail_Fragment();
             dtlFrgmnt.setArguments(bundle);
             FragmentManager fMngr = getSupportFragmentManager();
             FragmentTransaction frgmntTrnsctn = fMngr.beginTransaction();
@@ -79,7 +79,7 @@ public class MDetails_Activity extends AppCompatActivity {
             frgmntTrnsctn.commit();
             // --or--
             // getSupportFragmentManager().beginTransaction()
-            //                             .add(R.id.detail_movie_container, new MDetails_Fragment())
+            //                             .add(R.id.detail_movie_container, new Detail_Fragment())
             //                             .commit();
             */
         }

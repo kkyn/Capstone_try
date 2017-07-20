@@ -52,7 +52,6 @@ public class ChangeYearDialogFragment extends DialogFragment
         return cyDialog;
     }
 
-
     //----------------------------------------------------------------
     // Start-A-Fragment-In-A-Fragment .... Start Dialog in Fragment
     // Step 2 : ( Return data to 'source'/'target'-fragment )
@@ -65,7 +64,6 @@ public class ChangeYearDialogFragment extends DialogFragment
     }
 
     @BindView(R.id.year_dialog) EditText enterYear_et;
-//    View view;
 
 
     @Override
@@ -77,15 +75,17 @@ public class ChangeYearDialogFragment extends DialogFragment
 
     @Override
     public void onResume() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sp.registerOnSharedPreferenceChangeListener(this);
+        SharedPreferences
+            sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sp.registerOnSharedPreferenceChangeListener(this);
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sp.unregisterOnSharedPreferenceChangeListener(this);
+        SharedPreferences
+            sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sp.unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
@@ -198,6 +198,7 @@ public class ChangeYearDialogFragment extends DialogFragment
         editor.putString(yearKey, year);
         editor.apply();
 
+        dismissAllowingStateLoss(); // ??
         //MSyncAdapter.syncImmediately(getContext());
 
     }

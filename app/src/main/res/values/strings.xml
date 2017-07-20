@@ -82,5 +82,9 @@
 
     <string name="certification_country">US</string>
     <string name="vote_count_gte">50</string>
+    <string name="error_no_network">No network connectivity! \nWill load top movie list when the network is available.</string>
+    <string name="Most_Popular">Most Popular</string>
+    <string name="Highest_Rated">Highest Rated</string>
+    <string name="My_Favourites">My Favourites</string>
 
 </resources>

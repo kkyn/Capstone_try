@@ -3,5 +3,5 @@
     android:id="@+id/fragmentdetail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MDetails_Activity"
+    tools:context=".Detail_Activity"
     tools:ignore="MergeRooFrame" />

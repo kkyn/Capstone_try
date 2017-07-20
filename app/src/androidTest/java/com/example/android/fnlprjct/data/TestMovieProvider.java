@@ -224,6 +224,10 @@ public class TestMovieProvider extends AndroidTestCase {
             mMovieInfoValues.put(MovieInfoEntry.COL_BACKDROPLINK, "BackDropPath_" + j);
          //   mMovieInfoValues.put(MovieInfoEntry.COL_VIDEOLINK, "VideoLink_" + j);
 
+            // tky added to solve fail test, july17 2017 ---- it passes with ehe addition!!
+            mMovieInfoValues.put(MovieInfoEntry.COL_POSTERLINK, "PosterLink_" +j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_YEAR, "Year_" +j);
+
             mValuesArray[i] = mMovieInfoValues;
             //=============================================
             //=============================================

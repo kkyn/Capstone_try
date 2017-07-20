@@ -173,6 +173,7 @@ static void validateCursorValue(//String error,
         contentValues.put(MovieContract.MovieInfoEntry.COL_MOVIE_ID,         12);  // y
         contentValues.put(MovieContract.MovieInfoEntry.COL_ORIGINAL_TITLE,         "XMovie_Title"); // y
         contentValues.put(MovieContract.MovieInfoEntry.COL_RELEASE_DATE,   "XMovie_ReleaseDate"); // y
+        contentValues.put(MovieInfoEntry.COL_YEAR, "2017"); // add july17, to solve test problem
         contentValues.put(MovieContract.MovieInfoEntry.COL_OVERVIEW,      "XMovie_Overview"); // y
 
         contentValues.put(MovieContract.MovieInfoEntry.COL_VOTE_COUNT,    123); // y

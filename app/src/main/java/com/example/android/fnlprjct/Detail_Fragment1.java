@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.example.android.fnlprjct.adapter.DetailRcyclrVw_Adapter;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 
@@ -41,14 +42,14 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MDetails_Fragment1 extends Fragment
+public class Detail_Fragment1 extends Fragment
                              implements
                              // LoaderManager.LoaderCallbacks<Cursor>,
                               SharedPreferences.OnSharedPreferenceChangeListener
                             , View.OnClickListener
 {
 
-    public MDetails_Fragment1() {
+    public Detail_Fragment1() {
         // Required empty public constructor
         //setHasOptionsMenu(true);
     }
@@ -58,20 +59,20 @@ public class MDetails_Fragment1 extends Fragment
     // + To create a new instance of ArticleDetailFragment/Fragment,
     //    providing "num" as an argument.
     //---------------------------------------------------------------
-    public static MDetails_Fragment1 newInstance(int itemId) {
+    public static Detail_Fragment1 newInstance(int itemId) {
 
         Bundle arguments = new Bundle();
         arguments.putInt(ITEMID_KEY, itemId); // ?? itemId ??
        /// arguments.putInt("MyKey1", itemId); // ?? itemId ??
 
-        MDetails_Fragment1 fragment = new MDetails_Fragment1();
+        Detail_Fragment1 fragment = new Detail_Fragment1();
 
         fragment.setArguments(arguments);
         return fragment;
     }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private static final String LOG_TAG = MDetails_Fragment1.class.getSimpleName();
+    private static final String LOG_TAG = Detail_Fragment1.class.getSimpleName();
     private static final String ITEMID_KEY = "ItemID_Key";
 
     private static final int DETAIL_MOVIE_LOADER = 3;
@@ -85,7 +86,7 @@ public class MDetails_Fragment1 extends Fragment
     static final String MOVIE_ID = "MovieID";
     private String videoId;
 
-    private Details_Adapter detailsAdapter;
+    private DetailRcyclrVw_Adapter detailsAdapter;
     String trgtShrdElmtTrnstn;
     public boolean isFavouriteEnabled = false;
 
@@ -313,7 +314,7 @@ public class MDetails_Fragment1 extends Fragment
 
 //        Bundle mBundle = this.getArguments();
 //        if (mBundle != null) {
-//            mUri = mBundle.getParcelable(MDetails_Fragment1.DETAIL_URI);
+//            mUri = mBundle.getParcelable(Detail_Fragment1.DETAIL_URI);
 //        }
 
         // Inflate the layout for this fragment
@@ -395,7 +396,7 @@ public class MDetails_Fragment1 extends Fragment
         getLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null, reviewLoaderCallback_1);
         //++++++++++++++++++++++++++++++++++++++
 
-        detailsAdapter = new Details_Adapter(getContext());
+        detailsAdapter = new DetailRcyclrVw_Adapter(getContext());
 
         LinearLayoutManager lytMngr = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 

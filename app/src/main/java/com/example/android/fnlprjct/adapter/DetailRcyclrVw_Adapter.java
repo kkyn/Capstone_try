@@ -1,4 +1,4 @@
-package com.example.android.fnlprjct;
+package com.example.android.fnlprjct.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,18 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.fnlprjct.Detail_Fragment;
+import com.example.android.fnlprjct.R;
+
 /**
  * Created by kkyin on 26/10/2016.
  */
 
-public class Details_Adapter extends RecyclerView.Adapter<Details_Adapter.Details_ViewHolder> {
+public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_Adapter.Details_ViewHolder> {
 
-    private static final String LOG_TAG = Details_Adapter.class.getSimpleName();
+    private static final String LOG_TAG = DetailRcyclrVw_Adapter.class.getSimpleName();
     private static final int VIEW_TYPE_A = 0;
     private Cursor mCursor;
     private Context context;
 
-    public Details_Adapter(Context context) {
+    public DetailRcyclrVw_Adapter(Context context) {
         this.context = context;
     }
 
@@ -33,7 +36,7 @@ public class Details_Adapter extends RecyclerView.Adapter<Details_Adapter.Detail
             switch (viewType) {
                 case VIEW_TYPE_A: {
 
-                    // Log.d(LOG_TAG, "-- MvAdapter/onCreateViewHolder() --");
+                    // Log.d(LOG_TAG, "-- MainRcyclrVw_Adapter/onCreateViewHolder() --");
                     //=================================
                     layout_id = R.layout.cardview_review;
                     //=================================
@@ -62,8 +65,8 @@ public class Details_Adapter extends RecyclerView.Adapter<Details_Adapter.Detail
     @Override // basic requirement
     public void onBindViewHolder(Details_ViewHolder holder, int position) {
         if (mCursor.moveToPosition(position)) {
-            holder.Reviewer_tv.setText(mCursor.getString(MDetails_Fragment.INDX_1_REVIEWER));
-            holder.Review_tv.setText(mCursor.getString(MDetails_Fragment.INDX_1_REVIEWCONTENT));
+            holder.Reviewer_tv.setText(mCursor.getString(Detail_Fragment.INDX_1_REVIEWER));
+            holder.Review_tv.setText(mCursor.getString(Detail_Fragment.INDX_1_REVIEWCONTENT));
         }
     }
 

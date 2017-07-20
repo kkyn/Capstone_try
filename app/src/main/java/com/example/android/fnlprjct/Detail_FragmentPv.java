@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.android.fnlprjct.adapter.PagerViewAdapter;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 
@@ -22,10 +23,10 @@ import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
  * Created by kkyin on 7/6/2017.
  */
 
-public class PagerView_Details_Fragment extends Fragment
+public class Detail_FragmentPv extends Fragment
                     implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    private static final String LOG_TAG = PagerView_Details_Fragment.class.getSimpleName();
+    private static final String LOG_TAG = Detail_FragmentPv.class.getSimpleName();
     private static final int LOADER_ID = 4;
 
     private Cursor cursor;
@@ -36,7 +37,7 @@ public class PagerView_Details_Fragment extends Fragment
     Uri mUri;
     int movieId;
 
-    public PagerView_Details_Fragment(){
+    public Detail_FragmentPv(){
     }
 
 
@@ -70,7 +71,7 @@ public class PagerView_Details_Fragment extends Fragment
 
         Bundle mBundle = this.getArguments();
         if (mBundle != null) {
-            mUri = mBundle.getParcelable(MDetails_Fragment1.DETAIL_URI);
+            mUri = mBundle.getParcelable(Detail_Fragment1.DETAIL_URI);
         //    Toast.makeText(getContext(), "uri : " + mUri.toString(), Toast.LENGTH_LONG).show();
             movieId = Integer.parseInt(MovieContract.MovieInfoEntry.getMovieId_FromMovieInfoUri(mUri));
         }

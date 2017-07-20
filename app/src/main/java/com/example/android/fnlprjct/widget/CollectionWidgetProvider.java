@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.example.android.fnlprjct.Main_Activity;
 import com.example.android.fnlprjct.R;
@@ -55,6 +57,9 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             setRemoteAdapterV11(context, views);
         }
 
+        // Notifies the specified collection view in the specified AppWidget instance to invalidate its data.
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
+
         // Instruct the widget manager to update the widget
         // Set the RemoteViews to use for the specified appWidgetIds.
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -80,6 +85,8 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
 
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+        // tky added july17 2017, very important!!
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     // auto-generated
@@ -120,8 +127,8 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private static void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
-        views.setRemoteAdapter(R.id.widget_list,
-            new Intent(context, WidgetService.class));
+        views.setRemoteAdapter(
+            R.id.widget_list, new Intent(context, WidgetService.class));
     }
 
     // auto-generated
@@ -132,8 +139,8 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
      */
     @SuppressWarnings("deprecation")
     private static void setRemoteAdapterV11(Context context, @NonNull final RemoteViews views) {
-        views.setRemoteAdapter(0, R.id.widget_list,
-            new Intent(context, WidgetService.class));
+        views.setRemoteAdapter(
+            0, R.id.widget_list, new Intent(context, WidgetService.class));
     }
 
     // not auto-generated
@@ -156,12 +163,28 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     }
 
     // not auto-generated
-
+    // ------------------------------------------------
+    // tky add, july17, receiver broadcast-message from invoked method,
+    //              Utility.BroadcastMessage(getApplicationContext() context)
+    //
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        /*Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > onReceive ");*/
+        Toast.makeText(context, "IN on RECEIVE", Toast.LENGTH_LONG).show();
+
+        String action = intent.getAction();
+
+        if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
+
+            ComponentName componentName = new ComponentName(context, CollectionWidgetProvider.class);
+
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+            int appWidgetIds[] = appWidgetManager.getAppWidgetIds(componentName);
+
+            onUpdate(context, appWidgetManager, appWidgetIds);
+        }
     }
 }
 

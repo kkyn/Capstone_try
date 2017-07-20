@@ -1,6 +1,7 @@
 package com.example.android.fnlprjct;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -34,8 +36,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.fnlprjct.adapter.MainRcyclrVw_Adapter;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
@@ -48,20 +52,19 @@ import butterknife.ButterKnife;
  * A placeholder fragment (Main_Fragment) containing a simple view.
  */
 public class Main_Fragment extends Fragment
-    implements LoaderManager.LoaderCallbacks<Cursor>
-    , SharedPreferences.OnSharedPreferenceChangeListener
-    , SwipeRefreshLayout.OnRefreshListener
+                            implements LoaderManager.LoaderCallbacks<Cursor>
+                            , SharedPreferences.OnSharedPreferenceChangeListener
+                            , SwipeRefreshLayout.OnRefreshListener
 {
     // constructor
     public Main_Fragment() {
     }
 
-
     public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
     SharedPreferences.OnSharedPreferenceChangeListener listener;
 
-    private RecyclerView rv;
-    private MvAdapter rvAdapter;
+    //private RecyclerView mainRyclrVw;
+    private MainRcyclrVw_Adapter rvAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private long itemID = 0;
     private Uri uri;
@@ -71,7 +74,7 @@ public class Main_Fragment extends Fragment
     static final int COLUMN_POPULAR_ID;
     static final int COLUMN_MV_ID;
     static final int COLUMN_KEY_ID;
-    static final int COLUMN_POSTERLINK;
+    public static final int COLUMN_POSTERLINK;
     static final int COLUMN_BACKDROP_PATH;
 
     static {
@@ -93,12 +96,10 @@ public class Main_Fragment extends Fragment
 
         FragmentManager fm = getFragmentManager();
 
-        ChangeYearDialogFragment chngyrDialog = ChangeYearDialogFragment.newInstance();
-
-        chngyrDialog.setTargetFragment(this, DIALOG_REQUEST_CODE); // 1 : say is Constants.DIALOG_REQUEST_CODE
-//        chngyrDialog.setTargetFragment(this, 1); // 1 : say is Constants.DIALOG_REQUEST_CODE
-
-        chngyrDialog.show(fm, DIALOG);
+        ChangeYearDialogFragment
+            chngyrDialog = ChangeYearDialogFragment.newInstance();
+            chngyrDialog.setTargetFragment(this, DIALOG_REQUEST_CODE); // 1 : say is Constants.DIALOG_REQUEST_CODE
+            chngyrDialog.show(fm, DIALOG);
 
     }
     // Start-A-Fragment-In-A-Fragment .... Start Dialog in Fragment
@@ -111,9 +112,7 @@ public class Main_Fragment extends Fragment
             if (resultCode == Activity.RESULT_OK) {
                 if (data.getExtras().containsKey(DIALOG_KEY)) {
 
-                    String value = data.getExtras().getString(DIALOG_KEY);
-
-                    actionBar.setTitle("FINAL_PROJECT : " + value);
+                    actionBar.setTitle(UpdateActionBarTitle());
 
                     onRefresh();
                 }
@@ -127,52 +126,19 @@ public class Main_Fragment extends Fragment
     @BindView(R.id.toolbar) Toolbar tool_bar;
     @BindView(R.id.edit_fab) FloatingActionButton editfab;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.main_recyclerview) RecyclerView mainRyclrVw;
+    @BindView(R.id.error) TextView error;
 
-    /*Toolbar tool_bar;*/
     //-------------------------
     //--- Interface stuff -----
     //-------------------------
     CallBackListener mainCallBackListener;
 
-    // DEFINITION/IMPLEMENTATION for interface
-    // SwipeRefreshLayout.OnRefreshListener
-    @Override
-    public void onRefresh() {
-
-        if (networkUp()){
-
-            Toast.makeText(getContext(),"In OnRefresh...network is up --- Yeah", Toast.LENGTH_LONG).show();
-
-            swipeRefreshLayout.setRefreshing(false);
-
-            //getContext().getContentResolver().notifyChange(MovieInfoEntry.CONTENT_URI, null);
-
-            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
-            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-            //MSyncAdapter.syncImmediately(getContext());
-        }
-        else {
-            Toast.makeText(getContext(), "Sorry, there is not access to network.", Toast.LENGTH_LONG).show();
-        }
-    }
-    // Check for network connectivity
-    //
-    private boolean networkUp() {
-
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
-
     // Container Activity must implement this interface
     public interface CallBackListener {
 
         void onItemSelectedInRecyclerView(Intent intent, Bundle bundle);
-        //void onItemSelectedInRecyclerView(MvAdapter.MvViewHolder viewHolder, long itemId);
+        //void onItemSelectedInRecyclerView(MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder viewHolder, long itemId);
         //void onItemSelectedInRecyclerView(Uri mUri); // -- old --
 
     }
@@ -214,6 +180,9 @@ public class Main_Fragment extends Fragment
         super.onCreate(savedInstanceState);
 
         // Add this line in order for this fragment to handle menu events.
+        // Report that this fragment would like to participate in populating the
+        // options menu by receiving a call to onCreateOptionsMenu(Menu, MenuInflater)
+        // and related methods.
         setHasOptionsMenu(true);    //Log.d(LOG_TAG, "---- 0 onCreate() --");
     }
 
@@ -234,10 +203,8 @@ public class Main_Fragment extends Fragment
 
             actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle("FINAL_PROJECT : " + str);
-
+            actionBar.setTitle(UpdateActionBarTitle());
         }
-
     }
 
     @Override // --- 2 ----
@@ -264,9 +231,9 @@ public class Main_Fragment extends Fragment
     @Override //---- 4 ----
     public void onResume() {
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        sp.registerOnSharedPreferenceChangeListener(this);
+        SharedPreferences
+            sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sp.registerOnSharedPreferenceChangeListener(this);
 
         super.onResume();
 
@@ -278,9 +245,9 @@ public class Main_Fragment extends Fragment
     @Override //--- 5 ----
     public void onPause() {
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext()/*getActivity()*/);
-
-        sp.unregisterOnSharedPreferenceChangeListener(this);
+        SharedPreferences
+            sp = PreferenceManager.getDefaultSharedPreferences(getContext()/*getActivity()*/);
+            sp.unregisterOnSharedPreferenceChangeListener(this);
 
         super.onPause();
     }
@@ -297,6 +264,7 @@ public class Main_Fragment extends Fragment
     //------ SETTING FOR implementation of SharedPreferences.OnSharedPreferenceChangeListener -----
     //---------------------------------------------------------------------------------------------
     // For SharedPreferences.OnSharedPreferenceChangeListener
+    // Called when a shared preference is changed, added, or removed.
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
@@ -305,13 +273,18 @@ public class Main_Fragment extends Fragment
             getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
 
             MSyncAdapter.syncImmediately(getContext());
+
+            Intent intent = new Intent();
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//            mCntx.sendBroadcast(intent);
+            getActivity().sendBroadcast(intent);
         }
 
     }
 
     //--------------------------------------------------------------
     //-- LoaderManager.LoaderCallbacks<Cursor> --
-    //----------- LoaderCursor Stuff (begin) -----------------------
+    //----------- (begin) LoaderCursor Stuff -----------------------
     //--------------------------------------------------------------
     /*
     * Callback that's invoked when the system has initialized the Loader and
@@ -350,6 +323,7 @@ public class Main_Fragment extends Fragment
             sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
 
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
+
             projection = MyQuery.Favourites.PROJECTION;
             selection = MovieInfoEntry.COL_FAVOURITES + "=?";
             selectionArg = new String[]{"1"};
@@ -396,7 +370,7 @@ public class Main_Fragment extends Fragment
         rvAdapter.swapCursor(cursor); // notifyDataSetChanged() is called in swapCursor()
 
        /* if (mPosition != RecyclerView.NO_POSITION) {
-            rv.smoothScrollToPosition(mPosition);
+            mainRyclrVw.smoothScrollToPosition(mPosition);
         }*/
     }
 
@@ -413,22 +387,23 @@ public class Main_Fragment extends Fragment
         rvAdapter.swapCursor(null);
     }
     //--------------------------------------------------------------
-    //----------- LoaderCursor Stuff (End) -------------------------
+    //----------- (End) LoaderCursor Stuff -------------------------
     //--------------------------------------------------------------
 
     //-------------------------------------------------
-    //----------- OPTIONS MENU Stuff (Begin)-----------
+    //----------- (Begin) OPTIONS MENU Stuff-----------
     // ------------------------------------------------
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    // Initialize the contents of the Fragment host's standard options menu.
+    @Override public void
+    onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.menu_main_fragment, menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override public boolean
+    onOptionsItemSelected(MenuItem item) {
 
         // get the file, SharedPreferences
         // Gets a SharedPreferences instance that points to the default file
@@ -446,26 +421,60 @@ public class Main_Fragment extends Fragment
             editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_default_value));
 
             // Commit your preferences changes back from this Editor to the SharedPreferences object it is editing.
-            editor.apply();
-
+            editor.commit();
+            //editor.apply();
+            actionBar.setTitle(UpdateActionBarTitle());
             return true;
         }
         else if (id == R.id.most_rated) {
             editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_ratings));
-            editor.apply();
+            editor.commit();
+            //editor.apply();
+
+            actionBar.setTitle(UpdateActionBarTitle());
             return true;
         }
         else if (id == R.id.my_favorites) {
             editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_favourites));
-            editor.apply();
+            editor.commit();
+            //editor.apply();
+            actionBar.setTitle(UpdateActionBarTitle());
             return true;
         }
 
         return super.onOptionsItemSelected(item);
 
     }
+
+    private String UpdateActionBarTitle() {
+
+        String year = Utility.getPreferredYear(getContext());
+        String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
+        String category;
+        int option = 0;
+
+        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+        if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
+
+            category = getString(R.string.Most_Popular);
+            option = 1;
+        } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
+
+            category = getString(R.string.Highest_Rated); //"Highest Rated";
+            option = 1;
+        } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
+
+            category = getString(R.string.My_Favourites); //"My Favourites";
+            option = 2;
+        }
+        // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+        String title;
+        if(option==1){title = "FINAL_PROJECT : " + year + " : " + category;}
+        else         {title = "Final_PROJECT : " + category;}
+        return title;
+    }
     //------------------------------------------------
-    //--------------- OPTIONS MENU Stuff (End)--------
+    //--------------- (End) OPTIONS MENU Stuff -------
     //------------------------------------------------
 
     @Override
@@ -493,23 +502,23 @@ public class Main_Fragment extends Fragment
         StaggeredGridLayoutManager stgrdgrdlm;
         //return super.onCreateView(inflater, container, savedInstanceState);
 
-        //************************************************
+        //************************************************************************************************
+        //*******Begin, Instantiate a Listener for MainRcyclrVw_Adapter.ItemClickListener ****************
+        //************************************************************************************************
         // tky comment ....
         // Implementation the interface, 'NAME'/ItemClickListener
         // with the method-name/onClick0 found within the interface declaration.
-        MvAdapter.ItemClickListener adapterCallBackListener =
-
-            new MvAdapter.ItemClickListener() {
+        MainRcyclrVw_Adapter.ItemClickListener listener =
+                        new MainRcyclrVw_Adapter.ItemClickListener() {
 
                 @Override
-                public void onClick0(MvAdapter.MvViewHolder viewHolder) {
+                public void onClick0(MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder viewHolder) {
 
                     // ************* newer ***********************
                     mPosition = viewHolder.getAdapterPosition();
                     itemID = rvAdapter.getItemId(mPosition);
 
                     String srcView_SharedElementTransition = getString(R.string.shared_name) + itemID;
-                    //String srcView_SharedElementTransition = "photo" + itemID;
 
                     viewHolder.poster_imageview.setTransitionName(srcView_SharedElementTransition);
 
@@ -522,15 +531,13 @@ public class Main_Fragment extends Fragment
 
                     // http://guides.codepath.com/android/shared-element-activity-transition
                     ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pair1);
-                    //         ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(Main_Activity.this, pair1);
-                    //ActivityOptions option = ActivityOptions.makeSceneTransitionAnimation(Main_Activity.this, pair1);
 
                     Bundle bundle = option.toBundle();
 
                     uri = MovieContract.MovieInfoEntry.CONTENT_URI;
                     uri = ContentUris.withAppendedId(uri, itemID);
 
-                    Intent intent = new Intent(getActivity(), MDetails_Activity.class);
+                    Intent intent = new Intent(getActivity(), Detail_Activity.class);
                     intent.setData(uri);
                     // ????????????????????
 
@@ -561,24 +568,27 @@ public class Main_Fragment extends Fragment
 
                 }
             };
+        //************************************************************************************************
+        //*******End  , Instantiate a Listener for MainRcyclrVw_Adapter.ItemClickListener ****************
+        //************************************************************************************************
 
-        rvAdapter = new MvAdapter(getContext(), adapterCallBackListener);
+        rvAdapter = new MainRcyclrVw_Adapter(getContext(), listener);
         //************************************************
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         ButterKnife.bind(this, rootView);
 
-        rv = (RecyclerView) rootView.findViewById(R.id.pane1_recyclerview);/*recyclerview_id4_movies*/
+        //mainRyclrVw = (RecyclerView) rootView.findViewById(R.id.main_recyclerview);/*recyclerview_id4_movies*/
 
         //gridlm = new GridLayoutManager(getContext(), 2);
-        //rv.setLayoutManager(gridlm);
+        //mainRyclrVw.setLayoutManager(gridlm);
         // --or--
         stgrdgrdlm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        rv.setLayoutManager(stgrdgrdlm);
 
-        rv.setAdapter(rvAdapter);
-        rv.setHasFixedSize(true);
+        mainRyclrVw.setLayoutManager(stgrdgrdlm);
+        mainRyclrVw.setAdapter(rvAdapter);
+        mainRyclrVw.setHasFixedSize(true);
 
         if ((savedInstanceState != null) && savedInstanceState.containsKey(SELECTED_INDEX)) {
             mPosition = savedInstanceState.getInt(SELECTED_INDEX);
@@ -599,7 +609,85 @@ public class Main_Fragment extends Fragment
         });
         // +++++++++++++++++++++++++++++++++++++++++++++
         swipeRefreshLayout.setOnRefreshListener(this); // 'connect'/'bind' instance in xml with implementation
+        swipeRefreshLayout.setColorSchemeResources(
+            /*android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,*/
+            android.R.color.holo_red_light);
 
         return rootView;
     }
+
+
+    // ------------------------------------------------------
+    // ---- Begin -------------------------------------------
+    //  DEFINITION/IMPLEMENTATION for -----------------------
+    //      interface SwipeRefreshLayout.OnRefreshListener --
+    // ------------------------------------------------------
+    @Override
+    public void onRefresh() {
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        swipeRefreshLayout.setRefreshing(true); // enables progress visibility
+
+        if (!networkUp()){
+            /*Toast.makeText(getContext(), "Sorry, there is not access to network.", Toast.LENGTH_LONG).show();*/
+
+            error.setText(getString(R.string.error_no_network));
+            error.setVisibility(View.VISIBLE);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);// disables progress visibility
+                    error.setVisibility(View.INVISIBLE);
+                }
+            }, 3000);
+        }
+        else {
+            Toast.makeText(getContext(),"In OnRefresh...network is up --- Yeah", Toast.LENGTH_LONG).show();
+
+            swipeRefreshLayout.setRefreshing(false);
+
+            //getContext().getContentResolver().notifyChange(MovieInfoEntry.CONTENT_URI, null);
+
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            //MSyncAdapter.syncImmediately(getContext());
+
+            //---------------------------------------------------
+            Intent intent = new Intent();
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            getActivity().sendBroadcast(intent);
+            //getAppContext().sendBroadcast(intent);
+            //Utility.BroadcastMessage();
+            //Utility.BroadcastMessage(getAppContext());
+            //---------------------------------------------------
+        }
+    }
+
+    // Check for network connectivity
+    //
+    private boolean networkUp() {
+
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    // ------------------------------------------------------
+    // ---- End ---------------------------------------------
+    // ------------------------------------------------------
+
+
 }

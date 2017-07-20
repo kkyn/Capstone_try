@@ -147,7 +147,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     }
     // ************* new ***********************
     /*@Override
-    public void onItemSelectedInRecyclerView(MvAdapter.MvViewHolder viewHolder, long itemId) {
+    public void onItemSelectedInRecyclerView(MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder viewHolder, long itemId) {
 
         ImageView poster_imageview1 = viewHolder.poster_imageview;
         //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_imageview;
@@ -164,7 +164,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         uri = MovieContract.MovieInfoEntry.CONTENT_URI;
         uri = ContentUris.withAppendedId(uri, itemId);
 
-        Intent mIntent = new Intent(this, MDetails_Activity.class);
+        Intent mIntent = new Intent(this, Detail_Activity.class);
         mIntent.setData(uri);
 
         startActivity(mIntent, bundle);
@@ -180,9 +180,9 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         if (is2Pane == true) {
 
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MDetails_Fragment.DETAIL_URI, uri);
+            bundle.putParcelable(Detail_Fragment.DETAIL_URI, uri);
 
-            MDetails_Fragment dtlsFrgmnt = new MDetails_Fragment();
+            Detail_Fragment dtlsFrgmnt = new Detail_Fragment();
             dtlsFrgmnt.setArguments(bundle);
 
             FragmentManager frgmntMngr = getSupportFragmentManager();
@@ -195,7 +195,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         else {
 
         // Open a new view
-            Intent mIntent = new Intent(this, MDetails_Activity.class);
+            Intent mIntent = new Intent(this, Detail_Activity.class);
             mIntent.setData(uri);
             startActivity(mIntent);
         }
