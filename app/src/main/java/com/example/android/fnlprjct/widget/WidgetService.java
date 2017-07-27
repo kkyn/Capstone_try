@@ -11,7 +11,7 @@ import android.widget.RemoteViewsService;
     // POINT TO NOTE : Since we are doing a 'collection'-widget,
     // we need a RemoteViewsService and RemoteViewsService.RemoteViewsFactory classes.
     //
-    // at Androidmanifest.xml add :
+    // at AndroidManifest.xml add :
     // <service android:name=".widget.WidgetService"
     //             android:permission="android:permission.BIND_REMOTEVIEWS"/>
     //
@@ -22,7 +22,7 @@ public class WidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) { // 'intent' is passed into the RemoteViewsFactory
 
-        Log.d(LOG_TAG, "11111111111111 INSIDE WIDGETSERVICE > onGetViewFactory ");
+        /*Log.d(LOG_TAG, "11111111111111 INSIDE WIDGETSERVICE > onGetViewFactory ");*/
 
         RemoteViewsFactory rfctry = new WidgetDataProvider(this, intent);
 

@@ -27,13 +27,6 @@ public class MovieContract {
     // e.g "content://com.example.android.myproject_2/movieSortBy"
     // e.g "content://com.example.android.myproject_2/movieInfo"
 
-    // tky comment, 26th May 2016
-    // not use, to remove later
-    /*public static final String POPULAR = "popularity";
-    public static final String RATING = "rating";
-    public static final String MOVIEINFO = "movieInfo";*/
-
-
     public static final String MOVIEINFO = "movieinfo";  // "movie_info"
     public static final String MOVIEREVIEW = "moviereview";
     public static final String MOVIEVIDEO = "movievideo";
@@ -60,6 +53,7 @@ public class MovieContract {
 
         // Column contains foreign-key used in the SortByTable
         public static final String COL_KEY_ID = "KeyID";
+
         public static final String COL_MOVIE_ID = "MovieID";
 
         public static final String COL_YEAR = "Year";
@@ -188,7 +182,9 @@ public class MovieContract {
         }
 
         public static String getMovieId_FromMovieReviewUri(Uri uri) {
+
             return uri.getPathSegments().get(1);
+            //-- or --
             // return uri.getLastPathSegment();
         }
         //------------------------------------------------------------
@@ -197,7 +193,8 @@ public class MovieContract {
     //*******************************************************************//
     public static final class MovieVideosEntry implements BaseColumns {
 
-        public static Uri CONTENT_URI = URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEVIDEO).build();
+        public static Uri CONTENT_URI =
+                    URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEVIDEO).build();
         //--------------------------------------------------------------
         public static final String DIR_CURSOR_MOVIEVIDEO =
             ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEVIDEO;
@@ -215,7 +212,9 @@ public class MovieContract {
         public static final String COL_VIDEO_KEY = "VideoKey";
 
         public static String getMovieId_FromMovieVideoUri(Uri uri) {
+
             return uri.getPathSegments().get(1);
+            //-- or --
             // return uri.getLastPathSegment();
         }
 
@@ -228,7 +227,8 @@ public class MovieContract {
     //*******************************************************************//
     public static final class MovieFavouritesEntry implements BaseColumns {
 
-        public static final Uri CONTENT_URI = URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEFAVOURITES).build();
+        public static final Uri CONTENT_URI =
+                URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEFAVOURITES).build();
 
         public static final String FAVOURITES_MULTI_ITEM_CURSOR =
             ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + MOVIEFAVOURITES;

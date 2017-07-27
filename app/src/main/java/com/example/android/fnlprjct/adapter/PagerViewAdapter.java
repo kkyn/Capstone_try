@@ -19,18 +19,12 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
     private static final String LOG_TAG = PagerViewAdapter.class.getSimpleName();
 
     private Cursor cursor;
-   // private Detail_Fragment fgmnt1;
-    /*private*/
-   String sortMovieBy;
+    String sortMovieBy;
 
     public PagerViewAdapter(FragmentManager fMngr, String sortMovieBy) {
         super(fMngr);
         this.sortMovieBy = sortMovieBy;
     }
-    /*public PagerViewAdapter(FragmentManager fMngr, Cursor cursor) {
-        super(fMngr);
-        this.cursor = cursor;
-    }*/
 
     // Called to inform the adapter of which item is currently considered to be the "primary",
     // that is the one show to the user as the current page.
@@ -39,7 +33,7 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         super.setPrimaryItem(container, position, object);
 
-        Log.d(LOG_TAG, "  - - - - - - setPrimaryItem /position : " + position + " + + + + + +");
+        /*Log.d(LOG_TAG, "  - - - - - - setPrimaryItem /position : " + position + " + + + + + +");*/
 
         /*Detail_Fragment*///fgmnt1 = (Detail_Fragment) object;
 
@@ -52,13 +46,13 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        Log.d(LOG_TAG, "  - - - - - - getItem /position : " + position + " + + + + + +");
+        /*Log.d(LOG_TAG, "  - - - - - - getItem /position : " + position + " + + + + + +");*/
 
         cursor.moveToPosition(position);
 
         int movieId = cursor.getInt(MyQuery.MovieInfo.COL_MOVIE_ID);
 
-        Log.d(LOG_TAG, "  - - - - - - " + position + " + + + + + +");
+        /*Log.d(LOG_TAG, "  - - - - - - " + position + " + + + + + +");*/
 
         // Here we call an newinstance which create a new MDetails-Fragment with a given argument.
         // The 'argument-value' comes from the cursor residing/given in/to this ViewPager-Adapter.

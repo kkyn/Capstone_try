@@ -34,8 +34,8 @@ public class Detail_Activity extends AppCompatActivity {
 
         setContentView(com.example.android.fnlprjct.R.layout.activity_details);
 
-        // tky add, copied
-        postponeEnterTransition(); // tky add, -----------------------
+        // tky add, -----------------------
+        postponeEnterTransition();
 
         // ?? bundle from Main_Activity is passed on to the Detail_Fragment ?? how/why ??, see code below !!
         // (1) Get the 'intent' with the start-of-this-activity.
@@ -127,63 +127,5 @@ public class Detail_Activity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-//# # # # # # # # # # # # # # # # # # # # # # # # # # #
-//# # # # # # # # # # # # # # # # # # # # # # # # # # #
-    //-------------------------------------------------//
-    ///----- BEGIN, FRAGMENT-STATUS-PAGER-ADAPTER ----///
-    //-------------------------------------------------//
-    /**
-     * A pager-adapter that represents ArticleDetailFragment objects.
-     */
-    // Creates a class that extends the FragmentStatePagerAdapter abstract class
-//    private class MyFrgmntPgrAdptr extends FragmentStatePagerAdapter {
-//
-//        public MyFrgmntPgrAdptr(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        // Called to inform the adapter of which item is currently considered to be the "primary",
-//        // that is the one show to the user as the current page.
-//        @Override
-//        public void setPrimaryItem(ViewGroup container, int position, Object object) {
-//            super.setPrimaryItem(container, position, object);
-//
-//            ArticleDetailFragment fragment = (ArticleDetailFragment) object;
-//
-//            if (fragment != null) {
-//
-//            }
-//        }
-//
-//        // Implement the getItem() method to supply instances of ArticleDetailFragment as new pages.
-//        @Override
-//        public Fragment getItem(int position) {
-//
-//            mCursor.moveToPosition(position);
-//
-//            long itemID = mCursor.getLong(ArticleLoader.Query._ID);
-//
-//            ArticleDetailFragment dtlFragment = ArticleDetailFragment.newInstance(itemID);
-//
-//            return (Fragment) dtlFragment;
-//        }
-//
-//        // The pager adapter also requires that you implement the getCount() method,
-//        // which returns the amount of pages the adapter will create.
-//        @Override
-//        public int getCount() {
-//
-//            if(mCursor!=null) {
-//                int intCount = mCursor.getCount();
-//                return intCount;
-//            }
-//            else return 0;
-//        }
-//    }
-    //-------------------------------------------------//
-    ///----- END, FRAGMENT-STATUS-PAGER-ADAPTER ------///
-    //-------------------------------------------------//
-
-//# # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 }

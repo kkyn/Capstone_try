@@ -46,8 +46,8 @@ public class Detail_Fragment extends Fragment
                             , View.OnClickListener
 {
 
+    // Required empty public constructor
     public Detail_Fragment() {
-        // Required empty public constructor
         setHasOptionsMenu(true);
     }
 
@@ -78,20 +78,10 @@ public class Detail_Fragment extends Fragment
             MovieInfoEntry.COL_ORIGINAL_TITLE,
             MovieInfoEntry.COL_VOTE_AVERAGE
         };
-    /*private static final String[] PROJECTION_MOVIE_INFO =
-        new String[]{
-            MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID,
-            MovieInfoEntry.COL_MOVIE_ID,
-            MovieInfoEntry.COL_FAVOURITES,
-            MovieInfoEntry.COL_BACKDROPLINK,
-            MovieInfoEntry.COL_OVERVIEW,
-            MovieInfoEntry.COL_RELEASE_DATE,
-            MovieInfoEntry.COL_ORIGINAL_TITLE,
-            MovieInfoEntry.COL_VOTE_AVERAGE
-    };*/
 
     // These indices are tied to DETAIL_COLUMNS.  If DETAIL_COLUMNS changes, these
     // must change.
+
     //public static final int PROJECTION_RATING_ID = 0;
     public static final int INDX_MOVIE_ID = 1;
     public static final int INDX_FAVOURITES = 2;
@@ -116,21 +106,13 @@ public class Detail_Fragment extends Fragment
 
     ///////////////////////////////////////////////
 
-    /*@BindView(R.id.movietitle_tv)
-    TextView movietitle;*/
-    @BindView(R.id.moviethumbnail_iv)
-    DynamicHeightNetworkImageView  moviethumbnail;
-    //ImageView  moviethumbnail;
-    @BindView(R.id.moviereleasedate_tv)
-    TextView moviereleasedate;
-    @BindView(R.id.movieratings_tv)
-    TextView movieratings;
-    @BindView(R.id.moviesynopsis_tv)
-    TextView moviesynopsis;
-    @BindView(R.id.movievideo_btn)
-    Button movievideo;
-    @BindView(R.id.favourite_btn)
-    ImageButton moviefavourite;
+    /*@BindView(R.id.movietitle_tv) TextView movietitle;*/
+    @BindView(R.id.moviethumbnail_iv) DynamicHeightNetworkImageView  moviethumbnail;
+    @BindView(R.id.moviereleasedate_tv) TextView moviereleasedate;
+    @BindView(R.id.movieratings_tv) TextView movieratings;
+    @BindView(R.id.moviesynopsis_tv) TextView moviesynopsis;
+    @BindView(R.id.movievideo_tv) Button movievideo;
+    @BindView(R.id.favourite_btn) ImageButton moviefavourite;
 
     private TextView mTextView;
     //private DynamicHeightNetworkImageView moviethumbnail;
@@ -174,8 +156,10 @@ public class Detail_Fragment extends Fragment
     //---------- Save/ Remove/ Check Favourites stuff -----------
     //-----------------------------------------------------------
     private void removeFromFavourites(String movieID) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
+
+        ContentValues
+            contentValues = new ContentValues();
+            contentValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
 
         String select = MovieInfoEntry.COL_MOVIE_ID + "=?";
         String[] selectArg = new String[]{movieID};
@@ -186,13 +170,15 @@ public class Detail_Fragment extends Fragment
                     select,
                     selectArg
             );
+
         getContext().getContentResolver().notifyChange(MovieContract.MovieReviewEntry.CONTENT_URI, null);
     }
 
     private void saveToFavourites(String movieID) {
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieInfoEntry.COL_FAVOURITES, 1);
+        ContentValues
+            contentValues = new ContentValues();
+            contentValues.put(MovieInfoEntry.COL_FAVOURITES, 1);
 
         String select = MovieInfoEntry.COL_MOVIE_ID + "=?";
         String[] selectArg = new String[]{movieID};
@@ -243,7 +229,7 @@ public class Detail_Fragment extends Fragment
 
         switch (view.getId()) {
 
-            case R.id.movievideo_btn:
+            case R.id.movievideo_tv:
 
             case R.id.moviethumbnail_iv:
 
@@ -298,7 +284,7 @@ public class Detail_Fragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         //xx View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.moviedetails_ryclrv);
 
         ButterKnife.bind(this, rootView);
 

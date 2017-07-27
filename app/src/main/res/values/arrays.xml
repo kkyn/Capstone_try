@@ -2,15 +2,18 @@
 <resources>
 
     <string-array name="pref_movies_sortby_options">
-        <item>@string/pref_movies_sortby_popularity_label</item>
-        <item>@string/pref_movies_sortby_ratings_label</item>
-        <item>@string/pref_movies_sortby_ownfavourites_label</item>
+        <item>@string/pref_label_movies_sortby_popularity</item>
+        <item>@string/pref_label_movies_sortby_ratings</item>
+        <item>@string/pref_label_movies_sortby_ownfavorites</item>
+        <!--<item>@string/pref_label_movies_sortby_popularity</item>
+        <item>@string/pref_label_movies_sortby_ratings</item>
+        <item>@string/pref_label_movies_sortby_favorites</item>-->
     </string-array>
 
     <string-array name="pref_movies_sortby_values">
-        <item>@string/pref_movies_sortby_default_value</item>
-        <item>@string/pref_movies_sortby_ratings</item>
-        <item>@string/pref_movies_sortby_favourites</item>
+        <item>@string/pref_value_movies_sortby_default</item>
+        <item>@string/pref_value_movies_sortby_ratings</item>
+        <item>@string/pref_value_movies_sortby_favorites</item>
     </string-array>
 
 </resources>

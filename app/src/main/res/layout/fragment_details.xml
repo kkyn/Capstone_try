@@ -111,7 +111,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/movievideo_btn"
+                android:id="@+id/movievideo_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -122,13 +122,13 @@
                 android:id="@+id/favourite_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/movievideo_btn"
+                android:layout_toRightOf="@id/movievideo_tv"
                 android:background="#00ffffff"
                 android:src="@android:drawable/btn_star" />
             android:layout_below="@id/mvdtl_space"
             
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view_moviedetails"
+                android:id="@+id/moviedetails_ryclrv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical" />

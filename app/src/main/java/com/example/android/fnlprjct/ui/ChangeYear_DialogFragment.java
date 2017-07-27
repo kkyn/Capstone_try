@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.fnlprjct.Main_Fragment;
 import com.example.android.fnlprjct.R;
@@ -33,22 +32,21 @@ import butterknife.ButterKnife;
 //  https://developer.android.com/reference/android/app/DialogFragment.html
 //  https://developer.android.com/guide/topics/ui/dialogs.html
 //  https://developer.android.com/reference/android/app/AlertDialog.Builder.html
-    // https://developer.android.com/reference/android/widget/TextView.html
+//  https://developer.android.com/reference/android/widget/TextView.html
 
-public class ChangeYearDialogFragment extends DialogFragment
+public class ChangeYear_DialogFragment extends DialogFragment
                 implements SharedPreferences.OnSharedPreferenceChangeListener
-        // , MainFragement.callbackx
 {
 
-    private static final String LOG_TAG = ChangeYearDialogFragment.class.getSimpleName();
+    private static final String LOG_TAG = ChangeYear_DialogFragment.class.getSimpleName();
 
     // Empty constructor required for DialogFragment
-    public ChangeYearDialogFragment(){
+    public ChangeYear_DialogFragment(){
     }
 
-    public static ChangeYearDialogFragment
+    public static ChangeYear_DialogFragment
     newInstance(){
-        ChangeYearDialogFragment cyDialog = new ChangeYearDialogFragment();
+        ChangeYear_DialogFragment cyDialog = new ChangeYear_DialogFragment();
         return cyDialog;
     }
 
@@ -58,7 +56,9 @@ public class ChangeYearDialogFragment extends DialogFragment
     private void sendBackResult() {
         Bundle bundle = new Bundle();
         bundle.putString(Main_Fragment.DIALOG_KEY, enterYear_et.getText().toString());
+
         Intent intent = new Intent().putExtras(bundle);
+
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
 
     }
@@ -132,7 +132,7 @@ public class ChangeYearDialogFragment extends DialogFragment
         // +++++++++++ View Inflater Stuff ++++++++++++++
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 
-        View view = layoutInflater.inflate(R.layout.dialog_changeyear, null);
+        View view = layoutInflater.inflate(R.layout.dialogfragment_changeyear, null);
 
         ButterKnife.bind(this, view);
 
@@ -145,9 +145,11 @@ public class ChangeYearDialogFragment extends DialogFragment
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 //v.getText().toString();
-                Toast.makeText(getContext(),"--- " + v.getText().toString(), Toast.LENGTH_SHORT ).show();
-                Toast.makeText(getContext(),"Clicked search, setOnEditorActionListener", Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(getContext(),"--- " + v.getText().toString(), Toast.LENGTH_SHORT ).show();
+                Toast.makeText(getContext(),"Clicked search, setOnEditorActionListener", Toast.LENGTH_SHORT).show();*/
+
                 searchMoviesYear();
+
                 //return false;
                 return true;
             }
@@ -157,10 +159,10 @@ public class ChangeYearDialogFragment extends DialogFragment
         // +++++++++++ AlertDialog Builder Stuff ++++++++++++++
         dialogBuilder.setView(view);
         dialogBuilder.setTitle(R.string.dialog_title);
-        dialogBuilder.setMessage("Do not enter beyond this year");
+        dialogBuilder.setMessage(getString(R.string.dialog_comment));
 
         dialogBuilder.setPositiveButton(
-            getString(R.string.dialog_summit),
+            getString(R.string.dialog_submit),
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -186,12 +188,12 @@ public class ChangeYearDialogFragment extends DialogFragment
     // -------------------------------------------------
     private void searchMoviesYear() {
 
-        String yearKey = getResources().getString(R.string.pref_year_key);
+        String yearKey = getResources().getString(R.string.pref_key_year);
         String year = enterYear_et.getText().toString();
 
-        Toast.makeText(getContext(),
+        /*Toast.makeText(getContext(),
             "dialog> setPositiveButton> onClick> searchMoviesYear() > "
-                + yearKey + " - " + year, Toast.LENGTH_LONG).show();
+                + yearKey + " - " + year, Toast.LENGTH_LONG).show();*/
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = sp.edit();
@@ -212,12 +214,14 @@ public class ChangeYearDialogFragment extends DialogFragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        Toast.makeText(getContext(),"onSharedPreferenceChanged 0", Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(getContext(),"onSharedPreferenceChanged 0", Toast.LENGTH_SHORT).show();*/
 
-        if (key.equals(getResources().getString(R.string.pref_year_key))) {
+        if (key.equals(getResources().getString(R.string.pref_key_year))) {
 
-            Toast.makeText(getContext(),"onSharedPreferenceChanged 1", Toast.LENGTH_SHORT).show();
+            /*Toast.makeText(getContext(),"onSharedPreferenceChanged 1", Toast.LENGTH_SHORT).show();*/
+
             //getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
+
             getContext().getContentResolver().notifyChange(MovieContract.MovieInfoEntry.CONTENT_URI, null);
 
             MSyncAdapter.syncImmediately(getContext());

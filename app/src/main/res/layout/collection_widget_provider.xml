@@ -34,7 +34,7 @@
                 android:paddingLeft="@dimen/widget_header_padding"
                 android:paddingRight="@dimen/widget_header_padding"
                 android:paddingStart="@dimen/widget_header_padding"
-                android:text="@string/WidgetTitle"
+                android:text="@string/widget_title"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"/>

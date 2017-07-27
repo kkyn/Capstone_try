@@ -43,7 +43,7 @@ public class SettingsPreferenceActivity extends PreferenceActivity
 
         // Finds a Preference based on its key.
         // Preference mPreference = this.findPreference("Movies"); // -- or --
-        Preference mPreference = this.findPreference(getString(R.string.pref_movies_sort_key));
+        Preference mPreference = this.findPreference(getString(R.string.pref_key_movies_sortby));
 
         bindPreferenceSummaryToValue(mPreference);
     }
@@ -163,13 +163,13 @@ public class SettingsPreferenceActivity extends PreferenceActivity
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
 
-        if (key.equals(getString(R.string.pref_movies_sort_key))) {
+        if (key.equals(getString(R.string.pref_key_movies_sortby))) {
 
             String string = Utility.getPreferredSortSequence(this);
 
-            if (string.equals(getString(R.string.pref_movies_sortby_default_value)) ||
-                string.equals(getString(R.string.pref_movies_sortby_ratings)) ||
-                string.equals(getString(R.string.pref_movies_sortby_favourites))
+            if (string.equals(getString(R.string.pref_value_movies_sortby_default)) ||
+                string.equals(getString(R.string.pref_value_movies_sortby_ratings)) ||
+                string.equals(getString(R.string.pref_value_movies_sortby_favorites))
                )
             {
                 getContentResolver().notifyChange(MovieInfoEntry.CONTENT_URI, null);

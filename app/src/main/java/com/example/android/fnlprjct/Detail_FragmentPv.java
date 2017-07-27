@@ -19,6 +19,9 @@ import com.example.android.fnlprjct.adapter.PagerViewAdapter;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by kkyin on 7/6/2017.
  */
@@ -30,17 +33,18 @@ public class Detail_FragmentPv extends Fragment
     private static final int LOADER_ID = 4;
 
     private Cursor cursor;
-    private ViewPager pager;
+//--    private ViewPager pager;
     private PagerViewAdapter pagerAdapter;
 
     int currentPage;
-    Uri mUri;
     int movieId;
+    Uri mUri;
+
+//--    @BindView(R.id.viewpager) ViewPager pagerView;
+    @BindView(R.id.viewpager) ViewPager pager;
 
     public Detail_FragmentPv(){
     }
-
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,10 +80,10 @@ public class Detail_FragmentPv extends Fragment
             movieId = Integer.parseInt(MovieContract.MovieInfoEntry.getMovieId_FromMovieInfoUri(mUri));
         }
 
-
         View rootView = inflater.inflate(R.layout.page_view, container, false);
 
-        pager = (ViewPager) rootView.findViewById(R.id.viewpager);
+        ButterKnife.bind(this, rootView);
+//--        pager = (ViewPager) rootView.findViewById(R.id.viewpager);
 
         Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreateView  ) ) ) ) ) ) ");
 
@@ -117,6 +121,7 @@ public class Detail_FragmentPv extends Fragment
         Log.d(LOG_TAG, " ( ( ( ( ( ( (  onViewCreated  ) ) ) ) ) ) ");
     }
 
+    // ????
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -182,7 +187,7 @@ public class Detail_FragmentPv extends Fragment
         String[] selectionArg;
         String sortOrder;
 
-        if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
+        if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_default))) {
 
             projection = MyQuery.Popularity.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
@@ -190,7 +195,7 @@ public class Detail_FragmentPv extends Fragment
             sortOrder = MovieInfoEntry.COL_VOTE_COUNT + " DESC"; // ???? just change July12 2017
             //sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
 
-        } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
+        } else if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_ratings))) {
 
             projection = MyQuery.VoteAverage.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";

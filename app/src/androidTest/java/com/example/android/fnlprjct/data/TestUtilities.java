@@ -85,26 +85,9 @@ ContentValues expectedValues) {
         for (Map.Entry<String, Object> entry : valueSet) {
 
             String columnName = entry.getKey();
-          //  int idx = valueCursor.getColumnIndex(columnName);
-
-          //  String cColName = valueCursor.getColumnName(idx);
-
-          //  assertFalse("Column '" + columnName + "' not found. " + error, idx == -1);
 
             String expectedValue = entry.getValue().toString();
             Log.d("-- " + LOG_TAG,  "  +++ key: " + columnName + "  " + "value: " + expectedValue ); // tky add
-
-          //  Log.d("-- " + LOG_TAG,  "ColmnIndx: " + idx + "  " + "ColmnName: " + columnName + "  cColName: " + cColName + " value: " + expectedValue ); // tky add
-
-          //  assertEquals(
-          //      "Value '"
-          //          + entry.getValue().toString() // org.
-          //          //  + String.valueOf(idx)
-          //          //  + columnName
-          //          //    + valueCursor.getString(idx)
-          //          + "' did not match the expected value '" +
-          //          expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
-          //      //    expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
 
         }
     }
@@ -192,48 +175,6 @@ static void validateCursorValue(//String error,
     //++++++++++++++++++++++  END  +++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
-    /*
-        Students: You can uncomment this helper function once you have finished creating the
-        PopularEntry part of the MovieContract_x.
-    */
-//    static ContentValues createValues4MovieInfo(long rowId) {
-//
-//        return tValues;
-//    }
-//    static ContentValues createMovieInfoValues_1() {
-//
-//        return mContentValues;
-//    }
-
-    /*
-        Students: Use this to create some default MovieSelect values for your database tests.
-     */
-//    static ContentValues createPopularValues() {
-//
-//        // Create a new map of values, where column names are the keys
-//        ContentValues mContentValues = new ContentValues();
-//
-//        return mContentValues;
-//    }
-
-    /*
-        Students: You can uncomment this functReturn total number of columnsion once you have finished creating the
-        PopularEntry part of the MovieContract_x as well as the MovieDbHelperr.
-     */
-//    static long insertPopularValues(Context context) {
-//
-//        // insert our test records into the database
-//
-//        ContentValues testContentValues = TestUtilities.createPopularValues();
-//
-//        long popularRowId;
-//        popularRowId = db.insert(PopularEntry.TABLE_NAME, null, testContentValues);
-//
-//        // Verify we got a row back.
-//
-//        return popularRowId;
-//    }
-
 
     /*
         Students: The functions we provide inside of TestProvider use this utility class to test
@@ -287,30 +228,5 @@ static void validateCursorValue(//String error,
     static TestContentObserver getTestContentObserver() {
         return TestContentObserver.getTestContentObserver();
     }
-
-    //++++++++++++++++++++++++++===========
-    /*
-        Students: Use this to create some default Movie values for your database tests.
-     */
-//    static ContentValues createMovieValues() {
-//
-//        // Create a new map of values, where column names are the keys
-//
-//        return movieContentValues;
-//    }
-
-    //+++++++++++++++++++++++++++++++++++++++++++
-    /*
-        You can uncomment this function once you have finished creating the
-        MovieEntry part of the MovieContract_x as well as the MovieDbHelperr.
-    */
-//    static long insertMovieValues(Context context) {
-//
-//        // insert our test records into the database
-//
-//        // Verify we got a row back.
-//
-//        return movieRowId;
-//    }
 
 }

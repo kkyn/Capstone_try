@@ -27,11 +27,13 @@ public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_
         this.context = context;
     }
 
-    @Override // basic requirement
+    // basic requirement
+    @Override
     public Details_ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (parent instanceof RecyclerView) {
-            Log.d(LOG_TAG, "--xxxx--xxxx--xxxx--xxxx--xxxx-- viewType :- " + viewType);
+
+            /*Log.d(LOG_TAG, "--xxxx--xxxx--xxxx--xxxx--xxxx-- viewType :- " + viewType);*/
             int layout_id = -1;
             switch (viewType) {
                 case VIEW_TYPE_A: {
@@ -44,9 +46,8 @@ public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_
                 }
             }
             View view = LayoutInflater.from(context).inflate(layout_id, parent, false);
-            //View view = LayoutInflater.from(parent.getContext()).inflate(layout_id, parent, false);
 
-            // * Control whether a view can take focus
+            // Control whether a view can take focus
             view.setFocusable(true);
 
             Details_ViewHolder details_ViewHolder = new Details_ViewHolder(view);
@@ -58,13 +59,13 @@ public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_
         else {
             throw new RuntimeException("Not bound to RecyclerViewSelection");
         }
-
-       // return null;
     }
 
     @Override // basic requirement
     public void onBindViewHolder(Details_ViewHolder holder, int position) {
+
         if (mCursor.moveToPosition(position)) {
+
             holder.Reviewer_tv.setText(mCursor.getString(Detail_Fragment.INDX_1_REVIEWER));
             holder.Review_tv.setText(mCursor.getString(Detail_Fragment.INDX_1_REVIEWCONTENT));
         }
@@ -79,7 +80,7 @@ public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_
 
     public void swapCursor(Cursor newCursor) {
 
-        Log.d(LOG_TAG, "** swapCursor() --");
+        /*Log.d(LOG_TAG, "** swapCursor() --");*/
 
         mCursor = newCursor;
 
@@ -93,13 +94,13 @@ public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_
 
         public final TextView Reviewer_tv;
         public final TextView Review_tv;
+
         public Details_ViewHolder(View itemView) {
             super(itemView);
             Reviewer_tv = (TextView) itemView.findViewById(R.id.Reviewer_textView);
             Review_tv = (TextView) itemView.findViewById(R.id.Review_textView);
         }
     }
-
     //--------------------------------------
     //---- End,   ViewHolder definition ----
     //--------------------------------------

@@ -3,7 +3,6 @@ package com.example.android.fnlprjct.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import com.example.android.fnlprjct.DynamicHeightNetworkImageView;
 import com.example.android.fnlprjct.ImageLoaderHelper;
 import com.example.android.fnlprjct.Main_Fragment;
 import com.example.android.fnlprjct.R;
-import com.example.android.fnlprjct.data.MovieContract;
+import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,63 +30,63 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
     private Cursor mCursor;
 
     //------------------------------------------------------
-    //-------- ViewHolder stuff (begin) --------------------
+    //-------- (Begin) ViewHolder stuff --------------------
     //------------------------------------------------------
     /**
      * Cache of the children views for a movies list item.
      */
     public class MainRcyclrVw_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @BindView(R.id.poster_imageview) public DynamicHeightNetworkImageView poster_imageview;
+        @BindView(R.id.poster_imageview) public DynamicHeightNetworkImageView poster_networkimageview;
 
         public MainRcyclrVw_ViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
 
-            poster_imageview.setOnClickListener(this);
+            poster_networkimageview.setOnClickListener(this);
         }
 
         // Implement the OnClickListener callback, i.e. onClick(View);
         @Override
         public void onClick(View view) {
-            Log.d(LOG_TAG, "** Movie_ViewHolder.onClick");
+            /*Log.d(LOG_TAG, "** Movie_ViewHolder.onClick");*/
 
             switch (view.getId()){
+
                 case R.id.poster_imageview : /*frgmntm_imageview*/
                     clickListener.onClick0(this); // 'this' refers to this 'ViewHolder'
                     break;
+
                 default: break;
             }
         }
     }
     //------------------------------------------------------
-    //-------- ViewHolder stuff (end) ----------------------
+    //-------- (End) ViewHolder stuff ----------------------
     //------------------------------------------------------
 
     //------------------------------------------------------
-    //-------- RecyclerView.Adapter stuff  (begin) ---------
+    //-------- (Begin) RecyclerView.Adapter stuff  ---------
     //------------------------------------------------------
     final private Context context;
-    final private ItemClickListener clickListener; // "IttemClickHandler0" , "ittmClckHndlr"
+    final private ItemClickListener clickListener; // "ItemClickHandler0" , "ittmClckHndlr"
 
     // Declaration of interface listener, i.e. ItemClickListener,
     // for this RecyclerView Adapter, i.e. MainRcyclrVw_Adapter
-    //
     public interface ItemClickListener {
 
         void onClick0(MainRcyclrVw_ViewHolder viewHolder);
     }
 
-    // * provide  a suitable constructor( depends on the kind of data-set / how u want to interface ? )
-    public MainRcyclrVw_Adapter(Context context, ItemClickListener clickListener) { // "ittemClickHandler"
-        // super(context);
+    // Provide a suitable constructor( depends on the kind of data-set / how u want to interface ? )
+    public MainRcyclrVw_Adapter(Context context, ItemClickListener clickListener) { // "itemClickHandler"
         this.context = context;
         this.clickListener = clickListener;
     }
 
-    // * Called when RecyclerView needs a new 'RecyclerView.ViewHolder' of the given type to represent an item.
-    // * Locate new views( invoked by the LayoutManager )
+    // Called when RecyclerView needs a new 'RecyclerView.ViewHolder' of the given type to represent an item.
+    // Locate new views( invoked by the LayoutManager )
     @Override // RecyclerView.Adapter basic requirement
     public MainRcyclrVw_ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -95,15 +94,18 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
 
             int layout_id = -1;
             switch (viewType) {
+
                 case VIEW_TYPE_A: {
                     layout_id = R.layout.movie_poster; /*cardview_movie*/
                     break;
                 }
             }
-            // * Create a new view
+
+            // Create a new view
             View view = LayoutInflater.from(parent.getContext()).inflate(layout_id, parent, false);
 
-            view.setFocusable(true);    // * Control whether a view can take focus
+            // Control whether a view can take focus
+            view.setFocusable(true);
 
             MainRcyclrVw_ViewHolder viewHolder = new MainRcyclrVw_ViewHolder(view);
 
@@ -117,9 +119,9 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
     }
 
     // * To update the RecyclerView.ViewHolder contents with the item at the given position
-    // and also sets up some private fields to be used by RecyclerView.
+    //      and also sets up some private fields to be used by RecyclerView.
     // * Called by RecyclerView to display the data at the specified position.
-    // This method should update the contents of the itemView to reflect the item at the given position.
+    //   This method should update the contents of the itemView to reflect the item at the given position.
     // * You should only use the 'position' parameter while acquiring the related data item inside this method
     // * Replace the contents of a view ( invoked by the layout manager )
     //
@@ -137,7 +139,6 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
         if (mCursor.moveToPosition(position)) {
 
             // ++++++++++++++++++++++++++++++++++++++++++
-            // ++++++++++++++++++++++++++++++++++++++++++
             ImageLoader imageLoader = ImageLoaderHelper.getInstance(context).getImageLoader();
 
             // Get Image-info from ImageLoader-object,
@@ -145,13 +146,15 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
 
             String stringUrl = mCursor.getString(Main_Fragment.COLUMN_POSTERLINK);
 
-            // -- thumb-nail-View --
-            // .setImageUrl -- define in ImageView
-            viewHolder.poster_imageview.setImageUrl(stringUrl,imageLoader);
+            String string2 = mCursor.getString(Main_Fragment.COLUMN_MOVIE_TITLE);
+            viewHolder.poster_networkimageview.setContentDescription(string2);
 
-            viewHolder.poster_imageview.setAspectRatio(0.66f); // 1.5f, // --combo 1 --
-            viewHolder.poster_imageview.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
-            viewHolder.poster_imageview.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
+            // .setImageUrl -- define in ImageView
+            viewHolder.poster_networkimageview.setImageUrl(stringUrl,imageLoader);
+
+            viewHolder.poster_networkimageview.setAspectRatio(0.66f); // 1.5f, // --combo 1 --
+            viewHolder.poster_networkimageview.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
+            viewHolder.poster_networkimageview.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
 //                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);
 //                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_START);
             // ++++++++++++++++++++++++++++++++++++++++++
@@ -193,13 +196,14 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
     }
 
     /*
-     Return the view type of the item at position for the purposes of view recycling.
+     Return the view-type of the item at position for the purposes of view recycling.
      The default implementation of this method returns 0,
        making the assumption of a single view type for the adapter.
-     Consider using id resources to uniquely identify item view types.
+     Consider using id resources to uniquely identify item view-types.
     */
     @Override
     public int getItemViewType(int position) {
+
         return super.getItemViewType(position);
     }
 
@@ -212,11 +216,12 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
 
     @Override
     public long getItemId(int position) {
+
         int columnIndex=0;
+
         if (mCursor != null && mCursor.moveToPosition(position)) {
 
-           // columnIndex = mCursor.getColumnIndex("MovieID");
-            columnIndex = mCursor.getColumnIndex(MovieContract.MovieInfoEntry.COL_MOVIE_ID);
+            columnIndex = mCursor.getColumnIndex(MovieInfoEntry.COL_MOVIE_ID);
 
             return mCursor.getLong(columnIndex);
         }

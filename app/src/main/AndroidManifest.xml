@@ -16,10 +16,16 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:supportsRtl="true"
+        >
+
+        <!--This meta-data tag is required to use Google Play Services.-->
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+
         <activity
             android:name=".Main_Activity"
-            android:label="@string/app_name1"> <!-- also refers to the label name of the start-icon -->
+            android:label="@string/app_name_1"> <!-- also refers to the label name of the start-icon -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -69,14 +75,31 @@
         </service>
 
         <!-- Step-3b -->
+        <!-- NOTE: need to add this (android:exported="true") so widget
+            can access the content provider located in this app -->
         <provider
             android:name=".data.MovieProvider"
             android:authorities="com.example.android.fnlprjct"
             android:syncable="true"
             android:exported="true"/>
 
-        <receiver android:name=".widget.CollectionWidgetProvider">
+        <!-- BEGIN, For Collection Widget -->
+        <!-- We'll need to add two entries to our manifest for our collection view widget -->
+
+        <!-- 1. The broadcast receiver that refers to our widget. This needs the
+                intent-filter android.appwidget.action.APPWIDGET_UPDATE and the
+                meta-data for our XML widget configuration -->
+        <!-- This specifies a new class ExampleAppWidgetProvider which will be
+                responsible for receiving APPWIDGET_UPDATE intents.  -->
+        <!-- Step (B) -->
+        <!--  specifies the AppWidgetProvider used by the App Widget -->
+        <receiver android:name=".widget.CollectionWidgetProvider"
+                  android:label="@string/widget_name"
+            > -- broadcast-receiver element --
+
             <intent-filter>
+                <!-- specifies that the AppWidgetProvider accepts the ACTION_APPWIDGET_UPDATE broadcast from
+                 the AppWidgetManager-->
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
@@ -85,8 +108,18 @@
                 android:resource="@xml/collection_widget_provider_info"/>
         </receiver>
 
+        <!-- 2. The service that will send our collection data to our widget. It needs the
+                                permission android.permission.BIND_REMOTEVIEWS -->
         <service android:name=".widget.WidgetService"
                  android:permission="android.permission.BIND_REMOTEVIEWS"/>
+        <!-- END, For Collection Widget -->
+
+
+        <!--Include the AdActivity configChanges and theme. -->????
+        <activity android:name="com.google.android.gms.ads.AdActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+                  android:theme="@android:style/Theme.Translucent" />
+
     </application>
 
 </manifest>

@@ -44,13 +44,12 @@ import butterknife.ButterKnife;
  */
 public class Detail_Fragment1 extends Fragment
                              implements
-                             // LoaderManager.LoaderCallbacks<Cursor>,
                               SharedPreferences.OnSharedPreferenceChangeListener
                             , View.OnClickListener
 {
 
+    // Required empty public constructor
     public Detail_Fragment1() {
-        // Required empty public constructor
         //setHasOptionsMenu(true);
     }
 
@@ -62,18 +61,19 @@ public class Detail_Fragment1 extends Fragment
     public static Detail_Fragment1 newInstance(int itemId) {
 
         Bundle arguments = new Bundle();
-        arguments.putInt(ITEMID_KEY, itemId); // ?? itemId ??
-       /// arguments.putInt("MyKey1", itemId); // ?? itemId ??
+               arguments.putInt(ITEMID_KEY, itemId);
 
         Detail_Fragment1 fragment = new Detail_Fragment1();
+                         fragment.setArguments(arguments);
 
-        fragment.setArguments(arguments);
         return fragment;
     }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private static final String LOG_TAG = Detail_Fragment1.class.getSimpleName();
     private static final String ITEMID_KEY = "ItemID_Key";
+
+    static final String DETAIL_URI = "URI";
 
     private static final int DETAIL_MOVIE_LOADER = 3;
     private static final int MOVIE_REVIEW_LOADER = 4;
@@ -82,52 +82,29 @@ public class Detail_Fragment1 extends Fragment
     private Uri uri;
     private int mItemId;
 
-    static final String DETAIL_URI = "URI";
-    static final String MOVIE_ID = "MovieID";
+    //static final String MOVIE_ID = "MovieID";
     private String videoId;
 
     private DetailRcyclrVw_Adapter detailsAdapter;
-    String trgtShrdElmtTrnstn;
+    private String targetSharedElementTransition;
     public boolean isFavouriteEnabled = false;
 
     private AnimatedVectorDrawable emptyHeart;
     private AnimatedVectorDrawable fillHeart;
-    ///////////////////////////////////////////////
-    /*private static final String[] PROJECTION_MOVIE_REVIEW =
-        new String[]{
-            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry._ID,
-            MovieReviewEntry.TABLE_NAME + "." + MovieReviewEntry.COL_MOVIE_ID,
-            MovieReviewEntry.COL_REVIEWER,
-            MovieReviewEntry.COL_REVIEWCONTENT
-    };
-    //public static final int PROJECTION_RATING_ID = 0;
-    //public static final int INDX_1_MOVIE_ID = 1;
-    public static final int INDX_1_REVIEWER = 2;
-    public static final int INDX_1_REVIEWCONTENT = 3;*/
 
-    ///////////////////////////////////////////////
-
-    /*@BindView(R.id.movietitle_tv)
-    TextView movietitle;*/
-    /*@BindView(R.id.moviethumbnail_iv) ImageView moviethumbnail;*/
+    /*@BindView(R.id.movietitle_tv) TextView movietitle;*/
     @BindView(R.id.moviethumbnail_iv) DynamicHeightNetworkImageView  moviethumbnail;
-
     @BindView(R.id.moviereleasedate_tv) TextView moviereleasedate;
     @BindView(R.id.movieratings_tv) TextView movieratings;
     @BindView(R.id.moviesynopsis_tv) TextView moviesynopsis;
-    @BindView(R.id.movievideo_btn) ImageView movievideo;
-    //@BindView(R.id.movievideo_btn) Button movievideo;
-    @BindView(R.id.favourite_btn) /*ImageButton*/ ImageView moviefavourite; // ImageView > ImageButton > FloatingActionButton
+    @BindView(R.id.movievideo_tv) ImageView movievideo;
+    @BindView(R.id.favourite_btn) ImageView moviefavourite; // ImageView > ImageButton > FloatingActionButton
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.recycler_view_moviedetails) RecyclerView recyclerView;
+    @BindView(R.id.moviedetails_ryclrv) RecyclerView recyclerView;
 
-    //Toolbar toolbar;
-    private TextView mTextView;
-    //private DynamicHeightNetworkImageView moviethumbnail;
     //-----------------------------------------------------------
     //-- for FetchMoviesDbAsyncTask_1 ... AsyncTask<...> Stuff ----
     //-----------------------------------------------------------
-
     public class FetchComplete implements FetchMoviesDbAsyncTask.OnAsyncTaskCompletedListener {
 
         @Override
@@ -163,8 +140,10 @@ public class Detail_Fragment1 extends Fragment
     //-----------------------------------------------------------
     //-----------------------------------------------------------
     private void removeFromFavourites(String movieID) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
+
+        ContentValues
+            contentValues = new ContentValues();
+            contentValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
 
         String select = MovieInfoEntry.COL_MOVIE_ID + "=?";
         String[] selectArg = new String[]{movieID};
@@ -181,7 +160,7 @@ public class Detail_Fragment1 extends Fragment
     private void saveToFavourites(String movieID) {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieInfoEntry.COL_FAVOURITES, 1);
+                      contentValues.put(MovieInfoEntry.COL_FAVOURITES, 1);
 
         String select = MovieInfoEntry.COL_MOVIE_ID + "=?";
         String[] selectArg = new String[]{movieID};
@@ -198,7 +177,9 @@ public class Detail_Fragment1 extends Fragment
 
     private boolean checkFavourites(String movieID) {
 
-        String selection = MovieInfoEntry.COL_MOVIE_ID + "=?" + " AND " + MovieInfoEntry.COL_FAVOURITES + "=?";
+        String selection = MovieInfoEntry.COL_MOVIE_ID + "=?"
+                            + " AND "
+                            + MovieInfoEntry.COL_FAVOURITES + "=?";
         String[] selectionArg = new String[]{movieID, "1"};
 
         Boolean favouritesBoolean = false;
@@ -232,19 +213,13 @@ public class Detail_Fragment1 extends Fragment
 
         switch (view.getId()) {
 
-            case R.id.movievideo_btn:
-
-           // case R.id.moviethumbnail_iv: // commented to disable 'click' to start movie video
+            case R.id.movievideo_tv:
 
                 //...................
                 // TODO: call DBAsyncTAsk , call method FetchComplete()
                 //
                 FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
-                mTask.execute(movieID);
-
-                /*String mVideoPath = "vnd.youtube:" + videoId;
-                Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mVideoPath));
-                startActivity(mIntent);*/
+                                       mTask.execute(movieID);
 
                 break;
 
@@ -320,8 +295,6 @@ public class Detail_Fragment1 extends Fragment
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details1, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_moviedetails);
-
         ButterKnife.bind(this, rootView);
 
         movievideo.setOnClickListener(this);
@@ -330,14 +303,12 @@ public class Detail_Fragment1 extends Fragment
         emptyHeart = (AnimatedVectorDrawable) getActivity().getDrawable(R.drawable.avd_heart_empty);
         fillHeart = (AnimatedVectorDrawable) getActivity().getDrawable(R.drawable.avd_heart_fill);
         // ----------------------
-      //  moviethumbnail = (DynamicHeightNetworkImageView) rootView.findViewById(R.id.moviethumbnail_iv);
-        //moviethumbnail.setOnClickListener(this);
+
         moviefavourite.setOnClickListener(this);
 
-        trgtShrdElmtTrnstn = getString(R.string.shared_name) + mItemId;
-        //trgtShrdElmtTrnstn = "photo" + mItemId;
+        targetSharedElementTransition = getString(R.string.shared_name) + mItemId;
 
-        ViewCompat.setTransitionName(moviethumbnail, trgtShrdElmtTrnstn);
+        ViewCompat.setTransitionName(moviethumbnail, targetSharedElementTransition);
         /// moviethumbnail
         // **************************************
         // --- old way ?? ---
@@ -354,6 +325,7 @@ public class Detail_Fragment1 extends Fragment
         if (toolbar != null ){
 
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            toolbar.setNavigationContentDescription(getString(R.string.descriptor_backarrow)); // tky add, working
 
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -371,19 +343,7 @@ public class Detail_Fragment1 extends Fragment
                     // onSupportNavigateUp();
                 }
             });
-            toolbar.setTitle("HELLO");
-
-            // tky comment,
-            // ? color of text, no effect, the color is dependent on the accentColor in styles
-            // --------
-            //toolbar.setTitleTextColor(0xffaff000);
-            //@color/primary_text
-            //toolbar.setTitleTextColor(getResources().getColor(R.color.pink_a400));
-//            toolbar.setTitleTextColor(getResources().getColor(android.R.color.primary_text_light));
-
-            /*((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);*/ ///?????
-
-            //toolbar.setSubtitle("HELLO_Man");
+            /*toolbar.setTitle("HELLO");*/
 
         }
         // **************************************
@@ -429,24 +389,20 @@ public class Detail_Fragment1 extends Fragment
         super.onStart();    //Log.d(LOG_TAG, "++++ 3 onStart() --");
     }
 
-    @Override
+    @Override   // ++++ 5
     public void onPause() {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                          sp.unregisterOnSharedPreferenceChangeListener(this);
 
-        sp.unregisterOnSharedPreferenceChangeListener(this);
-        //sp.unregisterOnSharedPreferenceChangeListener(listener);
-
-        super.onPause();    //Log.d(LOG_TAG, "++++ 5 onPause() --");
+        super.onPause();
     }
 
     @Override
     public void onResume() {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        sp.registerOnSharedPreferenceChangeListener(this);
-        //sp.registerOnSharedPreferenceChangeListener(listener);
+                          sp.registerOnSharedPreferenceChangeListener(this);
 
         super.onResume();
     }
@@ -463,11 +419,8 @@ public class Detail_Fragment1 extends Fragment
     //-- LoaderManager.LoaderCallbacks<Cursor> ------------------
     //----------- LOADER Stuff ----------------------------------
     //-----------------------------------------------------------
-    //    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new MyTryLoader(context, mUri);
-    //    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new MyTryLoader(this.getActivity(), mUri);
-    //    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new MyTryLoader(getActivity(), mUri);
-    //    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new MyTryLoader(getContext(), mUri);
-    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 = new LoaderManager.LoaderCallbacks<Cursor>()
+    private LoaderManager.LoaderCallbacks<Cursor> detailsLoaderCallback_0 =
+                                new LoaderManager.LoaderCallbacks<Cursor>()
     {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -486,24 +439,14 @@ public class Detail_Fragment1 extends Fragment
                 moviereleasedate.setText(cursor.getString(MyQuery.MovieInfo.COL_RELEASEDATE));
 
                 String string = Utility.getPreferredSortSequence(getContext());
-                if (string.equals(getString(R.string.pref_movies_sortby_ratings))){
+                if (string.equals(getString(R.string.pref_value_movies_sortby_ratings))){
                     movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_VOTE_AVERAGE));
                 }else{
                     movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_VOTE_COUNT));
                 }
-                //movieratings.setText(cursor.getString(MyQuery.MovieInfo.COL_VOTE_AVERAGE));
 
                 moviesynopsis.setText(cursor.getString(MyQuery.MovieInfo.COL_OVERVIEW));
 
-                // ++++++++++++++++++++++++++++++++++++++++++
-                /*Picasso.with(getContext())
-                    .load(cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK))
-                    .placeholder(R.drawable.sample_1)
-                    .error(R.drawable.sample_0)
-                    .fit()  //  .resize(600,200)
-                      .centerCrop()
-                    .into(moviethumbnail);*/
-                // ++++++++++++++++++++++++++++++++++++++++++
                 // -------------------------------
                 // ---- Using Volley, begin ------
                 // -------------------------------
@@ -516,7 +459,6 @@ public class Detail_Fragment1 extends Fragment
                 // -- thumb-nail-View --
                 // .setImageUrl -- define in ImageView
                 moviethumbnail.setImageUrl(stringUrl, imageLoader);
-
                 moviethumbnail.setAspectRatio(0.66f); // 1.0f, 1.5f, 0.66f     // --combo 1 --,-- combo2,1.0f --, combo3,1.0f
                 //moviethumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
                 moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
@@ -537,11 +479,6 @@ public class Detail_Fragment1 extends Fragment
                 // -------------------------------
                 scheduleStartPostponedTransition(moviethumbnail);
 
-                /*Picasso.with(getContext()).load(cursor.getString(INDX_BACKDROP_PATH))
-                        .placeholder(R.drawable.sample_1)
-                        .error(R.drawable.sample_0)
-                        .into(moviethumbnail);*/
-
                 int favouriteValue = cursor.getInt(MyQuery.MovieInfo.COL_FAVOURITES);
 
                 if (favouriteValue == 1) {
@@ -555,12 +492,6 @@ public class Detail_Fragment1 extends Fragment
                     emptyHeart.start();
 
                 }
-                //...................
-                // TODO: call DBAsyncTAsk , call method FetchComplete()
-                //
-                /*FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
-                mTask.execute(cursor.getString(INDX_MOVIE_ID));*/
-                //...................
 
                 cursor.close();
             }
@@ -584,7 +515,6 @@ public class Detail_Fragment1 extends Fragment
                     }
                 });
         }
-
         ////////////////////////////////////////////////////////////
     };
 
@@ -616,6 +546,4 @@ public class Detail_Fragment1 extends Fragment
             detailsAdapter.swapCursor(null);
         }
     };
-
-
 }

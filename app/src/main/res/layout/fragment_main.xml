@@ -1,11 +1,19 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
 <!--<FrameLayout ...-->
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_above="@id/spacer"
     android:fitsSystemWindows="true">
 
     <!-- Use of Toolbar as/for App-Bar/Action-Bar, (A) -->
@@ -130,6 +138,26 @@
         />
 </android.support.design.widget.CoordinatorLayout>
 
+    <View    android:layout_width="match_parent"
+             android:layout_height="8dp"
+             android:id="@+id/spacer"
+             android:layout_above="@+id/adView"
+        />
+    android:background="#ffffff"
+
+    <com.google.android.gms.ads.AdView
+
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/my_admob_ap_id">
+
+    </com.google.android.gms.ads.AdView>
+</RelativeLayout>
 
 <!-- ++++++++++++++++++++++++++++++++++++++++++++ -->
 <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

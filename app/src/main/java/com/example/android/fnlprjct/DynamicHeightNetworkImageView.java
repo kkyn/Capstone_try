@@ -28,7 +28,7 @@ public class DynamicHeightNetworkImageView extends NetworkImageView {
 
         String aString = Float.toString(mAspectRatio);
 
-        Log.d(LTAG, " -- " + aString + " --");
+        /*Log.d(LTAG, " -- " + aString + " --");*/
 
         // Toast.makeText(getContext(), "-- "+ aString + " --", Toast.LENGTH_LONG).show();
 

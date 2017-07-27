@@ -280,6 +280,7 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
             if (alreadyExist) {
                 return null;
             }
+
             // If you don't set android:syncable="true" in
             // in your <provider> element in the manifest,
             // then call ContentResolver.setIsSyncable(account, AUTHORITY, 1) here.
@@ -343,6 +344,7 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
         } else {
             ContentResolver.addPeriodicSync(account, authority, new Bundle(), syncInterval);
 
+            // ????
             //---------------------------------------------
             // tky add, July17 2017
             //Utility.BroadcastMessage();
@@ -352,7 +354,6 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
             getAppContext().sendBroadcast(intent);*/
             //getAppContext().sendBroadcast(intent);
             //---------------------------------------------
-
 
         }
     }

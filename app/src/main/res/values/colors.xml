@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- tky add, june6 2017 -->
+
     <color name="lime_300">#DCE775</color>
     <color name="lime_500">#CDDC39</color>
     <color name="lime_700">#AFB42B</color>
@@ -11,4 +11,5 @@
     <color name="lightgray">#ECEFF1</color>
     <color name="purple_500">#9c27B0</color>
     <color name="orange_500">#ff9800</color>
+
 </resources>

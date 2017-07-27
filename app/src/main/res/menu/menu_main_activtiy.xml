@@ -2,12 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Main_Activity">
-<!--    <item
+
+    <!--<item
         android:id="@+id/highest_rated"
         android:orderInCategory="1"
         android:title="@string/highest_rated"
-        />
-        -->
+        />-->
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

@@ -46,12 +46,6 @@ public class Utility {
     private static final String PARAM_RELEASE_DATE = "primary_release_year";
     private static final String PARAM_VOTECOUNT_GRTR = "vote_count.gte";
 
-//    private static final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/"; //"http://api.themoviedb.org/3/"
-//    private static final String MOVIE_ = "movie";
-//    private static final String VIDEOS_ = "videos";
-//    private static final String REVIEWS_ = "reviews";
-//    private static final String PARAM_API_KEY = "api_key";
-
     static Uri uri;
 //    static Uri buildUri;
 //    static URL url;
@@ -66,11 +60,10 @@ public class Utility {
         // Retrieve a String value from the preferences.
         // getString(String key, String defValue)
 
-        String mstring = context.getString(R.string.pref_movies_sort_key);
-        String mstringDefault = context.getString(R.string.pref_movies_sortby_default_value);
-        //    String mstring = String.valueOf((R.string.pref_sortmovies_key));
+        String mKey = context.getString(R.string.pref_key_movies_sortby);
+        String mDefaultSequence = context.getString(R.string.pref_value_movies_sortby_default);
 
-        String string = sharedPreferences.getString(mstring, mstringDefault);
+        String string = sharedPreferences.getString(mKey, mDefaultSequence);
 
         /*Log.d(LOG_TAG, "1111 getPreferredSortSequence -- actualSortSeq : " + string);*/
 
@@ -80,19 +73,16 @@ public class Utility {
     public static String getPreferredYear(Context context) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String year = sharedPreferences.getString(context.getString(R.string.pref_year_key), context.getResources().getString(R.string.default_year));
-//        String year = sharedPreferences.getString(context.getString(R.string.pref_year_key), "2015");
+        String year = sharedPreferences.getString(context.getString(R.string.pref_key_year), context.getResources().getString(R.string.default_year));
 
         return year;
-        //return null;
     }
-    //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
     // /**************************************************/
     /******************* Movie Reviews *******************/
     /*****************************************************/
     public static void get_MovieReviews(Context context, int[] movieIDArray) throws IOException, JSONException { //MalformedURLException,
         // public static void get_MovieReviews(Context context, long[] movieIDArray) throws  IOException, JSONException{ //MalformedURLException,
-
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -325,42 +315,31 @@ public class Utility {
     /***************************************************************/
     public static Uri formUri_4_MovieInfo(Context context) {
 
-//        final String DISCOVER_ = "discover";
-//        final String MOVIE_ = "movie";
-//        final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
-//
-//        final String PARAM_API_KEY = "api_key";
-//        final String PARAM_SORT_BY = "sort_by";
-//        final String PARAM_COUNTRY = "certification_country";
-//        final String PARAM_RELEASE_DATE = "primary_release_year";
-//        final String PARAM_VOTECOUNT_GRTR = "vote_count.gte";
-
-        //final String REF_YEAR = "2017";
-
         String year = Utility.getPreferredYear(context);
         String sortBy = Utility.getPreferredSortSequence(context);
 
+        // e.g. http://api.themoviedb.org/3/
         // (1) build the Url ---Begin--------
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL);
         Uri.Builder uriBuilder = uri.buildUpon();
 
+        // e.g. http://api.themoviedb.org/3/discover/movie?api_key=xxxxxx
+        //          &sort_by=xxx&certification_country=US&primary_release_year=2017&vote_count.gte=50
         uriBuilder
             .appendPath(DISCOVER_)       // postfix a '/', e.g. discover/
             .appendEncodedPath(MOVIE_)  // postfix a '?', e.g. movie?
             .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY) // e.g. api_key=xxxxxx
             .appendQueryParameter(PARAM_SORT_BY, sortBy)            // sort_by=xxx
-            .appendQueryParameter(PARAM_COUNTRY, context.getString(R.string.certification_country)/*"US"*/)              // certification_country=US
+            .appendQueryParameter(PARAM_COUNTRY, context.getString(R.string.certification_country))              // certification_country=US
 
-            //.appendQueryParameter(PARAM_RELEASE_DATE, REF_YEAR)     // primary_release_year=2017
             .appendQueryParameter(PARAM_RELEASE_DATE, year)             // primary_release_year=2017
-
-            .appendQueryParameter(PARAM_VOTECOUNT_GRTR, context.getString(R.string.vote_count_gte)/*"50"*/);      // vote_count.gte=50
+            .appendQueryParameter(PARAM_VOTECOUNT_GRTR, context.getString(R.string.vote_count_gte));      // vote_count.gte=50
 
         uri = uriBuilder.build();
 
-        String aStrng;
+        /*String aStrng;
         aStrng = uri.toString();
-        Log.d(LOG_TAG, " ---- " + aStrng);
+        Log.d(LOG_TAG, " ---- " + aStrng);*/
         //-----End--------
 
         return uri;
@@ -510,20 +489,6 @@ public class Utility {
         final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
         final String POSTER_PATH = "poster_path";
         final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
-
-        // long rowId;
-//        final String RESULTS = "results";
-//        final String ID = "id";
-//        final String ORIGINAL_TITLE = "original_title";
-//        final String POSTER_PATH = "poster_path";
-//        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
-//        final String OVERVIEW = "overview";       // plot -- synopsis
-//        final String RELEASE_DATE = "release_date";
-//        final String VOTE_AVERAGE = "vote_average";   // user rating
-//        final String VOTE_COUNT = "vote_count";
-//        final String POPULARITY = "popularity";
-//
-//        final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
 
         // W92 = "w92/"; W154 = "w154/";
         // W185 = "w185/"; W342 = "w342/";

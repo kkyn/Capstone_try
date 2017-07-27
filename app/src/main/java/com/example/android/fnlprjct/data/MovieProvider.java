@@ -143,8 +143,6 @@ public class MovieProvider extends ContentProvider {
     //------------------------------------//
     //---------- Movie Info --------------//
     //------------------------------------//
-    // Table_X_MovieInfo.MovieID = ?
-    //
     private static final String selection_MovieInfo_WithMovieId =
             MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry.COL_MOVIE_ID + " = ?";
 
@@ -164,8 +162,6 @@ public class MovieProvider extends ContentProvider {
     //------------------------------------//
     //---------- Movie Review ------------//
     //------------------------------------//
-    // Table_X_MovieReview.MovieID = ?
-    //
     private static final String selection_MovieReview_WithMovieId =
             MovieReviewEntry.TABLE_NAME + "." + MovieContract.MovieReviewEntry.COL_MOVIE_ID + " = ?";
 
@@ -236,9 +232,9 @@ public class MovieProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
 
-        Log.d(LOG_TAG, "---- In MovieProvider / onCreate()  ----");  // tky add
+        Log.d(LOG_TAG, "---- In MovieProvider / onCreate()  ----");
+
         // Create/Reference the Database ( movie.db ) associated to this content provider
-        //
         mvsSqLtOpnHlpr = new MovieSQLiteOpenHelper(getContext());
         return true;
     }

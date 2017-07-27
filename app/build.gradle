@@ -29,7 +29,12 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'THE_MOVIE_DB_API_KEY', MyTheMovieDb_ApiKey
     }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/2'] } }
+    sourceSets {
+        main { java.srcDirs = ['src/main/java', 'src/main/java/2'] }
+        release {
+            java.srcDirs = ['src/release/java', 'src/release/java/', 'src/release/java/2', 'src/release/java/com/example/android/fnlprjct']
+        }
+    }
 }
 
 repositories {
@@ -68,8 +73,28 @@ dependencies {
     // -- tky removed -----------
     compile 'com.squareup.picasso:picasso:2.5.2'
 
+    // tky add ----- FireBase
+    //--------------------------------------
+    // com.google.firebase:firebase-core is a recommended
+    // alias for the com.google.firebase:firebase-analytics library.
+    compile 'com.google.firebase:firebase-core:11.0.2'  // service: analytics
+
+    // tky add ----- have/enable google analytics operational
+    // Google Play Services for Analytics
+    compile 'com.google.android.gms:play-services-analytics:11.0.2'
+
+    // tky add ----- Import the Mobile Ads SDK
+    compile 'com.google.firebase:firebase-ads:11.0.2'
 
 }
+
+// Add to the bottom of the file
+// tky add,
+// ---- cause/trigger the loading of file 'google-services.json'.
+// ---- include Analytics by default.
+apply plugin: 'com.google.gms.google-services'
+
+
 //testCompile 'com.facebook.stetho:stetho:1.3.1'
 //debugCompile 'com.facebook.stetho:stetho:1.3.1'
 // compile 'com.facebook.stetho:stetho:1.3.1'

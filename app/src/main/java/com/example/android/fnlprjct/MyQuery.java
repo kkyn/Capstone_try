@@ -30,6 +30,7 @@ public class MyQuery {
                 , MovieInfoEntry.COL_MOVIE_ID
                 , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
                 , MovieInfoEntry.COL_POSTERLINK
+                , MovieInfoEntry.COL_ORIGINAL_TITLE
             };
     }
     //-------------------------------------------------
@@ -43,6 +44,7 @@ public class MyQuery {
                 , MovieInfoEntry.COL_MOVIE_ID
                 , MovieInfoEntry.COL_VOTE_AVERAGE + " as sort_column"
                 , MovieInfoEntry.COL_POSTERLINK
+                , MovieInfoEntry.COL_ORIGINAL_TITLE
                 , MovieInfoEntry.COL_YEAR
             };
     }
@@ -58,9 +60,27 @@ public class MyQuery {
                 //, MovieInfoEntry.COL_POPULARITY + " as sort_column"
 
                 , MovieInfoEntry.COL_POSTERLINK
+                , MovieInfoEntry.COL_ORIGINAL_TITLE
                 , MovieInfoEntry.COL_YEAR
             };
     }
+    /*
+    static final int COLUMN_POPULAR_ID;
+    static final int COLUMN_MV_ID;
+    static final int COLUMN_KEY_ID;
+    public static final int COLUMN_POSTERLINK;
+    static final int COLUMN_BACKDROP_PATH;
+    public static final int COLUMN_MOVIE_TITLE;
+
+    static {
+        COLUMN_POPULAR_ID = 0;
+        COLUMN_MV_ID = 1;
+        COLUMN_KEY_ID = 2;
+        COLUMN_POSTERLINK = 3;
+        COLUMN_MOVIE_TITLE = 4;
+        COLUMN_BACKDROP_PATH = 5;
+    }
+     */
     //-------------------------------------------------
     public interface MovieInfo {
 
@@ -90,25 +110,5 @@ public class MyQuery {
         int COL_VOTE_AVERAGE = 7;
         int COL_VOTE_COUNT = 8;
         int COL_YEAR = 9;
-
-        /*String[] PROJECTION = {
-            ItemsContract.Items._ID,
-            ItemsContract.Items.TITLE,
-            ItemsContract.Items.PUBLISHED_DATE,
-            ItemsContract.Items.AUTHOR,
-            ItemsContract.Items.THUMB_URL,
-            ItemsContract.Items.PHOTO_URL,
-            ItemsContract.Items.ASPECT_RATIO,
-            ItemsContract.Items.BODY,
-        };
-
-        int _ID = 0;
-        int TITLE = 1;
-        int PUBLISHED_DATE = 2;
-        int AUTHOR = 3;
-        int THUMB_URL = 4;
-        int PHOTO_URL = 5;
-        int ASPECT_RATIO = 6;
-        int BODY = 7;*/
     }
 }

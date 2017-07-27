@@ -33,7 +33,7 @@
     android:background="@color/photo_placeholder"
 
     <!--<ImageView
-        android:id="@+id/poster_imageview"
+        android:id="@+id/poster_networkimageview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -50,7 +50,7 @@
     >
 
     <ImageView
-        android:id="@+id/poster_imageview"
+        android:id="@+id/poster_networkimageview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

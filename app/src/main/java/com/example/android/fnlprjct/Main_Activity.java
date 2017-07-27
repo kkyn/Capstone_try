@@ -1,12 +1,10 @@
 package com.example.android.fnlprjct;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +12,9 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.android.fnlprjct.sync.MSyncAdapter;
+import com.google.android.gms.analytics.Tracker; // need instance of 'google-service.json'
+
+import static com.example.android.fnlprjct.MyApplication.getAppContext;
 
 public class Main_Activity extends AppCompatActivity implements Main_Fragment.CallBackListener {
 
@@ -22,15 +23,17 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
 
     public boolean is2Pane = false;
 
-    private int displayMode;
-    private String mode;
+    /*private int displayMode;
+    private String mode;*/
 
-    private int mPosition = RecyclerView.NO_POSITION;
+    /*private int mPosition = RecyclerView.NO_POSITION;
     private long itemID = 0;
-    private Uri uri;
+    private Uri uri;*/
+
+    private Tracker mTracker;
 
     ////////////////////////////////////
-    @Override //--- 2
+    @Override   //--- 2
     protected void onPause() {
         super.onPause();
     }
@@ -47,19 +50,23 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         super.onDestroy();
     }
     ////////////////////////////////////
-    @Override
+    @Override   //--- 1
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override   //--- 2
     protected void onResume() {
         super.onResume();
 
-       displayMode = getResources().getConfiguration().orientation;
-
-        mode = (displayMode==1)? "portrait" :"landscape";
+        /*displayMode = getResources().getConfiguration().orientation;
+        mode = (displayMode == 1) ? "portrait" : "landscape";*/
 
         // displayMode -> 1 ==> portrait, 2 ==> landscape
 
         FragmentManager fMngr = getSupportFragmentManager();
 
-        Main_Fragment mainFragment = (Main_Fragment) fMngr.findFragmentById(R.id.container_fragment_main);
+        Main_Fragment mainFragment = (Main_Fragment) fMngr.findFragmentById(R.id.mainfragment_container);
 
         if ( mainFragment != null ) {
             mainFragment.myRestartLoaderCode();
@@ -67,7 +74,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     }
 
 
-    @Override
+    @Override    //--- 0
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -87,9 +94,8 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         // layout 'activity_main.xml' opens a fragment via 'android:name' attribute,
         // so no need to use getSupportFragmentManager,..fragmentTransaction,..add,..commit.
 
-        displayMode = getResources().getConfiguration().orientation;
-
-        mode = (displayMode==1)? "portrait" :"landscape";
+        /*displayMode = getResources().getConfiguration().orientation;
+        mode = (displayMode==1)? "portrait" :"landscape";*/
 
         // ToDO : add fragmentTransaction
         // The view with 'id' only exist within layout 'activity_main.xml' file,
@@ -99,6 +105,12 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         }
 
         MSyncAdapter.initializeSyncAdapter(this);
+
+        //--- Begin, Shared-Tracker -----
+        // Obtain the shared Tracker instance.
+        MyApplication application = (MyApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        //--- End,   Shared-Tracker -----
     }
 
     //------------------------------------------------
@@ -149,11 +161,11 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     /*@Override
     public void onItemSelectedInRecyclerView(MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder viewHolder, long itemId) {
 
-        ImageView poster_imageview1 = viewHolder.poster_imageview;
-        //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_imageview;
+        ImageView poster_imageview1 = viewHolder.poster_networkimageview;
+        //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_networkimageview;
 
-        final Pair<View, String> pair1 = Pair.create((View)poster_imageview1, viewHolder.poster_imageview.getTransitionName());
-        //final Pair<View, String> pair1 = new Pair<>((View)poster_imageview1, viewHolder.poster_imageview.getTransitionName());
+        final Pair<View, String> pair1 = Pair.create((View)poster_imageview1, viewHolder.poster_networkimageview.getTransitionName());
+        //final Pair<View, String> pair1 = new Pair<>((View)poster_imageview1, viewHolder.poster_networkimageview.getTransitionName());
 
         // http://guides.codepath.com/android/shared-element-activity-transition
         ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(Main_Activity.this, pair1);

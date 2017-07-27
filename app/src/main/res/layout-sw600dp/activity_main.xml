@@ -33,9 +33,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_centerInParent="true"
-        android:layout_above="@id/container_fragment_main"/>
+        android:layout_above="@id/mainfragment_container"/>
     <fragment
-        android:id="@+id/container_fragment_main"
+        android:id="@+id/mainfragment_container"
         android:name="com.example.android.fnlprjct.Main_Fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

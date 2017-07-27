@@ -43,11 +43,15 @@ import com.example.android.fnlprjct.adapter.MainRcyclrVw_Adapter;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
-import com.example.android.fnlprjct.ui.ChangeYearDialogFragment;
+import com.example.android.fnlprjct.ui.ChangeYear_DialogFragment;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.android.fnlprjct.MyApplication.getAppContext;
 /**
  * A placeholder fragment (Main_Fragment) containing a simple view.
  */
@@ -58,6 +62,7 @@ public class Main_Fragment extends Fragment
 {
     // constructor
     public Main_Fragment() {
+        setHasOptionsMenu(true); // ???????
     }
 
     public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
@@ -69,20 +74,24 @@ public class Main_Fragment extends Fragment
     private long itemID = 0;
     private Uri uri;
 
+    AdRequest adRequest;
+
     private static final int MOVIE_FRAGMENT_ID = 0; // constant definition
 
-    static final int COLUMN_POPULAR_ID;
+    /*static final int COLUMN_POPULAR_ID;
     static final int COLUMN_MV_ID;
-    static final int COLUMN_KEY_ID;
+    static final int COLUMN_KEY_ID;*/
     public static final int COLUMN_POSTERLINK;
-    static final int COLUMN_BACKDROP_PATH;
+    public static final int COLUMN_MOVIE_TITLE;
+    /*static final int COLUMN_BACKDROP_PATH;*/
 
     static {
-        COLUMN_POPULAR_ID = 0;
+        /*COLUMN_POPULAR_ID = 0;
         COLUMN_MV_ID = 1;
-        COLUMN_KEY_ID = 2;
+        COLUMN_KEY_ID = 2;*/
         COLUMN_POSTERLINK = 3;
-        COLUMN_BACKDROP_PATH = 4;
+        COLUMN_MOVIE_TITLE = 4;
+        /*COLUMN_BACKDROP_PATH = 5;*/
     }
     public static final int DIALOG_REQUEST_CODE = 1;
     public static final String DIALOG = "changeyear";
@@ -96,8 +105,8 @@ public class Main_Fragment extends Fragment
 
         FragmentManager fm = getFragmentManager();
 
-        ChangeYearDialogFragment
-            chngyrDialog = ChangeYearDialogFragment.newInstance();
+        ChangeYear_DialogFragment
+            chngyrDialog = ChangeYear_DialogFragment.newInstance();
             chngyrDialog.setTargetFragment(this, DIALOG_REQUEST_CODE); // 1 : say is Constants.DIALOG_REQUEST_CODE
             chngyrDialog.show(fm, DIALOG);
 
@@ -128,6 +137,7 @@ public class Main_Fragment extends Fragment
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.main_recyclerview) RecyclerView mainRyclrVw;
     @BindView(R.id.error) TextView error;
+    @BindView(R.id.adView) AdView bannerView; // ??? ... need instance of 'google-service.json'
 
     //-------------------------
     //--- Interface stuff -----
@@ -175,6 +185,15 @@ public class Main_Fragment extends Fragment
         super.onDestroyView();  //Log.d(LOG_TAG, "---- 7 onDestroyView() --");
     }
 
+    /** Called before the fragment is destroyed */
+    @Override
+    public void onDestroy() {
+        if (bannerView != null) {
+            bannerView.destroy();
+        }
+        super.onDestroy();
+    }
+
     @Override // --- 0 ----
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,8 +212,9 @@ public class Main_Fragment extends Fragment
 
         if (tool_bar != null ) {
             // ++++++++++++++++++++++++
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-            String str = sp.getString(getString(R.string.pref_year_key), "2017");
+            /*SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String str = sp.getString(getString(R.string.pref_year_key), getString(R.string.default_year));
+            //String str = sp.getString(getString(R.string.pref_year_key), "2017");*/
 
             // ++++++++++++++++++++++++
             // Sets the Toolbar to act as the ActionBar for this Activity window.
@@ -228,6 +248,7 @@ public class Main_Fragment extends Fragment
         super.onStart();
     }
 
+    /** Called when returning to the fragment */
     @Override //---- 4 ----
     public void onResume() {
 
@@ -240,8 +261,13 @@ public class Main_Fragment extends Fragment
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this); //  help maintain position ??
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // tky add, copied, july26-2017
+        if (bannerView != null) {
+            bannerView.resume();
+        }
     }
 
+    /** Called when leaving the fragment */
     @Override //--- 5 ----
     public void onPause() {
 
@@ -249,6 +275,10 @@ public class Main_Fragment extends Fragment
             sp = PreferenceManager.getDefaultSharedPreferences(getContext()/*getActivity()*/);
             sp.unregisterOnSharedPreferenceChangeListener(this);
 
+        // tky add, copied, july26-2017
+        if (bannerView != null) {
+            bannerView.pause();
+        }
         super.onPause();
     }
 
@@ -268,7 +298,7 @@ public class Main_Fragment extends Fragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        if (key.equals(getString(R.string.pref_movies_sort_key))) {
+        if (key.equals(getString(R.string.pref_key_movies_sortby))) {
 
             getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
 
@@ -308,14 +338,14 @@ public class Main_Fragment extends Fragment
 
         uri = MovieInfoEntry.CONTENT_URI;
 
-        if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
+        if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_default))) {
 
             projection = MyQuery.Popularity.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
             selectionArg = new String[]{searchYear};
             sortOrder = MovieInfoEntry.COL_VOTE_COUNT + " DESC";
 
-        } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
+        } else if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_ratings))) {
 
             projection = MyQuery.VoteAverage.PROJECTION;
             selection = MovieInfoEntry.COL_YEAR + "=?";
@@ -402,13 +432,15 @@ public class Main_Fragment extends Fragment
         inflater.inflate(R.menu.menu_main_fragment, menu);
     }
 
+    // This hook is called whenever an item in your options menu is selected.
+    // Return false to allow normal menu processing to proceed, true to consume it here.
     @Override public boolean
     onOptionsItemSelected(MenuItem item) {
 
         // get the file, SharedPreferences
         // Gets a SharedPreferences instance that points to the default file
         // that is used by the preference framework in the given context.
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         // Create a new Editor for these preferences, through which you can make modifications to
         // the data in the preferences and atomically commit those changes back to the SharedPreferences object.
@@ -418,7 +450,7 @@ public class Main_Fragment extends Fragment
 
         if (id == R.id.most_popular) {
             // Set a String value in the preferences editor, to be written back once commit() or apply() are called.
-            editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_default_value));
+            editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_default));
 
             // Commit your preferences changes back from this Editor to the SharedPreferences object it is editing.
             editor.commit();
@@ -427,7 +459,7 @@ public class Main_Fragment extends Fragment
             return true;
         }
         else if (id == R.id.most_rated) {
-            editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_ratings));
+            editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_ratings));
             editor.commit();
             //editor.apply();
 
@@ -435,7 +467,7 @@ public class Main_Fragment extends Fragment
             return true;
         }
         else if (id == R.id.my_favorites) {
-            editor.putString(getString(R.string.pref_movies_sort_key), getString(R.string.pref_movies_sortby_favourites));
+            editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_favorites));
             editor.commit();
             //editor.apply();
             actionBar.setTitle(UpdateActionBarTitle());
@@ -454,23 +486,23 @@ public class Main_Fragment extends Fragment
         int option = 0;
 
         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_default_value))) {
+        if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_default))) {
 
-            category = getString(R.string.Most_Popular);
+            category = getString(R.string.most_popular);
             option = 1;
-        } else if (sortMoviesBy.equals(getString(R.string.pref_movies_sortby_ratings))) {
+        } else if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_ratings))) {
 
-            category = getString(R.string.Highest_Rated); //"Highest Rated";
+            category = getString(R.string.highest_rated); //"Highest Rated";
             option = 1;
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
 
-            category = getString(R.string.My_Favourites); //"My Favourites";
+            category = getString(R.string.my_favorites); //"My Favourites";
             option = 2;
         }
         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
         String title;
-        if(option==1){title = "FINAL_PROJECT : " + year + " : " + category;}
-        else         {title = "Final_PROJECT : " + category;}
+        if(option==1){title = getString(R.string.main_title) + "   " + year + " : " + category;}
+        else         {title = getString(R.string.main_title) + "   " + " : " + category;}
         return title;
     }
     //------------------------------------------------
@@ -520,14 +552,14 @@ public class Main_Fragment extends Fragment
 
                     String srcView_SharedElementTransition = getString(R.string.shared_name) + itemID;
 
-                    viewHolder.poster_imageview.setTransitionName(srcView_SharedElementTransition);
+                    viewHolder.poster_networkimageview.setTransitionName(srcView_SharedElementTransition);
 
                     // ????????????????????
-                    ImageView poster_imageview1 = viewHolder.poster_imageview;
-                    //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_imageview;
+                    ImageView poster_imageview1 = viewHolder.poster_networkimageview;
+                    //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_networkimageview;
 
-                    final Pair<View, String> pair1 = Pair.create((View) poster_imageview1, viewHolder.poster_imageview.getTransitionName());
-                    //final Pair<View, String> pair1 = new Pair<>((View)poster_imageview1, viewHolder.poster_imageview.getTransitionName());
+                    final Pair<View, String> pair1 = Pair.create((View) poster_imageview1, viewHolder.poster_networkimageview.getTransitionName());
+                    //final Pair<View, String> pair1 = new Pair<>((View)poster_imageview1, viewHolder.poster_networkimageview.getTransitionName());
 
                     // http://guides.codepath.com/android/shared-element-activity-transition
                     ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pair1);
@@ -550,7 +582,7 @@ public class Main_Fragment extends Fragment
                     String srcView_SharedElementTransition = getString(R.string.shared_name) + itemID;
                     //String srcView_SharedElementTransition = "photo" + itemID;
 
-                    viewHolder.poster_imageview.setTransitionName(srcView_SharedElementTransition);
+                    viewHolder.poster_networkimageview.setTransitionName(srcView_SharedElementTransition);
 
                     mainCallBackListener.onItemSelectedInRecyclerView(viewHolder, itemID);*/
 
@@ -595,6 +627,7 @@ public class Main_Fragment extends Fragment
         }
 
         // +++++++++++++++++++++++++++++++++++++++++++++
+        editfab.setContentDescription(getString(R.string.descriptor_changeyear));
         editfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -604,7 +637,7 @@ public class Main_Fragment extends Fragment
                 /*Toast.makeText(getContext(), "AAAAAAAA edit_fab_clicked ", Toast.LENGTH_SHORT).show();*/
                 // https://developer.android.com/reference/android/app/DialogFragment.html
                 // Create and show the dialog.
-                /*new ChangeYearDialogFragment().show(getFragmentManager(), "Show_DialogFragment");*/
+                /*new ChangeYear_DialogFragment().show(getFragmentManager(), "Show_DialogFragment");*/
             }
         });
         // +++++++++++++++++++++++++++++++++++++++++++++
@@ -614,6 +647,19 @@ public class Main_Fragment extends Fragment
             android.R.color.holo_green_light,
             android.R.color.holo_orange_light,*/
             android.R.color.holo_red_light);
+
+        // +++++++++++++++++++++++++++++++++++++++++++++
+        //--- Begin, Initialize the Mobile Ads SDK -----
+        MobileAds.initialize(getActivity(), getString(R.string.my_admob_ap_id));
+        //--- End  , Initialize the Mobile Ads SDK -----
+
+        //--- Begin, AdMob's:  AdRequest.Builder,  BannerAd stuff ------
+        adRequest = new AdRequest.Builder()
+            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+            //.addTestDevice("23234f2377b3bd95")  // identify my physical device to connect
+            .build();
+        bannerView.loadAd(adRequest);
+        //--- End,  AdMob's:  AdRequest.Builder,  BannerAd stuff ------
 
         return rootView;
     }
