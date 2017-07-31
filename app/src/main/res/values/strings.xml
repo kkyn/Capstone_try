@@ -51,7 +51,7 @@
     <string name="pref_value_movies_sortby_ratings" translatable="false">vote_average.desc</string> <!--popularity.desc-->
     <string name="pref_value_movies_sortby_favorites" translatable="false">favourites.desc</string>
 
-    <string name="empty_movie_list">No Movie Information Available</string>
+    <string name="empty_movie_list" translatable="false">No Movie Information Available</string>
 
     <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Key name:'Year', used in accessing SharedPreferences values -->
@@ -103,6 +103,8 @@
     <string name="descriptor_backarrow">Return to previous interface</string>
 
 
-    <string name="my_admob_ap_id">ca-app-pub-3940256099942544/6300978111</string>
-    <!--<string name="my_admob_ap_id">ca-app-pub-9984201472519181~8798952934</string>-->
+    <string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <!--<string name="my_admob_ap_id" translatable="false">ca-app-pub-9984201472519181~8798952934</string>-->
+
+    <string name="beyondthisyearmessage">Please do not enter a number beyond this year</string>
 </resources>

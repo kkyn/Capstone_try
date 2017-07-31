@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.android.fnlprjct.adapter.PagerViewAdapter;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +40,9 @@ public class Detail_FragmentPv extends Fragment
     int currentPage;
     int movieId;
     Uri mUri;
+
+    // Firebase-Analytics, ----- (step1) Declare a variable
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 //--    @BindView(R.id.viewpager) ViewPager pagerView;
     @BindView(R.id.viewpager) ViewPager pager;
@@ -64,7 +68,8 @@ public class Detail_FragmentPv extends Fragment
 
         Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreate  ) ) ) ) ) ) ");
 
-
+        // Firebase-Analytics ---- (step2) Obtain a FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
     }
 
     @Nullable
@@ -103,6 +108,22 @@ public class Detail_FragmentPv extends Fragment
                 currentPage = position;
 
                 //pagerAdapter.notifyDataSetChanged();
+
+                //???????????????????????????????
+                // Firebase-Analytics ---- (step3) generate FirebaseAnalytics.logEvent
+                // Begin, movie-selection event
+                cursor.moveToPosition(currentPage);
+
+                // [START image_view_event]
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, cursor.getString(MyQuery.Popularity.COL_MOVIE_ID));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, cursor.getString(MyQuery.Popularity.COL_ORIGINAL_TITLE));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "selection_vp");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                // [END image_view_event]
+
+                // End, movie-selection event
+                //???????????????????????????????
             }
             @Override
             public void onPageScrollStateChanged(int state) {

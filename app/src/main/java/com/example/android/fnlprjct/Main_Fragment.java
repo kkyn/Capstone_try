@@ -47,6 +47,7 @@ import com.example.android.fnlprjct.ui.ChangeYear_DialogFragment;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,7 +75,10 @@ public class Main_Fragment extends Fragment
     private long itemID = 0;
     private Uri uri;
 
+    // Firebase-Ads, ----(step1) Declare a variable
     AdRequest adRequest;
+    // Firebase-Analytics, ----- (step1) Declare a variable
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static final int MOVIE_FRAGMENT_ID = 0; // constant definition
 
@@ -203,6 +207,9 @@ public class Main_Fragment extends Fragment
         // options menu by receiving a call to onCreateOptionsMenu(Menu, MenuInflater)
         // and related methods.
         setHasOptionsMenu(true);    //Log.d(LOG_TAG, "---- 0 onCreate() --");
+
+        // Firebase-Analytics ---- (step2) Obtain a FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
     }
 
     // onViewCreated() is called immediately after onCreateView() method.
@@ -262,6 +269,7 @@ public class Main_Fragment extends Fragment
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this); //  help maintain position ??
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // tky add, copied, july26-2017
+        // Resume the AdView.
         if (bannerView != null) {
             bannerView.resume();
         }
@@ -276,6 +284,7 @@ public class Main_Fragment extends Fragment
             sp.unregisterOnSharedPreferenceChangeListener(this);
 
         // tky add, copied, july26-2017
+        // Pause the AdView.
         if (bannerView != null) {
             bannerView.pause();
         }
@@ -553,6 +562,20 @@ public class Main_Fragment extends Fragment
                     String srcView_SharedElementTransition = getString(R.string.shared_name) + itemID;
 
                     viewHolder.poster_networkimageview.setTransitionName(srcView_SharedElementTransition);
+
+                    //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    // Firebase-Analytics ---- (step3) generate FirebaseAnalytics.logEvent
+                    // Begin, movie-selection event
+                    //  recordMovieImage(viewHolder);
+                    String movieName = rvAdapter.getItemName(mPosition);
+                    Bundle mbundle = new Bundle();
+                    mbundle.putString(FirebaseAnalytics.Param.ITEM_ID, Long.toString(itemID));
+                    mbundle.putString(FirebaseAnalytics.Param.ITEM_NAME, movieName );
+                    mbundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "selection");
+
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, mbundle);
+                    // End, movie-selection event
+                    //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
                     // ????????????????????
                     ImageView poster_imageview1 = viewHolder.poster_networkimageview;

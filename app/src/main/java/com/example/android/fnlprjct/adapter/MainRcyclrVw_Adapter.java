@@ -228,4 +228,17 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
         return columnIndex;
        // return super.getItemId(position);
     }
+
+    public String getItemName(int position) {
+        int columnIndex=0;
+        if (mCursor != null && mCursor.moveToPosition(position)) {
+
+            // columnIndex = mCursor.getColumnIndex("MovieID");
+            columnIndex = mCursor.getColumnIndex(MovieInfoEntry.COL_ORIGINAL_TITLE);
+
+            return mCursor.getString(columnIndex);
+        }
+        return "Error Not Title";
+    }
+
 }

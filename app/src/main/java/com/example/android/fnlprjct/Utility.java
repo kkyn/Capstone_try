@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -49,6 +51,14 @@ public class Utility {
     static Uri uri;
 //    static Uri buildUri;
 //    static URL url;
+
+    public static int getThisYearValue() {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        return year;
+    }
 
     public static String getPreferredSortSequence(Context context) {
         //public static String getPreferredSortSequence(Context context) {
