@@ -1,21 +1,24 @@
 <resources>
-    <!-- referenced in Manifest.xml (label name for app), autenticator.xml,  SyncAdapter.java -->
+
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
+    <!-- referenced in Manifest.xml (label name for app), authenticator.xml,  SyncAdapter.java -->
     <string name="app_name" translatable="false">My Final Project</string>
 
     <!-- referenced in Manifest.xml (label name for mainActivty), title of start-app icon -->
-    <string name="app_name_1" translatable="false">My FinalProject</string>
+    <string name="label_main_activity" translatable="false">My FinalProject</string>
 
-    <string name="main_title">Final Project</string>
+    <string name="label_detail_activity" translatable="false">Detail Activity</string>
 
-    <string name="title_activity_detailmovie" translatable="false">DetailmovieActivity</string>
+    <string name="title_main_ui">Final Project</string>
 
-    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- SyncAdapter related -->
     <string name="sync_account_type" translatable="false">movies.example.com</string> <!-- name something different -->
     <string name="content_authority" translatable="false">com.example.android.fnlprjct</string> <!-- name of the content provider -->
     <!--<string name="content_authority">com.example.android.myproject_2</string>--> <!-- name of the content provider -->
 
-    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- used in menu-bar, list of items -->
     <string name="most_popular">Most Popular</string>
     <string name="highest_rated">Highest Rated</string>
@@ -23,7 +26,7 @@
     <string name="action_settings">Settings</string>
     <!--<string name="highest_count" translatable="false">Highest Count</string>-->
 
-    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in Preference UI -->
     <!-- Label for the sort movies preference -->
     <!--<string name="pref_movies_sort_title">Sort Movies by :</string>-->
@@ -39,7 +42,7 @@
     <string name="pref_label_movies_sortby_ratings">Ratings</string>
     <string name="pref_label_movies_sortby_favorites">Favourites</string>-->
 
-    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in Shared-Preference -->
     <!-- Key name in SharedPreferences for sort-movies preference  -->
     <string name="pref_key_movies_sortby" translatable="false">Movies</string>
@@ -53,48 +56,36 @@
 
     <string name="empty_movie_list" translatable="false">No Movie Information Available</string>
 
-    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Key name:'Year', used in accessing SharedPreferences values -->
     <string name="pref_key_year" translatable="false">Year</string>
 
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <!--<string name="hello_blank_fragment">Hello blank fragment</string>-->
-
-    <!--   <string name="pref_sortmovies_by_ratings" translatable="false">ratings</string>
- -->
-
-    !--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    !--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- used in shared-element-transition -->
     <string name="shared_name" translatable="false">photo</string>
 
-    <!--<string name="appwidget_text">MY-MOVIE-WIDGET</string>-->
-    <!--<string name="appwidget_text">EXAMPLE</string>-->
-    <!--<string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>-->
-
-    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in widget -->
-    <string name="widget_title" translatable="false">Top Movies</string>
-    <string name="widget_name" translatable="false">MyWidget</string>
-    <!--<string name="pref_year_title">Select Year :</string>-->
-    <!--<string name="pref_year_key" translatable="false">Year</string>-->
+    <string name="widget_title">Top Movies</string>
+    <string name="widget_name">My Movie Widget</string>
 
-    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in dialog-fragment -->
     <string name="dialog_title">Enter Year of Interest</string>
     <string name="dialog_comment">Do not enter beyond this year</string>
     <string name="dialog_submit">Submit</string>
     <string name="dialog_cancel">Cancel</string>
-    <string name="dialog_hint">Enter example 2017</string>
+    <string name="dialog_hint" translatable="false">Year [e.g. 2017]</string>
     <string name="default_year">2017</string>
 
-    <!--  +++++++++++++++++++++++++++++++++++++++++++  -->
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in getting movies from internet stuff -->
     <string name="certification_country" translatable="false">US</string>
     <string name="vote_count_gte" translatable="false">50</string>
 
     <string name="error_no_network">No network connectivity! \nWill load top movie list when the network is available.</string>
+    <string name="error_not_beyond_this_year">Please do not enter a number beyond this year.</string>
+    <string name="error_no_title_found">No Title Found</string>
 
     <string name="descriptor_changeyear">Select another year</string>
     <string name="descriptor_setfavorite">Set favourite button</string>
@@ -102,9 +93,9 @@
     <string name="descriptor_movieclip">Start Movie Trailer</string>
     <string name="descriptor_backarrow">Return to previous interface</string>
 
-
-    <string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
+    <!-- Used in AdMob -->
+    <string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string> <!-- test id -->
     <!--<string name="my_admob_ap_id" translatable="false">ca-app-pub-9984201472519181~8798952934</string>-->
 
-    <string name="beyondthisyearmessage">Please do not enter a number beyond this year</string>
 </resources>

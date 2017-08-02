@@ -7,9 +7,7 @@ import android.provider.BaseColumns;
 
 import com.example.android.fnlprjct.R;
 
-/*
- * Created by kkyin on 6/1/2016.
- */
+
 public class MovieContract {
 
     // Step-1

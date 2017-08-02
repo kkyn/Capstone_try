@@ -15,9 +15,7 @@ import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieVideosEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieFavouritesEntry;
 
-/*
- * Created by kkyin on 22/1/2016.
- */
+
 // * Content providers implement functionality based upon URIs passed to them.
 // * The defined URIs for this content provider will be used to
 //      execute different types of operations against the underlying SQL database.

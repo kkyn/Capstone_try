@@ -30,9 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-/*
- * Created by kkyin on 1/7/2016.
- */
+
 public class Utility {
     public static String LOG_TAG = Utility.class.getSimpleName();
 
@@ -48,9 +46,6 @@ public class Utility {
     private static final String PARAM_RELEASE_DATE = "primary_release_year";
     private static final String PARAM_VOTECOUNT_GRTR = "vote_count.gte";
 
-    static Uri uri;
-//    static Uri buildUri;
-//    static URL url;
 
     public static int getThisYearValue() {
         Date date = new Date();
@@ -181,9 +176,8 @@ public class Utility {
 
             int size = contentResolver.bulkInsert(MovieReviewEntry.CONTENT_URI, arrayCV);
         }
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     }
+
     /*****************************************************/
     /******************* Movie Video *********************/
     /*****************************************************/
@@ -193,9 +187,6 @@ public class Utility {
         // so that they can be closed in the finally block.
         HttpURLConnection httpUrlConnection; // = null;
         BufferedReader bufferedReader; // = null;
-
-        // Will contain the raw JSON response as a string.
-//        String movieInfoInJsonStr;// = null;
 
         Uri uri;
         URL url;
@@ -347,150 +338,21 @@ public class Utility {
 
         uri = uriBuilder.build();
 
-        /*String aStrng;
-        aStrng = uri.toString();
-        Log.d(LOG_TAG, " ---- " + aStrng);*/
         //-----End--------
 
         return uri;
     }
 
-    /*****************************************************/
-    /******************* Movie INFO **********************/
-    /*****************************************************/
-    // =================================================
-    // tky add, called at MSyncAdapter
-//    public static long[] get_MovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
-//        //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
-//
-//        // long rowId;
-//        final String RESULTS = "results";
-//        final String ID = "id";
-//        final String ORIGINAL_TITLE = "original_title";
-//        final String POSTER_PATH = "poster_path";
-//        final String BACKDROP_PATH = "backdrop_path";  // movie poster image thumbnail
-//        final String OVERVIEW = "overview";       // plot -- synopsis
-//        final String RELEASE_DATE = "release_date";
-//        final String VOTE_AVERAGE = "vote_average";   // user rating
-//        final String VOTE_COUNT = "vote_count";
-//        final String POPULARITY = "popularity";
-//
-//        final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
-//
-//        // W92 = "w92/"; W154 = "w154/";
-//        // W185 = "w185/"; W342 = "w342/";
-//        // W342 = "w342/"; W500 = "w500/";
-//        // W780 = "w780/"; ORIGINAL = "original/";
-//
-//        final String W342 = "w342/";
-//        final String W780 = "w780/";
-//        final String W500 = "w500/";
-//        final String ORIGINAL = "original/";
-//
-//        Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
-//
-//        //-------------------
-//        JSONArray resultsJSONArray = moviesJsonObj.getJSONArray(RESULTS);
-//
-//        //JSONObject movies_JSONObject = new JSONObject(moviesJsonStr);
-//        //JSONArray resultsJSONArray = movies_JSONObject.getJSONArray(RESULTS);
-//        //-------------------
-//
-//        long[] movie_IDs = new long[resultsJSONArray.length()];
-//
-//        //++++++++++++++++++
-////        Vector<ContentValues> mVofCV = new Vector<ContentValues>(resultsJSONArray.length());
-//        Vector<ContentValues> Vctr = new Vector<ContentValues>();
-//        //++++++++++++++++++
-//        for (int i = 0; i < resultsJSONArray.length(); i++) {
-//
-//            JSONObject aJSONObject = resultsJSONArray.getJSONObject(i);
-//
-//            long mvId = aJSONObject.getLong(ID);
-//            String mvOrgTitle = aJSONObject.getString(ORIGINAL_TITLE);
-//            String mvOverview = aJSONObject.getString(OVERVIEW); // plot synopsis
-//            String mvVoteAverage = aJSONObject.getString(VOTE_AVERAGE);  // user rating
-//            long mvVoteCount = aJSONObject.getLong(VOTE_COUNT);  // user, sum number of votes
-//            String mvPopularity = aJSONObject.getString(POPULARITY);
-//            String mvReleaseDate = aJSONObject.getString(RELEASE_DATE);
-//
-//            String mvPosterPath = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
-//            String mvBackDropPath = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
-//            //String mvBackDropPath = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
-//
-//            movie_IDs[i] = mvId;
-//
-//            ContentValues cv = new ContentValues();
-//
-//            cv.put(MovieInfoEntry.COL_MOVIE_ID, mvId);    // Adds a value to the set.
-//            cv.put(MovieInfoEntry.COL_ORIGINAL_TITLE, mvOrgTitle);
-//            cv.put(MovieInfoEntry.COL_RELEASE_DATE, mvReleaseDate);
-//            cv.put(MovieInfoEntry.COL_POPULARITY, mvPopularity);
-//            cv.put(MovieInfoEntry.COL_VOTE_AVERAGE, mvVoteAverage);
-//            cv.put(MovieInfoEntry.COL_VOTE_COUNT, mvVoteCount);
-//            cv.put(MovieInfoEntry.COL_FAVOURITES, 0);
-//            cv.put(MovieInfoEntry.COL_OVERVIEW, mvOverview);
-//            cv.put(MovieInfoEntry.COL_POSTERLINK, mvPosterPath);
-//            cv.put(MovieInfoEntry.COL_BACKDROPLINK, mvBackDropPath);
-//
-//            //Log.d(LOG_TAG, "---------- get_MovieInfoFromJson --------- ");
-//
-//            if (!is_movieInDataBase(context, cv)) {
-//                Vctr.add(cv);
-//                Log.d(LOG_TAG, "+++++++++++++++  ADD INTO VECTOR  +++++++++++++++");
-//            }
-//            //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-//            add_MovieInfo(cv, context);
-//
-//            //Log.d(LOG_TAG, "---------- mValueId : " );
-//            //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-//
-//        }
-//        return movie_IDs;
-//    }
-
-    private static long add_MovieInfo(ContentValues contentvalues, Context context) {
-
-        long idNum = 0;
-
-        Uri uri = MovieInfoEntry.CONTENT_URI;
-        String[] projection = new String[]{MovieInfoEntry._ID};
-        String selection = MovieInfoEntry.COL_MOVIE_ID + "=?";
-        String[] selectionArg = new String[]{String.valueOf(contentvalues.getAsLong(MovieInfoEntry.COL_MOVIE_ID))};
-
-        ContentResolver contentResolver = context.getContentResolver();
-
-        Cursor mCursor = contentResolver.query(uri, projection, selection, selectionArg, null /*sortOrder*/);
-
-        if (mCursor != null) {
-            // Check presence or row/data
-            if (mCursor.moveToFirst()) {
-                // get the '_id' value
-                int clmnIndx = mCursor.getColumnIndex(MovieInfoEntry._ID);
-                idNum = mCursor.getLong(clmnIndx);
-            } else {
-                Uri mUri = contentResolver.insert(MovieInfoEntry.CONTENT_URI, contentvalues);
-
-                idNum = ContentUris.parseId(mUri);
-            }
-            mCursor.close();
-
-            Log.d(LOG_TAG, "---------- mValueId : " + idNum);
-        }
-        return idNum;
-    }
 
     /*********************************************************/
     /******************* Get Movie Info  *********************/
     /*********************************************************/
-
+    // tky add, called at MSyncAdapter
     //-- public static int[] getMovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
-
     //public static Vector<ContentValues> getMovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
+    //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
 
     public static int[] getMovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
-
-        //public static long[] get_MovieInfoFromJson(String moviesJsonStr, String sortBy, Context context) throws JSONException {
 
         // long rowId;
         final String RESULTS = "results";
@@ -596,12 +458,11 @@ public class Utility {
         //----------------------------------------------
 
         return mvIdIntArray;
-        //return movie_IDs;
     }
 
     private static boolean is_movieInDataBase(/*Uri uri,*/ Context context, ContentValues cv) {
 
-        //Uri         mUri            = uri; // e.g. MovieInfoEntry.CONTENT_URI;
+        //Uri  mUri  = uri; // e.g. MovieInfoEntry.CONTENT_URI;
         Uri uri = MovieInfoEntry.CONTENT_URI;
         String[] projection = new String[]{MovieInfoEntry._ID};
         String selection = MovieInfoEntry.COL_MOVIE_ID + "=?";

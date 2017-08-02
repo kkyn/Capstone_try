@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="main_title">Projet final</string>
+    <string name="title_main_ui">Projet final</string>
 
     <string name="most_popular">Le plus populaire</string>
     <string name="highest_rated">Les mieux notés</string>
@@ -18,14 +18,19 @@
     <string name="pref_movies_sortby_ratings_label">Évaluations</string>        &lt;!&ndash; Label for ratings option &ndash;&gt;
     <string name="pref_movies_sortby_ownfavorites_label">Favoris</string>-->
 
+    <string name="widget_title">Meilleurs films</string>
+    <string name="widget_name">Mon widget de film</string>
+
     <string name="dialog_title">Entrez l\'année d\'intérêt</string>
     <string name="dialog_comment">N\'entrez pas au-delà de cette année</string>
     <string name="dialog_submit">Soumettre</string>
     <string name="dialog_cancel">Annuler</string>
-    <string name="dialog_hint">Entrez l\'exemple 2017</string>
+    <!--<string name="dialog_hint">Entrez l\'exemple 2017</string>-->
     <string name="default_year">2017</string>
 
     <string name="error_no_network">Pas de connectivité réseau! \nChargera la liste supérieure des films lorsque le réseau sera disponible.</string>
+    <string name="error_not_beyond_this_year">Ne pas entrer un nombre au-delà de cette année.</string>
+    <string name="error_no_title_found">Aucun titre trouvé</string>
 
     <string name="descriptor_changeyear">Sélectionnez une autre année</string>
     <string name="descriptor_setfavorite">Régler le bouton préféré</string>

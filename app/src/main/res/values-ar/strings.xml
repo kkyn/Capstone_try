@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="main_title">المشروع النهائي</string>
+    <string name="title_main_ui">المشروع النهائي</string>
 
     <string name="most_popular">الأكثر شعبية</string>
     <string name="highest_rated">الأعلى تقييما</string>
@@ -10,8 +10,8 @@
 
 
     <string name="pref_title_movies_sortby">ترتيب الأفلام حسب:</string>
-    <string name="pref_label_movies_sortby_popularity">شعبية</string>  ... Label for popularity option ..
-    <string name="pref_label_movies_sortby_ratings">تصنيفات</string>        ... Label for ratings option ..
+    <string name="pref_label_movies_sortby_popularity">شعبية</string>  <!--... Label for popularity option ..-->
+    <string name="pref_label_movies_sortby_ratings">تصنيفات</string>        <!--... Label for ratings option ..-->
     <string name="pref_label_movies_sortby_ownfavorites">المفضلة</string>
 
     <!--<string name="pref_movies_sort_title">ترتيب الأفلام حسب:</string>
@@ -19,14 +19,20 @@
     <string name="pref_movies_sortby_ratings_label">تصنيفات</string>        ... Label for ratings option ..
     <string name="pref_movies_sortby_ownfavorites_label">المفضلة</string>-->
 
+    <string name="widget_title">أفضل الأفلام</string>
+    <string name="widget_name">فيلمي القطعة</string>
+
     <string name="dialog_title">أدخل سنة من الفائدة</string>
     <string name="dialog_comment">لا تدخل إلى ما بعد هذا العام</string>
     <string name="dialog_submit">عرض</string>
     <string name="dialog_cancel">إلغاء</string>
-    <string name="dialog_hint">أدخل مثال 2017</string>
+    <!--<string name="dialog_hint">أدخل مثال 2017</string>-->
     <string name="default_year">2017</string>
 
     <string name="error_no_network">لا اتصال الشبكة! سيتم تحميل أعلى قائمة الأفلام عندما تكون الشبكة متوفرة.</string>
+    <string name="error_not_beyond_this_year">يرجى عدم إدخال رقم ما بعد هذا العام.</string>
+    <string name="error_no_title_found">لم يتم العثور على عنوان</string>
+
 
     <!-- --> Select another year : حدد سنة أخرى <!-- -->
     <string name="descriptor_changeyear">حدد سنة أخرى</string>  <!-- Select another year -->

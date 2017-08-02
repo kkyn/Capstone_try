@@ -18,9 +18,6 @@ import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/*
- * Created by kkyin on 8/5/2016.
- */
 public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder>
 {
     public static final String LOG_TAG = MainRcyclrVw_Adapter.class.getSimpleName();
@@ -37,7 +34,7 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
      */
     public class MainRcyclrVw_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @BindView(R.id.poster_imageview) public DynamicHeightNetworkImageView poster_networkimageview;
+        @BindView(R.id.poster_networkimageview) public DynamicHeightNetworkImageView poster_networkimageview;
 
         public MainRcyclrVw_ViewHolder(View itemView) {
             super(itemView);
@@ -54,7 +51,7 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
 
             switch (view.getId()){
 
-                case R.id.poster_imageview : /*frgmntm_imageview*/
+                case R.id.poster_networkimageview: /*frgmntm_imageview*/
                     clickListener.onClick0(this); // 'this' refers to this 'ViewHolder'
                     break;
 
@@ -87,7 +84,8 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
 
     // Called when RecyclerView needs a new 'RecyclerView.ViewHolder' of the given type to represent an item.
     // Locate new views( invoked by the LayoutManager )
-    @Override // RecyclerView.Adapter basic requirement
+
+    @Override // This is RecyclerView.Adapter's basic method requirement
     public MainRcyclrVw_ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (parent instanceof RecyclerView) {
@@ -126,7 +124,8 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
     // * Replace the contents of a view ( invoked by the layout manager )
     //
     // * param holder <-- output/returned ViewHolder-data from method onCreateViewHolder{..} ??!!
-    @Override // RecyclerView.Adapter basic requirement
+
+    @Override // This is RecyclerView.Adapter's basic method requirement
     public void onBindViewHolder(MainRcyclrVw_ViewHolder viewHolder, int position) {
         // - get and bind 'that'-element from the data-set at this 'position'
         // - replace the contents of the view with 'that'-element
@@ -142,7 +141,7 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
             ImageLoader imageLoader = ImageLoaderHelper.getInstance(context).getImageLoader();
 
             // Get Image-info from ImageLoader-object,
-            // with the given image's-Url-id and interface 'pointer'/ (cllback).
+            // with the given image's-Url-id and interface 'pointer'/ (callback).
 
             String stringUrl = mCursor.getString(Main_Fragment.COLUMN_POSTERLINK);
 
@@ -150,14 +149,16 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
             viewHolder.poster_networkimageview.setContentDescription(string2);
 
             // .setImageUrl -- define in ImageView
+            // Sets the content of this ImageView to the specified Uri.
+            // Use volley's NetworkImageView, 'setImageUrl(url,imageloader)'-method
+            // https://github.com/google/volley/blob/master/src/main/java/com/android/volley/toolbox/NetworkImageView.java
             viewHolder.poster_networkimageview.setImageUrl(stringUrl,imageLoader);
 
-            viewHolder.poster_networkimageview.setAspectRatio(0.66f); // 1.5f, // --combo 1 --
-            viewHolder.poster_networkimageview.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
-            viewHolder.poster_networkimageview.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
-//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);
-//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_START);
+            viewHolder.poster_networkimageview.setAspectRatio(0.66f); // 1.5f,
+            viewHolder.poster_networkimageview.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            viewHolder.poster_networkimageview.setScaleType(ImageView.ScaleType.FIT_XY);
             // ++++++++++++++++++++++++++++++++++++++++++
+
             //-------------------------------------
             // Call Volley's imageloader get-method to get image from the Web
             /*ImageLoader.ImageContainer myImageContainer = imageLoader.get
@@ -231,14 +232,19 @@ public class MainRcyclrVw_Adapter extends RecyclerView.Adapter<MainRcyclrVw_Adap
 
     public String getItemName(int position) {
         int columnIndex=0;
+        String string;
         if (mCursor != null && mCursor.moveToPosition(position)) {
 
-            // columnIndex = mCursor.getColumnIndex("MovieID");
             columnIndex = mCursor.getColumnIndex(MovieInfoEntry.COL_ORIGINAL_TITLE);
 
             return mCursor.getString(columnIndex);
         }
-        return "Error Not Title";
+
+        string = context.getResources().getString(R.string.error_no_title_found);
+        return string;
     }
+
+
+
 
 }

@@ -123,9 +123,7 @@ static void validateCursorValue(//String error,
         valueCursor.moveToNext();
     }
     while (!valueCursor.isAfterLast());
-    //+++++++++++++++++++++++++++++++++++++
-/*
-    */
+
     //----------------------------------------
 
 }

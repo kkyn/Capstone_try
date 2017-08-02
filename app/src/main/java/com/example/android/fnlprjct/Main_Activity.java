@@ -18,21 +18,15 @@ import static com.example.android.fnlprjct.MyApplication.getAppContext;
 
 public class Main_Activity extends AppCompatActivity implements Main_Fragment.CallBackListener {
 
-    /*private static final String LOG_TAG = Main_Activity.class.getSimpleName(); // tky add
-    private static final String DETAILMOVIE_TAG = "DETAIL_MOVIE";*/
+    private static final String LOG_TAG = Main_Activity.class.getSimpleName();
 
     public boolean is2Pane = false;
 
-    /*private int displayMode;
-    private String mode;*/
-
-    /*private int mPosition = RecyclerView.NO_POSITION;
-    private long itemID = 0;
-    private Uri uri;*/
-
-    private Tracker mTracker;
-
     ////////////////////////////////////
+    @Override   //--- 1
+    protected void onStart() {
+        super.onStart();
+    }
     @Override   //--- 2
     protected void onPause() {
         super.onPause();
@@ -50,19 +44,11 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         super.onDestroy();
     }
     ////////////////////////////////////
-    @Override   //--- 1
-    protected void onStart() {
-        super.onStart();
-    }
+
 
     @Override   //--- 2
     protected void onResume() {
         super.onResume();
-
-        /*displayMode = getResources().getConfiguration().orientation;
-        mode = (displayMode == 1) ? "portrait" : "landscape";*/
-
-        // displayMode -> 1 ==> portrait, 2 ==> landscape
 
         FragmentManager fMngr = getSupportFragmentManager();
 
@@ -78,7 +64,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // try, add, 21 June 2017, copied from elsewhere
+        // try, add, 21 June 2017
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
@@ -106,11 +92,6 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
 
         MSyncAdapter.initializeSyncAdapter(this);
 
-        //--- Begin, Shared-Tracker -----
-        // Obtain the shared Tracker instance.
-        MyApplication application = (MyApplication) getApplication();
-        mTracker = application.getDefaultTracker();
-        //--- End,   Shared-Tracker -----
     }
 
     //------------------------------------------------
@@ -122,7 +103,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         // This add items in 'R.menu.menu_main_activtiy' to the action bar, 'menu' if it is present.
         // @1st param -- Resource ID for an XML layout resource to load (e.g., R.menu.main_activity)
         // @2nd param -- menu, The Menu to inflate into. The items and submenus will be added to this Menu
-        this.getMenuInflater().inflate(com.example.android.fnlprjct.R.menu.menu_main_activtiy, menu);
+        this.getMenuInflater().inflate(R.menu.menu_main_activtiy, menu);
 
         return true;
     }
@@ -135,14 +116,13 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == com.example.android.fnlprjct.R.id.action_settings) {
+        if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsPreferenceActivity.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
     //------------------------------------------------
     //----------- OPTIONS MENU Stuff (End) -------------------
     //------------------------------------------------
@@ -150,68 +130,10 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
     // -------- Implementing Callback methods called from Fragment ----
     // -------- Declared in Fragment associate with this Activity -----
     //-----------------------------------------------------------------
-
-    // ************* newer ***********************
     @Override
     public void onItemSelectedInRecyclerView(Intent intent, Bundle bundle) {
 
         startActivity(intent, bundle);
     }
-    // ************* new ***********************
-    /*@Override
-    public void onItemSelectedInRecyclerView(MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder viewHolder, long itemId) {
-
-        ImageView poster_imageview1 = viewHolder.poster_networkimageview;
-        //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_networkimageview;
-
-        final Pair<View, String> pair1 = Pair.create((View)poster_imageview1, viewHolder.poster_networkimageview.getTransitionName());
-        //final Pair<View, String> pair1 = new Pair<>((View)poster_imageview1, viewHolder.poster_networkimageview.getTransitionName());
-
-        // http://guides.codepath.com/android/shared-element-activity-transition
-        ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(Main_Activity.this, pair1);
-        //ActivityOptions option = ActivityOptions.makeSceneTransitionAnimation(Main_Activity.this, pair1);
-
-        Bundle bundle = option.toBundle();
-
-        uri = MovieContract.MovieInfoEntry.CONTENT_URI;
-        uri = ContentUris.withAppendedId(uri, itemId);
-
-        Intent mIntent = new Intent(this, Detail_Activity.class);
-        mIntent.setData(uri);
-
-        startActivity(mIntent, bundle);
-    }*/
-    // ************* old ***********************
-    /*@Override
-    public void onItemSelectedInRecyclerView(Uri uri) {
-
-        displayMode = getResources().getConfiguration().orientation;
-
-        mode = (displayMode==1)? "portrait" :"landscape";
-
-        if (is2Pane == true) {
-
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(Detail_Fragment.DETAIL_URI, uri);
-
-            Detail_Fragment dtlsFrgmnt = new Detail_Fragment();
-            dtlsFrgmnt.setArguments(bundle);
-
-            FragmentManager frgmntMngr = getSupportFragmentManager();
-            FragmentTransaction frgmntTrnsctn = frgmntMngr.beginTransaction();
-
-            frgmntTrnsctn.replace(R.id.pane2_container, dtlsFrgmnt);
-
-            frgmntTrnsctn.commit();
-        }
-        else {
-
-        // Open a new view
-            Intent mIntent = new Intent(this, Detail_Activity.class);
-            mIntent.setData(uri);
-            startActivity(mIntent);
-        }
-    }*/
-    // ************* old ***********************
 
 }

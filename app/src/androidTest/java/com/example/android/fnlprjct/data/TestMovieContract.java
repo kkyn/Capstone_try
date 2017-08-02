@@ -38,8 +38,6 @@ public class TestMovieContract extends AndroidTestCase {
 
     public static final String LOG_TAG = TestMovieContract.class.getSimpleName();
 
-
-    //============================================================================//
     //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
     ///////////////////////////////////////////////////////
@@ -158,13 +156,9 @@ public class TestMovieContract extends AndroidTestCase {
     // "content://com.example.android.myproject_2/popularity/id"
     ///////////////////////////////////////////
 
-    //============================================================================//
-
-    //============================================================================//
     // /////////////////////////////////////////
     // Test methods for Uri,
     // "content://com.example.android.myproject_2/movieInfo"
     ////////////////////////////////////////////
-//    public void testBuildUri_MovieInfo_Id() {
 
 }

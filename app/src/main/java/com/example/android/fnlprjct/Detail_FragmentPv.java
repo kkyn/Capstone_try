@@ -34,7 +34,6 @@ public class Detail_FragmentPv extends Fragment
     private static final int LOADER_ID = 4;
 
     private Cursor cursor;
-//--    private ViewPager pager;
     private PagerViewAdapter pagerAdapter;
 
     int currentPage;
@@ -44,7 +43,6 @@ public class Detail_FragmentPv extends Fragment
     // Firebase-Analytics, ----- (step1) Declare a variable
     private FirebaseAnalytics mFirebaseAnalytics;
 
-//--    @BindView(R.id.viewpager) ViewPager pagerView;
     @BindView(R.id.viewpager) ViewPager pager;
 
     public Detail_FragmentPv(){
@@ -55,18 +53,12 @@ public class Detail_FragmentPv extends Fragment
         super.onCreate(savedInstanceState);
 
         String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
-        Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreate  ) ) ) ) ) ) ");
-        Log.d(LOG_TAG, " ( ( ( ( ( ( (  Before getLoaderManager().initLoader  ) ) ) ) ) ) ");
 
         this.getLoaderManager().initLoader(LOADER_ID, null, this);
-
-        Log.d(LOG_TAG, " ( ( ( ( ( ( (  After getLoaderManager().initLoader  ) ) ) ) ) ) ");
 
         FragmentManager fMngr = getFragmentManager(); // when called in Fragment
 
         pagerAdapter = new PagerViewAdapter(fMngr, sortMoviesBy);
-
-        Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreate  ) ) ) ) ) ) ");
 
         // Firebase-Analytics ---- (step2) Obtain a FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -75,25 +67,20 @@ public class Detail_FragmentPv extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // return super.onCreateView(inflater, container, savedInstanceState);
+
 
 
         Bundle mBundle = this.getArguments();
         if (mBundle != null) {
             mUri = mBundle.getParcelable(Detail_Fragment1.DETAIL_URI);
-        //    Toast.makeText(getContext(), "uri : " + mUri.toString(), Toast.LENGTH_LONG).show();
             movieId = Integer.parseInt(MovieContract.MovieInfoEntry.getMovieId_FromMovieInfoUri(mUri));
         }
 
         View rootView = inflater.inflate(R.layout.page_view, container, false);
 
         ButterKnife.bind(this, rootView);
-//--        pager = (ViewPager) rootView.findViewById(R.id.viewpager);
-
-        Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreateView  ) ) ) ) ) ) ");
 
         //pager.setOnPageChangeListener(); // deprecated ???
-
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -102,8 +89,6 @@ public class Detail_FragmentPv extends Fragment
             // Called when swipe for a new page.
             @Override
             public void onPageSelected(int position) {
-                Log.d(LOG_TAG, " ( ( ( ( ( position : " + position + " ) ) ) ) ) )");
-                //Toast.makeText(getActivity()," ( ( ( ( ( position : " + position + " ) ) ) ) ) )", Toast.LENGTH_SHORT).show();
 
                 currentPage = position;
 
@@ -139,7 +124,6 @@ public class Detail_FragmentPv extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.d(LOG_TAG, " ( ( ( ( ( ( (  onViewCreated  ) ) ) ) ) ) ");
     }
 
     // ????
@@ -149,50 +133,15 @@ public class Detail_FragmentPv extends Fragment
         outState.putInt("outState", 8);
     }
 
-    int myOutState;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //---------------------------------------
-        if (savedInstanceState != null) {
-
-      //--      Toast.makeText(getContext(), "+ + + + + savedInstanceState NOT NULL ", Toast.LENGTH_SHORT).show();
-            // Restore last state for checked position.
-            //mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
-        }
-        else {
-      //--      Toast.makeText(getContext(), "+ + + + + savedInstanceState     NULL ", Toast.LENGTH_SHORT).show();
-
-        }
-
-        /*if (savedInstanceState == null) {
-            if (getIntent() != null && getIntent().getData() != null) {
-                mStartId = ItemsContract.Items.getItemId(getIntent().getData());
-
-            }
-        }*/
-        //--------------------------------------
-
         pager.setAdapter(pagerAdapter);
 
-        Log.d(LOG_TAG, " ( ( ( ( ( ( (  onActivityCreated  ) ) ) ) ) ) ");
     }
 
-/* ??? ???
- @Override
-    public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
-    }
- */
     //--- Callback methods for "LoaderManager.LoaderCallbacks<Cursor>" ---
     //--------------------------------------------------------------------
     @Override
@@ -211,9 +160,9 @@ public class Detail_FragmentPv extends Fragment
         if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_default))) {
 
             projection = MyQuery.Popularity.PROJECTION;
-            selection = MovieInfoEntry.COL_YEAR + "=?";                                       //
+            selection = MovieInfoEntry.COL_YEAR + "=?";
             selectionArg = new String[]{searchYear};
-            sortOrder = MovieInfoEntry.COL_VOTE_COUNT + " DESC"; // ???? just change July12 2017
+            sortOrder = MovieInfoEntry.COL_VOTE_COUNT + " DESC";
             //sortOrder = MovieInfoEntry.COL_POPULARITY + " DESC";
 
         } else if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_ratings))) {
@@ -239,15 +188,12 @@ public class Detail_FragmentPv extends Fragment
                                 selectionArg,            // selectionArg
                                 sortOrder                // sortOrder
                             );
-        Log.d(LOG_TAG, " ( ( ( ( ( ( (  onCreateLoader  ) ) ) ) ) ) ");
 
         return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-//        pagerAdapter.swapCursor(data);
 
         cursor = data;
         pagerAdapter.swapCursor(cursor);
@@ -265,11 +211,6 @@ public class Detail_FragmentPv extends Fragment
             }
             movieId = 0;
         }
-        //pagerAdapter.notifyDataSetChanged();
-        //Log.d(LOG_TAG, " ( ( ( ( ( ( (  onLoadFinished  ) ) ) ) ) ) "  + cursor.getCount());
-
-        //pagerAdapter.notifyDataSetChanged();
-
     }
 
     @Override

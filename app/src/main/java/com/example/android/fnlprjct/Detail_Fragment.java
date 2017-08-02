@@ -281,8 +281,8 @@ public class Detail_Fragment extends Fragment
         }
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
-        //xx View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_xx_details, container, false);
+        //xx View rootView = inflater.inflate(R.layout.fragment_xx_details, container, false);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.moviedetails_ryclrv);
 

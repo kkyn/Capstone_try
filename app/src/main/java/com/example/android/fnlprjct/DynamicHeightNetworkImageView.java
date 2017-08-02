@@ -26,7 +26,7 @@ public class DynamicHeightNetworkImageView extends NetworkImageView {
     public void setAspectRatio(float aspectRatio) {
         mAspectRatio = aspectRatio;
 
-        String aString = Float.toString(mAspectRatio);
+        /*String aString = Float.toString(mAspectRatio);*/
 
         /*Log.d(LTAG, " -- " + aString + " --");*/
 

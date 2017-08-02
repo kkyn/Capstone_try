@@ -1,35 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Base application theme, defined here. -->
 
     <!-- Disable the theme-provided ActionBar. -->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
 
-    <!--don't work, begin -->
-    <!--<style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>-->
-    <!--don't work, end -->
+    <!-- .............................................................. -->
 
-    <!-- Enable use of Toolbar as ActionBar -->
+    <!-- Enable the use of Toolbar like an ActionBar -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-   <!-- <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
-    <!--<style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">-->
-    <!--<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">-->
 
-        <!-- Customize your theme here. -->
-        <!-- tky add, june6 2017-->
+        <!-- +++++++++++++++ Customize your theme here  +++++++++++++++ -->
 
         <!-- your app branding color for the app bar -->
-        <!--<item name="colorPrimary">@color/pink_a400</item>-->
         <item name="colorPrimary">@color/lime_300</item>
 
         <!-- darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">@color/lime_700</item>
 
-        <!-- colorAccent is used as the default value for colorControlActivated
-         which is used to tint widgets -->
+        <!-- colorAccent is used as the default value for colorControlActivated which is used to tint widgets -->
         <!-- theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/pink_a400</item>
 
@@ -40,7 +30,7 @@
         <!-- colorControlHighlight controls the ripple coloring -->
         <!-- //////////////////////////////////////////////// -->
         <item name="android:colorControlHighlight">@color/lime_300</item>
-        <!--<item name="android:colorControlHighlight">@color/lime_700</item>-->
+    <!--<item name="android:colorControlHighlight">@color/lime_700</item>-->
 
         <!--<item name="android:textColorSecondary">@color/white</item>--> <!-- only set/change overflow-icon color to white -->
 
@@ -49,12 +39,11 @@
 
         <!-- Under Theme.AppCompat.Light.NoActionBar, -->
         <!-- default color is black for "android:textColorPrimary", refers to colors for text in 'views' -->
+        <!-- ...................................................... -->
+        <!--<item name="android:textColorPrimary">?android:colorPrimary</item>-->
         <item name="android:textColorPrimary">@color/orange_500</item>
-        <!--<item name="android:textColorPrimary">@color/purple_500</item>-->
 
-        <!--<item name="colorBackground">#f2f2f2</item>-->
-
-        <item name="android:statusBarColor">?android:colorPrimary</item> .. don't seem to work ...
+        <item name="android:statusBarColor">?android:colorPrimary</item> <!--.. don't seem to work ...-->
 
 
          <!-- ....... enable window content transitions ....... -->
@@ -71,18 +60,15 @@
 
         check this section, (A)
         <!-- ....... specify shared element transition ....... -->
-        ... ok ...
-        <item name="android:windowSharedElementExitTransition">@transition/v21_sharedelementtransition</item>
-        <item name="android:windowSharedElementEnterTransition">@transition/v21_sharedelementtransition</item>
-        ... no Good ...
-        <!--<item name="android:windowSharedElementExitTransition">@transition/change_image_transform</item>
-        <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform</item>-->
+        <!--... ok ...-->
+        <item name="android:windowSharedElementExitTransition">@transition/sharedelementtransition_v21</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/sharedelementtransition_v21</item>
+
     </style>
 
-    <!-- .............................. -->
-    <!-- .............................. -->
+    <!-- .............................................................. -->
+
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-    <!--<style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">--> <!-- copied -->
 
     <!-- set the color of the title text, and also (?) overflow-icon in the Toolbar  -->
 
@@ -93,11 +79,10 @@
         <item name="android:textColorPrimary">@android:color/holo_blue_light</item>
     </style>
 
-    <!-- .............................. -->
+    <!-- .............................................................. -->
+
     <!-- This configures the styles for the title within the Toolbar  -->
     <style name="Toolbar.TitleText" parent="AppTheme">
-    <!--<style name="Toolbar.TitleText" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
-    <!--<style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">-->
         <item name="android:textSize">21sp</item>
         <item name="android:textStyle">italic</item>
     </style>

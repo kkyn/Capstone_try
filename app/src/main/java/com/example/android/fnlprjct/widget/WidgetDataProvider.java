@@ -13,7 +13,7 @@ import com.example.android.fnlprjct.MyApplication;
 import com.example.android.fnlprjct.MyQuery;
 import com.example.android.fnlprjct.R;
 import com.example.android.fnlprjct.Utility;
-import com.example.android.fnlprjct.data.MovieContract;
+import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 
 /**
  * Created by kkyin on 24/6/2017.
@@ -22,11 +22,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
     private static final String LOG_TAG = WidgetDataProvider.class.getSimpleName();
 
-    Uri uri = MovieContract.MovieInfoEntry.CONTENT_URI;
-//    String[] mProjection = MyQuery.MovieInfo.PROJECTION;
-//    String selection = null;                                    // e.g. Quote.COLUMN_SYMBOL + "=?";
-//    String selectionArg[] = null;                               // e.g. new String[]{"1"};
-//    String sortOrder  = MovieContract.MovieInfoEntry.COL_POPULARITY + " DESC";  // e.g. "COLUMN_NAME ASC", DESC/ASC
+    Uri uri = MovieInfoEntry.CONTENT_URI;
     Cursor cursor = null;
 
     // Context --- the widget needs to get the package name to be associated with our app.
@@ -52,7 +48,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         }
         cursor = context.getContentResolver().query(uri, mProjection, selection, selectionArg, sortOrder);*/
 
-        Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onCreate ");
+        /*Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onCreate ");*/
 
 
     }
@@ -68,24 +64,24 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         //-------------------------------
         String sortMoviesBy = Utility.getPreferredSortSequence(MyApplication.getAppContext());
         String searchYear = Utility.getPreferredYear(MyApplication.getAppContext());
-        String[] xprojection;
-        String xselection;
-        String xselectionArg[];
-        String xsortOrder;
+        String[] projection;
+        String selection;
+        String selectionArg[];
+        String sortOrder;
 
         if (sortMoviesBy.equals(context.getResources().getString(R.string.pref_value_movies_sortby_default))) {
 
-            xprojection = MyQuery.MovieInfo.PROJECTION;    // pick the selected columns
-            xselection = MovieContract.MovieInfoEntry.COL_YEAR + "=?";
-            xselectionArg = new String[]{searchYear};
-            xsortOrder = MovieContract.MovieInfoEntry.COL_VOTE_COUNT + " DESC";
+            projection = MyQuery.MovieInfo.PROJECTION;    // pick the selected columns
+            selection = MovieInfoEntry.COL_YEAR + "=?";
+            selectionArg = new String[]{searchYear};
+            sortOrder = MovieInfoEntry.COL_VOTE_COUNT + " DESC";
 
         }
         else {
-            xprojection = MyQuery.MovieInfo.PROJECTION;
-            xselection = MovieContract.MovieInfoEntry.COL_YEAR + "=?";
-            xselectionArg = new String[]{searchYear};
-            xsortOrder = MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
+            projection = MyQuery.MovieInfo.PROJECTION;
+            selection = MovieInfoEntry.COL_YEAR + "=?";
+            selectionArg = new String[]{searchYear};
+            sortOrder = MovieInfoEntry.COL_VOTE_AVERAGE + " DESC";
         }
 
         //-------------------------------
@@ -93,8 +89,8 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
             cursor.close();
         }
         ContentResolver contentResolver = context.getContentResolver();
-        cursor = contentResolver.query(uri, xprojection, xselection, xselectionArg, xsortOrder);
-        //cursor = context.getContentResolver().query(uri, xprojection, xselection, xselectionArg, xsortOrder);
+        cursor = contentResolver.query(uri, projection, selection, selectionArg, sortOrder);
+        //cursor = context.getContentResolver().query(uri, projection, selection, selectionArg, sortOrder);
         //--------------------------------
 
     }

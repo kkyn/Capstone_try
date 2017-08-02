@@ -71,8 +71,6 @@ public class ChangeYear_DialogFragment extends DialogFragment
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        /*SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sp.registerOnSharedPreferenceChangeListener(this);*/
         super.onCreate(savedInstanceState);
     }
 
@@ -92,38 +90,6 @@ public class ChangeYear_DialogFragment extends DialogFragment
         super.onPause();
     }
 
-    /*@Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //return super.onCreateView(inflater, container, savedInstanceState);
-
-        // +++++++++++ View Inflater Stuff ++++++++++++++
-        //LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-
-        //View
-            view = inflater.inflate(R.layout.dialog_changeyear, null);
-
-        ButterKnife.bind(this, view);
-
-        // Set a special listener to be called when an action is performed on the text view.
-        // Interface definition for a callback to be invoked when an action is performed on the editor.
-        enterYear_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            // Called when an action is being performed.
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                //v.getText().toString();
-                Toast.makeText(getContext(),"--- " + v.getText().toString(), Toast.LENGTH_SHORT ).show();
-                Toast.makeText(getContext(),"Clicked search, setOnEditorActionListener", Toast.LENGTH_SHORT).show();
-
-                //return false;
-                return true;
-            }
-        });
-
-        return view;
-    }*/
 
     @NonNull
     @Override
@@ -149,11 +115,10 @@ public class ChangeYear_DialogFragment extends DialogFragment
 
                 String stringEnteredYear = enterYear_et.getText().toString();
                 int intEnteredYear = Integer.parseInt(stringEnteredYear);
-                Toast toast = Toast.makeText(getActivity(), getString(R.string.beyondthisyearmessage), Toast.LENGTH_LONG); //.show();
+                Toast toast = Toast.makeText(getActivity(), getString(R.string.error_not_beyond_this_year), Toast.LENGTH_LONG); //.show();
 
                 if (intEnteredYear > Utility.getThisYearValue()) {
-                    //Toast.makeText(getActivity(), getString(R.string.beyondthisyearmessage), Toast.LENGTH_LONG); //.show();
-                    toast.setGravity(Gravity.CENTER | Gravity.LEFT, 0, 0);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                     //toast.setGravity(Gravity.TOP|Gravity.LEFT,0,0);
                     toast.show();
 
@@ -164,14 +129,6 @@ public class ChangeYear_DialogFragment extends DialogFragment
                     return true;
                 }
 
-              /*  //v.getText().toString();
-                Toast.makeText(getContext(),"--- " + v.getText().toString(), Toast.LENGTH_SHORT ).show();
-                Toast.makeText(getContext(),"Clicked search, setOnEditorActionListener", Toast.LENGTH_SHORT).show();
-
-                searchMoviesYear();
-
-                //return false;
-                return true;*/
             }
         });
 
@@ -189,11 +146,11 @@ public class ChangeYear_DialogFragment extends DialogFragment
 
                     String stringEnteredYear = enterYear_et.getText().toString();
                     int intEnteredYear = Integer.parseInt(stringEnteredYear);
-                    Toast toast = Toast.makeText(getActivity(), getString(R.string.beyondthisyearmessage), Toast.LENGTH_LONG); //.show();
+                    Toast toast = Toast.makeText(getActivity(), getString(R.string.error_not_beyond_this_year), Toast.LENGTH_LONG); //.show();
 
                     if (intEnteredYear > Utility.getThisYearValue()) {
-//                        Toast.makeText(getActivity(), getString(R.string.beyondthisyearmessage), Toast.LENGTH_LONG).show();
-                        toast.setGravity(Gravity.CENTER|Gravity.LEFT,0,0);
+                        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+                        //toast.setGravity(Gravity.CENTER|Gravity.LEFT,0,0);
                         toast.show();
 
                     } else {
@@ -221,10 +178,6 @@ public class ChangeYear_DialogFragment extends DialogFragment
 
         String yearKey = getResources().getString(R.string.pref_key_year);
         String year = enterYear_et.getText().toString();
-
-        /*Toast.makeText(getContext(),
-            "dialog> setPositiveButton> onClick> searchMoviesYear() > "
-                + yearKey + " - " + year, Toast.LENGTH_LONG).show();*/
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = sp.edit();

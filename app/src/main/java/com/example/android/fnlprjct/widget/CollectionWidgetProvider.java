@@ -155,7 +155,7 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        Toast.makeText(context, "IN on RECEIVE", Toast.LENGTH_LONG).show();
+        /*Toast.makeText(context, "IN on RECEIVE", Toast.LENGTH_LONG).show();*/
 
         String action = intent.getAction();
 

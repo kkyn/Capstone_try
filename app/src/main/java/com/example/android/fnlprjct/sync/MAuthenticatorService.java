@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-/**
- * Created by kkyin on 14/7/2016.
- */
+
 public class MAuthenticatorService extends Service {
 
     // Instance field that stores the authenticator object

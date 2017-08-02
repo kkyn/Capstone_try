@@ -9,12 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.fnlprjct.Detail_Fragment;
+import com.example.android.fnlprjct.MyQuery;
 import com.example.android.fnlprjct.R;
 
-/**
- * Created by kkyin on 26/10/2016.
- */
 
 public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_Adapter.Details_ViewHolder> {
 
@@ -66,8 +63,8 @@ public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_
 
         if (mCursor.moveToPosition(position)) {
 
-            holder.Reviewer_tv.setText(mCursor.getString(Detail_Fragment.INDX_1_REVIEWER));
-            holder.Review_tv.setText(mCursor.getString(Detail_Fragment.INDX_1_REVIEWCONTENT));
+            holder.Reviewer_tv.setText(mCursor.getString(MyQuery.Reviews.COL_REVIEWER));
+            holder.Review_tv.setText(mCursor.getString(MyQuery.Reviews.COL_REVIEWCONTENT));
         }
     }
 

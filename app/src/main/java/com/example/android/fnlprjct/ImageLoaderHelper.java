@@ -9,6 +9,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 public class ImageLoaderHelper {
+
     private static ImageLoaderHelper sInstance;
 
     public static ImageLoaderHelper getInstance(Context context) {
@@ -19,15 +20,16 @@ public class ImageLoaderHelper {
         return sInstance;
     }
 
-//    int cacheSize = 50 * 1024 * 1024; // 4MiB
+    //int cacheSize = 50 * 1024 * 1024; // 4MiB
+
+    /*private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(cacheSize){
+        protected int sizeOf(String key, Bitmap value) {
+            return value.getByteCount();
+        }
+    };*/
     // https://developer.android.com/reference/android/util/LruCache.html
     // https://developer.android.com/topic/performance/graphics/cache-bitmap.html
     private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(10);
-    //private final LruCache<String, Bitmap> mImageCache = new LruCache<String, Bitmap>(cacheSize){
-//        protected int sizeOf(String key, Bitmap value) {
-//            return value.getByteCount();
-//        }
-//    };
 
     private ImageLoader mImageLoader;
 

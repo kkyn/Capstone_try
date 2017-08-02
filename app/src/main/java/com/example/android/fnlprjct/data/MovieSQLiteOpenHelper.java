@@ -9,7 +9,6 @@ import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieVideosEntry;
 
 /**
- * Created by kkyin on 8/1/2016.
  *
  * Contains code to create and initialize the movie database.
  */

@@ -43,7 +43,7 @@ public class Detail_Activity extends AppCompatActivity {
         Intent intent = this.getIntent();
         mUri = intent.getData();
 
-        Log.d(LOG_TAG, "yyyy Detail_Activity / onCreate / mUri : " + mUri.toString());
+        /*Log.d(LOG_TAG, "yyyy Detail_Activity / onCreate / mUri : " + mUri.toString());*/
 
         // Log.d(LOG_TAG, "yyyy onCreate / savedInstanceState == null / DetailMoviewFragment --");
         // Log.d(LOG_TAG, "yyyy onCreate / mUri : " + mUri.toString());
@@ -51,9 +51,9 @@ public class Detail_Activity extends AppCompatActivity {
         //-- Begin-- Attach data to a fragment
         // (1) Place 'data' into bundle
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Detail_Fragment.DETAIL_URI, mUri);
+        bundle.putParcelable(Detail_Fragment1.DETAIL_URI, mUri);
 
-        Log.d(LOG_TAG, "( ( ( ( ( ( ( " + mUri.toString()+ " ) ) ) ) ) ) ) ");
+        /*Log.d(LOG_TAG, "( ( ( ( ( ( ( " + mUri.toString()+ " ) ) ) ) ) ) ) ");*/
 
         if (savedInstanceState == null) {
             // (2) Attach the bundle to a fragment
@@ -88,8 +88,7 @@ public class Detail_Activity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putInt("outState", 8);
-        Toast.makeText(this, "+ + + + + Detail_Activity/onSaveInstanceState ", Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(this, "+ + + + + Detail_Activity/onSaveInstanceState ", Toast.LENGTH_SHORT).show();*/
     }
 
     @Override
@@ -97,35 +96,35 @@ public class Detail_Activity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(com.example.android.fnlprjct.R.menu.menu_detailmovie, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == com.example.android.fnlprjct.R.id.action_settings) {
-
-            startActivity(new Intent(this, SettingsPreferenceActivity.class));
-
-            return true;
-
-        } else if (id == android.R.id.home) {
-
-            this.finish();
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(com.example.android.fnlprjct.R.menu.menu_detailmovie, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == com.example.android.fnlprjct.R.id.action_settings) {
+//
+//            startActivity(new Intent(this, SettingsPreferenceActivity.class));
+//
+//            return true;
+//
+//        } else if (id == android.R.id.home) {
+//
+//            this.finish();
+//
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 }

@@ -28,7 +28,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +36,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.fnlprjct.adapter.MainRcyclrVw_Adapter;
 import com.example.android.fnlprjct.data.MovieContract;
@@ -52,7 +50,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.android.fnlprjct.MyApplication.getAppContext;
 /**
  * A placeholder fragment (Main_Fragment) containing a simple view.
  */
@@ -63,7 +60,7 @@ public class Main_Fragment extends Fragment
 {
     // constructor
     public Main_Fragment() {
-        setHasOptionsMenu(true); // ???????
+        setHasOptionsMenu(true);
     }
 
     public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
@@ -152,9 +149,6 @@ public class Main_Fragment extends Fragment
     public interface CallBackListener {
 
         void onItemSelectedInRecyclerView(Intent intent, Bundle bundle);
-        //void onItemSelectedInRecyclerView(MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder viewHolder, long itemId);
-        //void onItemSelectedInRecyclerView(Uri mUri); // -- old --
-
     }
 
     @Override
@@ -179,12 +173,12 @@ public class Main_Fragment extends Fragment
         super.onAttach(activity);
     }
 
-    @Override
+    @Override // --- 6 ----
     public void onStop() {
         super.onStop(); //Log.d(LOG_TAG, "---- 6 onStop() --");
     }
 
-    @Override
+    @Override // --- 7 ----
     public void onDestroyView() {
         super.onDestroyView();  //Log.d(LOG_TAG, "---- 7 onDestroyView() --");
     }
@@ -218,12 +212,7 @@ public class Main_Fragment extends Fragment
         super.onViewCreated(view, savedInstanceState);  //Log.d(LOG_TAG, "---- 1a onViewCreated(View view, @Nullable Bundle savedInstanceState) --");
 
         if (tool_bar != null ) {
-            // ++++++++++++++++++++++++
-            /*SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-            String str = sp.getString(getString(R.string.pref_year_key), getString(R.string.default_year));
-            //String str = sp.getString(getString(R.string.pref_year_key), "2017");*/
 
-            // ++++++++++++++++++++++++
             // Sets the Toolbar to act as the ActionBar for this Activity window.
             // Make sure the tool_bar exists in the activity and is not null
             ((AppCompatActivity) getActivity()).setSupportActionBar(tool_bar); // <!-- to set the Toolbar to act as the ActionBar  -->
@@ -268,7 +257,7 @@ public class Main_Fragment extends Fragment
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this); //  help maintain position ??
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // tky add, copied, july26-2017
+
         // Resume the AdView.
         if (bannerView != null) {
             bannerView.resume();
@@ -283,7 +272,6 @@ public class Main_Fragment extends Fragment
             sp = PreferenceManager.getDefaultSharedPreferences(getContext()/*getActivity()*/);
             sp.unregisterOnSharedPreferenceChangeListener(this);
 
-        // tky add, copied, july26-2017
         // Pause the AdView.
         if (bannerView != null) {
             bannerView.pause();
@@ -315,7 +303,7 @@ public class Main_Fragment extends Fragment
 
             Intent intent = new Intent();
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//            mCntx.sendBroadcast(intent);
+
             getActivity().sendBroadcast(intent);
         }
 
@@ -393,14 +381,6 @@ public class Main_Fragment extends Fragment
     @Override //--- 5 ---
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
-        Log.d(LOG_TAG, "----   onLoadFinished(), loader ID : " + loader.getId() + " --");
-        if (cursor == null) {
-            Log.d(LOG_TAG, "----   onLoadFinished(), cursor,NULL --");
-        } else {
-            Log.d(LOG_TAG, "----   onLoadFinished(), cursor,NOT NULL -- cursor count : " + cursor.getCount() + " --");
-
-        }
-
         // import a new set of cursor structured/found in 'Cursor' into the RecyclerViewAdapter.
         /*
          * Moves the query results into the adapter, causing the
@@ -462,23 +442,23 @@ public class Main_Fragment extends Fragment
             editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_default));
 
             // Commit your preferences changes back from this Editor to the SharedPreferences object it is editing.
-            editor.commit();
-            //editor.apply();
+//            editor.commit();
+            editor.apply();
             actionBar.setTitle(UpdateActionBarTitle());
             return true;
         }
         else if (id == R.id.most_rated) {
             editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_ratings));
-            editor.commit();
-            //editor.apply();
+//            editor.commit();
+            editor.apply();
 
             actionBar.setTitle(UpdateActionBarTitle());
             return true;
         }
         else if (id == R.id.my_favorites) {
             editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_favorites));
-            editor.commit();
-            //editor.apply();
+//            editor.commit();
+            editor.apply();
             actionBar.setTitle(UpdateActionBarTitle());
             return true;
         }
@@ -510,8 +490,8 @@ public class Main_Fragment extends Fragment
         }
         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
         String title;
-        if(option==1){title = getString(R.string.main_title) + "   " + year + " : " + category;}
-        else         {title = getString(R.string.main_title) + "   " + " : " + category;}
+        if(option==1){title = getString(R.string.title_main_ui) + "   " + year + " : " + category;}
+        else         {title = getString(R.string.title_main_ui) + "   " + " : " + category;}
         return title;
     }
     //------------------------------------------------
@@ -525,10 +505,6 @@ public class Main_Fragment extends Fragment
         }
         super.onSaveInstanceState(outState);
     }
-
-   /* private long getNewPosition(int position) {
-        return rvAdapter.getItemId(position);
-    }*/
 
 
     /* When the system is ready for the Fragment to appear, this displays
@@ -577,7 +553,7 @@ public class Main_Fragment extends Fragment
                     // End, movie-selection event
                     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-                    // ????????????????????
+                    // ????????????????????????????????
                     ImageView poster_imageview1 = viewHolder.poster_networkimageview;
                     //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_networkimageview;
 
@@ -594,32 +570,9 @@ public class Main_Fragment extends Fragment
 
                     Intent intent = new Intent(getActivity(), Detail_Activity.class);
                     intent.setData(uri);
-                    // ????????????????????
+                    // ????????????????????????????????
 
                     mainCallBackListener.onItemSelectedInRecyclerView(intent, bundle);
-
-                    // ************* new ***********************
-                    /*mPosition = viewHolder.getAdapterPosition();
-                    itemID = rvAdapter.getItemId(mPosition);
-
-                    String srcView_SharedElementTransition = getString(R.string.shared_name) + itemID;
-                    //String srcView_SharedElementTransition = "photo" + itemID;
-
-                    viewHolder.poster_networkimageview.setTransitionName(srcView_SharedElementTransition);
-
-                    mainCallBackListener.onItemSelectedInRecyclerView(viewHolder, itemID);*/
-
-                    // ************* old ***********************
-                    /*mPosition = viewHolder.getAdapterPosition();
-
-                    itemID = rvAdapter.getItemId(mPosition);
-                    uri = MovieInfoEntry.CONTENT_URI;
-                    uri = ContentUris.withAppendedId(uri, itemID);
-
-                    mainCallBackListener.onItemSelectedInRecyclerView(uri);
-                    //-- or --
-                    // ((CallBackListener) getActivity()).onItemSelectedInRecyclerView(tryUri);*/
-                    // ************* old ***********************
 
                 }
             };
@@ -633,8 +586,6 @@ public class Main_Fragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         ButterKnife.bind(this, rootView);
-
-        //mainRyclrVw = (RecyclerView) rootView.findViewById(R.id.main_recyclerview);/*recyclerview_id4_movies*/
 
         //gridlm = new GridLayoutManager(getContext(), 2);
         //mainRyclrVw.setLayoutManager(gridlm);
@@ -656,19 +607,14 @@ public class Main_Fragment extends Fragment
             public void onClick(View v) {
 
                 showChangeYearDialog();
-
-                /*Toast.makeText(getContext(), "AAAAAAAA edit_fab_clicked ", Toast.LENGTH_SHORT).show();*/
-                // https://developer.android.com/reference/android/app/DialogFragment.html
-                // Create and show the dialog.
-                /*new ChangeYear_DialogFragment().show(getFragmentManager(), "Show_DialogFragment");*/
             }
         });
         // +++++++++++++++++++++++++++++++++++++++++++++
         swipeRefreshLayout.setOnRefreshListener(this); // 'connect'/'bind' instance in xml with implementation
         swipeRefreshLayout.setColorSchemeResources(
-            /*android.R.color.holo_blue_bright,
+            android.R.color.holo_blue_bright,
             android.R.color.holo_green_light,
-            android.R.color.holo_orange_light,*/
+            android.R.color.holo_orange_light,
             android.R.color.holo_red_light);
 
         // +++++++++++++++++++++++++++++++++++++++++++++
@@ -702,7 +648,6 @@ public class Main_Fragment extends Fragment
         swipeRefreshLayout.setRefreshing(true); // enables progress visibility
 
         if (!networkUp()){
-            /*Toast.makeText(getContext(), "Sorry, there is not access to network.", Toast.LENGTH_LONG).show();*/
 
             error.setText(getString(R.string.error_no_network));
             error.setVisibility(View.VISIBLE);
@@ -713,28 +658,18 @@ public class Main_Fragment extends Fragment
                     swipeRefreshLayout.setRefreshing(false);// disables progress visibility
                     error.setVisibility(View.INVISIBLE);
                 }
-            }, 3000);
+            }, 4000);
         }
         else {
-            Toast.makeText(getContext(),"In OnRefresh...network is up --- Yeah", Toast.LENGTH_LONG).show();
+            /*Toast.makeText(getContext(),"In OnRefresh...network is up --- Yeah", Toast.LENGTH_LONG).show();*/
 
             swipeRefreshLayout.setRefreshing(false);
-
-            //getContext().getContentResolver().notifyChange(MovieInfoEntry.CONTENT_URI, null);
-
-            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            //getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
-            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-            //MSyncAdapter.syncImmediately(getContext());
 
             //---------------------------------------------------
             Intent intent = new Intent();
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
             getActivity().sendBroadcast(intent);
-            //getAppContext().sendBroadcast(intent);
-            //Utility.BroadcastMessage();
-            //Utility.BroadcastMessage(getAppContext());
             //---------------------------------------------------
         }
     }

@@ -32,9 +32,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/*
- * Created by kkyin on 2/7/2016.
- */
+
 public class MSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final String LOG_TAG = MSyncAdapter.class.getSimpleName();
@@ -43,12 +41,6 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
     // 60 seconds (1 minute) * 180 = 3 hours
     private static final int SYNC_INTERVAL = 60 * 720;
     private static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
-
-//    public static final String MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
-//    public static final String MOVIE_ = "movie";
-//    public static final String VIDEOS_ = "videos";
-//    public static final String REVIEWS_ = "reviews";
-//    public static final String PARAM_API_KEY = "api_key";
 
     //+++++++++++++++++++++++++++++++++
     //+++ Add 'ACCOUNT' required by the 'Framework'
@@ -69,73 +61,6 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
-//? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
-//        String sortBy = Utility.getPreferredSortSequence(mContext);
-//
-//        // (1)
-//        Uri uri = Utility.formUri_4_MovieInfo(mContext);
-//        String mUrl = uri.toString();
-//
-//        //---------------------------------
-//        // (1) Create a new 'futureRequest'
-//        // (2) Create a new request, with 'futureRequest' as one of the arguments.
-//        // (3) Get an instance of the requestQ.
-//        // (4) Add (2) into (3) -or- Place the new request into the requestQ
-//        //---------------------------------
-//        // (1)
-//        final RequestFuture<JSONObject> futureRequest = RequestFuture.newFuture();
-//        // (2)
-//          JsonObjectRequest jsnObjctRqst = new JsonObjectRequest(mUrl, null, futureRequest, futureRequest);
-//        //JsonObjectRequest jsnObjctRqst = new JsonObjectRequest(Request.Method.GET, mUrl, new JSONObject(), futureRequest, futureRequest);
-//        // (3)
-//        MyRqstQ myRqstQ = MyRqstQ.getInstance(mContext.getApplicationContext());
-//        RequestQueue requestQ = myRqstQ.getRequestQueue();
-//        //RequestQueue requestQ =
-//        //    MyRqstQ.getInstance(mContext.getApplicationContext()).getRequestQueue();
-//        // (4)
-//        requestQ.add(jsnObjctRqst);
-//
-//        Log.d(LOG_TAG, "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
-//        try {
-//
-//            JSONObject response = futureRequest.get(10, TimeUnit.SECONDS);
-//            // JSONObject response = futureRequest.get(); // this will block
-//            Log.d(LOG_TAG, "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
-//
-//            int[] mMovieIDs = Utility.getMovieInfoFromJson(response, sortBy, mContext);
-//            //long[] mMovieIDs = Utility.get_MovieInfoFromJson(response, sortBy, mContext); // ????
-//            Log.d(LOG_TAG, "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
-//
-//            // ***************** Movie Review **********************
-//            Utility.get_MovieReviews(mContext, mMovieIDs);
-//
-//            // ***************** Movie Video ********************
-//            Utility.get_MovieVideos(mContext, mMovieIDs);
-//
-//        } catch (InterruptedException e) {
-//            // exception handling
-//            e.printStackTrace();
-//            Log.d(LOG_TAG, "++++ InterruptedException ++++");
-//            //Toast.makeText(mContext,"++++ InterruptedException ++++", Toast.LENGTH_LONG).show();
-//        } catch (ExecutionException e) {
-//            // exception handling
-//            e.printStackTrace();
-//            Log.d(LOG_TAG, "++++ ExecutionException ++++");
-//            //Toast.makeText(mContext,"++++ ExecutionException ++++", Toast.LENGTH_LONG).show();
-//        } catch (TimeoutException e) {
-//            e.printStackTrace();
-//            Log.d(LOG_TAG, "++++ TimeoutException ++++");
-//            //Toast.makeText(mContext,"++++ TimeoutException ++++", Toast.LENGTH_LONG).show();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
-
-        //-----------------------------------------
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-//        String sortBy = sharedPreferences.getString(mContext.getString(R.string.pref_sortmovies_key), mContext.getString(R.string.pref_sortmovies_default_value));
         //-----------------------------------------
         String sortBy = Utility.getPreferredSortSequence(mContext);
         //-----------------------------------------
@@ -164,10 +89,6 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
 
         Log.d(LOG_TAG, "******************************************");
         try {
-            //----------------------------------------- added 8th August 2 am
-            //            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-            //            String sortBy = sharedPreferences.getString(mContext.getString(R.string.pref_sortmovies_key), mContext.getString(R.string.pref_sortmovies_default_value));
-            //-----------------------------------------//
 
             // ***************** Movie Info **********************
             // ***************************************************
@@ -202,12 +123,11 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
             // (5)
             movieInfoInJsonStr = stringBuilder.toString();
 
-            Log.d(LOG_TAG, "  <--- INTO getMovieInfoFromJson() ------------------");
             //long[] mMovieIDs = Utility.get_MovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext); // ????
-
-            int[] mMovieIDs = Utility.getMovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext); // ????
             //int[] mMovieIDs = Utility.getMovieInfoFromJson(response, sortBy, mContext);
 
+            Log.d(LOG_TAG, "  <--- INTO getMovieInfoFromJson() ------------------");
+            int[] mMovieIDs = Utility.getMovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext);
 
             // ***************** Movie Review ********************
             Log.d(LOG_TAG, "  <--- INTO get_MovieReviews() ------------------");
@@ -343,17 +263,6 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
 
         } else {
             ContentResolver.addPeriodicSync(account, authority, new Bundle(), syncInterval);
-
-            // ????
-            //---------------------------------------------
-            // tky add, July17 2017
-            //Utility.BroadcastMessage();
-            //Utility.BroadcastMessage(getAppContext());
-            /*Intent intent = new Intent();
-                   intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-            getAppContext().sendBroadcast(intent);*/
-            //getAppContext().sendBroadcast(intent);
-            //---------------------------------------------
 
         }
     }

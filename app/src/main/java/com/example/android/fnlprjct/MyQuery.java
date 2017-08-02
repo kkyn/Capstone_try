@@ -65,27 +65,11 @@ public class MyQuery {
             };
         int COL_MOVIE_ID = 1;
         int COL_VOTE_COUNT = 2;
-        int COL_POSTERLINK = 3;
+        //int COL_POSTERLINK = 3;
         int COL_ORIGINAL_TITLE = 4;
-        int COL_YEAR = 1;
+        //int COL_YEAR = 1;
     }
-    /*
-    static final int COLUMN_POPULAR_ID;
-    static final int COLUMN_MV_ID;
-    static final int COLUMN_KEY_ID;
-    public static final int COLUMN_POSTERLINK;
-    static final int COLUMN_BACKDROP_PATH;
-    public static final int COLUMN_MOVIE_TITLE;
 
-    static {
-        COLUMN_POPULAR_ID = 0;
-        COLUMN_MV_ID = 1;
-        COLUMN_KEY_ID = 2;
-        COLUMN_POSTERLINK = 3;
-        COLUMN_MOVIE_TITLE = 4;
-        COLUMN_BACKDROP_PATH = 5;
-    }
-     */
     //-------------------------------------------------
     public interface MovieInfo {
 

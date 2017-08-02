@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import com.example.android.fnlprjct.Detail_Fragment1;
 import com.example.android.fnlprjct.MyQuery;
 
-/**
- * Created by kkyin on 6/6/2017.
- */
 
 public class PagerViewAdapter extends FragmentStatePagerAdapter {
 

@@ -79,14 +79,9 @@ public class Detail_Fragment1 extends Fragment
     private static final int MOVIE_REVIEW_LOADER = 4;
 
     private Uri mUri;
-    private Uri uri;
     private int mItemId;
 
-    //static final String MOVIE_ID = "MovieID";
-    private String videoId;
-
     private DetailRcyclrVw_Adapter detailsAdapter;
-    private String targetSharedElementTransition;
     public boolean isFavouriteEnabled = false;
 
     private AnimatedVectorDrawable emptyHeart;
@@ -109,6 +104,8 @@ public class Detail_Fragment1 extends Fragment
 
         @Override
         public void onAsyncTaskCompleted(String[] result) {
+
+            String videoId;
 
             if (result != null) {
                 if (result.length == 0){
@@ -255,13 +252,11 @@ public class Detail_Fragment1 extends Fragment
         super.onCreate(savedInstanceState);
 
         //Return the arguments supplied when the fragment was instantiated, if any.
-        // ?????? is it needed ???
         Bundle bundle = this.getArguments();
         if (bundle.containsKey(ITEMID_KEY) == true) {
             mItemId = bundle.getInt(ITEMID_KEY);
-        /*if (bundle.containsKey("MyKey1") == true) {
-            mItemId = bundle.getInt("MyKey1");*/
 
+            Uri uri;
             uri = MovieInfoEntry.CONTENT_URI;
             uri = ContentUris.withAppendedId(uri, mItemId);
             mUri = uri;
@@ -287,10 +282,10 @@ public class Detail_Fragment1 extends Fragment
         mUriString = intent.getDataString();
         mUri = intent.getData();*/
 
-//        Bundle mBundle = this.getArguments();
-//        if (mBundle != null) {
-//            mUri = mBundle.getParcelable(Detail_Fragment1.DETAIL_URI);
-//        }
+        /*Bundle mBundle = this.getArguments();
+        if (mBundle != null) {
+            mUri = mBundle.getParcelable(Detail_Fragment1.DETAIL_URI);
+        }*/
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details1, container, false);
@@ -306,10 +301,12 @@ public class Detail_Fragment1 extends Fragment
 
         moviefavourite.setOnClickListener(this);
 
+        String targetSharedElementTransition;
+
         targetSharedElementTransition = getString(R.string.shared_name) + mItemId;
 
         ViewCompat.setTransitionName(moviethumbnail, targetSharedElementTransition);
-        /// moviethumbnail
+
         // **************************************
         // --- old way ?? ---
         //toolbar = (Toolbar) rootView.findViewById(R.id.tool_bar);
@@ -371,17 +368,6 @@ public class Detail_Fragment1 extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /*toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    //----------------------------------------------------------------
-                    // Indirect a call to a method via ArticaleDetailActivity/Activity.
-                    // supportFinishAfterTransition() -- refers to a method in FragmentActivity.java
-                    //----------------------------------------------------------------
-                    getActivity().supportFinishAfterTransition(); // onSupportNavigateUp();
-                }
-            });*/
     }
 
     @Override
@@ -455,24 +441,12 @@ public class Detail_Fragment1 extends Fragment
                 String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK);
                 //String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_BACKDROPLINK);
 
-                Log.d(LOG_TAG, "? ? ? ?  " + stringUrl + " ? ? ? ?");
+                /*Log.d(LOG_TAG, "? ? ? ?  " + stringUrl + " ? ? ? ?");*/
                 // -- thumb-nail-View --
                 // .setImageUrl -- define in ImageView
                 moviethumbnail.setImageUrl(stringUrl, imageLoader);
-                moviethumbnail.setAspectRatio(0.66f); // 1.0f, 1.5f, 0.66f     // --combo 1 --,-- combo2,1.0f --, combo3,1.0f
-                //moviethumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
-                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
-
-
-//--                moviethumbnail.setAspectRatio(1.0f); // 1.5f, 0.66f     // --combo 1 --,-- combo2,1.0f --, combo3,1.0f
-//--                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_END);   // combo3
-//                  moviethumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER); // --combo 1 --
-//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_START); // -- combo2 --
-//                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY); // --combo 1 --
-//                  moviethumbnail.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-//                moviethumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP); // lousy
-
-//                moviethumbnail.setScaleType(ImageView.ScaleType.MATRIX);
+                moviethumbnail.setAspectRatio(0.66f); // 1.0f, 1.5f, 0.66f
+                moviethumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
 
                 // -------------------------------
                 // ---- Using Volley, end --------
@@ -528,9 +502,9 @@ public class Detail_Fragment1 extends Fragment
 
             String[] projection = MyQuery.Reviews.PROJECTION;
             String mvID = mUri.getPathSegments().get(1);
-            Uri xUri = ContentUris.withAppendedId(MovieReviewEntry.CONTENT_URI, Long.valueOf(mvID));
+            Uri uri = ContentUris.withAppendedId(MovieReviewEntry.CONTENT_URI, Long.valueOf(mvID));
 
-            return new CursorLoader(getActivity(), xUri, projection, null, null, null);
+            return new CursorLoader(getActivity(), uri, projection, null, null, null);
 
         }
 

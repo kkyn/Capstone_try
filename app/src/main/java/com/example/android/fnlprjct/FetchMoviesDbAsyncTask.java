@@ -16,9 +16,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by kkyin on 3/11/2015.
- */
 
 public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
 
