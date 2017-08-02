@@ -4,9 +4,7 @@ import android.content.Context;
 
 import com.facebook.stetho.Stetho;
 
-/**
- * Created by kkyin on 2/4/2016.
- */
+
 public class OptionalDependencies {
     private Context context;
 
