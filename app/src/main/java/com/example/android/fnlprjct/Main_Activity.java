@@ -12,9 +12,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.android.fnlprjct.sync.MSyncAdapter;
-import com.google.android.gms.analytics.Tracker; // need instance of 'google-service.json'
 
-import static com.example.android.fnlprjct.MyApplication.getAppContext;
+//import static com.example.android.fnlprjct.MyApplication.getAppContext;
 
 public class Main_Activity extends AppCompatActivity implements Main_Fragment.CallBackListener {
 

@@ -212,9 +212,6 @@ public class Detail_Fragment1 extends Fragment
 
             case R.id.movievideo_tv:
 
-                //...................
-                // TODO: call DBAsyncTAsk , call method FetchComplete()
-                //
                 FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
                                        mTask.execute(movieID);
 
