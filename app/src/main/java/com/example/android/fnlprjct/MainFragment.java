@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,13 +36,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.android.fnlprjct.adapter.MainRcyclrVw_Adapter;
+import com.example.android.fnlprjct.adapter.MainRcyclrVwAdapter;
 import com.example.android.fnlprjct.data.MovieContract;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
-import com.example.android.fnlprjct.ui.ChangeYear_DialogFragment;
+import com.example.android.fnlprjct.ui.ChangeYearDialogFragment;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -51,25 +52,24 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * A placeholder fragment (Main_Fragment) containing a simple view.
+ * A placeholder fragment (MainFragment) containing a simple view.
  */
-public class Main_Fragment extends Fragment
+public class MainFragment extends Fragment
                             implements LoaderManager.LoaderCallbacks<Cursor>
                             , SharedPreferences.OnSharedPreferenceChangeListener
                             , SwipeRefreshLayout.OnRefreshListener
 {
     // constructor
-    public Main_Fragment() {
+    public MainFragment() {
         setHasOptionsMenu(true);
     }
 
-    public static final String LOG_TAG = Main_Fragment.class.getSimpleName();
-    SharedPreferences.OnSharedPreferenceChangeListener listener;
+    public static final String LOG_TAG = MainFragment.class.getSimpleName();
 
     //private RecyclerView mainRyclrVw;
-    private MainRcyclrVw_Adapter rvAdapter;
+    private MainRcyclrVwAdapter rvAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
-    private long itemID = 0;
+    private long itemId = 0;
     private Uri uri;
 
     // Firebase-Ads, ----(step1) Declare a variable
@@ -106,8 +106,8 @@ public class Main_Fragment extends Fragment
 
         FragmentManager fm = getFragmentManager();
 
-        ChangeYear_DialogFragment
-            chngyrDialog = ChangeYear_DialogFragment.newInstance();
+        ChangeYearDialogFragment
+            chngyrDialog = ChangeYearDialogFragment.newInstance();
             chngyrDialog.setTargetFragment(this, DIALOG_REQUEST_CODE); // 1 : say is Constants.DIALOG_REQUEST_CODE
             chngyrDialog.show(fm, DIALOG);
 
@@ -122,7 +122,9 @@ public class Main_Fragment extends Fragment
             if (resultCode == Activity.RESULT_OK) {
                 if (data.getExtras().containsKey(DIALOG_KEY)) {
 
-                    actionBar.setTitle(UpdateActionBarTitle());
+                    actionBar.setTitle(updateActionBarTitle());
+                    //actionBar.setSubtitle(updateActionBarTitle());
+                    //actionBar.setWindowTitle(updateActionBarTitle());
 
                     onRefresh();
                 }
@@ -137,7 +139,9 @@ public class Main_Fragment extends Fragment
     @BindView(R.id.edit_fab) FloatingActionButton editfab;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.main_recyclerview) RecyclerView mainRyclrVw;
-    @BindView(R.id.error) TextView error;
+    /*@BindView(R.id.error)
+    EditText error;*/
+    //@BindView(R.id.error) TextView error;
     @BindView(R.id.adView) AdView bannerView; // ??? ... need instance of 'google-service.json'
 
     //-------------------------
@@ -219,7 +223,7 @@ public class Main_Fragment extends Fragment
 
             actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(UpdateActionBarTitle());
+            actionBar.setTitle(updateActionBarTitle());
         }
     }
 
@@ -442,24 +446,23 @@ public class Main_Fragment extends Fragment
             editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_default));
 
             // Commit your preferences changes back from this Editor to the SharedPreferences object it is editing.
-//            editor.commit();
-            editor.apply();
-            actionBar.setTitle(UpdateActionBarTitle());
+            editor.apply(); // editor.commit();
+
+            actionBar.setTitle(updateActionBarTitle());
             return true;
         }
         else if (id == R.id.most_rated) {
             editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_ratings));
-//            editor.commit();
-            editor.apply();
+            editor.apply(); // editor.commit();
 
-            actionBar.setTitle(UpdateActionBarTitle());
+            actionBar.setTitle(updateActionBarTitle());
             return true;
         }
         else if (id == R.id.my_favorites) {
             editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_favorites));
-//            editor.commit();
-            editor.apply();
-            actionBar.setTitle(UpdateActionBarTitle());
+            editor.apply(); // editor.commit();
+
+            actionBar.setTitle(updateActionBarTitle());
             return true;
         }
 
@@ -467,7 +470,7 @@ public class Main_Fragment extends Fragment
 
     }
 
-    private String UpdateActionBarTitle() {
+    private String updateActionBarTitle() {
 
         String year = Utility.getPreferredYear(getContext());
         String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
@@ -520,24 +523,24 @@ public class Main_Fragment extends Fragment
         //return super.onCreateView(inflater, container, savedInstanceState);
 
         //************************************************************************************************
-        //*******Begin, Instantiate a Listener for MainRcyclrVw_Adapter.ItemClickListener ****************
+        //*******Begin, Instantiate a Listener for MainRcyclrVwAdapter.ItemClickListener ****************
         //************************************************************************************************
         // tky comment ....
         // Implementation the interface, 'NAME'/ItemClickListener
         // with the method-name/onClick0 found within the interface declaration.
-        MainRcyclrVw_Adapter.ItemClickListener listener =
-                        new MainRcyclrVw_Adapter.ItemClickListener() {
+        MainRcyclrVwAdapter.ItemClickListener listener =
+                        new MainRcyclrVwAdapter.ItemClickListener() {
 
                 @Override
-                public void onClick0(MainRcyclrVw_Adapter.MainRcyclrVw_ViewHolder viewHolder) {
+                public void onClick0(MainRcyclrVwAdapter.MainRcyclrVwViewHolder viewHolder) {
 
                     // ************* newer ***********************
                     mPosition = viewHolder.getAdapterPosition();
-                    itemID = rvAdapter.getItemId(mPosition);
+                    itemId = rvAdapter.getItemId(mPosition);
 
-                    String srcView_SharedElementTransition = getString(R.string.shared_name) + itemID;
+                    String srcViewSharedElementTransition = getString(R.string.shared_name) + itemId;
 
-                    viewHolder.poster_networkimageview.setTransitionName(srcView_SharedElementTransition);
+                    viewHolder.poster_networkimageview.setTransitionName(srcViewSharedElementTransition);
 
                     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                     // Firebase-Analytics ---- (step3) generate FirebaseAnalytics.logEvent
@@ -545,7 +548,7 @@ public class Main_Fragment extends Fragment
                     //  recordMovieImage(viewHolder);
                     String movieName = rvAdapter.getItemName(mPosition);
                     Bundle mbundle = new Bundle();
-                    mbundle.putString(FirebaseAnalytics.Param.ITEM_ID, Long.toString(itemID));
+                    mbundle.putString(FirebaseAnalytics.Param.ITEM_ID, Long.toString(itemId));
                     mbundle.putString(FirebaseAnalytics.Param.ITEM_NAME, movieName );
                     mbundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "selection");
 
@@ -554,11 +557,11 @@ public class Main_Fragment extends Fragment
                     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
                     // ????????????????????????????????
-                    ImageView poster_imageview1 = viewHolder.poster_networkimageview;
-                    //DynamicHeightNetworkImageView poster_imageview1 = viewHolder.poster_networkimageview;
+                    ImageView posterImageview = viewHolder.poster_networkimageview;
+                    //DynamicHeightNetworkImageView posterImageview = viewHolder.poster_networkimageview;
 
-                    final Pair<View, String> pair1 = Pair.create((View) poster_imageview1, viewHolder.poster_networkimageview.getTransitionName());
-                    //final Pair<View, String> pair1 = new Pair<>((View)poster_imageview1, viewHolder.poster_networkimageview.getTransitionName());
+                    final Pair<View, String> pair1 = Pair.create((View) posterImageview, viewHolder.poster_networkimageview.getTransitionName());
+                    //final Pair<View, String> pair1 = new Pair<>((View)posterImageview, viewHolder.poster_networkimageview.getTransitionName());
 
                     // http://guides.codepath.com/android/shared-element-activity-transition
                     ActivityOptionsCompat option = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pair1);
@@ -566,9 +569,9 @@ public class Main_Fragment extends Fragment
                     Bundle bundle = option.toBundle();
 
                     uri = MovieContract.MovieInfoEntry.CONTENT_URI;
-                    uri = ContentUris.withAppendedId(uri, itemID);
+                    uri = ContentUris.withAppendedId(uri, itemId);
 
-                    Intent intent = new Intent(getActivity(), Detail_Activity.class);
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
                     intent.setData(uri);
                     // ????????????????????????????????
 
@@ -577,10 +580,10 @@ public class Main_Fragment extends Fragment
                 }
             };
         //************************************************************************************************
-        //*******End  , Instantiate a Listener for MainRcyclrVw_Adapter.ItemClickListener ****************
+        //*******End  , Instantiate a Listener for MainRcyclrVwAdapter.ItemClickListener ****************
         //************************************************************************************************
 
-        rvAdapter = new MainRcyclrVw_Adapter(getContext(), listener);
+        rvAdapter = new MainRcyclrVwAdapter(getContext(), listener);
         //************************************************
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -649,14 +652,19 @@ public class Main_Fragment extends Fragment
 
         if (!networkUp()){
 
-            error.setText(getString(R.string.error_no_network));
-            error.setVisibility(View.VISIBLE);
+           // error.setContentDescription(getString(R.string.error_no_network));
+            /*error.setText(getString(R.string.error_no_network));
+            error.setVisibility(View.VISIBLE);*/
+
+            Toast toast = Toast.makeText(getActivity(), getString(R.string.error_no_network), Toast.LENGTH_LONG); //.show();
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                    toast.show();
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     swipeRefreshLayout.setRefreshing(false);// disables progress visibility
-                    error.setVisibility(View.INVISIBLE);
+                    /*error.setVisibility(View.INVISIBLE);*/
                 }
             }, 4000);
         }

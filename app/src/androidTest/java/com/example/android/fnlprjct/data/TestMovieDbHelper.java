@@ -53,7 +53,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         Note that this only tests that the MovieInfo table has the correct columns.
         This test does not look at the
      */
-    public void test_CreateDb() throws Throwable {
+    public void testCreateDb() throws Throwable {
         // build a HashSet of all of the table names we wish to look for
         // Note that there will be another table in the DB that stores the
         // Android metadata (db version information)
@@ -101,19 +101,19 @@ public class TestMovieDbHelper extends AndroidTestCase {
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         // Build a HashSet of all of the column names we want to look for
-        final HashSet<String> X_MovieInfoColumnHashSet = new HashSet<String>();
+        final HashSet<String> xMovieInfoColumnHashSet = new HashSet<String>();
 
-        X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry._ID);
-        X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_MOVIE_ID);
-        X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_ORIGINAL_TITLE);
-        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_RELEASE_DATE);
-        X_MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE);
-        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_POPULARITY);
-        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_VOTE_COUNT);
-        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_OVERVIEW);
-        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_POSTERLINK);
-        X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_BACKDROPLINK); // new
-     // X_MovieInfoColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);     // new
+        xMovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry._ID);
+        xMovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_MOVIE_ID);
+        xMovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_ORIGINAL_TITLE);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_RELEASE_DATE);
+        xMovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_POPULARITY);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_VOTE_COUNT);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_OVERVIEW);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_POSTERLINK);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_BACKDROPLINK); // new
+     // xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);     // new
 
         // now, do our tables contain the correct columns?
         mCursor = db.rawQuery("PRAGMA table_info(" + MovieContract.MovieInfoEntry.TABLE_NAME + ")", null);
@@ -121,27 +121,27 @@ public class TestMovieDbHelper extends AndroidTestCase {
         assertTrue("Error: This means that we were unable to query the database for table information.",
                 mCursor.moveToFirst());
 
-        int X_columnNameIndex = mCursor.getColumnIndex("name");
+        int xColumnNameIndex = mCursor.getColumnIndex("name");
         do {
-            String X_columnName = mCursor.getString(X_columnNameIndex);
-            X_MovieInfoColumnHashSet.remove(X_columnName);
+            String X_columnName = mCursor.getString(xColumnNameIndex);
+            xMovieInfoColumnHashSet.remove(X_columnName);
         } while(mCursor.moveToNext());
 
         // if this fails, it means that your database doesn't contain all of the required SortBy
         // entry columns
         assertTrue("Error: The database doesn't contain all of the required location entry columns",
-                X_MovieInfoColumnHashSet.isEmpty());
+                xMovieInfoColumnHashSet.isEmpty());
         //db.close();
 
         //-------------------------------------------------------//
 
         // Build a HashSet of all of the column names we want to look for
-        final HashSet<String> X_MovieReviewColumnHashSet = new HashSet<String>();
+        final HashSet<String> yMovieReviewColumnHashSet = new HashSet<String>();
 
-        X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry._ID);
-        X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_MOVIE_ID);
-        X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_REVIEWER);
-        X_MovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_REVIEWCONTENT);
+        yMovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry._ID);
+        yMovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_MOVIE_ID);
+        yMovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_REVIEWER);
+        yMovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_REVIEWCONTENT);
 
         // now, do our tables contain the correct columns?
         mCursor = db.rawQuery("PRAGMA table_info(" + MovieContract.MovieReviewEntry.TABLE_NAME + ")", null);
@@ -149,16 +149,16 @@ public class TestMovieDbHelper extends AndroidTestCase {
         assertTrue("Error: This means that we were unable to query the database for table information.",
                 mCursor.moveToFirst());
 
-        int X1_columnNameIndex = mCursor.getColumnIndex("name");
+        int yColumnNameIndex = mCursor.getColumnIndex("name");
         do {
-            String X1_columnName = mCursor.getString(X1_columnNameIndex);
-            X_MovieReviewColumnHashSet.remove(X1_columnName);
+            String yColumnName = mCursor.getString(yColumnNameIndex);
+            yMovieReviewColumnHashSet.remove(yColumnName);
         } while(mCursor.moveToNext());
 
         // if this fails, it means that your database doesn't contain all of the required SortBy
         // entry columns
         assertTrue("Error: The database doesn't contain all of the required location entry columns",
-                X_MovieReviewColumnHashSet.isEmpty());
+                yMovieReviewColumnHashSet.isEmpty());
 
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // now, do our tables contain the correct columns?
@@ -210,27 +210,27 @@ public class TestMovieDbHelper extends AndroidTestCase {
         You'll want to look in TestUtilities, the "createPopularValues" function.
         You can also make use of the ValidateCurrentRecord function from within TestUtilities.
     */
-    public void test_X_MovieInfo_Table() {
+    public void testMovieInfoTable() {
 
         Log.d("-- " + LOG_TAG, " ---testPopularTable()--- "); // tky add
 
         long rowId;
-        rowId = insert_X_MovieInfo_Table();
+        rowId = insertMovieInfoTable();
 
         Log.d("-- " + LOG_TAG, " rowId : " + rowId); // tky add
     }
 
 
-    public long insert_X_MovieInfo_Table() {
+    public long insertMovieInfoTable() {
 
         SQLiteDatabase db = new MovieSQLiteOpenHelper(this.mContext).getWritableDatabase();
 
         ContentValues contentValues = TestUtilities.create_ContentValues4_X_MovieInfo();
 
-        long x_MovieInfo_RowId = db.insert(MovieInfoEntry.TABLE_NAME, null, contentValues);
+        long xMovieInfoRowId = db.insert(MovieInfoEntry.TABLE_NAME, null, contentValues);
 
         // Verify we got a row back.
-        assertTrue(x_MovieInfo_RowId != -1);
+        assertTrue(xMovieInfoRowId != -1);
 
         // Step 4 : Query the database and receive a Cursor back
         // A cursor is your primary interface to the query results.
@@ -264,7 +264,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         cursor.close();
         db.close();
 
-        return x_MovieInfo_RowId;
+        return xMovieInfoRowId;
     }
 
     //
@@ -272,11 +272,11 @@ public class TestMovieDbHelper extends AndroidTestCase {
     //    You'll want to look in TestUtilities where you can use the "createPopularValues" function.
     //    You can also make use of the validateCurrentRecord function from within TestUtilities.
     //
-    public void test_X_MovieReview_Table() {
+    public void testMovieReviewTable() {
 
         Log.d("-- " + LOG_TAG, " ---testMovieInfoTable()--- "); // tky add
 
-        // First insert the sortby value, and then use the X_MovieInfo_RowId to insert
+        // First insert the sortby value, and then use the xMovieInfoRowId to insert
         // the movieInfo. Make sure to cover as many failure cases as you can.
 
         // Instead of rewriting all of the code we've already written in testPopularTable
@@ -289,10 +289,10 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // tests. Why move it? We need the code to return the ID of the inserted location
         // and our testPopularTable can only return void because it's a test.
 
-        long X_MovieInfo_RowId = insert_X_MovieInfo_Table();
+        long xMovieInfoRowId = insertMovieInfoTable();
 
         // Make sure we have a valid row ID.
-        assertFalse("Error: Location Not Inserted Correctly", X_MovieInfo_RowId == -1L);
+        assertFalse("Error: Location Not Inserted Correctly", xMovieInfoRowId == -1L);
 
         // First step: Get reference to writable database
         // If there's an error in those massive SQL table creation Strings,
@@ -301,7 +301,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         // Second Step (MovieInfo): Create MovieInfo values
-        ContentValues contentValues = TestUtilities.create_ContentValues4_X_MovieReview(X_MovieInfo_RowId);
+        ContentValues contentValues = TestUtilities.create_ContentValues4_X_MovieReview(xMovieInfoRowId);
 
         // Third Step (MovieInfo): Insert ContentValues into database and get a row ID back
         long movieReview_RowId = db.insert(MovieContract.MovieReviewEntry.TABLE_NAME, null, contentValues);

@@ -10,7 +10,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +26,10 @@ import butterknife.ButterKnife;
  * Created by kkyin on 7/6/2017.
  */
 
-public class Detail_FragmentPv extends Fragment
+public class DetailFragmentPv extends Fragment
                     implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    private static final String LOG_TAG = Detail_FragmentPv.class.getSimpleName();
+    private static final String LOG_TAG = DetailFragmentPv.class.getSimpleName();
     private static final int LOADER_ID = 4;
 
     private Cursor cursor;
@@ -45,7 +44,7 @@ public class Detail_FragmentPv extends Fragment
 
     @BindView(R.id.viewpager) ViewPager pager;
 
-    public Detail_FragmentPv(){
+    public DetailFragmentPv(){
     }
 
     @Override
@@ -72,8 +71,8 @@ public class Detail_FragmentPv extends Fragment
 
         Bundle mBundle = this.getArguments();
         if (mBundle != null) {
-            mUri = mBundle.getParcelable(Detail_Fragment1.DETAIL_URI);
-            movieId = Integer.parseInt(MovieContract.MovieInfoEntry.getMovieId_FromMovieInfoUri(mUri));
+            mUri = mBundle.getParcelable(DetailFragmentNew.DETAIL_URI);
+            movieId = Integer.parseInt(MovieContract.MovieInfoEntry.getMovieIdFromMovieInfoUri(mUri));
         }
 
         View rootView = inflater.inflate(R.layout.page_view, container, false);

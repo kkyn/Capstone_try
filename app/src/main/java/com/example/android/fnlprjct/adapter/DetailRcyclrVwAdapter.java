@@ -3,7 +3,6 @@ package com.example.android.fnlprjct.adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,45 +12,46 @@ import com.example.android.fnlprjct.MyQuery;
 import com.example.android.fnlprjct.R;
 
 
-public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_Adapter.Details_ViewHolder> {
+public class DetailRcyclrVwAdapter extends RecyclerView.Adapter<DetailRcyclrVwAdapter.DetailsViewHolder> {
 
-    private static final String LOG_TAG = DetailRcyclrVw_Adapter.class.getSimpleName();
+    private static final String LOG_TAG = DetailRcyclrVwAdapter.class.getSimpleName();
     private static final int VIEW_TYPE_A = 0;
     private Cursor mCursor;
-    private Context context;
+    private Context mContext;
 
-    public DetailRcyclrVw_Adapter(Context context) {
-        this.context = context;
+    public DetailRcyclrVwAdapter(Context context) {
+        this.mContext = context;
     }
 
     // basic requirement
     @Override
-    public Details_ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DetailsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (parent instanceof RecyclerView) {
 
             /*Log.d(LOG_TAG, "--xxxx--xxxx--xxxx--xxxx--xxxx-- viewType :- " + viewType);*/
-            int layout_id = -1;
+            int layoutId = -1;
             switch (viewType) {
+
                 case VIEW_TYPE_A: {
 
-                    // Log.d(LOG_TAG, "-- MainRcyclrVw_Adapter/onCreateViewHolder() --");
+                    // Log.d(LOG_TAG, "-- MainRcyclrVwAdapter/onCreateViewHolder() --");
                     //=================================
-                    layout_id = R.layout.cardview_review;
+                    layoutId = R.layout.cardview_review;
                     //=================================
                     break;
                 }
             }
-            View view = LayoutInflater.from(context).inflate(layout_id, parent, false);
+            View view = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
 
             // Control whether a view can take focus
             view.setFocusable(true);
 
-            Details_ViewHolder details_ViewHolder = new Details_ViewHolder(view);
+            DetailsViewHolder detailsViewHolder = new DetailsViewHolder(view);
 
-            view.setTag(details_ViewHolder);
+            view.setTag(detailsViewHolder);
 
-            return details_ViewHolder;
+            return detailsViewHolder;
         }
         else {
             throw new RuntimeException("Not bound to RecyclerViewSelection");
@@ -59,12 +59,12 @@ public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_
     }
 
     @Override // basic requirement
-    public void onBindViewHolder(Details_ViewHolder holder, int position) {
+    public void onBindViewHolder(DetailsViewHolder holder, int position) {
 
         if (mCursor.moveToPosition(position)) {
 
-            holder.Reviewer_tv.setText(mCursor.getString(MyQuery.Reviews.COL_REVIEWER));
-            holder.Review_tv.setText(mCursor.getString(MyQuery.Reviews.COL_REVIEWCONTENT));
+            holder.reviewerTextView.setText(mCursor.getString(MyQuery.Reviews.COL_REVIEWER));
+            holder.reviewTextView.setText(mCursor.getString(MyQuery.Reviews.COL_REVIEWCONTENT));
         }
     }
 
@@ -87,15 +87,15 @@ public class DetailRcyclrVw_Adapter extends RecyclerView.Adapter<DetailRcyclrVw_
     //--------------------------------------
     //---- Begin, ViewHolder definition ----
     //--------------------------------------
-    public class Details_ViewHolder extends RecyclerView.ViewHolder {
+    public class DetailsViewHolder extends RecyclerView.ViewHolder {
 
-        public final TextView Reviewer_tv;
-        public final TextView Review_tv;
+        public final TextView reviewerTextView;
+        public final TextView reviewTextView;
 
-        public Details_ViewHolder(View itemView) {
+        public DetailsViewHolder(View itemView) {
             super(itemView);
-            Reviewer_tv = (TextView) itemView.findViewById(R.id.Reviewer_textView);
-            Review_tv = (TextView) itemView.findViewById(R.id.Review_textView);
+            reviewerTextView = (TextView) itemView.findViewById(R.id.Reviewer_textView);
+            reviewTextView = (TextView) itemView.findViewById(R.id.Review_textView);
         }
     }
     //--------------------------------------

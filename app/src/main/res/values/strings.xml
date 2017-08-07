@@ -11,12 +11,17 @@
 
     <string name="title_main_ui">Final Project</string>
 
-
+    <string name="textview_default_text" translatable="false">TextView</string>
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- SyncAdapter related -->
+    <!-- Note: the value should be different when
+            building a 'debug' build-variant and a 'release' build-variant
+            would have error if they are the same -->
+    <!--<string name="sync_account_type" translatable="false">mymovies.example.com</string>--> <!-- name something different -->
     <string name="sync_account_type" translatable="false">movies.example.com</string> <!-- name something different -->
+
+    <!-- name where the content provider is from-->
     <string name="content_authority" translatable="false">com.example.android.fnlprjct</string> <!-- name of the content provider -->
-    <!--<string name="content_authority">com.example.android.myproject_2</string>--> <!-- name of the content provider -->
 
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- used in menu-bar, list of items -->
@@ -86,16 +91,23 @@
     <string name="error_no_network">No network connectivity! \nWill load top movie list when the network is available.</string>
     <string name="error_not_beyond_this_year">Please do not enter a number beyond this year.</string>
     <string name="error_no_title_found">No Title Found</string>
+    <string name="error_no_youtube_trailer">Error &#8212; No video trailer found at Youtube</string>
+
 
     <string name="descriptor_changeyear">Select another year</string>
-    <string name="descriptor_setfavorite">Set favourite button</string>
-    <string name="descriptor_unsetfavorite">Unset favourite button</string>
-    <string name="descriptor_movieclip">Start Movie Trailer</string>
+
+    <string name="descriptor_title">Movie title </string>
+    <string name="descriptor_movieclip">Movie Trailer</string>
     <string name="descriptor_backarrow">Return to previous interface</string>
+
+    <string name="descriptor_favorite">Favorite</string>
+    <string name="descriptor_set_favorite">Set Favorite</string>
+    <string name="descriptor_unset_favorite">Unset Favorite</string>
 
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in AdMob -->
-    <string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string> <!-- test id -->
     <!--<string name="my_admob_ap_id" translatable="false">ca-app-pub-9984201472519181~8798952934</string>-->
+    <string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+
 
 </resources>

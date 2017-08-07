@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
 
-//import static com.example.android.myproject_2.Main_Fragment.*;
+//import static com.example.android.myproject_2.MainFragment.*;
 //==============================================
 //==============================================
 /**

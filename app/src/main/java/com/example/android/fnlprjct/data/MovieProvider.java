@@ -95,23 +95,23 @@ public class MovieProvider extends ContentProvider {
         mvInfo_SQLiteQryBldr.setTables(MovieInfoEntry.TABLE_NAME);
     }
 
-    private static final SQLiteQueryBuilder mvReview_SQLiteQryBldr;
+    private static final SQLiteQueryBuilder mvReviewSQLiteQryBldr;
     static {
-        mvReview_SQLiteQryBldr = new SQLiteQueryBuilder();
+        mvReviewSQLiteQryBldr = new SQLiteQueryBuilder();
         // .setTables -- Sets the list of tables to query.
-        mvReview_SQLiteQryBldr.setTables(MovieReviewEntry.TABLE_NAME);
+        mvReviewSQLiteQryBldr.setTables(MovieReviewEntry.TABLE_NAME);
     }
 
-    private static final SQLiteQueryBuilder mvVideo_SQLiteQryBldr;
+    private static final SQLiteQueryBuilder mvVideoSQLiteQryBldr;
     static {
-        mvVideo_SQLiteQryBldr = new SQLiteQueryBuilder();
-        mvVideo_SQLiteQryBldr.setTables(MovieVideosEntry.TABLE_NAME);
+        mvVideoSQLiteQryBldr = new SQLiteQueryBuilder();
+        mvVideoSQLiteQryBldr.setTables(MovieVideosEntry.TABLE_NAME);
     }
 
-    private static final SQLiteQueryBuilder mvFavourites_SQLiteQryBldr;
+    private static final SQLiteQueryBuilder mvFavouritesSQLiteQryBldr;
     static {
-        mvFavourites_SQLiteQryBldr = new SQLiteQueryBuilder();
-        mvFavourites_SQLiteQryBldr.setTables(MovieFavouritesEntry.TABLE_NAME);
+        mvFavouritesSQLiteQryBldr = new SQLiteQueryBuilder();
+        mvFavouritesSQLiteQryBldr.setTables(MovieFavouritesEntry.TABLE_NAME);
     }
 
 
@@ -124,10 +124,10 @@ public class MovieProvider extends ContentProvider {
     private Cursor getMovieReviewData(
             Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
-        Log.d(LOG_TAG, "---- INTO getMovieReviewData() ---- call SQLiteQueryBuilder.query()"); // tky add
+        /*Log.d(LOG_TAG, "---- INTO getMovieReviewData() ---- call SQLiteQueryBuilder.query()");*/ // tky add
 
 
-        return mvReview_SQLiteQryBldr.query(
+        return mvReviewSQLiteQryBldr.query(
                 mvsSqLtOpnHlpr.getReadableDatabase()
                 , projection
                 , selection
@@ -141,26 +141,26 @@ public class MovieProvider extends ContentProvider {
     //------------------------------------//
     //---------- Movie Info --------------//
     //------------------------------------//
-    private static final String selection_MovieInfo_WithMovieId =
+    private static final String selectionMovieInfoWithMovieId =
             MovieContract.MovieInfoEntry.TABLE_NAME + "." + MovieContract.MovieInfoEntry.COL_MOVIE_ID + " = ?";
 
-    private Cursor getMovieInfoData_FromMovieId(Uri uri, String[] projection, String sortOrder) {
+    private Cursor getMovieInfoDataFromMovieId(Uri uri, String[] projection, String sortOrder) {
 
-        String movieId = MovieInfoEntry.getMovieId_FromMovieInfoUri(uri);
+        String movieId = MovieInfoEntry.getMovieIdFromMovieInfoUri(uri);
 
-        SQLiteDatabase  read_SQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
-        String          selection = selection_MovieInfo_WithMovieId;
+        SQLiteDatabase  readSQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
+        String          selection = selectionMovieInfoWithMovieId;
         String[]        selectionArg = new String[]{movieId};
 
         return mvInfo_SQLiteQryBldr.query(
-                            read_SQLiteDB, projection, selection, selectionArg,
+                            readSQLiteDB, projection, selection, selectionArg,
                             null, null, sortOrder);
 
     }
     //------------------------------------//
     //---------- Movie Review ------------//
     //------------------------------------//
-    private static final String selection_MovieReview_WithMovieId =
+    private static final String selectionMovieReviewWithMovieId =
             MovieReviewEntry.TABLE_NAME + "." + MovieContract.MovieReviewEntry.COL_MOVIE_ID + " = ?";
 
     // ContentResolver > Content-Provider > "DATABASE"
@@ -168,18 +168,18 @@ public class MovieProvider extends ContentProvider {
     //
     // e.g. uri --> "content://com.example.android.myproject_2/moviereview/123"
     //
-    private Cursor getMovieReviewData_FromMovieId(Uri uri, String[] projection, String sortOrder) {
+    private Cursor getMovieReviewDataFromMovieId(Uri uri, String[] projection, String sortOrder) {
 
         // get the last segment in the uri
-        String mMovieId = MovieReviewEntry.getMovieId_FromMovieReviewUri(uri);
+        String mMovieId = MovieReviewEntry.getMovieIdForFromMovieReviewUri(uri);
 
-        SQLiteDatabase read_SQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
+        SQLiteDatabase readSQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
 
         // call database and query for the row with such mMovieId
-        return mvReview_SQLiteQryBldr.query(
-                read_SQLiteDB
+        return mvReviewSQLiteQryBldr.query(
+                readSQLiteDB
                 , projection
-                , selection_MovieReview_WithMovieId
+                , selectionMovieReviewWithMovieId
                 , new String[]{mMovieId}
                 , null
                 , null
@@ -192,24 +192,24 @@ public class MovieProvider extends ContentProvider {
     //------------------------------------//
     // Table_X_MovieVideo.MovieID = ?
     //
-    private static final String selectMovieVideo_WithMovieId =
+    private static final String selectMovieVideoWithMovieId =
             MovieVideosEntry.TABLE_NAME + "." + MovieContract.MovieVideosEntry.COL_MOVIE_ID + " = ?";
     //
     // e.g. uri --> "content://com.example.android.myproject_2/movievideo/123"
     //
-    private Cursor getMovieVideoKey_FromMovieId(Uri uri, String[] projection, String sortOrder) {
+    private Cursor getMovieVideoKeyFromMovieId(Uri uri, String[] projection, String sortOrder) {
 
         // get the last segment in the uri
-        String movieId = MovieContract.MovieVideosEntry.getMovieId_FromMovieVideoUri(uri);
+        String movieId = MovieContract.MovieVideosEntry.getMovieIdFromMovieVideoUri(uri);
 
         SQLiteDatabase readSQLiteDataBase = mvsSqLtOpnHlpr.getReadableDatabase();
 
-        String selection = selectMovieVideo_WithMovieId;
+        String selection = selectMovieVideoWithMovieId;
 
         String[] selectionArg = new String[]{movieId};
 
         // call database and query for the row with such movieId
-        return mvVideo_SQLiteQryBldr.query(
+        return mvVideoSQLiteQryBldr.query(
                       readSQLiteDataBase
                       , projection              // get some columns
                       , selection               // selection
@@ -272,7 +272,7 @@ public class MovieProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         Cursor retCursor;
-        SQLiteDatabase rdbl_SQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
+        SQLiteDatabase rdblSQLiteDB = mvsSqLtOpnHlpr.getReadableDatabase();
         final int match = sUriMatcher.match(uri);
 
         // The switch statement gets a URI, it will determine what kind of request it is,
@@ -281,17 +281,17 @@ public class MovieProvider extends ContentProvider {
 
             //---  movieinfo/*
             case CNST_MOVIE_INFO_ID_: {
-                 retCursor = getMovieInfoData_FromMovieId(uri, projection, sortOrder);
+                 retCursor = getMovieInfoDataFromMovieId(uri, projection, sortOrder);
                 break;
             }
 		    //---  moviereview/*
             case CNST_MOVIE_REVIEW_ID_: {
-                retCursor = getMovieReviewData_FromMovieId(uri, projection, sortOrder);
+                retCursor = getMovieReviewDataFromMovieId(uri, projection, sortOrder);
                 break;
             }
             //--- movievideo/*
             case CNST_MOVIE_VIDEO_ID_: {
-                retCursor = getMovieVideoKey_FromMovieId(uri, projection, sortOrder);
+                retCursor = getMovieVideoKeyFromMovieId(uri, projection, sortOrder);
                 break;
             }
             //--- moviefavourites/*
@@ -304,7 +304,7 @@ public class MovieProvider extends ContentProvider {
             case CNST_MOVIE_REVIEW_: {
 
               //retCursor = getMovieReviewData(uri, projection, selection, selectionArgs, sortOrder);
-                retCursor = rdbl_SQLiteDB.query(
+                retCursor = rdblSQLiteDB.query(
                                     MovieReviewEntry.TABLE_NAME, projection,
                                     selection, selectionArgs,
                                     null, null, sortOrder
@@ -315,7 +315,7 @@ public class MovieProvider extends ContentProvider {
             //                          String groupBy, String having, String orderBy, String limit)
             //---  movieinfo/
             case CNST_MOVIE_INFO_: {
-                retCursor = rdbl_SQLiteDB.query(
+                retCursor = rdblSQLiteDB.query(
                                     MovieInfoEntry.TABLE_NAME, projection,
                                     selection, selectionArgs,
                                     null, null,
@@ -325,7 +325,7 @@ public class MovieProvider extends ContentProvider {
             }
             //---  movievideo/
             case CNST_MOVIE_VIDEO_: {
-                retCursor = rdbl_SQLiteDB.query(
+                retCursor = rdblSQLiteDB.query(
                                     MovieVideosEntry.TABLE_NAME, projection,
                                     selection, selectionArgs,
                                     null, null, sortOrder
@@ -335,7 +335,7 @@ public class MovieProvider extends ContentProvider {
             //--- moviefavourites/
             case CNST_MOVIE_FAVOURITES_:{
 
-                retCursor = rdbl_SQLiteDB.query(
+                retCursor = rdblSQLiteDB.query(
                         MovieFavouritesEntry.TABLE_NAME,
                         projection, selection, selectionArgs, null, null, sortOrder);
                 }
@@ -357,18 +357,18 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
-        final SQLiteDatabase wrtbl_SQLiteDB = mvsSqLtOpnHlpr.getWritableDatabase();
+        final SQLiteDatabase wrtblSQLiteDB = mvsSqLtOpnHlpr.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsUpdated;
 
         switch (match) {
 
 			case CNST_MOVIE_REVIEW_: {
-                rowsUpdated = wrtbl_SQLiteDB.update(MovieReviewEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = wrtblSQLiteDB.update(MovieReviewEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
             case CNST_MOVIE_INFO_: {
-                rowsUpdated = wrtbl_SQLiteDB.update(MovieInfoEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = wrtblSQLiteDB.update(MovieInfoEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
 
@@ -406,7 +406,7 @@ public class MovieProvider extends ContentProvider {
                 long _id = wrtbl_SQLiteDB.insert(MovieReviewEntry.TABLE_NAME, null, values);
 
                 if (_id > 0) {
-                    retUri = MovieReviewEntry.buildUri_MovieReviewWithId(_id);
+                    retUri = MovieReviewEntry.buildUriForMovieReviewWithId(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -418,7 +418,7 @@ public class MovieProvider extends ContentProvider {
                 long _id = wrtbl_SQLiteDB.insert(MovieInfoEntry.TABLE_NAME, null, values);
 
                 if (_id > 0) {
-                    retUri = MovieInfoEntry.buildUri_MovieInfoWithId(_id);
+                    retUri = MovieInfoEntry.buildUriForMovieInfoWithId(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -445,7 +445,7 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
 
-        final SQLiteDatabase wrtbl_SQLiteDB = mvsSqLtOpnHlpr.getWritableDatabase();
+        final SQLiteDatabase wrtblSQLiteDB = mvsSqLtOpnHlpr.getWritableDatabase();
         int rowsDeleted;
 
         if (selection == null) selection = "1";
@@ -453,17 +453,17 @@ public class MovieProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
 
 			case CNST_MOVIE_REVIEW_: {
-                rowsDeleted = wrtbl_SQLiteDB.delete(MovieReviewEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = wrtblSQLiteDB.delete(MovieReviewEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
 
             case CNST_MOVIE_INFO_: {
-                rowsDeleted = wrtbl_SQLiteDB.delete(MovieInfoEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = wrtblSQLiteDB.delete(MovieInfoEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
 
             case CNST_MOVIE_VIDEO_: {
-                rowsDeleted = wrtbl_SQLiteDB.delete(MovieVideosEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = wrtblSQLiteDB.delete(MovieVideosEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
 
@@ -493,8 +493,8 @@ public class MovieProvider extends ContentProvider {
                 returnCount = 0;
                 try {
                     for (ContentValues cv : values) {
-                        long _id = wrtblSqLtDb.insert(MovieVideosEntry.TABLE_NAME, null, cv);
-                        if (_id != 1) {
+                        long id = wrtblSqLtDb.insert(MovieVideosEntry.TABLE_NAME, null, cv);
+                        if (id != 1) {
                             returnCount++;
                         }
                     }
@@ -529,8 +529,8 @@ public class MovieProvider extends ContentProvider {
                 returnCount = 0;
                 try {
                     for (ContentValues cv : values) {
-                        long _id = wrtblSqLtDb.insert(MovieInfoEntry.TABLE_NAME, null, cv);  // ??
-                        if (_id != -1) {
+                        long id = wrtblSqLtDb.insert(MovieInfoEntry.TABLE_NAME, null, cv);  // ??
+                        if (id != -1) {
                             returnCount++;
                         }
                     }

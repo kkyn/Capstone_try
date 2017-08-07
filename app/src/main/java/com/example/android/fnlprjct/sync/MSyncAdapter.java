@@ -93,7 +93,7 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
             // ***************** Movie Info **********************
             // ***************************************************
             // (1)
-            uri = Utility.formUri_4_MovieInfo(mContext);
+            uri = Utility.formUriForMovieInfo(mContext);
             url = new URL(uri.toString());
             // (2)
             httpUrlConnection = (HttpURLConnection) url.openConnection();
@@ -130,12 +130,12 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
             int[] mMovieIDs = Utility.getMovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext);
 
             // ***************** Movie Review ********************
-            Log.d(LOG_TAG, "  <--- INTO get_MovieReviews() ------------------");
-            Utility.get_MovieReviews(mContext, mMovieIDs);
+            Log.d(LOG_TAG, "  <--- INTO getMovieReviews() ------------------");
+            Utility.getMovieReviews(mContext, mMovieIDs);
 
             // ***************** Movie Video *********************
-            Log.d(LOG_TAG, "  <--- INTO get_MovieVideos() ------------------");
-            Utility.get_MovieVideos(mContext, mMovieIDs);
+            Log.d(LOG_TAG, "  <--- INTO getMovieVideos() ------------------");
+            Utility.getMovieVideos(mContext, mMovieIDs);
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error", e);

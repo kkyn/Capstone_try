@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.example.android.fnlprjct.adapter.DetailRcyclrVw_Adapter;
+import com.example.android.fnlprjct.adapter.DetailRcyclrVwAdapter;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 
@@ -38,18 +39,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Detail_Fragment1 extends Fragment
+public class DetailFragmentNew extends Fragment
                              implements
                               SharedPreferences.OnSharedPreferenceChangeListener
-                            , View.OnClickListener
+                           // , View.OnClickListener
 {
 
     // Required empty public constructor
-    public Detail_Fragment1() {
+    public DetailFragmentNew() {
         //setHasOptionsMenu(true);
     }
 
@@ -58,19 +60,19 @@ public class Detail_Fragment1 extends Fragment
     // + To create a new instance of ArticleDetailFragment/Fragment,
     //    providing "num" as an argument.
     //---------------------------------------------------------------
-    public static Detail_Fragment1 newInstance(int itemId) {
+    public static DetailFragmentNew newInstance(int itemId) {
 
         Bundle arguments = new Bundle();
                arguments.putInt(ITEMID_KEY, itemId);
 
-        Detail_Fragment1 fragment = new Detail_Fragment1();
+        DetailFragmentNew fragment = new DetailFragmentNew();
                          fragment.setArguments(arguments);
 
         return fragment;
     }
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private static final String LOG_TAG = Detail_Fragment1.class.getSimpleName();
+    private static final String LOG_TAG = DetailFragmentNew.class.getSimpleName();
     private static final String ITEMID_KEY = "ItemID_Key";
 
     static final String DETAIL_URI = "URI";
@@ -81,7 +83,7 @@ public class Detail_Fragment1 extends Fragment
     private Uri mUri;
     private int mItemId;
 
-    private DetailRcyclrVw_Adapter detailsAdapter;
+    private DetailRcyclrVwAdapter detailsAdapter;
     public boolean isFavouriteEnabled = false;
 
     private AnimatedVectorDrawable emptyHeart;
@@ -109,7 +111,10 @@ public class Detail_Fragment1 extends Fragment
 
             if (result != null) {
                 if (result.length == 0){
-                    Toast.makeText(getContext(),"Error -- No Videos Trailer for YouTube" , Toast.LENGTH_LONG).show();
+
+                    Toast toast = Toast.makeText(getContext(), getString(R.string.error_no_youtube_trailer), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
                 }
                 else {
                     //TODO; update VideoId for youtube
@@ -200,48 +205,90 @@ public class Detail_Fragment1 extends Fragment
         return favouritesBoolean;
     }
 
+    // tky add, Using ButterKnife's 'OnClick'
+    @OnClick(R.id.movievideo_tv)
+    public void startYoutubeVideo(View view) {
+
+        String movieId = mUri.getPathSegments().get(1);
+
+        if (view.getId() == R.id.movievideo_tv) {
+            FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
+            mTask.execute(movieId);
+        }
+    }
+
+    // tky add, Using ButterKnife's 'OnClick'
+    // ref: stackoverflow --- 29603834
+    @OnClick(R.id.favourite_btn)
+    public void setFavoriteButton(View view){
+
+        String movieId = mUri.getPathSegments().get(1);
+
+        if (view.getId() == R.id.favourite_btn) {
+
+            isFavouriteEnabled = checkFavourites(movieId);
+
+            if (!isFavouriteEnabled) {
+                moviefavourite.setImageDrawable(fillHeart);
+                moviefavourite.setContentDescription(getString(R.string.descriptor_set_favorite)); // ok!
+                fillHeart.start();
+
+                saveToFavourites(movieId);
+            }
+            else {
+                moviefavourite.setImageDrawable(emptyHeart);
+                moviefavourite.setContentDescription(getString(R.string.descriptor_unset_favorite)); // ok!
+                emptyHeart.start();
+
+                removeFromFavourites(movieId);
+            }
+        }
+    }
+
     //-------------------------------------------
     //-- for View.onClickListener, movievideo.setOnClickListener(this);
     //-------------------------------------------
-    @Override
-    public void onClick(View view) {
-
-        String movieID = mUri.getPathSegments().get(1);
-
-        switch (view.getId()) {
-
-            case R.id.movievideo_tv:
-
-                FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
-                                       mTask.execute(movieID);
-
-                break;
-
-            case R.id.favourite_btn:
-
-                //movieID = mUri.getPathSegments().get(1);
-
-                isFavouriteEnabled = checkFavourites(movieID);
-
-                if (!isFavouriteEnabled) {
-                    moviefavourite.setImageDrawable(fillHeart);
-                    fillHeart.start();
-
-                    saveToFavourites(movieID);
-                }
-                else {
-                    moviefavourite.setImageDrawable(emptyHeart);
-                    emptyHeart.start();
-
-                    removeFromFavourites(movieID);
-                }
-
-                break;
-
-            default:
-                break;
-        }
-    }
+//    @Override
+//    public void onClick(View view) {
+//
+//        String movieId = mUri.getPathSegments().get(1);
+//
+//        switch (view.getId()) {
+//
+//           /* case R.id.movievideo_tv:
+////startYoutubeVideo(view);
+//                *//*FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
+//                                       mTask.execute(movieId);*//*
+//
+//                break;*/
+//
+//            case R.id.favourite_btn:
+//
+//                //movieId = mUri.getPathSegments().get(1);
+//
+//                isFavouriteEnabled = checkFavourites(movieId);
+//
+//                if (!isFavouriteEnabled) {
+//                    moviefavourite.setImageDrawable(fillHeart);
+//                    moviefavourite.setContentDescription(getString(R.string.descriptor_set_favorite)); // ok!
+//                    fillHeart.start();
+//
+//                    saveToFavourites(movieId);
+//                }
+//                else {
+//                    moviefavourite.setImageDrawable(emptyHeart);
+//                    moviefavourite.setContentDescription(getString(R.string.descriptor_unset_favorite)); // ok!
+//                    emptyHeart.start();
+//
+//                    removeFromFavourites(movieId);
+//                }
+//
+//                break;
+//
+//            default:
+//                break;
+//        }
+//    }
     //-------------------------------------------
 
     @Override
@@ -281,7 +328,7 @@ public class Detail_Fragment1 extends Fragment
 
         /*Bundle mBundle = this.getArguments();
         if (mBundle != null) {
-            mUri = mBundle.getParcelable(Detail_Fragment1.DETAIL_URI);
+            mUri = mBundle.getParcelable(DetailFragmentNew.DETAIL_URI);
         }*/
 
         // Inflate the layout for this fragment
@@ -289,14 +336,15 @@ public class Detail_Fragment1 extends Fragment
 
         ButterKnife.bind(this, rootView);
 
-        movievideo.setOnClickListener(this);
+        movievideo.setContentDescription(getString(R.string.descriptor_movieclip));
 
         // ----------------------
         emptyHeart = (AnimatedVectorDrawable) getActivity().getDrawable(R.drawable.avd_heart_empty);
         fillHeart = (AnimatedVectorDrawable) getActivity().getDrawable(R.drawable.avd_heart_fill);
         // ----------------------
 
-        moviefavourite.setOnClickListener(this);
+        //moviefavourite.setContentDescription(getString(R.string.descriptor_favorite));
+        //moviefavourite.setOnClickListener(this);
 
         String targetSharedElementTransition;
 
@@ -350,7 +398,7 @@ public class Detail_Fragment1 extends Fragment
         getLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null, reviewLoaderCallback_1);
         //++++++++++++++++++++++++++++++++++++++
 
-        detailsAdapter = new DetailRcyclrVw_Adapter(getContext());
+        detailsAdapter = new DetailRcyclrVwAdapter(getContext());
 
         LinearLayoutManager lytMngr = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
@@ -435,6 +483,10 @@ public class Detail_Fragment1 extends Fragment
                 // -------------------------------
                 ImageLoader imageLoader = ImageLoaderHelper.getInstance(getContext()).getImageLoader();
 
+                String stringTitle = getString(R.string.descriptor_title) +
+                                        cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE);
+                moviethumbnail.setContentDescription(stringTitle);
+
                 String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK);
                 //String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_BACKDROPLINK);
 
@@ -454,11 +506,13 @@ public class Detail_Fragment1 extends Fragment
 
                 if (favouriteValue == 1) {
                     isFavouriteEnabled = true;
+                    moviefavourite.setContentDescription(getString(R.string.descriptor_favorite));
                     moviefavourite.setImageDrawable(fillHeart);
                     fillHeart.start();
 
                 } else {
                     isFavouriteEnabled = false;
+                    moviefavourite.setContentDescription(getString(R.string.descriptor_favorite));
                     moviefavourite.setImageDrawable(emptyHeart);
                     emptyHeart.start();
 
@@ -498,8 +552,8 @@ public class Detail_Fragment1 extends Fragment
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
             String[] projection = MyQuery.Reviews.PROJECTION;
-            String mvID = mUri.getPathSegments().get(1);
-            Uri uri = ContentUris.withAppendedId(MovieReviewEntry.CONTENT_URI, Long.valueOf(mvID));
+            String mvId = mUri.getPathSegments().get(1);
+            Uri uri = ContentUris.withAppendedId(MovieReviewEntry.CONTENT_URI, Long.valueOf(mvId));
 
             return new CursorLoader(getActivity(), uri, projection, null, null, null);
 

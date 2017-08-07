@@ -32,13 +32,19 @@
     <string name="error_no_network">لا اتصال الشبكة! سيتم تحميل أعلى قائمة الأفلام عندما تكون الشبكة متوفرة.</string>
     <string name="error_not_beyond_this_year">يرجى عدم إدخال رقم ما بعد هذا العام.</string>
     <string name="error_no_title_found">لم يتم العثور على عنوان</string>
+    <string name="error_no_youtube_trailer">خطأ - لم يتم العثور على مقطع فيديو مرئي في يوتوب</string>
+
 
 
     <!-- --> Select another year : حدد سنة أخرى <!-- -->
     <string name="descriptor_changeyear">حدد سنة أخرى</string>  <!-- Select another year -->
-    <string name="descriptor_setfavorite">تعيين زر المفضلة لديك</string> <!-- Set favorite button -->
-    <string name="descriptor_unsetfavorite">إلغاء تعيين الزر المفضل</string> <!-- Unset favorite button -->
+
+    <string name="descriptor_title">عنوان الفيلم</string>
     <string name="descriptor_movieclip">بدء فيلم مقطورة</string> <!-- Start Movie Trailer -->
     <string name="descriptor_backarrow">ارجع إلى الواجهة السابقة</string> <!-- Return to previous interface -->
+
+    <string name="descriptor_favorite">المفضلة</string> <!-- Favorite button -->
+    <string name="descriptor_set_favorite">مجموعة المفضلة</string>  <!-- Set favorite button -->
+    <string name="descriptor_unset_favorite">إلغاء تعيين المفضلة</string> <!-- Unset favorite button -->
 
 </resources>

@@ -1,7 +1,6 @@
 package com.example.android.fnlprjct;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,6 +31,7 @@ import java.util.Vector;
 
 
 public class Utility {
+
     public static String LOG_TAG = Utility.class.getSimpleName();
 
     private static final String MOVIE_DB_BASE_URL = "https://api.themoviedb.org/3/"; //"http://api.themoviedb.org/3/"
@@ -48,11 +48,14 @@ public class Utility {
 
 
     public static int getThisYearValue() {
+
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-        return year;
+
+        // Return the year.
+        return calendar.get(Calendar.YEAR);
+
     }
 
     public static String getPreferredSortSequence(Context context) {
@@ -70,7 +73,7 @@ public class Utility {
 
         String string = sharedPreferences.getString(mKey, mDefaultSequence);
 
-        /*Log.d(LOG_TAG, "1111 getPreferredSortSequence -- actualSortSeq : " + string);*/
+        Log.d(LOG_TAG, "1111 getPreferredSortSequence -- actualSortSeq : " + string);
 
         return string;
     }
@@ -83,11 +86,11 @@ public class Utility {
         return year;
     }
 
-    // /**************************************************/
-    /******************* Movie Reviews *******************/
-    /*****************************************************/
-    public static void get_MovieReviews(Context context, int[] movieIDArray) throws IOException, JSONException { //MalformedURLException,
-        // public static void get_MovieReviews(Context context, long[] movieIDArray) throws  IOException, JSONException{ //MalformedURLException,
+    //*****************************************************/
+    //******************* Movie Reviews *******************/
+    //*****************************************************/
+    public static void getMovieReviews(Context context, int[] movieIdArray) throws IOException, JSONException { //MalformedURLException,
+  //public static void getMovieReviews(Context context, long[] movieIdArray) throws  IOException, JSONException{ //MalformedURLException,
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -99,16 +102,16 @@ public class Utility {
         InputStream inputStream;
         StringBuffer stringBuffer;
 
-        Vector<ContentValues> vectorCV = new Vector<ContentValues>();
+        Vector<ContentValues> vectorCV = new Vector<>();
 
-        if (movieIDArray.length > 0) {
+        if (movieIdArray.length > 0) {
 
-            Log.d(LOG_TAG, "z z z z z z z z z z  " + movieIDArray.length + " y y y y y y y y y y y y");
-            for (int movieId : movieIDArray) {
+            /*Log.d(LOG_TAG, "z z z z z z z z z z  " + movieIdArray.length + " y y y y y y y y y y y y");*/
+            for (int movieId : movieIdArray) {
 
-                Log.d(LOG_TAG, "z z z z z z z z z z  " + movieId + " y y y y y y y y y y y y");
+                /*Log.d(LOG_TAG, "z z z z z z z z z z  " + movieId + " y y y y y y y y y y y y");*/
                 // (1) build the Url
-                mUri = formUri_4_MovieReview(movieId);
+                mUri = formUriForMovieReview(movieId);
 
                 url = new URL(mUri.toString());
 
@@ -160,7 +163,7 @@ public class Utility {
                     cv.put(MovieReviewEntry.COL_REVIEWCONTENT, content);
                     // cv.put(MovieReviewEntry.COL_KEY_ID, movieId);
 
-                    Log.d(LOG_TAG, "  <--- Add cv ------------------ " + index);
+                    /*Log.d(LOG_TAG, "  <--- Add cv ------------------ " + index);*/
                     vectorCV.add(cv);
                 }
             }
@@ -172,16 +175,16 @@ public class Utility {
 
             ContentResolver contentResolver = context.getContentResolver();
 
-            Log.d(LOG_TAG, "x x x x x x x x x x x x x x x " + MovieReviewEntry.CONTENT_URI.toString());
+            /*Log.d(LOG_TAG, "x x x x x x x x x x x x x x x " + MovieReviewEntry.CONTENT_URI.toString());*/
 
             int size = contentResolver.bulkInsert(MovieReviewEntry.CONTENT_URI, arrayCV);
         }
     }
 
+    /* ****************************************************/
+    /* ****************** Movie Video *********************/
     /*****************************************************/
-    /******************* Movie Video *********************/
-    /*****************************************************/
-    public static void get_MovieVideos(Context context, int[] movieIDArray) throws IOException, JSONException { //MalformedURLException,
+    public static void getMovieVideos(Context context, int[] movieIdArray) throws IOException, JSONException { //MalformedURLException,
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -194,13 +197,14 @@ public class Utility {
         InputStream inputStream;
         StringBuffer stringBuffer;
 
-        Vector<ContentValues> vectorCV = new Vector<>();
+        Vector<ContentValues> vectorCv = new Vector<>();
+        /*Vector<ContentValues> vectorCv = new Vector<ContentValues>();*/
 
-        if (movieIDArray.length > 0) {
-            for (int movieId : movieIDArray) {
+        if (movieIdArray.length > 0) {
+            for (int movieId : movieIdArray) {
 
                 // (1) build the Url
-                uri = formUri_4_MovieVideo(movieId);
+                uri = formUriForMovieVideo(movieId);
 
                 url = new URL(uri.toString());
 
@@ -233,12 +237,12 @@ public class Utility {
                 String movieVideosJsonStr = stringBuffer.toString();
 
                 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                final String RESULTS = "results";
-                final String KEY = "key";
+                final String results = "results";
+                final String key = "key";
                 String videoKey;
 
                 JSONObject movieVideosJsonObject = new JSONObject(movieVideosJsonStr);
-                JSONArray resultsJsonArray = movieVideosJsonObject.getJSONArray(RESULTS);
+                JSONArray resultsJsonArray = movieVideosJsonObject.getJSONArray(results);
                 //==================
                 //String[] moviesVideoKey = new String[results_In_JSONArray.length()];
                 for (int i = 0; i < resultsJsonArray.length(); i++) {
@@ -247,7 +251,7 @@ public class Utility {
                     if (i == 0) {
                         JSONObject resultJsonObject = resultsJsonArray.getJSONObject(i);
 
-                        videoKey = resultJsonObject.getString(KEY);
+                        videoKey = resultJsonObject.getString(key);
 
                         ContentValues cv = new ContentValues();
 
@@ -256,29 +260,29 @@ public class Utility {
 
                         /*context.getContentResolver()
                                 .insert(MovieContract.MovieVideosEntry.CONTENT_URI, contentValues);*/
-                        vectorCV.add(cv);
+                        vectorCv.add(cv);
                     }
                 }
                 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
             }
-            ContentValues[] arrayCV = new ContentValues[vectorCV.size()];
-            vectorCV.toArray(arrayCV);
+            ContentValues[] arrayCv = new ContentValues[vectorCv.size()];
+            vectorCv.toArray(arrayCv);
             // -- or --
             //ContentValues[] arrayContentValues = Vctr.toArray(new ContentValues[Vctr.size()]);
 
             ContentResolver contentResolver = context.getContentResolver();
 
-            Log.d(LOG_TAG, "y y y y y y y y y y y y y y y " + MovieVideosEntry.CONTENT_URI.toString());
-            int size = contentResolver.bulkInsert(MovieVideosEntry.CONTENT_URI, arrayCV);
+            /*Log.d(LOG_TAG, "y y y y y y y y y y y y y y y " + MovieVideosEntry.CONTENT_URI.toString());*/
+            int size = contentResolver.bulkInsert(MovieVideosEntry.CONTENT_URI, arrayCv);
         }
     }
 
     //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
     //=================================================
-    /***************************************************************/
-    /******************* Form Uri Movie Video **********************/
-    /***************************************************************/
-    private static Uri formUri_4_MovieVideo(int movieId) {
+    //***************************************************************/
+    //******************* Form Uri Movie Video **********************/
+    //***************************************************************/
+    private static Uri formUriForMovieVideo(int movieId) {
 
         Uri uri =
             Uri.parse(MOVIE_DB_BASE_URL)        // creates a Uri which parses the given encoded URI string
@@ -289,13 +293,15 @@ public class Utility {
                 .appendEncodedPath(VIDEOS_)             // appendEncodedPath postfix a '?', e.g.  reviews?
                 .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY)// appendQueryParameter infix a '=', e.g. api_key=xxxxxx
                 .build();
+
+        // return a constructed uri 'string'
         return uri;
     }
 
-    /***************************************************************/
-    /******************* Form Uri Movie Reivews ********************/
-    /***************************************************************/
-    private static Uri formUri_4_MovieReview(int movieId) {
+    //***************************************************************/
+    //******************* Form Uri Movie Reivews ********************/
+    //***************************************************************/
+    private static Uri formUriForMovieReview(int movieId) {
 
         Uri uri = Uri.parse(MOVIE_DB_BASE_URL);        // Creates a Uri from parsing the given encoded URI string
         Uri.Builder uriBuilder = uri.buildUpon();  // Obtain a builder (Uri.Builder) representing an existing URI
@@ -311,10 +317,10 @@ public class Utility {
         return uri;
     }
 
-    /***************************************************************/
-    /******************* Form Uri Movie Info ***********************/
-    /***************************************************************/
-    public static Uri formUri_4_MovieInfo(Context context) {
+    //***************************************************************/
+    //******************* Form Uri Movie Info ***********************/
+    //***************************************************************/
+    public static Uri formUriForMovieInfo(Context context) {
 
         String year = Utility.getPreferredYear(context);
         String sortBy = Utility.getPreferredSortSequence(context);
@@ -344,9 +350,9 @@ public class Utility {
     }
 
 
-    /*********************************************************/
-    /******************* Get Movie Info  *********************/
-    /*********************************************************/
+    //*********************************************************/
+    //******************* Get Movie Info  *********************/
+    //*********************************************************/
     // tky add, called at MSyncAdapter
     //-- public static int[] getMovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
     //public static Vector<ContentValues> getMovieInfoFromJson(JSONObject moviesJsonObj, String sortBy, Context context) throws JSONException {
@@ -367,12 +373,12 @@ public class Utility {
         // W342 = "w342/"; W500 = "w500/";
         // W780 = "w780/"; ORIGINAL = "original/";
 
-        final String W342 = "w342/";
+        //final String W342 = "w342/";
         final String W780 = "w780/";
-        final String W500 = "w500/";
+        //final String W500 = "w500/";
         final String ORIGINAL = "original/";
 
-        Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");
+        /*Log.d(LOG_TAG, "  ---> INSIDE  getMovieInfoFromJson(); ---");*/
 
         String searchYearBy = Utility.getPreferredYear(context);
         //-------------------
@@ -384,7 +390,8 @@ public class Utility {
 
         List<String> mvIdStringList = new ArrayList<>();
 
-        Vector<ContentValues> Vctr = new Vector<ContentValues>();
+        Vector<ContentValues> Vctr = new Vector<>();
+        /*Vector<ContentValues> Vctr = new Vector<ContentValues>();*/
 
         int jsonArrayLength = resultsJSONArray.length();
 
@@ -405,8 +412,6 @@ public class Utility {
             String backdropLink = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
             //String backdropLink = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
 
-            //movie_IDs[i] = (int)mvId;
-
             ContentValues cv = new ContentValues();
 
             cv.put(MovieInfoEntry.COL_MOVIE_ID, mvId);
@@ -424,13 +429,13 @@ public class Utility {
 
             //Log.d(LOG_TAG, "---------- get_MovieInfoFromJson --------- ");
 
-            if (!is_movieInDataBase(context, cv)) {
+            if (!isMovieInfoInDataBase(context, cv)) {
 
                 Vctr.add(cv);
 
                 mvIdStringList.add(Integer.toString((int) mvId));
 
-                Log.d(LOG_TAG, "+++++++++++++++  ADD INTO VECTOR  +++++++++++++++" + mvId);
+                /*Log.d(LOG_TAG, "+++++++++++++++  ADD INTO VECTOR  +++++++++++++++" + mvId);*/
             }
         }
 //        Vector<String> v = new Vector<String>();  // sample code
@@ -442,7 +447,7 @@ public class Utility {
 
         int size = contentResolver.bulkInsert(MovieInfoEntry.CONTENT_URI, arrayContentValues);
 
-        Log.d(LOG_TAG, "z z z z z z z z z z SIZE :- " + size + " z z z z z z z z z z z");
+        /*Log.d(LOG_TAG, "z z z z z z z z z z SIZE :- " + size + " z z z z z z z z z z z");*/
 
         //-----------------------------------------------
         String[] mvIdStringArray = new String[mvIdStringList.size()];
@@ -460,7 +465,7 @@ public class Utility {
         return mvIdIntArray;
     }
 
-    private static boolean is_movieInDataBase(/*Uri uri,*/ Context context, ContentValues cv) {
+    private static boolean isMovieInfoInDataBase(/*Uri uri,*/ Context context, ContentValues cv) {
 
         //Uri  mUri  = uri; // e.g. MovieInfoEntry.CONTENT_URI;
         Uri uri = MovieInfoEntry.CONTENT_URI;
@@ -472,10 +477,9 @@ public class Utility {
 
         Cursor cursor = contentResolver.query(uri, projection, selection, selectionArg, null /*sortOrder*/);
 
-        return (cursor != null && cursor.moveToFirst());
-
-        /*if(cursor!=null && cursor.moveToFirst()){
+        if(cursor!=null && cursor.moveToFirst()){
+            cursor.close(); // ensure freeing up of cursor after 'query'
             return true;
-        } else return false;*/
+        } else return false;
     }
 }

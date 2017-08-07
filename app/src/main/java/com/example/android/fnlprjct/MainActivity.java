@@ -15,9 +15,9 @@ import com.example.android.fnlprjct.sync.MSyncAdapter;
 
 //import static com.example.android.fnlprjct.MyApplication.getAppContext;
 
-public class Main_Activity extends AppCompatActivity implements Main_Fragment.CallBackListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.CallBackListener {
 
-    private static final String LOG_TAG = Main_Activity.class.getSimpleName();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     public boolean is2Pane = false;
 
@@ -51,7 +51,7 @@ public class Main_Activity extends AppCompatActivity implements Main_Fragment.Ca
 
         FragmentManager fMngr = getSupportFragmentManager();
 
-        Main_Fragment mainFragment = (Main_Fragment) fMngr.findFragmentById(R.id.mainfragment_container);
+        MainFragment mainFragment = (MainFragment) fMngr.findFragmentById(R.id.mainfragment_container);
 
         if ( mainFragment != null ) {
             mainFragment.myRestartLoaderCode();

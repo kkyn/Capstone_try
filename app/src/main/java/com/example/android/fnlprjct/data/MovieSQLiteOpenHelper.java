@@ -50,7 +50,7 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
 	    //+++++++++++++++++++++++++++++++++++++++++++++
         // Define the formats of the Database tables
         //+++++++++++++++++++++++++++++++++++++++++++++
-        final String SQL_CREATE_TABLE_MOVIE_INFO =
+        final String sqlCreateTableMovieInfo =
 
                 "CREATE TABLE " + MovieInfoEntry.TABLE_NAME
                    + " ("
@@ -68,7 +68,7 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
                    + MovieInfoEntry.COL_BACKDROPLINK  + TYPE_TEXT_NOT_NULL
                    + ");";
 
-        final String SQL_CREATE_TABLE_MOVIE_REVIEW =
+        final String sqlCreateTableMovieReview =
 
                 "CREATE TABLE " + MovieReviewEntry.TABLE_NAME
                     + " ("
@@ -81,7 +81,7 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
 
                     + ");";
 
-        final String SQL_CREATE_TABLE_MOVIE_VIDEO =
+        final String sqlCreateTableMovieVideo =
 
                 "CREATE TABLE " + MovieVideosEntry.TABLE_NAME
                     + " ("
@@ -92,9 +92,9 @@ public class MovieSQLiteOpenHelper extends SQLiteOpenHelper {
 
         // Have the system to execute the "SQL...", to build the database table
 
-        db.execSQL(SQL_CREATE_TABLE_MOVIE_REVIEW);
-        db.execSQL(SQL_CREATE_TABLE_MOVIE_INFO);
-        db.execSQL(SQL_CREATE_TABLE_MOVIE_VIDEO);
+        db.execSQL(sqlCreateTableMovieReview);
+        db.execSQL(sqlCreateTableMovieInfo);
+        db.execSQL(sqlCreateTableMovieVideo);
 
     }
 

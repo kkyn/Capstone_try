@@ -7,15 +7,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import com.example.android.fnlprjct.Main_Activity;
+import com.example.android.fnlprjct.MainActivity;
 import com.example.android.fnlprjct.R;
 
 // tky comment,
@@ -37,8 +33,8 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
 
         // ***************************************************************
         // click event handler for the title, launches the app when the user clicks on Title.
-        // Create an Intent to launch Main_Activity
-        Intent titleIntent = new Intent(context, Main_Activity.class);
+        // Create an Intent to launch MainActivity
+        Intent titleIntent = new Intent(context, MainActivity.class);
 
         PendingIntent titlePendingIntent = PendingIntent.getActivity(context, 0, titleIntent, 0);
 

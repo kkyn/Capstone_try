@@ -4,10 +4,9 @@ import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 import android.view.ViewGroup;
 
-import com.example.android.fnlprjct.Detail_Fragment1;
+import com.example.android.fnlprjct.DetailFragmentNew;
 import com.example.android.fnlprjct.MyQuery;
 
 
@@ -54,9 +53,9 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
         // Here we call an newinstance which create a new MDetails-Fragment with a given argument.
         // The 'argument-value' comes from the cursor residing/given in/to this ViewPager-Adapter.
         // To display at the ViewPager UI
-        Detail_Fragment1 fgmnt1 = Detail_Fragment1.newInstance(movieId);
+        DetailFragmentNew fgmnt = DetailFragmentNew.newInstance(movieId);
 
-        return (Fragment) fgmnt1;
+        return (Fragment) fgmnt;
     }
 
     // (1) In this adapter, get the number of 'items'.
@@ -85,7 +84,7 @@ public class PagerViewAdapter extends FragmentStatePagerAdapter {
     public int getItemPosition(Object object) {
         //return super.getItemPosition(object);
         // this method will be called for every fragment in the ViewPager
-        if (object instanceof Detail_Fragment1){
+        if (object instanceof DetailFragmentNew){
             return POSITION_UNCHANGED;  // don't force a reload
         } else {
             // POSITION_NONE means something like: this fragment is no longer valid

@@ -39,13 +39,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:elevation="4dp"
+                android:layout_marginStart="@dimen/toolbar_title_padding"
+                android:layout_marginEnd="@dimen/toolbar_title_padding"
+                android:elevation="@dimen/toolbar_elevation"
                 android:minHeight="?android:attr/actionBarSize"
 
 
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_collapseMode="pin"
                 >
+
+                android:minHeight="?android:attr/actionBarSize"
                 app:theme="@style/ToolbarStyle"
 
             </android.support.v7.widget.Toolbar>
@@ -68,37 +72,37 @@
         <!-- FAB -->
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/edit_fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
             android:layout_marginBottom="@dimen/fab_margin"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginEnd="@dimen/fab_margin"
 
-            app:elevation="6dp"
+            app:elevation="@dimen/fab_elevation"
             app:fabSize="auto"
             app:layout_anchor="@id/fragment_main_base_id"
             app:layout_anchorGravity="bottom|end"
-            app:pressedTranslationZ="12dp"
+            app:pressedTranslationZ="@dimen/fab_z_translation"
             app:srcCompat="@drawable/ic_mode_edit_white_24dp"
             />
         <!-- ++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
-        <TextView
+        <!--<EditText
             android:id="@+id/error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAppearance="@android:style/TextAppearance.Medium"
-            android:visibility="gone"
+            android:visibility="invisible"
             tools:text="Error message"
-            />
+            />-->
 
     </android.support.design.widget.CoordinatorLayout>
 
     <View
         android:id="@+id/spacer"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
+        android:layout_height="@dimen/view_height"
         android:layout_above="@+id/adView"
         />
 

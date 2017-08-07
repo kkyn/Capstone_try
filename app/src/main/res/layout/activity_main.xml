@@ -4,10 +4,10 @@ we don't need to use fragmenttransaction in xxx.java file because
 the 'id' is for identify this fragment,
 the 'name' is to specify the class to instantiate in the layout.
 the 'id' to this fragment is associated to,
-the UI layout fragment referenced in android:name="com....Main_Fragment".
+the UI layout fragment referenced in android:name="com....MainFragment".
 -->
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mainfragment_container"
-    android:name="com.example.android.fnlprjct.Main_Fragment"
+    android:name="com.example.android.fnlprjct.MainFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

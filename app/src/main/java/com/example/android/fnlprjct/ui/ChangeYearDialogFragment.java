@@ -15,11 +15,13 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.fnlprjct.Main_Fragment;
+import com.example.android.fnlprjct.MainFragment;
 import com.example.android.fnlprjct.R;
 import com.example.android.fnlprjct.Utility;
 import com.example.android.fnlprjct.data.MovieContract;
@@ -37,19 +39,19 @@ import butterknife.ButterKnife;
 //  https://developer.android.com/reference/android/app/AlertDialog.Builder.html
 //  https://developer.android.com/reference/android/widget/TextView.html
 
-public class ChangeYear_DialogFragment extends DialogFragment
+public class ChangeYearDialogFragment extends DialogFragment
                 implements SharedPreferences.OnSharedPreferenceChangeListener
 {
 
-    private static final String LOG_TAG = ChangeYear_DialogFragment.class.getSimpleName();
+    private static final String LOG_TAG = ChangeYearDialogFragment.class.getSimpleName();
 
     // Empty constructor required for DialogFragment
-    public ChangeYear_DialogFragment(){
+    public ChangeYearDialogFragment(){
     }
 
-    public static ChangeYear_DialogFragment
+    public static ChangeYearDialogFragment
     newInstance(){
-        ChangeYear_DialogFragment cyDialog = new ChangeYear_DialogFragment();
+        ChangeYearDialogFragment cyDialog = new ChangeYearDialogFragment();
         return cyDialog;
     }
 
@@ -58,7 +60,7 @@ public class ChangeYear_DialogFragment extends DialogFragment
     // Step 2 : ( Return data to 'source'/'target'-fragment )
     private void sendBackResult() {
         Bundle bundle = new Bundle();
-        bundle.putString(Main_Fragment.DIALOG_KEY, enterYear_et.getText().toString());
+        bundle.putString(MainFragment.DIALOG_KEY, enterYear_et.getText().toString());
 
         Intent intent = new Intent().putExtras(bundle);
 
@@ -105,7 +107,8 @@ public class ChangeYear_DialogFragment extends DialogFragment
 
         ButterKnife.bind(this, view);
 
-        // Set a special listener to be called when an action is performed on the text view.
+        // reference: stackoverflow.com -- 9596010 --
+        // Set a special listener to be called when an action is performed on the edittext view.
         // Interface definition for a callback to be invoked when an action is performed on the editor.
         enterYear_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -113,24 +116,60 @@ public class ChangeYear_DialogFragment extends DialogFragment
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                String stringEnteredYear = enterYear_et.getText().toString();
-                int intEnteredYear = Integer.parseInt(stringEnteredYear);
-                Toast toast = Toast.makeText(getActivity(), getString(R.string.error_not_beyond_this_year), Toast.LENGTH_LONG); //.show();
+                /* When I(the user) press the 'Done' option in the softkeyboard,
+                 the app's dialogFragment will perform the same sequence
+                 as when the user select the 'submit' option in the dialog UI.
+                */
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) ||
+                    (actionId == EditorInfo.IME_ACTION_DONE)
+                    )
+                {
+                    /*Toast.makeText(getContext(), "Enter pressed", Toast.LENGTH_LONG).show();*/
 
-                if (intEnteredYear > Utility.getThisYearValue()) {
-                    toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-                    //toast.setGravity(Gravity.TOP|Gravity.LEFT,0,0);
-                    toast.show();
+                    String stringEnteredYear = enterYear_et.getText().toString();
+                    int intEnteredYear = Integer.parseInt(stringEnteredYear);
+                    Toast toast = Toast.makeText(getActivity(), getString(R.string.error_not_beyond_this_year), Toast.LENGTH_LONG); //.show();
 
-                    return true;
+                    if (intEnteredYear > Utility.getThisYearValue()) {
+                        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                        toast.show();
+
+                        return true;
+                    } else {
+                        searchMoviesYear();
+                        sendBackResult();
+                        return true;
+                    }
                 } else {
-                    searchMoviesYear();
-                    //return false;
-                    return true;
+                    return false;
                 }
-
             }
         });
+
+//        enterYear_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//
+//            // Called when an action is being performed.
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                String stringEnteredYear = enterYear_et.getText().toString();
+//                int intEnteredYear = Integer.parseInt(stringEnteredYear);
+//                Toast toast = Toast.makeText(getActivity(), getString(R.string.error_not_beyond_this_year), Toast.LENGTH_LONG); //.show();
+//
+//
+//                if (intEnteredYear > Utility.getThisYearValue()) {
+//                    toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+//                    //toast.setGravity(Gravity.TOP|Gravity.LEFT,0,0);
+//                    toast.show();
+//
+//                    return true;
+//                } else {
+//                    searchMoviesYear();
+//                    //return false;
+//                    return true;
+//                }
+//
+//            }
+//        });
 
 
         // +++++++++++ AlertDialog Builder Stuff ++++++++++++++
@@ -149,8 +188,7 @@ public class ChangeYear_DialogFragment extends DialogFragment
                     Toast toast = Toast.makeText(getActivity(), getString(R.string.error_not_beyond_this_year), Toast.LENGTH_LONG); //.show();
 
                     if (intEnteredYear > Utility.getThisYearValue()) {
-                        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
-                        //toast.setGravity(Gravity.CENTER|Gravity.LEFT,0,0);
+                        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);    // Gravity.CENTER|Gravity.LEFT
                         toast.show();
 
                     } else {
@@ -168,7 +206,7 @@ public class ChangeYear_DialogFragment extends DialogFragment
 
         // ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        //dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         return dialog;
     }

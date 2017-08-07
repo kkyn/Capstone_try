@@ -19,11 +19,9 @@ import java.net.URL;
 
 public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
 
-
     private final String LOG_TAG = FetchMoviesDbAsyncTask.class.getSimpleName();
 
     ///////////////////////////////////////////////////
-
     private Context mContext;
     private OnAsyncTaskCompletedListener mListener;
 
@@ -39,7 +37,6 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
         void onAsyncTaskCompleted(String[] result);
     }
     //--------------------------------------
-
     ///////////////////////////////////////////
 
     //++++++++++++++++++++++++++++++++++++++++++++++++
@@ -88,7 +85,7 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
                     .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DB_API_KEY /*  &api_key=####  */)
                     .build();
 
-            Log.d(LOG_TAG, "----xxxxxxx" + buildUri.toString());
+            /*Log.d(LOG_TAG, "----xxxxxxx" + buildUri.toString());*/
 
             URL url = new URL(buildUri.toString());
 

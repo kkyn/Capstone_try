@@ -24,7 +24,7 @@
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
 
         <activity
-            android:name=".Main_Activity"
+            android:name=".MainActivity"
             android:label="@string/label_main_activity"> <!-- also refers to the label name of the start-icon -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -33,20 +33,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Detail_Activity"
+            android:name=".DetailActivity"
             android:label="@string/label_detail_activity"
-            android:parentActivityName=".Main_Activity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Main_Activity"/>
+                android:value=".MainActivity"/>
         </activity>
         <activity
             android:name=".SettingsPreferenceActivity"
             android:label="Settings"
-            android:parentActivityName=".Main_Activity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Main_Activity"/>
+                android:value=".MainActivity"/>
         </activity>
 
         <!-- The SyncAdapter's dummy authentication service -->
@@ -123,6 +123,16 @@
                   android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
                   android:theme="@android:style/Theme.Translucent" />
 
+        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->
+        <!-- https://stackoverflow.com/questions/33270613/android-app-crashes-on-addaccountexplicitlyaccount-password-null -->
+        <!--<service android:name="your.AuthService">-->
+        <!--<service android:name="your.AuthService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator"
+                       android:resource="@xml/authenticator" />
+        </service>-->
     </application>
 
 </manifest>

@@ -25,19 +25,20 @@
             android:minHeight="?android:attr/actionBarSize"
 
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginStart="72dp"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             >
+            <!--app:expandedTitleMarginStart="72dp"-->
 
             <com.example.android.fnlprjct.DynamicHeightNetworkImageView
                 android:id="@+id/moviethumbnail_iv"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/DynamicHeightNetworkImageView_height"
                 android:fitsSystemWindows="true"
 
                 app:layout_collapseMode="parallax"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|exitUntilCollapsed"
                 >
+
             </com.example.android.fnlprjct.DynamicHeightNetworkImageView>
 
             <!-- Scrim --><!-- use big V, not small V -->
@@ -75,9 +76,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
+            android:background="@color/white"
             android:orientation="vertical"
-            android:paddingTop="24dp">
+            android:paddingTop="@dimen/linearlayout_padding">
+
 
             <include layout="@layout/fragment_details1_a"/>
 
@@ -95,19 +97,20 @@
     <!-- FAB -->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/favourite_btn"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
 
         android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         android:scaleType="center"
+        android:onClick="setFavoriteButton"
 
-        app:elevation="6dp"
+        app:elevation="@dimen/fab_elevation"
         app:fabSize="auto"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:pressedTranslationZ="12dp"/>
+        app:pressedTranslationZ="@dimen/fab_z_translation"/>
     <!-- +++++++++++++++++++++++++++++++ -->
 
 </android.support.design.widget.CoordinatorLayout>

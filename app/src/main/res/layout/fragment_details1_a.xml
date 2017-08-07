@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical">
 
     <TextView
@@ -11,29 +12,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textSize="15sp"/>
+        android:textSize="@dimen/textview_text_size"/>
 
     <TextView
         android:id="@+id/movieratings_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textSize="15sp"/>
+        android:textSize="@dimen/textview_text_size"/>
 
     <TextView
         android:id="@+id/moviesynopsis_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textColor="#000000"
-        android:textSize="15sp"/>
+        android:paddingStart="@dimen/cardview_content_padding"
+        android:paddingEnd="@dimen/cardview_content_padding"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/textview_text_size"/>
+
 
     <ImageView
         android:id="@+id/movievideo_tv"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="center"
+        android:layout_width="@dimen/video_imageview_size"
+        android:layout_height="@dimen/video_imageview_size"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/video_imageview_margin"
+        android:layout_marginStart="@dimen/video_imageview_margin"
+        android:onClick="startYoutubeVideo"
 
+        app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/youtube_play"/>
 
 </LinearLayout>

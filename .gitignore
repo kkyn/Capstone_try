@@ -5,3 +5,7 @@
 .DS_Store
 /build
 /captures
+
+# means, ignore this file when load to GitHub
+# tky add, to give added security ...
+/keystore.properties

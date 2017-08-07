@@ -46,9 +46,9 @@ public class TestMovieContract extends AndroidTestCase {
     // Test methods for Uri,
     // "content://com.example.android.myproject_2/movieinfo/movieName"
     ///////////////////////////////////////////
-    public void test_buildUri_MovieInfo() {
+    public void testBuildUriMovieInfo() {
 
-        Uri mUri = MovieInfoEntry.buildUri_MovieInfo(TEST_MOVIE_NAME);
+        Uri mUri = MovieInfoEntry.buildUriForMovieInfo(TEST_MOVIE_NAME);
 
         assertNotNull(
                 "Error: Null Uri returned. "
@@ -68,13 +68,13 @@ public class TestMovieContract extends AndroidTestCase {
                 mUri.toString(),
                 "content://com.example.android.fnlprjct/movieinfo/%2FXMovie" );
     }
-    public void test_buildUri_MovieInfoWithId() {
+    public void testBuildUriMovieInfoWithId() {
 
-        Uri mUri = MovieInfoEntry.buildUri_MovieInfoWithId(TEST_MOVIE_ID);
+        Uri mUri = MovieInfoEntry.buildUriForMovieInfoWithId(TEST_MOVIE_ID);
 
         assertNotNull(
                 "Error: Null Uri returned. " +
-                "You must fill-in buildUri_MovieInfoWithId() in MovieContract.",
+                "You must fill-in buildUriForMovieInfoWithId() in MovieContract.",
                 mUri);
 
         assertEquals(
@@ -83,11 +83,11 @@ public class TestMovieContract extends AndroidTestCase {
                 Long.parseLong(mUri.getLastPathSegment(), 10));
     }
 
-    public void test_getMovieId_FromMovieInfoUri() {
+    public void testGetMovieIdFromMovieInfoUri() {
 
         Uri mUri =  Uri.parse("content://com.example.android.myproject_2/movieinfo/1234");
 
-        String mMovieId = MovieContract.MovieInfoEntry.getMovieId_FromMovieInfoUri(mUri);
+        String mMovieId = MovieContract.MovieInfoEntry.getMovieIdFromMovieInfoUri(mUri);
 
         assertEquals(
                 "Error: 'extracted Movie_Id from Uri don't match with fixed 1234",
@@ -102,9 +102,9 @@ public class TestMovieContract extends AndroidTestCase {
     ///////////////////////////////////////////////////////
     ////////////// MovieReviewEntry /////////////////////
     ///////////////////////////////////////////////////////
-    public void test_buildUri_MovieReviewWithName() {
+    public void testBuildUriMovieReviewWithName() {
 
-        Uri mUri = MovieContract.MovieReviewEntry.buildUri_4MovieReviewWithName(TEST_MOVIE_NAME);
+        Uri mUri = MovieContract.MovieReviewEntry.buildUriForMovieReviewWithName(TEST_MOVIE_NAME);
 
         assertNotNull("Error:  Null Uri returned."
                 + "You must fill-in buildUri_X_MovieReviewWithName() in MovieContract.\"",
@@ -118,13 +118,13 @@ public class TestMovieContract extends AndroidTestCase {
                 mUri.toString(),
                 "content://com.example.android.fnlprjct/moviereview/%2FXMovie");
     }
-    public void test_buildUri_X_MovieReviewWithId() {
+    public void testBuildUriXMovieReviewWithId() {
 
-        Uri mUri = MovieContract.MovieReviewEntry.buildUri_MovieReviewWithId(TEST_MOVIE_ID);
+        Uri mUri = MovieContract.MovieReviewEntry.buildUriForMovieReviewWithId(TEST_MOVIE_ID);
 
         assertNotNull(
                 "Error: Null Uri returned. " +
-                        "You must fill-in buildUri_MovieReviewWithId() in MovieContract.",
+                        "You must fill-in buildUriForMovieReviewWithId() in MovieContract.",
                 mUri);
 
         assertEquals(
@@ -133,11 +133,11 @@ public class TestMovieContract extends AndroidTestCase {
                 Long.parseLong(mUri.getLastPathSegment(), 10));
     }
 
-    public void test_getMovieId_FromMovieReviewUri() {
+    public void testGetMovieIdFromMovieReviewUri() {
 
         Uri mUri =  Uri.parse("content://com.example.android.myproject_2/moviereview/1234");
 
-        String mMovieId = MovieContract.MovieReviewEntry.getMovieId_FromMovieReviewUri(mUri);
+        String mMovieId = MovieContract.MovieReviewEntry.getMovieIdForFromMovieReviewUri(mUri);
 
         assertEquals(
                 "Error: 'extracted Movie_Id from Uri don't match with fixed 1234",

@@ -78,7 +78,7 @@ public class MovieContract {
         // * Convenient supporting methods to help build the Content Provider Queries, Uri(s)
         //
         // *  e.g. "content://com.example.android.myproject_2/movieinfo/movieName"
-        public static Uri buildUri_MovieInfo(String movieName) {
+        public static Uri buildUriForMovieInfo(String movieName) {
 
             return CONTENT_URI.buildUpon().appendPath(movieName).build();
         }
@@ -92,12 +92,12 @@ public class MovieContract {
         //---------------------------------------------------//
         // Supporting methods to build Uris
         //
-        public static Uri buildUri_MovieInfoWithId(long movieId) {
+        public static Uri buildUriForMovieInfoWithId(long movieId) {
 
             return ContentUris.withAppendedId(CONTENT_URI, movieId);
         }
 
-        public static String getMovieId_FromMovieInfoUri(Uri uri) {
+        public static String getMovieIdFromMovieInfoUri(Uri uri) {
 
             return uri.getPathSegments().get(1);
             //-- or --
@@ -163,7 +163,7 @@ public class MovieContract {
         // * Convenient supporting methods to help build the Content Provider Queries, Uri(s)
         //
         // *  e.g. "content://com.example.android.myproject_2/moviereview/movieName"
-        public static Uri buildUri_4MovieReviewWithName(String movieName) {
+        public static Uri buildUriForMovieReviewWithName(String movieName) {
 
             return CONTENT_URI.buildUpon().appendPath(movieName).build();
         }
@@ -174,12 +174,12 @@ public class MovieContract {
         // * content://authority/path/id
         //      e.g. "content://com.example.android.myproject_2/moviereview/movieId"
         // * public static Uri withAppendedId (Uri contentUri, long id)
-        public static Uri buildUri_MovieReviewWithId(long movieId) {
+        public static Uri buildUriForMovieReviewWithId(long movieId) {
 
             return ContentUris.withAppendedId(CONTENT_URI, movieId);
         }
 
-        public static String getMovieId_FromMovieReviewUri(Uri uri) {
+        public static String getMovieIdForFromMovieReviewUri(Uri uri) {
 
             return uri.getPathSegments().get(1);
             //-- or --
@@ -209,7 +209,7 @@ public class MovieContract {
         public static final String COL_MOVIE_ID = "MovieID";
         public static final String COL_VIDEO_KEY = "VideoKey";
 
-        public static String getMovieId_FromMovieVideoUri(Uri uri) {
+        public static String getMovieIdFromMovieVideoUri(Uri uri) {
 
             return uri.getPathSegments().get(1);
             //-- or --
