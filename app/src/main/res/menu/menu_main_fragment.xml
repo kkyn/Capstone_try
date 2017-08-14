@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--<item
-        android:id="@+id/highest_rated"
-        android:orderInCategory="1"
-        android:title="@string/highest_rated" /> -->
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/most_popular"
         android:orderInCategory="2"
-        android:title="@string/most_popular" />
+        android:title="@string/most_popular"/>
 
     <item
-    android:id="@+id/most_rated"
-    android:orderInCategory="2"
-    android:title="@string/highest_rated" />
+        android:id="@+id/most_rated"
+        android:orderInCategory="2"
+        android:title="@string/highest_rated"/>
 
     <item
         android:id="@+id/my_favorites"
         android:orderInCategory="3"
-        android:title="@string/my_favorites" />
+        android:title="@string/my_favorites"/>
 
 </menu>

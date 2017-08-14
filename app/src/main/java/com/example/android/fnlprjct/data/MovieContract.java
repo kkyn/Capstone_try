@@ -22,8 +22,8 @@ public class MovieContract {
 
     // Possible valid paths (appended to the "base content URI" for possible URIs)
     // Note the valid paths matches the tables in the database.
-    // e.g "content://com.example.android.myproject_2/movieSortBy"
-    // e.g "content://com.example.android.myproject_2/movieInfo"
+    // e.g "content://com.example.android.fnlprjct/movieSortBy"
+    // e.g "content://com.example.android.fnlprjct/movieInfo"
 
     public static final String MOVIEINFO = "movieinfo";  // "movie_info"
     public static final String MOVIEREVIEW = "moviereview";
@@ -31,11 +31,11 @@ public class MovieContract {
     public static final String MOVIEFAVOURITES = "moviefavourites";
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-    // DEFINITIONS FOR TABLE 1 -- "content://com.example.android.myproject_2/movieinfo"
+    // DEFINITIONS FOR TABLE 1 -- "content://com.example.android.fnlprjct/movieinfo"
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
     public static final class MovieInfoEntry implements BaseColumns {
 
-        // "content://com.example.android.myproject_2/movieinfo"
+        // "content://com.example.android.fnlprjct/movieinfo"
         public static final Uri CONTENT_URI =
                 URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEINFO).build();
 
@@ -77,7 +77,7 @@ public class MovieContract {
         // * Uri.Builder -- Helper class for building or manipulating URI references.
         // * Convenient supporting methods to help build the Content Provider Queries, Uri(s)
         //
-        // *  e.g. "content://com.example.android.myproject_2/movieinfo/movieName"
+        // *  e.g. "content://com.example.android.fnlprjct/movieinfo/movieName"
         public static Uri buildUriForMovieInfo(String movieName) {
 
             return CONTENT_URI.buildUpon().appendPath(movieName).build();
@@ -87,7 +87,7 @@ public class MovieContract {
         // * ContentUris : Contains Utility methods useful for working with Uri objects
         //      that use the "content" (content://) scheme.
         // * content://authority/path/id
-        //      e.g. "content://com.example.android.myproject_2/movieinfo/movieId"
+        //      e.g. "content://com.example.android.fnlprjct/movieinfo/movieId"
         // * public static Uri withAppendedId (Uri contentUri, long id)
         //---------------------------------------------------//
         // Supporting methods to build Uris
@@ -111,9 +111,9 @@ public class MovieContract {
 
         // Step-1
         //-------------------------------
-        // Uri reference to TABLE 2 -- "content://com.example.android.myproject_2/moviereview"
+        // Uri reference to TABLE 2 -- "content://com.example.android.fnlprjct/moviereview"
         //-------------------------------
-        // "content://com.example.android.myproject_2/moviereview"
+        // "content://com.example.android.fnlprjct/moviereview"
         public static final Uri CONTENT_URI =
                 URI_CONTENT_AUTHORITY.buildUpon().appendPath(MOVIEREVIEW).build();
 
@@ -148,9 +148,7 @@ public class MovieContract {
         //----------------------------------------
         public static final String TABLE_NAME = "Table_MovieReview";
 
-        public static final String COL_KEY_ID = "KeyID";
         public static final String COL_MOVIE_ID = "MovieID";
-        public static final String COL_TITLE = "Title";
         public static final String COL_REVIEWER = "Reviewer";
         public static final String COL_REVIEWCONTENT = "ReviewerContent";
 
@@ -162,7 +160,7 @@ public class MovieContract {
         // * Uri.Builder -- Helper class for building or manipulating URI references.
         // * Convenient supporting methods to help build the Content Provider Queries, Uri(s)
         //
-        // *  e.g. "content://com.example.android.myproject_2/moviereview/movieName"
+        // *  e.g. "content://com.example.android.fnlprjct/moviereview/movieName"
         public static Uri buildUriForMovieReviewWithName(String movieName) {
 
             return CONTENT_URI.buildUpon().appendPath(movieName).build();
@@ -172,7 +170,7 @@ public class MovieContract {
         // * ContentUris : Contains Utility methods useful for working with Uri objects
         //      that use the "content" (content://) scheme.
         // * content://authority/path/id
-        //      e.g. "content://com.example.android.myproject_2/moviereview/movieId"
+        //      e.g. "content://com.example.android.fnlprjct/moviereview/movieId"
         // * public static Uri withAppendedId (Uri contentUri, long id)
         public static Uri buildUriForMovieReviewWithId(long movieId) {
 
@@ -205,7 +203,6 @@ public class MovieContract {
         // TABLE 2's name and column constants
         //----------------------------------------
         public static final String TABLE_NAME = "Table_MovieVideo";
-     //   public static final String COL_KEY_ID = "KeyID";
         public static final String COL_MOVIE_ID = "MovieID";
         public static final String COL_VIDEO_KEY = "VideoKey";
 

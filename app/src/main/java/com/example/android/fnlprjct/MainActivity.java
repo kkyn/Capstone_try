@@ -13,8 +13,6 @@ import android.view.WindowManager;
 
 import com.example.android.fnlprjct.sync.MSyncAdapter;
 
-//import static com.example.android.fnlprjct.MyApplication.getAppContext;
-
 public class MainActivity extends AppCompatActivity implements MainFragment.CallBackListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -63,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // try, add, 21 June 2017
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
@@ -75,12 +72,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         }
 
         setContentView(com.example.android.fnlprjct.R.layout.activity_main);
-
-        // layout 'activity_main.xml' opens a fragment via 'android:name' attribute,
-        // so no need to use getSupportFragmentManager,..fragmentTransaction,..add,..commit.
-
-        /*displayMode = getResources().getConfiguration().orientation;
-        mode = (displayMode==1)? "portrait" :"landscape";*/
 
         // ToDO : add fragmentTransaction
         // The view with 'id' only exist within layout 'activity_main.xml' file,
@@ -94,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     }
 
     //------------------------------------------------
-    //----------- OPTIONS MENU Stuff (Begin)------------------
+    //--------- Begin, OPTIONS MENU Stuff ------------
     //------------------------------------------------
     @Override public boolean
     onCreateOptionsMenu(Menu menu) {
@@ -123,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         return super.onOptionsItemSelected(item);
     }
     //------------------------------------------------
-    //----------- OPTIONS MENU Stuff (End) -------------------
+    //--------- End, OPTIONS MENU Stuff --------------
     //------------------------------------------------
 
     // -------- Implementing Callback methods called from Fragment ----

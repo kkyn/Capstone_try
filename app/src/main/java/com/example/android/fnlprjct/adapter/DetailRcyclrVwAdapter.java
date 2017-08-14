@@ -29,13 +29,11 @@ public class DetailRcyclrVwAdapter extends RecyclerView.Adapter<DetailRcyclrVwAd
 
         if (parent instanceof RecyclerView) {
 
-            /*Log.d(LOG_TAG, "--xxxx--xxxx--xxxx--xxxx--xxxx-- viewType :- " + viewType);*/
             int layoutId = -1;
             switch (viewType) {
 
                 case VIEW_TYPE_A: {
 
-                    // Log.d(LOG_TAG, "-- MainRcyclrVwAdapter/onCreateViewHolder() --");
                     //=================================
                     layoutId = R.layout.cardview_review;
                     //=================================
@@ -76,8 +74,6 @@ public class DetailRcyclrVwAdapter extends RecyclerView.Adapter<DetailRcyclrVwAd
     }
 
     public void swapCursor(Cursor newCursor) {
-
-        /*Log.d(LOG_TAG, "** swapCursor() --");*/
 
         mCursor = newCursor;
 

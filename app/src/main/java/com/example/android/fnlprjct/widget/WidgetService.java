@@ -22,8 +22,6 @@ public class WidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) { // 'intent' is passed into the RemoteViewsFactory
 
-        /*Log.d(LOG_TAG, "11111111111111 INSIDE WIDGETSERVICE > onGetViewFactory ");*/
-
         RemoteViewsFactory rfctry = new WidgetDataProvider(this, intent);
 
         return rfctry;

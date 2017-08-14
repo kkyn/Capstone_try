@@ -39,10 +39,8 @@ public class SettingsPreferenceActivity extends PreferenceActivity
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         // TODO: Add preferences
-        // bindPreferenceSummaryToValue(findPreference(getString(com.example.android.myproject_2.R.string.pref_sortmovies_by_key)));
 
         // Finds a Preference based on its key.
-        // Preference mPreference = this.findPreference("Movies"); // -- or --
         Preference mPreference = this.findPreference(getString(R.string.pref_key_movies_sortby));
 
         bindPreferenceSummaryToValue(mPreference);
@@ -77,19 +75,8 @@ public class SettingsPreferenceActivity extends PreferenceActivity
         // Retrieve a String value from the preferences.
         Object object = sharedPreferences.getString(preference.getKey(), "");
 
-        setPreferenceSummary(preference, object);
-        //++++++++++++++++++++++++++++++
-        /*Object object = PreferenceManager
-                // Gets a SharedPreferences instance that points to the default file
-                // that is used by the preference framework in the given context.
-                // 'preference.getContext()' ++ get the context of this preference
-                .getDefaultSharedPreferences(preference.getContext())
-
-                // Retrieve a String value from the preferences.
-                .getString(preference.getKey(), "");
-
         // Set the preference summaries
-        setPreferenceSummary (preference, object);*/
+        setPreferenceSummary(preference, object);
         //++++++++++++++++++++++++++++++
     }
 
@@ -169,7 +156,7 @@ public class SettingsPreferenceActivity extends PreferenceActivity
 
             if (string.equals(getString(R.string.pref_value_movies_sortby_default)) ||
                 string.equals(getString(R.string.pref_value_movies_sortby_ratings)) ||
-                string.equals(getString(R.string.pref_value_movies_sortby_favorites))
+                string.equals(getString(R.string.pref_value_movies_sortby_ownfavorites))
                )
             {
                 getContentResolver().notifyChange(MovieInfoEntry.CONTENT_URI, null);
@@ -180,4 +167,3 @@ public class SettingsPreferenceActivity extends PreferenceActivity
 
     }
 }
-

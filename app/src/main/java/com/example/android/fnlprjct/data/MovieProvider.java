@@ -58,15 +58,15 @@ public class MovieProvider extends ContentProvider {
     // Step-3a
     static UriMatcher buildUriMatcher() {
 
-        // e.g. "com.example.android.myproject_2"
+        // e.g. "com.example.android.fnlprjct"
         String authority = MovieContract.AUTHORITY;
 
-        // e.g. "com.example.android.myproject_2/Popularity"
-        // e.g. "com.example.android.myproject_2/Popularity/*"
-        // e.g. "com.example.android.myproject_2/Rating"
-        // e.g. "com.example.android.myproject_2/Rating/*"
-        // e.g. "com.example.android.myproject_2/MovieInfo"
-        // e.g. "com.example.android.myproject_2/Movie"
+        // e.g. "com.example.android.fnlprjct/Popularity"
+        // e.g. "com.example.android.fnlprjct/Popularity/*"
+        // e.g. "com.example.android.fnlprjct/Rating"
+        // e.g. "com.example.android.fnlprjct/Rating/*"
+        // e.g. "com.example.android.fnlprjct/MovieInfo"
+        // e.g. "com.example.android.fnlprjct/Movie"
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         uriMatcher.addURI(authority, MovieContract.MOVIEREVIEW,             CNST_MOVIE_REVIEW_);
@@ -166,7 +166,7 @@ public class MovieProvider extends ContentProvider {
     // ContentResolver > Content-Provider > "DATABASE"
     // This method is to be used in Content-Provider's query method
     //
-    // e.g. uri --> "content://com.example.android.myproject_2/moviereview/123"
+    // e.g. uri --> "content://com.example.android.fnlprjct/moviereview/123"
     //
     private Cursor getMovieReviewDataFromMovieId(Uri uri, String[] projection, String sortOrder) {
 
@@ -190,12 +190,12 @@ public class MovieProvider extends ContentProvider {
     //------------------------------------//
     //---------- Movie Video -------------//
     //------------------------------------//
-    // Table_X_MovieVideo.MovieID = ?
+    // Table_MovieVideo.MovieID = ?
     //
     private static final String selectMovieVideoWithMovieId =
             MovieVideosEntry.TABLE_NAME + "." + MovieContract.MovieVideosEntry.COL_MOVIE_ID + " = ?";
     //
-    // e.g. uri --> "content://com.example.android.myproject_2/movievideo/123"
+    // e.g. uri --> "content://com.example.android.fnlprjct/movievideo/123"
     //
     private Cursor getMovieVideoKeyFromMovieId(Uri uri, String[] projection, String sortOrder) {
 
@@ -222,7 +222,7 @@ public class MovieProvider extends ContentProvider {
     //------------------------------------//
     //---------- Movie Favourites -------------//
     //------------------------------------//
-    // Table_X_MovieFavourites.MovieID = ?
+    // Table_MovieFavourites.MovieID = ?
     //
 
     // + onCreate runs on the UI thread, so you should avoid executing any long-lasting tasks in this method.

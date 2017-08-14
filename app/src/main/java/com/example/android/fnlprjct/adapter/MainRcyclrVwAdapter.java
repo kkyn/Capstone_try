@@ -47,7 +47,6 @@ public class MainRcyclrVwAdapter extends RecyclerView.Adapter<MainRcyclrVwAdapte
         // Implement the OnClickListener callback, i.e. onClick(View);
         @Override
         public void onClick(View view) {
-            /*Log.d(LOG_TAG, "** Movie_ViewHolder.onClick");*/
 
             switch (view.getId()){
 
@@ -91,6 +90,7 @@ public class MainRcyclrVwAdapter extends RecyclerView.Adapter<MainRcyclrVwAdapte
         if (parent instanceof RecyclerView) {
 
             int layout_id = -1;
+
             switch (viewType) {
 
                 case VIEW_TYPE_A: {
@@ -137,7 +137,7 @@ public class MainRcyclrVwAdapter extends RecyclerView.Adapter<MainRcyclrVwAdapte
         // bind the view associated with the 'position'
         //     .into(holder.imageView);
 
-        //***********************
+
         if (mCursor.moveToPosition(position)) {
 
             // ++++++++++++++++++++++++++++++++++++++++++
@@ -161,32 +161,6 @@ public class MainRcyclrVwAdapter extends RecyclerView.Adapter<MainRcyclrVwAdapte
             viewHolder.poster_networkimageview.setScaleType(ImageView.ScaleType.FIT_CENTER);
             viewHolder.poster_networkimageview.setScaleType(ImageView.ScaleType.FIT_XY);
             // ++++++++++++++++++++++++++++++++++++++++++
-
-            //-------------------------------------
-            // Call Volley's imageloader get-method to get image from the Web
-            /*ImageLoader.ImageContainer myImageContainer = imageLoader.get
-                (
-                    stringUrl,
-                    new ImageLoader.ImageListener() {
-
-                        // Callback method
-                        @Override
-                        public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-
-                            Bitmap bitmap = imageContainer.getBitmap();
-
-                            //if (bitmap != null) {
-                            //    Palette p = Palette.generate(bitmap, 12);
-                            //    mMutedColor = p.getDarkMutedColor(0xFF770000); // 0xFF333333
-                            //    holder.bar_layout.setBackgroundColor(mMutedColor);
-                            //}
-                        }
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                        }
-                    }
-                );*/
-            //***********************
         }
     }
 

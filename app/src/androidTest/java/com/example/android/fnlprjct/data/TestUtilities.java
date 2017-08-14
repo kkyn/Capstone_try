@@ -17,12 +17,11 @@ import java.util.Map;
 import java.util.Set;
 
 /*
-    Students: These are functions and some test data to make it easier to test your database and
-    Content Provider.  Note that you'll want your WeatherContract class to exactly match the one
+    These are functions and some test data to make it easier to test your database and
+    Content Provider.  Note that you'll want your MovieContract class to exactly match the one
     in our solution to use these as-given.
  */
 public class TestUtilities extends AndroidTestCase {
-
 
 
     public static final String LOG_TAG = TestUtilities.class.getSimpleName();
@@ -31,16 +30,14 @@ public class TestUtilities extends AndroidTestCase {
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
 
-        Log.d("-- " + LOG_TAG, "  +++ validateCursor()--- "); // tky add
-
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
+
         validateCurrentRecord(error, valueCursor, expectedValues);
+
         valueCursor.close();
     }
 
     static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
-
-        Log.d("-- " + LOG_TAG, "  +++ validateCurrentRecord()--- "); // tky add
 
         // Returns a set of all of the keys and values in 'expectedValues'
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
@@ -60,25 +57,16 @@ public class TestUtilities extends AndroidTestCase {
             // Returns the value corresponding to this entry.
             String expctdValue = entry.getValue().toString();
 
-            Log.d("-- " + LOG_TAG,  "  +++ ColIndx: " + index + " -- " + "ColName: " + columnNameFromEntry + " colNameFromCursor: " + colNameFromCursor + " --- " + expctdValue ); // tky add
-
             assertEquals(
                 "Value '"
                     + entry.getValue().toString() // org.
-                    //  + String.valueOf(index)
-                    //  + columnNameFromEntry
-                    //    + valueCursor.getString(index)
                     + "' did not match the expected value '" +
                     expctdValue + "'. " + error,
                     expctdValue, valueCursor.getString(index));
-                //    expctdValue + "'. " + error, expctdValue, valueCursor.getString(index));
-
         }
     }
 
-/* */
-static void validateContentValue(//String error, Cursor valueCursor,
-ContentValues expectedValues) {
+    static void validateContentValue(ContentValues expectedValues) {
 
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
 
@@ -87,84 +75,77 @@ ContentValues expectedValues) {
             String columnName = entry.getKey();
 
             String expectedValue = entry.getValue().toString();
-            Log.d("-- " + LOG_TAG,  "  +++ key: " + columnName + "  " + "value: " + expectedValue ); // tky add
+            Log.d("-- " + LOG_TAG, "  +++ key: " + columnName + "  " + "value: " + expectedValue); // tky add
 
         }
     }
-/* */
-/* */
-static void validateCursorValue(//String error,
-                                 Cursor valueCursor
-                                 //,ContentValues expectedValues
-                                 ) {
 
-    Log.d("-- " + LOG_TAG, "  +++ validateCursorValue() --- "); // tky add
-  //  Cursor mCursor = valueCursor;
+    static void validateCursorValue(Cursor valueCursor) {
 
-    //Returns the numbers of rows in the cursor.
-    int rowCount = valueCursor.getCount();
-    //Return total number of columns.
-    int colCount = valueCursor.getColumnCount();
+        Log.d("-- " + LOG_TAG, "  +++ validateCursorValue() --- "); // tky add
+        //  Cursor mCursor = valueCursor;
 
-    Log.d("-- "+LOG_TAG, "  +++ rows:- " + rowCount +  " cols:- " + colCount);
-    //Log.d("-- "+LOG_TAG, "  +++ rows:: " + Integer.toString(rowCount) +  " cols:: " + Integer.toString(colCount));
+        //Returns the numbers of rows in the cursor.
+        int rowCount = valueCursor.getCount();
 
-    int count = 0;
-    String mValue = "";
-    String nValue = valueCursor.moveToFirst() == true ? "yes it is first" : "no -- not first--";
-    Log.d("-- "+LOG_TAG, "  +++ *** :" + nValue);
+        //Return total number of columns.
+        int colCount = valueCursor.getColumnCount();
 
-    do {
-        mValue = valueCursor.isFirst() == true ? "YES it is first" : "NO -- not first";
-        Log.d("-- "+LOG_TAG, "  +++ *** :" + mValue);
-        for (count = 0; count < colCount; count++) {
-            Log.d("-- "+LOG_TAG, "  +++ " + valueCursor.getColumnName(count)+ " : " + valueCursor.getString(count));
+        Log.d("-- " + LOG_TAG, "  +++ rows:- " + rowCount + " cols:- " + colCount);
+
+        int count = 0;
+        String mValue = "";
+        String nValue = valueCursor.moveToFirst() == true ? "yes it is first" : "no -- not first--";
+        Log.d("-- " + LOG_TAG, "  +++ *** :" + nValue);
+
+        do {
+            mValue = valueCursor.isFirst() == true ? "YES it is first" : "NO -- not first";
+            Log.d("-- " + LOG_TAG, "  +++ *** :" + mValue);
+            for (count = 0; count < colCount; count++) {
+                Log.d("-- " + LOG_TAG, "  +++ " + valueCursor.getColumnName(count) + " : " + valueCursor.getString(count));
+            }
+            valueCursor.moveToNext();
         }
-        valueCursor.moveToNext();
+        while (!valueCursor.isAfterLast());
+
+        //----------------------------------------
+
     }
-    while (!valueCursor.isAfterLast());
 
-    //----------------------------------------
-
-}
-
-    /**/
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //+++++++++++++++++++  BEGIN  ++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    static ContentValues create_ContentValues4_X_MovieReview(long rowId) {
+    static ContentValues createTestContentValuesForMovieReview(long rowId) {
 
         ContentValues cntValues = new ContentValues();
 
-        // Here I use the input rowId of cursor as the 'COL_KEY_ID', for testing only.
-//xxx        cntValues.put(MovieReviewEntry.COL_KEY_ID, rowId);
-        cntValues.put(MovieReviewEntry.COL_MOVIE_ID, 12);
-        cntValues.put(MovieReviewEntry.COL_REVIEWER, "XMovie_Reviewer");
-        cntValues.put(MovieReviewEntry.COL_REVIEWCONTENT, "XMovie_ReviewContent");
+        // Here I use the input rowId of cursor as the 'COL_MOVIE_ID', for testing only.
+        cntValues.put(MovieReviewEntry.COL_MOVIE_ID,        12);
+        cntValues.put(MovieReviewEntry.COL_REVIEWER,        "XMovie_Reviewer");
+        cntValues.put(MovieReviewEntry.COL_REVIEWCONTENT,   "XMovie_ReviewContent");
 
         return cntValues;
     }
-    /*
-     */
-    static ContentValues create_ContentValues4_X_MovieInfo() {
+
+    static ContentValues createTestContentValuesForMovieInfo() {
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(MovieContract.MovieInfoEntry.COL_MOVIE_ID,         12);  // y
-        contentValues.put(MovieContract.MovieInfoEntry.COL_ORIGINAL_TITLE,         "XMovie_Title"); // y
-        contentValues.put(MovieContract.MovieInfoEntry.COL_RELEASE_DATE,   "XMovie_ReleaseDate"); // y
-        contentValues.put(MovieInfoEntry.COL_YEAR, "2017"); // add july17, to solve test problem
-        contentValues.put(MovieContract.MovieInfoEntry.COL_OVERVIEW,      "XMovie_Overview"); // y
+        contentValues.put(MovieInfoEntry.COL_MOVIE_ID,       12);
+        contentValues.put(MovieInfoEntry.COL_ORIGINAL_TITLE, "XMovie_Title");
+        contentValues.put(MovieInfoEntry.COL_RELEASE_DATE,   "XMovie_ReleaseDate");
+        contentValues.put(MovieInfoEntry.COL_YEAR,           "2017");
+        contentValues.put(MovieInfoEntry.COL_OVERVIEW,       "XMovie_Overview");
 
-        contentValues.put(MovieContract.MovieInfoEntry.COL_VOTE_COUNT,    123); // y
-        contentValues.put(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE,  "XMovie_Vote_Average"); // y
-        contentValues.put(MovieContract.MovieInfoEntry.COL_POPULARITY,    "XMovie_Popularity"); // y
+        contentValues.put(MovieInfoEntry.COL_VOTE_COUNT,     123);
+        contentValues.put(MovieInfoEntry.COL_VOTE_AVERAGE,   "XMovie_Vote_Average");
+        contentValues.put(MovieInfoEntry.COL_POPULARITY,     "XMovie_Popularity");
 
-        contentValues.put(MovieContract.MovieInfoEntry.COL_FAVOURITES,    0);
+        contentValues.put(MovieInfoEntry.COL_FAVOURITES,     0);
 
-        contentValues.put(MovieInfoEntry.COL_POSTERLINK,    "XMovie_PosterLink"); // y
-        contentValues.put(MovieInfoEntry.COL_BACKDROPLINK, "XMovie_BackDrop_Path");
+        contentValues.put(MovieInfoEntry.COL_POSTERLINK,     "XMovie_PosterLink");
+        contentValues.put(MovieInfoEntry.COL_BACKDROPLINK,   "XMovie_BackDrop_Path");
 
         return contentValues;
     }
@@ -175,7 +156,7 @@ static void validateCursorValue(//String error,
     //++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     /*
-        Students: The functions we provide inside of TestProvider use this utility class to test
+        The functions we provide inside of TestProvider use this utility class to test
         the ContentObserver callbacks using the PollingCheck class that we grabbed from the Android
         CTS tests.
 

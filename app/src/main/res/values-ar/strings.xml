@@ -14,13 +14,8 @@
     <string name="pref_label_movies_sortby_ratings">تصنيفات</string>        <!--... Label for ratings option ..-->
     <string name="pref_label_movies_sortby_ownfavorites">المفضلة</string>
 
-    <!--<string name="pref_movies_sort_title">ترتيب الأفلام حسب:</string>
-    <string name="pref_movies_sortby_popularity_label">شعبية</string>  ... Label for popularity option ..
-    <string name="pref_movies_sortby_ratings_label">تصنيفات</string>        ... Label for ratings option ..
-    <string name="pref_movies_sortby_ownfavorites_label">المفضلة</string>-->
-
     <string name="widget_title">أفضل الأفلام</string>
-    <string name="widget_name">فيلمي القطعة</string>
+    <string name="widget_name">فيلم القطعة</string>
 
     <string name="dialog_title">أدخل سنة من الفائدة</string>
     <string name="dialog_comment">لا تدخل إلى ما بعد هذا العام</string>

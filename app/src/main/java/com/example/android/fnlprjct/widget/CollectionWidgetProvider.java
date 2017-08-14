@@ -14,7 +14,6 @@ import android.widget.RemoteViews;
 import com.example.android.fnlprjct.MainActivity;
 import com.example.android.fnlprjct.R;
 
-// tky comment,
 // (A) initial code are auto-generated when use File > New > Widget > App Widget, wizard
 
 /**
@@ -67,12 +66,8 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-        /*Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > onUpdate ");*/
-
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-
-            /*Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > Loop ");*/
 
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -81,7 +76,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     }
 
     // auto-generated
-    // tky comment,
     // starting sequence -- STEP 1
     // Only called once, when the first widget from this app is selected.
     // Called when the user 'select' the appwidget from the list of widgets
@@ -92,7 +86,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        /*Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > onEnabled ");*/
 
         // Enter relevant functionality for when the first widget is created
 
@@ -103,7 +96,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     // Only called once, when the last widget from this app is selected.
     @Override
     public void onDisabled(Context context) {
-        /*Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > onDisabled ");*/
 
         // Enter relevant functionality for when the last widget is disabled
     }
@@ -137,9 +129,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
 
-        /*Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > onDeleted " + context.getPackageName());
-        Log.d(LOG_TAG, "00000000000000 INSIDE CollectionWidgetProvider > onDeleted " + context.getString(R.string.pref_movies_sort_key));*/
-
     }
 
     // not auto-generated
@@ -150,8 +139,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-
-        /*Toast.makeText(context, "IN on RECEIVE", Toast.LENGTH_LONG).show();*/
 
         String action = intent.getAction();
 

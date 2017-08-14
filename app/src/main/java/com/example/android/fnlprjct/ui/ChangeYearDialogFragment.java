@@ -24,16 +24,13 @@ import android.widget.Toast;
 import com.example.android.fnlprjct.MainFragment;
 import com.example.android.fnlprjct.R;
 import com.example.android.fnlprjct.Utility;
-import com.example.android.fnlprjct.data.MovieContract;
+import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 import com.example.android.fnlprjct.sync.MSyncAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-/**
- * Created by kkyin on 2/7/2017.
- */
 //  https://developer.android.com/reference/android/app/DialogFragment.html
 //  https://developer.android.com/guide/topics/ui/dialogs.html
 //  https://developer.android.com/reference/android/app/AlertDialog.Builder.html
@@ -124,7 +121,6 @@ public class ChangeYearDialogFragment extends DialogFragment
                     (actionId == EditorInfo.IME_ACTION_DONE)
                     )
                 {
-                    /*Toast.makeText(getContext(), "Enter pressed", Toast.LENGTH_LONG).show();*/
 
                     String stringEnteredYear = enterYear_et.getText().toString();
                     int intEnteredYear = Integer.parseInt(stringEnteredYear);
@@ -134,43 +130,17 @@ public class ChangeYearDialogFragment extends DialogFragment
                         toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
                         toast.show();
 
-                        return true;
+                        return true;    // if you have consumed the action
                     } else {
                         searchMoviesYear();
                         sendBackResult();
-                        return true;
+                        return true;    // if you have consumed the action
                     }
                 } else {
-                    return false;
+                    return false;       // if you have NOT consumed the action
                 }
             }
         });
-
-//        enterYear_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//
-//            // Called when an action is being performed.
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                String stringEnteredYear = enterYear_et.getText().toString();
-//                int intEnteredYear = Integer.parseInt(stringEnteredYear);
-//                Toast toast = Toast.makeText(getActivity(), getString(R.string.error_not_beyond_this_year), Toast.LENGTH_LONG); //.show();
-//
-//
-//                if (intEnteredYear > Utility.getThisYearValue()) {
-//                    toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-//                    //toast.setGravity(Gravity.TOP|Gravity.LEFT,0,0);
-//                    toast.show();
-//
-//                    return true;
-//                } else {
-//                    searchMoviesYear();
-//                    //return false;
-//                    return true;
-//                }
-//
-//            }
-//        });
-
 
         // +++++++++++ AlertDialog Builder Stuff ++++++++++++++
         dialogBuilder.setView(view);
@@ -222,8 +192,7 @@ public class ChangeYearDialogFragment extends DialogFragment
         editor.putString(yearKey, year);
         editor.apply();
 
-        dismissAllowingStateLoss(); // ??
-        //MSyncAdapter.syncImmediately(getContext());
+        dismissAllowingStateLoss(); // ?? to
 
     }
 
@@ -236,15 +205,9 @@ public class ChangeYearDialogFragment extends DialogFragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        /*Toast.makeText(getContext(),"onSharedPreferenceChanged 0", Toast.LENGTH_SHORT).show();*/
-
         if (key.equals(getResources().getString(R.string.pref_key_year))) {
 
-            /*Toast.makeText(getContext(),"onSharedPreferenceChanged 1", Toast.LENGTH_SHORT).show();*/
-
-            //getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
-
-            getContext().getContentResolver().notifyChange(MovieContract.MovieInfoEntry.CONTENT_URI, null);
+            getContext().getContentResolver().notifyChange(MovieInfoEntry.CONTENT_URI, null);
 
             MSyncAdapter.syncImmediately(getContext());
         }

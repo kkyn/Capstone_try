@@ -2,9 +2,7 @@ package com.example.android.fnlprjct;
 
 import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
-/**
- * Created by kkyin on 8/6/2017.
- */
+
 
 public class MyQuery {
 
@@ -55,19 +53,16 @@ public class MyQuery {
             {
                 MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID
                 , MovieInfoEntry.COL_MOVIE_ID
-
                 , MovieInfoEntry.COL_VOTE_COUNT + " as sort_column"
-                //, MovieInfoEntry.COL_POPULARITY + " as sort_column"
-
                 , MovieInfoEntry.COL_POSTERLINK
                 , MovieInfoEntry.COL_ORIGINAL_TITLE
                 , MovieInfoEntry.COL_YEAR
             };
         int COL_MOVIE_ID = 1;
         int COL_VOTE_COUNT = 2;
-        //int COL_POSTERLINK = 3;
+      //int COL_POSTERLINK = 3;
         int COL_ORIGINAL_TITLE = 4;
-        //int COL_YEAR = 1;
+      //int COL_YEAR = 5;
     }
 
     //-------------------------------------------------

@@ -47,7 +47,6 @@ import butterknife.OnClick;
 public class DetailFragmentNew extends Fragment
                              implements
                               SharedPreferences.OnSharedPreferenceChangeListener
-                           // , View.OnClickListener
 {
 
     // Required empty public constructor
@@ -55,7 +54,7 @@ public class DetailFragmentNew extends Fragment
         //setHasOptionsMenu(true);
     }
 
-    // tky comment ---------------------------------------------
+    //---------------------------------------------
     // + Used by the caller, MyFrgmntPgrAdptr/FragmentStatePagerAdapter
     // + To create a new instance of ArticleDetailFragment/Fragment,
     //    providing "num" as an argument.
@@ -89,7 +88,6 @@ public class DetailFragmentNew extends Fragment
     private AnimatedVectorDrawable emptyHeart;
     private AnimatedVectorDrawable fillHeart;
 
-    /*@BindView(R.id.movietitle_tv) TextView movietitle;*/
     @BindView(R.id.moviethumbnail_iv) DynamicHeightNetworkImageView  moviethumbnail;
     @BindView(R.id.moviereleasedate_tv) TextView moviereleasedate;
     @BindView(R.id.movieratings_tv) TextView movieratings;
@@ -217,7 +215,7 @@ public class DetailFragmentNew extends Fragment
         }
     }
 
-    // tky add, Using ButterKnife's 'OnClick'
+    // Using ButterKnife's 'OnClick'
     // ref: stackoverflow --- 29603834
     @OnClick(R.id.favourite_btn)
     public void setFavoriteButton(View view){
@@ -245,51 +243,6 @@ public class DetailFragmentNew extends Fragment
         }
     }
 
-    //-------------------------------------------
-    //-- for View.onClickListener, movievideo.setOnClickListener(this);
-    //-------------------------------------------
-//    @Override
-//    public void onClick(View view) {
-//
-//        String movieId = mUri.getPathSegments().get(1);
-//
-//        switch (view.getId()) {
-//
-//           /* case R.id.movievideo_tv:
-////startYoutubeVideo(view);
-//                *//*FetchMoviesDbAsyncTask mTask = new FetchMoviesDbAsyncTask(getContext(), new FetchComplete());
-//                                       mTask.execute(movieId);*//*
-//
-//                break;*/
-//
-//            case R.id.favourite_btn:
-//
-//                //movieId = mUri.getPathSegments().get(1);
-//
-//                isFavouriteEnabled = checkFavourites(movieId);
-//
-//                if (!isFavouriteEnabled) {
-//                    moviefavourite.setImageDrawable(fillHeart);
-//                    moviefavourite.setContentDescription(getString(R.string.descriptor_set_favorite)); // ok!
-//                    fillHeart.start();
-//
-//                    saveToFavourites(movieId);
-//                }
-//                else {
-//                    moviefavourite.setImageDrawable(emptyHeart);
-//                    moviefavourite.setContentDescription(getString(R.string.descriptor_unset_favorite)); // ok!
-//                    emptyHeart.start();
-//
-//                    removeFromFavourites(movieId);
-//                }
-//
-//                break;
-//
-//            default:
-//                break;
-//        }
-//    }
-    //-------------------------------------------
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -306,7 +259,6 @@ public class DetailFragmentNew extends Fragment
             mUri = uri;
         }
 
-        // tky add, july10 2017,
         // must add this to solve the change-of-orientation where
         // the 'Details_Activity' gets recreated but the loader in LoaderManager still exist.
         //
@@ -322,15 +274,6 @@ public class DetailFragmentNew extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        /*Intent intent = getActivity().getIntent();
-        mUriString = intent.getDataString();
-        mUri = intent.getData();*/
-
-        /*Bundle mBundle = this.getArguments();
-        if (mBundle != null) {
-            mUri = mBundle.getParcelable(DetailFragmentNew.DETAIL_URI);
-        }*/
-
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_details1, container, false);
 
@@ -342,9 +285,6 @@ public class DetailFragmentNew extends Fragment
         emptyHeart = (AnimatedVectorDrawable) getActivity().getDrawable(R.drawable.avd_heart_empty);
         fillHeart = (AnimatedVectorDrawable) getActivity().getDrawable(R.drawable.avd_heart_fill);
         // ----------------------
-
-        //moviefavourite.setContentDescription(getString(R.string.descriptor_favorite));
-        //moviefavourite.setOnClickListener(this);
 
         String targetSharedElementTransition;
 
@@ -417,7 +357,7 @@ public class DetailFragmentNew extends Fragment
 
     @Override
     public void onStart() {
-        super.onStart();    //Log.d(LOG_TAG, "++++ 3 onStart() --");
+        super.onStart();
     }
 
     @Override   // ++++ 5
@@ -466,7 +406,6 @@ public class DetailFragmentNew extends Fragment
 
             if (cursor != null && cursor.moveToFirst()) {
 
-                //movietitle.setText(cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE));
                 moviereleasedate.setText(cursor.getString(MyQuery.MovieInfo.COL_RELEASEDATE));
 
                 String string = Utility.getPreferredSortSequence(getContext());
@@ -488,9 +427,7 @@ public class DetailFragmentNew extends Fragment
                 moviethumbnail.setContentDescription(stringTitle);
 
                 String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_POSTERLINK);
-                //String stringUrl = cursor.getString(MyQuery.MovieInfo.COL_BACKDROPLINK);
 
-                /*Log.d(LOG_TAG, "? ? ? ?  " + stringUrl + " ? ? ? ?");*/
                 // -- thumb-nail-View --
                 // .setImageUrl -- define in ImageView
                 moviethumbnail.setImageUrl(stringUrl, imageLoader);
@@ -500,6 +437,7 @@ public class DetailFragmentNew extends Fragment
                 // -------------------------------
                 // ---- Using Volley, end --------
                 // -------------------------------
+
                 scheduleStartPostponedTransition(moviethumbnail);
 
                 int favouriteValue = cursor.getInt(MyQuery.MovieInfo.COL_FAVOURITES);

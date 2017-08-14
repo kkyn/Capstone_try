@@ -22,8 +22,5 @@
         android:textColor="@color/widget_listitem_textcolor"
         android:textStyle="bold"
         />
-    <!--android:ellipsize="marquee"
-    android:scrollHorizontally="true"
-    android:ellipsize="middle"-->
 
 </RelativeLayout>

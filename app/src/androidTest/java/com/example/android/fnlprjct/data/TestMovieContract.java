@@ -19,9 +19,10 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
+import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 
 /*
-    Students: This is NOT a complete test for the WeatherContract --- just for the functions
+    This is NOT a complete test for the MovieContract --- just for the functions
     that we expect you to write.
  */
 public class TestMovieContract extends AndroidTestCase {
@@ -29,22 +30,17 @@ public class TestMovieContract extends AndroidTestCase {
     // intentionally includes a slash to make sure Uri is getting quoted correctly
     // e.g. /North Pole ==> %2FNorth%20Pole
     //      /popularity ==> %2Fpopularity
-    private static final String TEST_MOVIE_NAME = "/XMovie"; //
-   // private static final String TEST_MOVIE_NAME = "/popularity"; //
-    //private static final String TEST_MOVIE_INFO = "/movieInfo";
+    private static final String TEST_MOVIE_NAME = "/XMovie";
 
-    //private static final long TEST_MOVIE_ID = 14;
     private static final long TEST_MOVIE_ID = 14L;
 
     public static final String LOG_TAG = TestMovieContract.class.getSimpleName();
-
-    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
     ///////////////////////////////////////////////////////
     ////////////// MovieInfoEntry /////////////////////
     ///////////////////////////////////////////////////////
     // Test methods for Uri,
-    // "content://com.example.android.myproject_2/movieinfo/movieName"
+    // "content://com.example.android.fnlprjct/movieinfo/movieName"
     ///////////////////////////////////////////
     public void testBuildUriMovieInfo() {
 
@@ -60,11 +56,11 @@ public class TestMovieContract extends AndroidTestCase {
                 TEST_MOVIE_NAME,
                 mUri.getLastPathSegment());
 
-        // " content://com.example.android.myproject_2/movieSortBy//popularity "
-        // " content://com.example.android.myproject_2/SortByPopularity//XMovie "
-        // " content://com.example.android.myproject_2/movieinfo/%2FXMovie "
+        // " content://com.example.android.fnlprjct/movieSortBy//popularity "
+        // " content://com.example.android.fnlprjct/SortByPopularity//XMovie "
+        // " content://com.example.android.fnlprjct/movieinfo/%2FXMovie "
         assertEquals(
-                "Error: 'X_MovieInfo' Uri doesn't match our expected result",
+                "Error: 'MovieInfo' Uri doesn't match our expected result",
                 mUri.toString(),
                 "content://com.example.android.fnlprjct/movieinfo/%2FXMovie" );
     }
@@ -85,17 +81,14 @@ public class TestMovieContract extends AndroidTestCase {
 
     public void testGetMovieIdFromMovieInfoUri() {
 
-        Uri mUri =  Uri.parse("content://com.example.android.myproject_2/movieinfo/1234");
+        Uri mUri =  Uri.parse("content://com.example.android.fnlprjct/movieinfo/1234");
 
-        String mMovieId = MovieContract.MovieInfoEntry.getMovieIdFromMovieInfoUri(mUri);
+        String mMovieId = MovieInfoEntry.getMovieIdFromMovieInfoUri(mUri);
 
         assertEquals(
                 "Error: 'extracted Movie_Id from Uri don't match with fixed 1234",
                 "1234",
                 mMovieId);
-
-        //Log.d("-- " + LOG_TAG, "Uri : " + mUri.toString() ); // tky add
-        //Log.d("-- "+ LOG_TAG, "movieId : " + mMovieId);     // tky add
 
     }
 
@@ -104,7 +97,7 @@ public class TestMovieContract extends AndroidTestCase {
     ///////////////////////////////////////////////////////
     public void testBuildUriMovieReviewWithName() {
 
-        Uri mUri = MovieContract.MovieReviewEntry.buildUriForMovieReviewWithName(TEST_MOVIE_NAME);
+        Uri mUri = MovieReviewEntry.buildUriForMovieReviewWithName(TEST_MOVIE_NAME);
 
         assertNotNull("Error:  Null Uri returned."
                 + "You must fill-in buildUri_X_MovieReviewWithName() in MovieContract.\"",
@@ -118,9 +111,10 @@ public class TestMovieContract extends AndroidTestCase {
                 mUri.toString(),
                 "content://com.example.android.fnlprjct/moviereview/%2FXMovie");
     }
+
     public void testBuildUriXMovieReviewWithId() {
 
-        Uri mUri = MovieContract.MovieReviewEntry.buildUriForMovieReviewWithId(TEST_MOVIE_ID);
+        Uri mUri = MovieReviewEntry.buildUriForMovieReviewWithId(TEST_MOVIE_ID);
 
         assertNotNull(
                 "Error: Null Uri returned. " +
@@ -135,30 +129,22 @@ public class TestMovieContract extends AndroidTestCase {
 
     public void testGetMovieIdFromMovieReviewUri() {
 
-        Uri mUri =  Uri.parse("content://com.example.android.myproject_2/moviereview/1234");
+        Uri mUri =  Uri.parse("content://com.example.android.fnlprjct/moviereview/1234");
 
-        String mMovieId = MovieContract.MovieReviewEntry.getMovieIdForFromMovieReviewUri(mUri);
+        String mMovieId = MovieReviewEntry.getMovieIdForFromMovieReviewUri(mUri);
 
         assertEquals(
                 "Error: 'extracted Movie_Id from Uri don't match with fixed 1234",
                 "1234",
                 mMovieId);
     }
-    //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    
 
     ///////////////////////////////////////////
     // Test methods for Uri,
-    // "content://com.example.android.myproject_2/popularity/movieName"
-    ///////////////////////////////////////////
-
-    ///////////////////////////////////////////
-    // Test methods for Uri,
-    // "content://com.example.android.myproject_2/popularity/id"
-    ///////////////////////////////////////////
-
-    // /////////////////////////////////////////
-    // Test methods for Uri,
-    // "content://com.example.android.myproject_2/movieInfo"
+    // "content://com.example.android.fnlprjct/popularity/movieName"
+    // "content://com.example.android.fnlprjct/popularity/id"
+    // "content://com.example.android.fnlprjct/movieInfo"
     ////////////////////////////////////////////
 
 }

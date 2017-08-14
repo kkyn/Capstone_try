@@ -3,12 +3,11 @@ package com.example.android.fnlprjct;
 import android.app.Application;
 import android.content.Context;
 
-//import com.facebook.stetho.Stetho; // tky commented
+//import com.facebook.stetho.Stetho;
 
 
 public class MyApplication extends Application {
 
-    // tky add july17 2017
     private static Context context;
 
     @Override
@@ -17,14 +16,12 @@ public class MyApplication extends Application {
 
         new OptionalDependencies(this).initialize();
 
-        // tky add july17 2017
         MyApplication.context = getApplicationContext();
 
-        //Stetho.initializeWithDefaults(this); /// tky commented
+        //Stetho.initializeWithDefaults(this);
 
     }
 
-    // tky add july17 2017
     public static Context getAppContext(){
         return MyApplication.context;
     }

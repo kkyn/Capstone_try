@@ -13,13 +13,8 @@
     <string name="pref_label_movies_sortby_ratings">Évaluations</string>        <!-- Label for ratings option -->
     <string name="pref_label_movies_sortby_ownfavorites">Favoris</string>
 
-    <!--<string name="pref_movies_sort_title">Trier les films par:</string>
-    <string name="pref_movies_sortby_popularity_label">Popularité</string>  &lt;!&ndash; Label for popularity option &ndash;&gt;
-    <string name="pref_movies_sortby_ratings_label">Évaluations</string>        &lt;!&ndash; Label for ratings option &ndash;&gt;
-    <string name="pref_movies_sortby_ownfavorites_label">Favoris</string>-->
-
     <string name="widget_title">Meilleurs films</string>
-    <string name="widget_name">Mon widget de film</string>
+    <string name="widget_name">Movie Widget</string>
 
     <string name="dialog_title">Entrez l\'année d\'intérêt</string>
     <string name="dialog_comment">N\'entrez pas au-delà de cette année</string>

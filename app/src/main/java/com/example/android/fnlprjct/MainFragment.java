@@ -66,7 +66,6 @@ public class MainFragment extends Fragment
 
     public static final String LOG_TAG = MainFragment.class.getSimpleName();
 
-    //private RecyclerView mainRyclrVw;
     private MainRcyclrVwAdapter rvAdapter;
     private int mPosition = RecyclerView.NO_POSITION;
     private long itemId = 0;
@@ -79,20 +78,12 @@ public class MainFragment extends Fragment
 
     private static final int MOVIE_FRAGMENT_ID = 0; // constant definition
 
-    /*static final int COLUMN_POPULAR_ID;
-    static final int COLUMN_MV_ID;
-    static final int COLUMN_KEY_ID;*/
     public static final int COLUMN_POSTERLINK;
     public static final int COLUMN_MOVIE_TITLE;
-    /*static final int COLUMN_BACKDROP_PATH;*/
 
     static {
-        /*COLUMN_POPULAR_ID = 0;
-        COLUMN_MV_ID = 1;
-        COLUMN_KEY_ID = 2;*/
         COLUMN_POSTERLINK = 3;
         COLUMN_MOVIE_TITLE = 4;
-        /*COLUMN_BACKDROP_PATH = 5;*/
     }
     public static final int DIALOG_REQUEST_CODE = 1;
     public static final String DIALOG = "changeyear";
@@ -122,9 +113,7 @@ public class MainFragment extends Fragment
             if (resultCode == Activity.RESULT_OK) {
                 if (data.getExtras().containsKey(DIALOG_KEY)) {
 
-                    actionBar.setTitle(updateActionBarTitle());
-                    //actionBar.setSubtitle(updateActionBarTitle());
-                    //actionBar.setWindowTitle(updateActionBarTitle());
+                    actionBar.setSubtitle(updateActionBarTitle());
 
                     onRefresh();
                 }
@@ -139,10 +128,7 @@ public class MainFragment extends Fragment
     @BindView(R.id.edit_fab) FloatingActionButton editfab;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.main_recyclerview) RecyclerView mainRyclrVw;
-    /*@BindView(R.id.error)
-    EditText error;*/
-    //@BindView(R.id.error) TextView error;
-    @BindView(R.id.adView) AdView bannerView; // ??? ... need instance of 'google-service.json'
+    @BindView(R.id.adView) AdView bannerView; // ... need instance of 'google-service.json' to work
 
     //-------------------------
     //--- Interface stuff -----
@@ -204,7 +190,7 @@ public class MainFragment extends Fragment
         // Report that this fragment would like to participate in populating the
         // options menu by receiving a call to onCreateOptionsMenu(Menu, MenuInflater)
         // and related methods.
-        setHasOptionsMenu(true);    //Log.d(LOG_TAG, "---- 0 onCreate() --");
+        setHasOptionsMenu(true);
 
         // Firebase-Analytics ---- (step2) Obtain a FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -223,7 +209,9 @@ public class MainFragment extends Fragment
 
             actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(updateActionBarTitle());
+
+            actionBar.setTitle(getString(R.string.label_main_activity));
+            actionBar.setSubtitle(updateActionBarTitle());
         }
     }
 
@@ -323,8 +311,7 @@ public class MainFragment extends Fragment
     * called. The loaderID argument contains the ID value passed to the
     * initLoader() call.
     */
-    // @param int id --- refers to MOVIE_LOADER
-    // @param Bundle args ---
+    // int id --- refers to MOVIE_LOADER
     @Override   // --- 1 ---
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
@@ -380,7 +367,7 @@ public class MainFragment extends Fragment
     // Called when a previously created loader has finished its load.
     /*
     * Defines the callback that CursorLoader calls
-    * when it's finished its query
+    * when it finishes its query
     */
     @Override //--- 5 ---
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
@@ -392,7 +379,7 @@ public class MainFragment extends Fragment
         */
         rvAdapter.swapCursor(cursor); // notifyDataSetChanged() is called in swapCursor()
 
-       /* if (mPosition != RecyclerView.NO_POSITION) {
+        /*if (mPosition != RecyclerView.NO_POSITION) {
             mainRyclrVw.smoothScrollToPosition(mPosition);
         }*/
     }
@@ -448,21 +435,21 @@ public class MainFragment extends Fragment
             // Commit your preferences changes back from this Editor to the SharedPreferences object it is editing.
             editor.apply(); // editor.commit();
 
-            actionBar.setTitle(updateActionBarTitle());
+            actionBar.setSubtitle(updateActionBarTitle());
             return true;
         }
         else if (id == R.id.most_rated) {
             editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_ratings));
-            editor.apply(); // editor.commit();
+            editor.apply();
 
-            actionBar.setTitle(updateActionBarTitle());
+            actionBar.setSubtitle(updateActionBarTitle());
             return true;
         }
         else if (id == R.id.my_favorites) {
-            editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_favorites));
-            editor.apply(); // editor.commit();
+            editor.putString(getString(R.string.pref_key_movies_sortby), getString(R.string.pref_value_movies_sortby_ownfavorites));
+            editor.apply();
 
-            actionBar.setTitle(updateActionBarTitle());
+            actionBar.setSubtitle(updateActionBarTitle());
             return true;
         }
 
@@ -484,17 +471,18 @@ public class MainFragment extends Fragment
             option = 1;
         } else if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_ratings))) {
 
-            category = getString(R.string.highest_rated); //"Highest Rated";
+            category = getString(R.string.highest_rated);
             option = 1;
         } else {  // sortMoviesBy.equals(getString(R.string.pref_movies_sortby_favourites))
 
-            category = getString(R.string.my_favorites); //"My Favourites";
+            category = getString(R.string.my_favorites);
             option = 2;
         }
         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
         String title;
-        if(option==1){title = getString(R.string.title_main_ui) + "   " + year + " : " + category;}
-        else         {title = getString(R.string.title_main_ui) + "   " + " : " + category;}
+        if(option==1){title = year + " : " + category;}
+        else         {title = category;}
         return title;
     }
     //------------------------------------------------
@@ -525,7 +513,7 @@ public class MainFragment extends Fragment
         //************************************************************************************************
         //*******Begin, Instantiate a Listener for MainRcyclrVwAdapter.ItemClickListener ****************
         //************************************************************************************************
-        // tky comment ....
+        //
         // Implementation the interface, 'NAME'/ItemClickListener
         // with the method-name/onClick0 found within the interface declaration.
         MainRcyclrVwAdapter.ItemClickListener listener =
@@ -556,7 +544,7 @@ public class MainFragment extends Fragment
                     // End, movie-selection event
                     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-                    // ????????????????????????????????
+                    //????????????????????????????????
                     ImageView posterImageview = viewHolder.poster_networkimageview;
                     //DynamicHeightNetworkImageView posterImageview = viewHolder.poster_networkimageview;
 
@@ -573,7 +561,7 @@ public class MainFragment extends Fragment
 
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     intent.setData(uri);
-                    // ????????????????????????????????
+                    //????????????????????????????????
 
                     mainCallBackListener.onItemSelectedInRecyclerView(intent, bundle);
 
@@ -584,7 +572,6 @@ public class MainFragment extends Fragment
         //************************************************************************************************
 
         rvAdapter = new MainRcyclrVwAdapter(getContext(), listener);
-        //************************************************
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -627,7 +614,7 @@ public class MainFragment extends Fragment
 
         //--- Begin, AdMob's:  AdRequest.Builder,  BannerAd stuff ------
         adRequest = new AdRequest.Builder()
-            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+            //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
             //.addTestDevice("23234f2377b3bd95")  // identify my physical device to connect
             .build();
         bannerView.loadAd(adRequest);
@@ -652,9 +639,6 @@ public class MainFragment extends Fragment
 
         if (!networkUp()){
 
-           // error.setContentDescription(getString(R.string.error_no_network));
-            /*error.setText(getString(R.string.error_no_network));
-            error.setVisibility(View.VISIBLE);*/
 
             Toast toast = Toast.makeText(getActivity(), getString(R.string.error_no_network), Toast.LENGTH_LONG); //.show();
                     toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
@@ -664,12 +648,11 @@ public class MainFragment extends Fragment
                 @Override
                 public void run() {
                     swipeRefreshLayout.setRefreshing(false);// disables progress visibility
-                    /*error.setVisibility(View.INVISIBLE);*/
+
                 }
             }, 4000);
         }
         else {
-            /*Toast.makeText(getContext(),"In OnRefresh...network is up --- Yeah", Toast.LENGTH_LONG).show();*/
 
             swipeRefreshLayout.setRefreshing(false);
 

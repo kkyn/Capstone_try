@@ -1,11 +1,18 @@
 <resources>
 
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
-    <!-- referenced in Manifest.xml (label name for app), authenticator.xml,  SyncAdapter.java -->
-    <string name="app_name" translatable="false">My Final Project</string>
+    <!-- Referenced in Manifest.xml (label name for app),
+                        authenticator.xml,
+                        SyncAdapter.java,
+                        Widget List -->
+    <string name="app_name" translatable="false">Movie Project</string>
 
-    <!-- referenced in Manifest.xml (label name for mainActivty), title of start-app icon -->
-    <string name="label_main_activity" translatable="false">My FinalProject</string>
+    <!-- Referenced in Manifest.xml (label name for mainActivty),
+                        title of start-app icon,
+                        title of back-ground app -->
+    <!-- Custom, used for 'Title' in toolbar -->
+    <string name="label_main_activity" translatable="false">Movie Collection</string>
+
 
     <string name="label_detail_activity" translatable="false">Detail Activity</string>
 
@@ -43,9 +50,6 @@
     <string name="pref_label_movies_sortby_popularity">Popularity</string>
     <string name="pref_label_movies_sortby_ratings">Ratings</string>
     <string name="pref_label_movies_sortby_ownfavorites">Favourites</string>
-    <!--<string name="pref_label_movies_sortby_popularity">Popularity</string>
-    <string name="pref_label_movies_sortby_ratings">Ratings</string>
-    <string name="pref_label_movies_sortby_favorites">Favourites</string>-->
 
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in Shared-Preference -->
@@ -57,7 +61,7 @@
      3) favorites -->
     <string name="pref_value_movies_sortby_default" translatable="false">popularity.desc</string> <!--vote_average.desc-->
     <string name="pref_value_movies_sortby_ratings" translatable="false">vote_average.desc</string> <!--popularity.desc-->
-    <string name="pref_value_movies_sortby_favorites" translatable="false">favourites.desc</string>
+    <string name="pref_value_movies_sortby_ownfavorites" translatable="false">favourites.desc</string>
 
     <string name="empty_movie_list" translatable="false">No Movie Information Available</string>
 
@@ -72,7 +76,7 @@
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in widget -->
     <string name="widget_title">Top Movies</string>
-    <string name="widget_name">My Movie Widget</string>
+    <string name="widget_name">Movie Widget</string>
 
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in dialog-fragment -->
@@ -107,7 +111,7 @@
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in AdMob -->
     <!--<string name="my_admob_ap_id" translatable="false">ca-app-pub-9984201472519181~8798952934</string>-->
-    <string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string> <!-- test admob -->
 
 
 </resources>

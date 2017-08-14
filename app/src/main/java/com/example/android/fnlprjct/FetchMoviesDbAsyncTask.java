@@ -85,7 +85,6 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
                     .appendQueryParameter(KEY_PARAM, BuildConfig.THE_MOVIE_DB_API_KEY /*  &api_key=####  */)
                     .build();
 
-            /*Log.d(LOG_TAG, "----xxxxxxx" + buildUri.toString());*/
 
             URL url = new URL(buildUri.toString());
 
@@ -99,7 +98,6 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
             //StringBuffer stringBuffer = new StringBuffer();
 
             if (inputStream == null) {
-                //Log.d(LOG_TAG, "----xxxxxxx ---- null");
                 return null;
             }
 
@@ -180,6 +178,7 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
             movieKey = movie.getString(KEY);
 
             myMovSlctdInfo[i] = movieKey;
+
             /*
             movieKey = movie.getString(KEY);
             movieSite = movie.getString(SITE);

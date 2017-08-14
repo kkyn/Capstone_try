@@ -47,6 +47,6 @@ public class MSyncService extends Service {
          * constructors call super()
          */
         return mSyncAdapter.getSyncAdapterBinder();
-        //return null;
+
     }
 }

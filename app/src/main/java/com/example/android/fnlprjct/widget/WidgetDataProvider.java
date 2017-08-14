@@ -15,23 +15,21 @@ import com.example.android.fnlprjct.R;
 import com.example.android.fnlprjct.Utility;
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
 
-/**
- * Created by kkyin on 24/6/2017.
- */
+
 public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
 
     private static final String LOG_TAG = WidgetDataProvider.class.getSimpleName();
 
-    Uri uri = MovieInfoEntry.CONTENT_URI;
-    Cursor cursor = null;
+    private Uri uri = MovieInfoEntry.CONTENT_URI;
+    private Cursor cursor = null;
 
     // Context --- the widget needs to get the package name to be associated with our app.
     // Intent --- this value is from the 'WidgetService.onGetViewFactory(Intent intent)'
     // WidgetDataProvider Constructor with (Context,Intent )  -- because we are accessing these data (Context,Intent )from the 'WidgetService.java'
     // Intent is used for example, opening up certain activities from tapping on the list-item.
 
-    Context context;
-    Intent intent;
+    private Context context;
+    private Intent intent;
 
 
     public WidgetDataProvider(Context context, Intent intent) { // passing the context and get the intent
@@ -43,14 +41,6 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onCreate() {
 
-        /*if (cursor != null) {  // -x-x-x-x
-            cursor.close();
-        }
-        cursor = context.getContentResolver().query(uri, mProjection, selection, selectionArg, sortOrder);*/
-
-        /*Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onCreate ");*/
-
-
     }
 
     // Called when notifyDataSetChanged() is triggered on the remote adapter.
@@ -58,8 +48,6 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     // ? when this -> ( appWidgetManager.updateAppWidget(appWidgetId, views); ) is first called ??
     @Override
     public void onDataSetChanged() {
-
-        /*Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onDataSetChanged ");*/
 
         //-------------------------------
         String sortMoviesBy = Utility.getPreferredSortSequence(MyApplication.getAppContext());
@@ -88,8 +76,10 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         if (cursor != null) {
             cursor.close();
         }
+
         ContentResolver contentResolver = context.getContentResolver();
         cursor = contentResolver.query(uri, projection, selection, selectionArg, sortOrder);
+        //-- or --
         //cursor = context.getContentResolver().query(uri, projection, selection, selectionArg, sortOrder);
         //--------------------------------
 
@@ -99,8 +89,6 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDestroy() {
 
-        /*Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > onDestroy ");*/
-
         if(cursor != null){
             cursor.close();
         }
@@ -109,25 +97,20 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public int getCount() {
 
-        if ( null == cursor ) return 0;
-        int count = cursor.getCount();
+        if ( cursor == null ) {return 0;}
+        else {return cursor.getCount();}
 
-        /*Log.d(LOG_TAG, "22222222222222 INSIDE WidgetDataProvider > getCount " + count);*/
-
-        return cursor.getCount();
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
 
         // -------------------------------------
-        // 1 July 2017
         cursor.moveToPosition(position);
         RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.grid_item);
 
-        //  -- viewId, text --
+        // -- viewId, text --
         remoteView.setTextViewText(R.id.textview_id, cursor.getString(MyQuery.MovieInfo.COL_MOVIE_TITLE));
-        //remoteView.setTextViewText(R.id.movieratings_tv, cursor.getString(MyQuery.MovieInfo.COL_VOTE_AVERAGE));
 
         return remoteView;
         // -------------------------------------

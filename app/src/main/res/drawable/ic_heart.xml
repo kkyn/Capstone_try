@@ -31,7 +31,7 @@ Copyright (C) 2015 The Android Open Source Project
         android:name="empty"
         android:pathData="@string/heart_empty_path"
         android:fillColor="#FFF" />
-    <!--android:fillColor="#999"-->
+
     <clip-path
         android:name="clip"
         android:pathData="@string/heart_clip_hidden" />
@@ -40,5 +40,5 @@ Copyright (C) 2015 The Android Open Source Project
         android:name="full"
         android:pathData="@string/heart_full_path"
         android:fillColor="#FFF" />
-    <!--android:fillColor="#999"-->
+
 </vector>

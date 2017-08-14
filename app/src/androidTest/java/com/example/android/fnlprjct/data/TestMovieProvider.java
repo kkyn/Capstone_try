@@ -59,23 +59,21 @@ public class TestMovieProvider extends AndroidTestCase {
 
             ContentValues mMovieInfoValues = new ContentValues();
 
-            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_MOVIE_ID, j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_MOVIE_ID,       j);
             mMovieInfoValues.put(MovieInfoEntry.COL_ORIGINAL_TITLE, "MyMovie_" + j);
-            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_POSTERLINK, "PosterLink_" + j);
-            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_OVERVIEW, "OverView_"+ j);
-            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_RELEASE_DATE, "ReleaseDate_" + j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_POSTERLINK,     "PosterLink_" + j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_OVERVIEW,       "OverView_"+ j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_RELEASE_DATE,   "ReleaseDate_" + j);
 
-            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE, "VoteAverage_" + j);
-            mMovieInfoValues.put(MovieContract.MovieInfoEntry.COL_POPULARITY, "Popularity_" + j);
-            mMovieInfoValues.put(MovieInfoEntry.COL_VOTE_COUNT, "VoteCount_" + j);
-            mMovieInfoValues.put(MovieInfoEntry.COL_FAVOURITES, 0);
+            mMovieInfoValues.put(MovieInfoEntry.COL_VOTE_AVERAGE,   "VoteAverage_" + j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_POPULARITY,     "Popularity_" + j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_VOTE_COUNT,     "VoteCount_" + j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_FAVOURITES,     0);
 
-            mMovieInfoValues.put(MovieInfoEntry.COL_BACKDROPLINK, "BackDropPath_" + j);
-         //   mMovieInfoValues.put(MovieInfoEntry.COL_VIDEOLINK, "VideoLink_" + j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_BACKDROPLINK,   "BackDropPath_" + j);
 
-            // tky added to solve fail test, july17 2017 ---- it passes with ehe addition!!
-            mMovieInfoValues.put(MovieInfoEntry.COL_POSTERLINK, "PosterLink_" +j);
-            mMovieInfoValues.put(MovieInfoEntry.COL_YEAR, "Year_" +j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_POSTERLINK,     "PosterLink_" +j);
+            mMovieInfoValues.put(MovieInfoEntry.COL_YEAR,           "Year_" +j);
 
             mValuesArray[i] = mMovieInfoValues;
             //=============================================
@@ -84,7 +82,7 @@ public class TestMovieProvider extends AndroidTestCase {
         return mValuesArray;
     }
 
-    // Student: Uncomment this test after you have completed writing the BulkInsert functionality
+    // Uncomment this test after you have completed writing the BulkInsert functionality
     // in your provider.  Note that this test will work with the built-in (default) provider
     // implementation, which just inserts records one-at-a-time, so really do implement the
     // BulkInsert ContentProvider function.
@@ -96,15 +94,16 @@ public class TestMovieProvider extends AndroidTestCase {
         MovieSQLiteOpenHelper dbHelper = new MovieSQLiteOpenHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        db.delete(MovieContract.MovieInfoEntry.TABLE_NAME, null, null);
+        db.delete(MovieInfoEntry.TABLE_NAME, null, null);
         db.close();
 
         ContentValues[] mBulkInsertValues = createBulkInsertMovieInfoValues();
 
         ContentResolver mResolver = mContext.getContentResolver();
+
         // Register a content observer for our bulk insert.
         TestUtilities.TestContentObserver mObserver = TestUtilities.getTestContentObserver();
-        mResolver.registerContentObserver(MovieContract.MovieInfoEntry.CONTENT_URI, true, mObserver);
+        mResolver.registerContentObserver(MovieInfoEntry.CONTENT_URI, true, mObserver);
 
         int insertCount = mResolver.bulkInsert(MovieInfoEntry.CONTENT_URI, mBulkInsertValues);
 
@@ -117,7 +116,7 @@ public class TestMovieProvider extends AndroidTestCase {
 
         // A cursor is your primary interface to the query results.
         Cursor cursor = mResolver.query(
-                MovieContract.MovieInfoEntry.CONTENT_URI,
+                MovieInfoEntry.CONTENT_URI,
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause

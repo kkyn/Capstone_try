@@ -1,6 +1,6 @@
 <!--
 Here we use <fragment .. /> element, (STATIC)
-we don't need to use fragmenttransaction in xxx.java file because
+we don't need to use fragment-transaction in xxx.java file because
 the 'id' is for identify this fragment,
 the 'name' is to specify the class to instantiate in the layout.
 the 'id' to this fragment is associated to,

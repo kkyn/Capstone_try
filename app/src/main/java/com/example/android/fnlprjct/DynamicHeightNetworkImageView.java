@@ -25,15 +25,10 @@ public class DynamicHeightNetworkImageView extends NetworkImageView {
     }
 
     public void setAspectRatio(float aspectRatio) {
+
         mAspectRatio = aspectRatio;
 
-        /*String aString = Float.toString(mAspectRatio);*/
-
-        /*Log.d(LTAG, " -- " + aString + " --");*/
-
-        // Toast.makeText(getContext(), "-- "+ aString + " --", Toast.LENGTH_LONG).show();
-
-        // tky add comment ---------------------
+        //--------------------------------------
         // Call this when something has changed which has invalidated the layout of this view.
         // https://developer.android.com/reference/android/view/View.html
         // * https://developer.android.com/reference/android/view/View.html#requestLayout()
@@ -41,10 +36,10 @@ public class DynamicHeightNetworkImageView extends NetworkImageView {
         requestLayout();
     }
 
-    // tky add comment ---------------------
+    //--------------------------------------
     // * https://developer.android.com/reference/android/view/View.html#measure(int, int)
     // * https://developer.android.com/reference/android/view/View.html#onMeasure(int, int)
-    // * tky add, Called to determine the size requirements for this view and all of its children.
+    // * Called to determine the size requirements for this view and all of its children.
     // * Only onMeasure(int, int) can and must be overridden by subclasses.
     // * When overriding this method, you must call setMeasuredDimension(int, int)
     // to store the measured width and height of this view.
@@ -53,13 +48,13 @@ public class DynamicHeightNetworkImageView extends NetworkImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        // tky add comment ---------------------
+        //--------------------------------------
         // https://developer.android.com/reference/android/view/View.html
         //--------------------------------------
 
         int measuredWidth = getMeasuredWidth();
 
-        // tky add comment ----------------------
+        //--------------------------------------
         // https://developer.android.com/reference/android/view/View.html
         // This method must be called by onMeasure(int, int) to store the measured width and measured height.
         // MUST CALL METHOD INSIDE 'onMeasure(....)'

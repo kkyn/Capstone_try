@@ -5,7 +5,6 @@
     >
     <slide />
 
-    <!--check this section (A)-->
     <changeBounds/>
     <changeTransform/>
     <changeClipBounds/>

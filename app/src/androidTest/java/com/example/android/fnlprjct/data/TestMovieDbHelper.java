@@ -21,11 +21,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-//import com.example.android.myproject_2.data.MovieContract.MovieInfoEntry;
-//import com.example.android.myproject_2.data.MovieContract.PopularEntry;
-//import com.example.android.myproject_2.data.MovieContract_x.RatingEntry;
 
 import com.example.android.fnlprjct.data.MovieContract.MovieInfoEntry;
+import com.example.android.fnlprjct.data.MovieContract.MovieReviewEntry;
 
 import java.util.HashSet;
 
@@ -60,11 +58,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         final HashSet<String> tableNameHashSet = new HashSet<String>();
 
         tableNameHashSet.add(MovieInfoEntry.TABLE_NAME);      // new
-        tableNameHashSet.add(MovieContract.MovieReviewEntry.TABLE_NAME);    // new
-
- /*       tableNameHashSet.add(MovieInfoEntry.TABLE_NAME);
-        tableNameHashSet.add(PopularEntry.TABLE_NAME);*/
-//        tableNameHashSet.add(RatingEntry.TABLE_NAME);
+        tableNameHashSet.add(MovieReviewEntry.TABLE_NAME);    // new
 
         // tky:
         // Deletes a database including its journal file and other auxiliary files
@@ -103,11 +97,11 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // Build a HashSet of all of the column names we want to look for
         final HashSet<String> xMovieInfoColumnHashSet = new HashSet<String>();
 
-        xMovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry._ID);
-        xMovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_MOVIE_ID);
-        xMovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_ORIGINAL_TITLE);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry._ID);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_MOVIE_ID);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_ORIGINAL_TITLE);
         xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_RELEASE_DATE);
-        xMovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE);
+        xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_VOTE_AVERAGE);
         xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_POPULARITY);
         xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_VOTE_COUNT);
         xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_OVERVIEW);
@@ -116,15 +110,17 @@ public class TestMovieDbHelper extends AndroidTestCase {
      // xMovieInfoColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);     // new
 
         // now, do our tables contain the correct columns?
-        mCursor = db.rawQuery("PRAGMA table_info(" + MovieContract.MovieInfoEntry.TABLE_NAME + ")", null);
+        mCursor = db.rawQuery("PRAGMA table_info(" + MovieInfoEntry.TABLE_NAME + ")", null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
                 mCursor.moveToFirst());
 
         int xColumnNameIndex = mCursor.getColumnIndex("name");
         do {
-            String X_columnName = mCursor.getString(xColumnNameIndex);
-            xMovieInfoColumnHashSet.remove(X_columnName);
+            String xColumnName = mCursor.getString(xColumnNameIndex);
+
+            xMovieInfoColumnHashSet.remove(xColumnName);
+
         } while(mCursor.moveToNext());
 
         // if this fails, it means that your database doesn't contain all of the required SortBy
@@ -138,13 +134,13 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // Build a HashSet of all of the column names we want to look for
         final HashSet<String> yMovieReviewColumnHashSet = new HashSet<String>();
 
-        yMovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry._ID);
-        yMovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_MOVIE_ID);
-        yMovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_REVIEWER);
-        yMovieReviewColumnHashSet.add(MovieContract.MovieReviewEntry.COL_REVIEWCONTENT);
+        yMovieReviewColumnHashSet.add(MovieReviewEntry._ID);
+        yMovieReviewColumnHashSet.add(MovieReviewEntry.COL_MOVIE_ID);
+        yMovieReviewColumnHashSet.add(MovieReviewEntry.COL_REVIEWER);
+        yMovieReviewColumnHashSet.add(MovieReviewEntry.COL_REVIEWCONTENT);
 
         // now, do our tables contain the correct columns?
-        mCursor = db.rawQuery("PRAGMA table_info(" + MovieContract.MovieReviewEntry.TABLE_NAME + ")", null);
+        mCursor = db.rawQuery("PRAGMA table_info(" + MovieReviewEntry.TABLE_NAME + ")", null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
                 mCursor.moveToFirst());
@@ -152,7 +148,9 @@ public class TestMovieDbHelper extends AndroidTestCase {
         int yColumnNameIndex = mCursor.getColumnIndex("name");
         do {
             String yColumnName = mCursor.getString(yColumnNameIndex);
+
             yMovieReviewColumnHashSet.remove(yColumnName);
+
         } while(mCursor.moveToNext());
 
         // if this fails, it means that your database doesn't contain all of the required SortBy
@@ -162,41 +160,43 @@ public class TestMovieDbHelper extends AndroidTestCase {
 
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // now, do our tables contain the correct columns?
-        mCursor = db.rawQuery("PRAGMA table_info(" + MovieContract.MovieInfoEntry.TABLE_NAME + ")", null);
+        mCursor = db.rawQuery("PRAGMA table_info(" + MovieInfoEntry.TABLE_NAME + ")", null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
                 mCursor.moveToFirst());
 
 
         // Build a HashSet of all of the column names we want to look for
-        final HashSet<String> MovieInfoColumnHashSet = new HashSet<String>();
+        final HashSet<String> zMovieInfoColumnHashSet = new HashSet<String>();
 
-        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry._ID);
-        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_POSTERLINK);  // y
-        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_MOVIE_ID);   // y
+        zMovieInfoColumnHashSet.add(MovieInfoEntry._ID);
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_POSTERLINK);
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_MOVIE_ID);
         
-        MovieInfoColumnHashSet.add(MovieInfoEntry.COL_ORIGINAL_TITLE);   // y
-        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_RELEASE_DATE); // y
-        MovieInfoColumnHashSet.add(MovieInfoEntry.COL_OVERVIEW);    // y
-        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_VOTE_AVERAGE);    // y
-        MovieInfoColumnHashSet.add(MovieInfoEntry.COL_POPULARITY);  // y
-        MovieInfoColumnHashSet.add(MovieContract.MovieInfoEntry.COL_VOTE_COUNT);  // y
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_ORIGINAL_TITLE);
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_RELEASE_DATE);
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_OVERVIEW);
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_VOTE_AVERAGE);
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_POPULARITY);
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_VOTE_COUNT);
 
-        MovieInfoColumnHashSet.add(MovieInfoEntry.COL_BACKDROPLINK); // new
-    //    MovieInfoColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);     // new
+        zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_BACKDROPLINK); // new
+    //    zMovieInfoColumnHashSet.add(MovieInfoEntry.COL_VIDEOLINK);     // new
         //--------------------------------------------------------------
 
         //---------------------------------------------------//
-        int columnNameIndex = mCursor.getColumnIndex("name");
+        int zColumnNameIndex = mCursor.getColumnIndex("name");
         do {
-            String columnName = mCursor.getString(columnNameIndex);
-            MovieInfoColumnHashSet.remove(columnName);
+            String zColumnName = mCursor.getString(zColumnNameIndex);
+
+            zMovieInfoColumnHashSet.remove(zColumnName);
+
         } while(mCursor.moveToNext());
 
         // if this fails, it means that your database doesn't contain all of the required SortBy
         // entry columns
         assertTrue("Error: The database doesn't contain all of the required location entry columns",
-                MovieInfoColumnHashSet.isEmpty());
+                zMovieInfoColumnHashSet.isEmpty());
 
         db.close();
     }
@@ -225,7 +225,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
 
         SQLiteDatabase db = new MovieSQLiteOpenHelper(this.mContext).getWritableDatabase();
 
-        ContentValues contentValues = TestUtilities.create_ContentValues4_X_MovieInfo();
+        ContentValues contentValues = TestUtilities.createTestContentValuesForMovieInfo();
 
         long xMovieInfoRowId = db.insert(MovieInfoEntry.TABLE_NAME, null, contentValues);
 
@@ -235,7 +235,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         // Step 4 : Query the database and receive a Cursor back
         // A cursor is your primary interface to the query results.
         Cursor cursor = db.query(
-                            MovieContract.MovieInfoEntry.TABLE_NAME, // Table to Query
+                            MovieInfoEntry.TABLE_NAME, // Table to Query
                             null, // all columns
                             null, // Columns for the "where" clause
                             null, // Values for the "where" clause
@@ -301,17 +301,17 @@ public class TestMovieDbHelper extends AndroidTestCase {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         // Second Step (MovieInfo): Create MovieInfo values
-        ContentValues contentValues = TestUtilities.create_ContentValues4_X_MovieReview(xMovieInfoRowId);
+        ContentValues contentValues = TestUtilities.createTestContentValuesForMovieReview(xMovieInfoRowId);
 
         // Third Step (MovieInfo): Insert ContentValues into database and get a row ID back
-        long movieReview_RowId = db.insert(MovieContract.MovieReviewEntry.TABLE_NAME, null, contentValues);
+        long movieReview_RowId = db.insert(MovieReviewEntry.TABLE_NAME, null, contentValues);
 
         assertTrue(movieReview_RowId != -1);
 
         // Fourth Step: Query the database and receive a Cursor back
         // A cursor is your primary interface to the query results.
         Cursor cursor = db.query(
-                            MovieContract.MovieReviewEntry.TABLE_NAME,  // Table to Query
+                            MovieReviewEntry.TABLE_NAME,  // Table to Query
                             null, // leaving "columns" null just returns all the columns.
                             null, // cols for "where" clause
                             null, // values for "where" clause
@@ -332,7 +332,7 @@ public class TestMovieDbHelper extends AndroidTestCase {
         assertFalse("Error: More than one record returned from weather query",
                 cursor.moveToNext());
 
-        TestUtilities.validateCursorValue(cursor); // tky add
+        TestUtilities.validateCursorValue(cursor);
 
         // Sixth Step: Close cursor and database
         cursor.close();

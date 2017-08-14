@@ -22,7 +22,7 @@ public class MAuthenticatorService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        //return null;
+
         return mvAccntAuthntctr.getIBinder();
     }
 }

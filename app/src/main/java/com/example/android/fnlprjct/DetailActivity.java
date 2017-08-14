@@ -19,7 +19,6 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // tky add, copied
         // Check if we're running on Android 5.0 or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Call some material design APIs here
@@ -30,7 +29,7 @@ public class DetailActivity extends AppCompatActivity {
 
         setContentView(com.example.android.fnlprjct.R.layout.activity_details);
 
-        // tky add, -----------------------
+        // postpone display
         postponeEnterTransition();
 
         // ?? bundle from MainActivity is passed on to the Detail_Fragment ?? how/why ??, see code below !!
@@ -39,16 +38,12 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         mUri = intent.getData();
 
-        /*Log.d(LOG_TAG, "yyyy DetailActivity / onCreate / mUri : " + mUri.toString());*/
-        // Log.d(LOG_TAG, "yyyy onCreate / savedInstanceState == null / DetailMoviewFragment --");
-        // Log.d(LOG_TAG, "yyyy onCreate / mUri : " + mUri.toString());
 
         //-- Begin-- Attach data to a fragment
         // (1) Place 'data' into bundle
         Bundle bundle = new Bundle();
         bundle.putParcelable(DetailFragmentNew.DETAIL_URI, mUri);
 
-        /*Log.d(LOG_TAG, "( ( ( ( ( ( ( " + mUri.toString()+ " ) ) ) ) ) ) ) ");*/
 
         if (savedInstanceState == null) {
             // (2) Attach the bundle to a fragment
@@ -65,25 +60,13 @@ public class DetailActivity extends AppCompatActivity {
             frgmntTrnsctn.add(R.id.fragmentdetail_container, pagerViewDetailsFragment);
             frgmntTrnsctn.commit();
 
-            /*
-            Detail_Fragment dtlFrgmnt = new Detail_Fragment();
-            dtlFrgmnt.setArguments(bundle);
-            FragmentManager fMngr = getSupportFragmentManager();
-            FragmentTransaction frgmntTrnsctn = fMngr.beginTransaction();
-            frgmntTrnsctn.add(R.id.pane2_container, dtlFrgmnt);
-            frgmntTrnsctn.commit();
-            // --or--
-            // getSupportFragmentManager().beginTransaction()
-            //                             .add(R.id.detail_movie_container, new Detail_Fragment())
-            //                             .commit();
-            */
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        /*Toast.makeText(this, "+ + + + + DetailActivity/onSaveInstanceState ", Toast.LENGTH_SHORT).show();*/
+        
     }
 
     @Override

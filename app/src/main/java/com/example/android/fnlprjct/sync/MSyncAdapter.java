@@ -123,9 +123,6 @@ public class MSyncAdapter extends AbstractThreadedSyncAdapter {
             // (5)
             movieInfoInJsonStr = stringBuilder.toString();
 
-            //long[] mMovieIDs = Utility.get_MovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext); // ????
-            //int[] mMovieIDs = Utility.getMovieInfoFromJson(response, sortBy, mContext);
-
             Log.d(LOG_TAG, "  <--- INTO getMovieInfoFromJson() ------------------");
             int[] mMovieIDs = Utility.getMovieInfoFromJson(movieInfoInJsonStr, sortBy, mContext);
 

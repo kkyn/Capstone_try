@@ -14,7 +14,8 @@
         <!-- +++++++++++++++ Customize your theme here  +++++++++++++++ -->
 
         <!-- your app branding color for the app bar -->
-        <item name="colorPrimary">@color/lime_300</item>
+    <!--<item name="colorPrimary">@color/lime_300</item>-->
+        <item name="colorPrimary">@color/lime_500</item>
 
         <!-- darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">@color/lime_700</item>
@@ -24,7 +25,7 @@
         <item name="colorAccent">@color/pink_a400</item>
 
         <!-- //////////////////////////////////////////////// -->
-        <!--???? You can also set colorControlNormal, colorControlActivated colorControlHighlight & colorSwitchThumbNormal. -->
+        <!-- You can also set colorControlNormal, colorControlActivated colorControlHighlight & colorSwitchThumbNormal. -->
         <!-- colorControlNormal controls the ‘normal’ state of components such as an unselected EditText, and unselected Checkboxes and RadioButtons -->
         <!-- colorControlActivated overrides colorAccent as the activated or checked state for Checkboxes and RadioButtons -->
         <!-- colorControlHighlight controls the ripple coloring -->
@@ -32,7 +33,7 @@
         <item name="android:colorControlHighlight">@color/lime_300</item>
     <!--<item name="android:colorControlHighlight">@color/lime_700</item>-->
 
-        <!--<item name="android:textColorSecondary">@color/white</item>--> <!-- only set/change overflow-icon color to white -->
+    <!--<item name="android:textColorSecondary">@color/white</item>--> <!-- only set/change overflow-icon color to white -->
 
         <!-- background color of 'home', e.g. bottom-layer ?? -->
         <item name="android:windowBackground">@color/lightgray</item>
@@ -40,10 +41,11 @@
         <!-- Under Theme.AppCompat.Light.NoActionBar, -->
         <!-- default color is black for "android:textColorPrimary", refers to colors for text in 'views' -->
         <!-- ...................................................... -->
-        <!--<item name="android:textColorPrimary">?android:colorPrimary</item>-->
+    <!--<item name="android:textColorPrimary">?android:colorPrimary</item>-->
         <item name="android:textColorPrimary">@color/orange_500</item>
 
-        <item name="android:statusBarColor">?android:colorPrimary</item> <!--.. don't seem to work ...-->
+        <!--.. don't seem to work ...-->
+        <item name="android:statusBarColor">?android:colorPrimary</item>
 
 
          <!-- ....... enable window content transitions ....... -->
@@ -52,15 +54,11 @@
 
         <item name="android:windowTransitionBackgroundFadeDuration">@integer/duration_slide</item>
 
-
-        <!-- specify enter and exit transitions -->
+        <!-- ....... specify enter and exit transitions ....... -->
         <item name="android:windowEnterTransition">@transition/explode</item>
         <item name="android:windowExitTransition">@transition/explode</item>
 
-
-        check this section, (A)
         <!-- ....... specify shared element transition ....... -->
-        <!--... ok ...-->
         <item name="android:windowSharedElementExitTransition">@transition/sharedelementtransition_v21</item>
         <item name="android:windowSharedElementEnterTransition">@transition/sharedelementtransition_v21</item>
 

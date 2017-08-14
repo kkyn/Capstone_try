@@ -9,7 +9,4 @@
         android:entryValues="@array/pref_movies_sortby_values"
         />
 
-    <!--
-        android:key="Movies"
-        android:defaultValue="popularity.desc"-->
 </PreferenceScreen>
