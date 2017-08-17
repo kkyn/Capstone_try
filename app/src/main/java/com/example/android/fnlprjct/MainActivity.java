@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
 
         setContentView(com.example.android.fnlprjct.R.layout.activity_main);
 
-        // ToDO : add fragmentTransaction
         // The view with 'id' only exist within layout 'activity_main.xml' file,
         // if the device is a tablet.
         if (findViewById(R.id.fragmentdetail_container) != null) {

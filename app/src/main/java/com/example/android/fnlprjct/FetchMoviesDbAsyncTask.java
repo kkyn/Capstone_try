@@ -119,8 +119,6 @@ public class FetchMoviesDbAsyncTask extends AsyncTask<String, Void, String[]> {
             // (5) convert string-buffer to string
             movieInfoInJsonStr = stringBuffer.toString();
 
-            //Log.d(LOG_TAG, "----xxxxxxx" + stringBuffer.toString());
-
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error", e);
             return null;

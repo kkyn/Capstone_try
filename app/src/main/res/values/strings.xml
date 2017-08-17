@@ -110,7 +110,7 @@
 
     <!--  ++++++++++++++++++++++++++++++++++++++++++++++++++  -->
     <!-- Used in AdMob -->
-    <!--<string name="my_admob_ap_id" translatable="false">ca-app-pub-9984201472519181~8798952934</string>-->
+<!--<string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/3347511713</string>--> <!-- test admob -->
     <string name="my_admob_ap_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string> <!-- test admob -->
 
 

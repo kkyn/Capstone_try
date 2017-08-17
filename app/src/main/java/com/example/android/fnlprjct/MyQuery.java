@@ -20,6 +20,8 @@ public class MyQuery {
         int COL_REVIEWER = 2;
         int COL_REVIEWCONTENT = 3;
     }
+
+    //-------------------------------------------------
     public interface Favourites {
 
         String[] PROJECTION =
@@ -31,8 +33,8 @@ public class MyQuery {
                 , MovieInfoEntry.COL_ORIGINAL_TITLE
             };
     }
-    //-------------------------------------------------
 
+    //-------------------------------------------------
     // state the columns of data I want
     public interface VoteAverage {
 
@@ -46,6 +48,7 @@ public class MyQuery {
                 , MovieInfoEntry.COL_YEAR
             };
     }
+
     //-------------------------------------------------
     public interface Popularity {
 
@@ -73,7 +76,7 @@ public class MyQuery {
                 MovieInfoEntry.TABLE_NAME + "." + MovieInfoEntry._ID,
                 MovieInfoEntry.COL_MOVIE_ID,
                 MovieInfoEntry.COL_FAVOURITES,
-                MovieInfoEntry.COL_POSTERLINK,  // MovieInfoEntry.COL_BACKDROPLINK,
+                MovieInfoEntry.COL_POSTERLINK,
                 MovieInfoEntry.COL_OVERVIEW,
                 MovieInfoEntry.COL_RELEASE_DATE,
                 MovieInfoEntry.COL_ORIGINAL_TITLE,
@@ -87,7 +90,7 @@ public class MyQuery {
         //public static final int PROJECTION_RATING_ID = 0;
         int COL_MOVIE_ID = 1;
         int COL_FAVOURITES = 2;
-        int COL_POSTERLINK = 3;       // int COL_BACKDROPLINK = 3;
+        int COL_POSTERLINK = 3;
         int COL_OVERVIEW = 4;
         int COL_RELEASEDATE = 5;
         int COL_MOVIE_TITLE = 6;

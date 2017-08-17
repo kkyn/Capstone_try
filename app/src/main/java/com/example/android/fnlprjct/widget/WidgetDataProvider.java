@@ -44,8 +44,8 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     }
 
     // Called when notifyDataSetChanged() is triggered on the remote adapter.
-    // ? call only on the 1st addition of appWidgets ??
-    // ? when this -> ( appWidgetManager.updateAppWidget(appWidgetId, views); ) is first called ??
+    // Call only on the 1st addition of appWidgets,
+    //    when this -> ( appWidgetManager.updateAppWidget(appWidgetId, views); ) is first called.
     @Override
     public void onDataSetChanged() {
 

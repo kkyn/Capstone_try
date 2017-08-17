@@ -22,9 +22,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by kkyin on 7/6/2017.
- */
 
 public class DetailFragmentPv extends Fragment
                     implements LoaderManager.LoaderCallbacks<Cursor>
@@ -39,7 +36,7 @@ public class DetailFragmentPv extends Fragment
     int movieId;
     Uri mUri;
 
-    // Firebase-Analytics, ----- (step1) Declare a variable
+    // Firebase-Analytics ---- (step1) Declare a variable
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @BindView(R.id.viewpager) ViewPager pager;
@@ -93,7 +90,7 @@ public class DetailFragmentPv extends Fragment
 
                 //pagerAdapter.notifyDataSetChanged();
 
-                //???????????????????????????????
+                //------------------------------------
                 // Firebase-Analytics ---- (step3) generate FirebaseAnalytics.logEvent
                 // Begin, movie-selection event
                 cursor.moveToPosition(currentPage);
@@ -107,7 +104,7 @@ public class DetailFragmentPv extends Fragment
                 // [END image_view_event]
 
                 // End, movie-selection event
-                //???????????????????????????????
+                //------------------------------------
             }
             @Override
             public void onPageScrollStateChanged(int state) {

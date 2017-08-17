@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -71,10 +72,9 @@ public class MainFragment extends Fragment
     private long itemId = 0;
     private Uri uri;
 
-    // Firebase-Ads, ----(step1) Declare a variable
+    // (step1) Declare variables for Firebase-Ads, Firebase-Analytics
     AdRequest adRequest;
-    // Firebase-Analytics, ----- (step1) Declare a variable
-    private FirebaseAnalytics mFirebaseAnalytics;
+    FirebaseAnalytics mFirebaseAnalytics;
 
     private static final int MOVIE_FRAGMENT_ID = 0; // constant definition
 
@@ -194,6 +194,7 @@ public class MainFragment extends Fragment
 
         // Firebase-Analytics ---- (step2) Obtain a FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+
     }
 
     // onViewCreated() is called immediately after onCreateView() method.
@@ -208,10 +209,12 @@ public class MainFragment extends Fragment
             ((AppCompatActivity) getActivity()).setSupportActionBar(tool_bar); // <!-- to set the Toolbar to act as the ActionBar  -->
 
             actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(true);
+            if (actionBar != null) {
+                actionBar.setDisplayShowTitleEnabled(true);
+                actionBar.setTitle(getString(R.string.label_main_activity));
+                actionBar.setSubtitle(updateActionBarTitle());
+            }
 
-            actionBar.setTitle(getString(R.string.label_main_activity));
-            actionBar.setSubtitle(updateActionBarTitle());
         }
     }
 
@@ -376,7 +379,7 @@ public class MainFragment extends Fragment
         /*
          * Moves the query results into the adapter, causing the
          * RecyclerView fronting this adapter to re-display
-        */
+         */
         rvAdapter.swapCursor(cursor); // notifyDataSetChanged() is called in swapCursor()
 
         /*if (mPosition != RecyclerView.NO_POSITION) {
@@ -400,9 +403,9 @@ public class MainFragment extends Fragment
     //----------- (End) LoaderCursor Stuff -------------------------
     //--------------------------------------------------------------
 
-    //-------------------------------------------------
-    //----------- (Begin) OPTIONS MENU Stuff-----------
-    // ------------------------------------------------
+    //-----------------------------------------------------------
+    //----------- (Begin) OPTIONS MENU Stuff---------------------
+    // ----------------------------------------------------------
 
     // Initialize the contents of the Fragment host's standard options menu.
     @Override public void
@@ -462,7 +465,7 @@ public class MainFragment extends Fragment
         String year = Utility.getPreferredYear(getContext());
         String sortMoviesBy = Utility.getPreferredSortSequence(getContext());
         String category;
-        int option = 0;
+        int option;
 
         // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
         if (sortMoviesBy.equals(getString(R.string.pref_value_movies_sortby_default))) {
@@ -485,9 +488,9 @@ public class MainFragment extends Fragment
         else         {title = category;}
         return title;
     }
-    //------------------------------------------------
-    //--------------- (End) OPTIONS MENU Stuff -------
-    //------------------------------------------------
+    //----------------------------------------------------------
+    //--------------- (End) OPTIONS MENU Stuff -----------------
+    //----------------------------------------------------------
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -508,7 +511,6 @@ public class MainFragment extends Fragment
         //RecyclerView.LayoutManager layoutManager;
 
         StaggeredGridLayoutManager stgrdgrdlm;
-        //return super.onCreateView(inflater, container, savedInstanceState);
 
         //************************************************************************************************
         //*******Begin, Instantiate a Listener for MainRcyclrVwAdapter.ItemClickListener ****************
@@ -522,15 +524,15 @@ public class MainFragment extends Fragment
                 @Override
                 public void onClick0(MainRcyclrVwAdapter.MainRcyclrVwViewHolder viewHolder) {
 
-                    // ************* newer ***********************
                     mPosition = viewHolder.getAdapterPosition();
+
                     itemId = rvAdapter.getItemId(mPosition);
 
                     String srcViewSharedElementTransition = getString(R.string.shared_name) + itemId;
 
                     viewHolder.poster_networkimageview.setTransitionName(srcViewSharedElementTransition);
 
-                    //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    //-----------------------------------------
                     // Firebase-Analytics ---- (step3) generate FirebaseAnalytics.logEvent
                     // Begin, movie-selection event
                     //  recordMovieImage(viewHolder);
@@ -542,9 +544,9 @@ public class MainFragment extends Fragment
 
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, mbundle);
                     // End, movie-selection event
-                    //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    //-----------------------------------------
 
-                    //????????????????????????????????
+                    //-----------------------------------------
                     ImageView posterImageview = viewHolder.poster_networkimageview;
                     //DynamicHeightNetworkImageView posterImageview = viewHolder.poster_networkimageview;
 
@@ -561,7 +563,7 @@ public class MainFragment extends Fragment
 
                     Intent intent = new Intent(getActivity(), DetailActivity.class);
                     intent.setData(uri);
-                    //????????????????????????????????
+                    //-----------------------------------------
 
                     mainCallBackListener.onItemSelectedInRecyclerView(intent, bundle);
 
@@ -599,8 +601,10 @@ public class MainFragment extends Fragment
                 showChangeYearDialog();
             }
         });
+
         // +++++++++++++++++++++++++++++++++++++++++++++
-        swipeRefreshLayout.setOnRefreshListener(this); // 'connect'/'bind' instance in xml with implementation
+        // 'connect'/'bind' instance in xml with implementation
+        swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(
             android.R.color.holo_blue_bright,
             android.R.color.holo_green_light,
@@ -608,14 +612,12 @@ public class MainFragment extends Fragment
             android.R.color.holo_red_light);
 
         // +++++++++++++++++++++++++++++++++++++++++++++
-        //--- Begin, Initialize the Mobile Ads SDK -----
+        //--- Initialize the Mobile Ads SDK -----
         MobileAds.initialize(getActivity(), getString(R.string.my_admob_ap_id));
-        //--- End  , Initialize the Mobile Ads SDK -----
 
         //--- Begin, AdMob's:  AdRequest.Builder,  BannerAd stuff ------
         adRequest = new AdRequest.Builder()
-            //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-            //.addTestDevice("23234f2377b3bd95")  // identify my physical device to connect
+            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
             .build();
         bannerView.loadAd(adRequest);
         //--- End,  AdMob's:  AdRequest.Builder,  BannerAd stuff ------
@@ -635,7 +637,8 @@ public class MainFragment extends Fragment
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this);
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        swipeRefreshLayout.setRefreshing(true); // enables progress visibility
+        // enables progress visibility
+        swipeRefreshLayout.setRefreshing(true);
 
         if (!networkUp()){
 
@@ -647,7 +650,8 @@ public class MainFragment extends Fragment
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    swipeRefreshLayout.setRefreshing(false);// disables progress visibility
+                    // disables progress visibility
+                    swipeRefreshLayout.setRefreshing(false);
 
                 }
             }, 4000);
@@ -676,9 +680,7 @@ public class MainFragment extends Fragment
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()){
             return true;
         }
-        else {
-            return false;
-        }
+        else return false;
     }
     // ------------------------------------------------------
     // ---- End ---------------------------------------------

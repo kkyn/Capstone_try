@@ -6,6 +6,6 @@
 /build
 /captures
 
-# means, ignore this file when load to GitHub
-# tky add, to give added security ...
+# Ignore this file when load to GitHub
+# To give added security
 /keystore.properties

@@ -8,14 +8,13 @@
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/spacer"
         android:fitsSystemWindows="true">
 
-        <!-- Use of Toolbar as/for App-Bar/Action-Bar, (A) -->
+        <!-- Use of Toolbar as/for App-Bar/Action-Bar -->
         <!-- Is a LinearLayout ... and orientation is vertical -->
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -86,16 +85,6 @@
             app:srcCompat="@drawable/ic_mode_edit_white_24dp"
             />
         <!-- ++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-        <!--<EditText
-            android:id="@+id/error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            android:visibility="invisible"
-            tools:text="Error message"
-            />-->
 
     </android.support.design.widget.CoordinatorLayout>
 

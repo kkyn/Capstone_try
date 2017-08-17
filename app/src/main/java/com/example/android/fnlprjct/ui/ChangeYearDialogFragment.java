@@ -158,7 +158,7 @@ public class ChangeYearDialogFragment extends DialogFragment
                     Toast toast = Toast.makeText(getActivity(), getString(R.string.error_not_beyond_this_year), Toast.LENGTH_LONG); //.show();
 
                     if (intEnteredYear > Utility.getThisYearValue()) {
-                        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);    // Gravity.CENTER|Gravity.LEFT
+                        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0); // Gravity.CENTER|Gravity.LEFT
                         toast.show();
 
                     } else {
@@ -192,7 +192,7 @@ public class ChangeYearDialogFragment extends DialogFragment
         editor.putString(yearKey, year);
         editor.apply();
 
-        dismissAllowingStateLoss(); // ?? to
+        dismissAllowingStateLoss();
 
     }
 

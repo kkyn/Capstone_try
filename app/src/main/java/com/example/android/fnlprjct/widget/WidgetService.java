@@ -4,10 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViewsService;
 
-/**
- * Created by kkyin on 24/6/2017.
- */
-    // tky comment,
+    //
     // POINT TO NOTE : Since we are doing a 'collection'-widget,
     // we need a RemoteViewsService and RemoteViewsService.RemoteViewsFactory classes.
     //

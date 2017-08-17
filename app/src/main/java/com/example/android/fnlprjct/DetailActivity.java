@@ -74,5 +74,4 @@ public class DetailActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-
 }

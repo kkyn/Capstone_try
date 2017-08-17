@@ -80,9 +80,8 @@ public class Utility {
     public static String getPreferredYear(Context context) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String year = sharedPreferences.getString(context.getString(R.string.pref_key_year), context.getResources().getString(R.string.default_year));
 
-        return year;
+        return sharedPreferences.getString(context.getString(R.string.pref_key_year), context.getResources().getString(R.string.default_year));
     }
 
     //*****************************************************/
@@ -234,7 +233,7 @@ public class Utility {
                 JSONObject movieVideosJsonObject = new JSONObject(movieVideosJsonStr);
                 JSONArray resultsJsonArray = movieVideosJsonObject.getJSONArray(results);
                 //==================
-                //String[] moviesVideoKey = new String[results_In_JSONArray.length()];
+
                 for (int i = 0; i < resultsJsonArray.length(); i++) {
 
                     // Take the first Key value.
@@ -248,8 +247,6 @@ public class Utility {
                         cv.put(MovieVideosEntry.COL_VIDEO_KEY, videoKey);
                         cv.put(MovieVideosEntry.COL_MOVIE_ID, movieId);
 
-                        /*context.getContentResolver()
-                                .insert(MovieContract.MovieVideosEntry.CONTENT_URI, contentValues);*/
                         vectorCv.add(cv);
                     }
                 }
@@ -292,13 +289,13 @@ public class Utility {
     //***************************************************************/
     private static Uri formUriForMovieReview(int movieId) {
 
-        Uri uri = Uri.parse(MOVIE_DB_BASE_URL);        // Creates a Uri from parsing the given encoded URI string
+        Uri uri = Uri.parse(MOVIE_DB_BASE_URL);    // Creates a Uri from parsing the given encoded URI string
         Uri.Builder uriBuilder = uri.buildUpon();  // Obtain a builder (Uri.Builder) representing an existing URI
 
         uriBuilder
-            .appendPath(MOVIE_)                   // appendPath postfix a '/', e.g. movie/
-            .appendPath(Integer.toString(movieId))    // appendPath postfix a '/', e.g. ID/
-            .appendEncodedPath(REVIEWS_)          // appendEncodedPath postfix a '?', e.g.  reviews?
+            .appendPath(MOVIE_)                    // appendPath postfix a '/', e.g. movie/
+            .appendPath(Integer.toString(movieId)) // appendPath postfix a '/', e.g. ID/
+            .appendEncodedPath(REVIEWS_)           // appendEncodedPath postfix a '?', e.g.  reviews?
             .appendQueryParameter(PARAM_API_KEY, BuildConfig.THE_MOVIE_DB_API_KEY);  // appendQueryParameter infix a '=', e.g. api_key=xxxxxx
 
         uri = uriBuilder.build();
@@ -391,7 +388,6 @@ public class Utility {
 
             String posterLink = TMDB_BASE_URL + /*W780*/ ORIGINAL /*W500*/ /*W342*/ + aJSONObject.getString(POSTER_PATH);
             String backdropLink = TMDB_BASE_URL + W780 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
-            //String backdropLink = TMDB_BASE_URL + W500 + aJSONObject.getString(BACKDROP_PATH); // movie poster image thumbnail
 
             ContentValues cv = new ContentValues();
 
@@ -438,9 +434,8 @@ public class Utility {
         return mvIdIntArray;
     }
 
-    private static boolean isMovieInfoInDataBase(/*Uri uri,*/ Context context, ContentValues cv) {
+    private static boolean isMovieInfoInDataBase(Context context, ContentValues cv) {
 
-        //Uri  mUri  = uri; // e.g. MovieInfoEntry.CONTENT_URI;
         Uri uri = MovieInfoEntry.CONTENT_URI;
         String[] projection = new String[]{MovieInfoEntry._ID};
         String selection = MovieInfoEntry.COL_MOVIE_ID + "=?";
