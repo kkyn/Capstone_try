@@ -245,10 +245,17 @@ public class MainFragment extends Fragment
 
         SharedPreferences
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            // Registers a callback to be invoked when a change happens to a preference.
             sp.registerOnSharedPreferenceChangeListener(this);
 
         super.onResume();
 
+        // This update the title & subtitle, after from PerferenceActivity call
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(getString(R.string.label_main_activity));
+            actionBar.setSubtitle(updateActionBarTitle());
+        }
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         getLoaderManager().restartLoader(MOVIE_FRAGMENT_ID, null, this); //  help maintain position ??
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -264,7 +271,8 @@ public class MainFragment extends Fragment
     public void onPause() {
 
         SharedPreferences
-            sp = PreferenceManager.getDefaultSharedPreferences(getContext()/*getActivity()*/);
+            sp = PreferenceManager.getDefaultSharedPreferences(/*getContext()*/getActivity());
+            // Unregisters a previous callback
             sp.unregisterOnSharedPreferenceChangeListener(this);
 
         // Pause the AdView.
